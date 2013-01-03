@@ -1053,7 +1053,7 @@ names.of.texts = gsub("(\\.txt)||(\\.xml)||(\\.html)||(\\.htm)","",rownames(tabl
 
 # using an appropriate function to assing colors to subsequent samples
 colors.of.pca.graph = assign.plot.colors(labels=names.of.texts,
-                            col=colors.on.graphs)
+                            col=colors.on.graphs, opacity=1)
 
 
 
@@ -1104,12 +1104,12 @@ if(analysis.type == "CA") {
         # any other linkage algorithm is produced by hclust()
         } else {
           # clustering the distances stored in the distance.table
-          clustered.data = hclust(as.dist(distance.table),method=linkage)
+          clustered.data = hclust(as.dist(distance.table), method=linkage)
           # reordering the vector of colors to fit the order of clusters
           colors.on.dendrogram = colors.of.pca.graph[clustered.data$order]
           # converting the clusters into common dendrogram format
-          tree.with.clusters = as.dendrogram(clustered.data,hang=0)
-          # now, preparing the procedure for changing leaves‘ color attributes
+          tree.with.clusters = as.dendrogram(clustered.data, hang=0)
+          # now, preparing the procedure for changing leaves' color attributes
           # (this snippet is taken from "help(dendrapply)" and slightly adjusted)
                   colLab = function(n) {
                           if(is.leaf(n)) {
@@ -1121,7 +1121,8 @@ if(analysis.type == "CA") {
                           n
                   }
                   mycols = colors.on.dendrogram
-                  i <- 0
+                  attributes(mycols) = NULL
+                  i = 0
           # adding the attributes to subsequent leaves of the dendrogram,
           # using the above colLab(n) function
           dendrogram.with.colors = dendrapply(tree.with.clusters, colLab)
@@ -1323,7 +1324,7 @@ if (analysis.type == "BCT") {
   if(linkage == "nj") {
     current.bootstrap.results = nj(as.dist(distance.table))
     } else {
-  current.bootstrap.results = as.phylo(hclust(as.dist(distance.table),
+    current.bootstrap.results = as.phylo(hclust(as.dist(distance.table),
                                        method=linkage))
   }
 ########################################################################
@@ -1339,9 +1340,9 @@ if(ngram.size > 1) {
   }
   #
 if(titles.on.graphs == TRUE) {
-   graph.title = paste(basename(getwd()),"\n",name.of.the.method)
+  graph.title = paste(basename(getwd()),"\n",name.of.the.method)
   if(analysis.type == "BCT") {
-  graph.subtitle = paste(mfw.info," MF",toupper(analyzed.features)," ",ngram.value," Culled @ ",culling.info,"%\n",
+      graph.subtitle = paste(mfw.info," MF",toupper(analyzed.features)," ",ngram.value," Culled @ ",culling.info,"%\n",
                     pronouns.info," ",distance.name.on.graph," Consensus ",consensus.strength," ",start.at.info, sep="") 
   } else {
       graph.subtitle = paste(mfw.info," MF",toupper(analyzed.features)," ",ngram.value," Culled @ ",culling.info,"%\n",

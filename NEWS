@@ -3,6 +3,8 @@
 
 
 
+== version 0.5.8-1, 2014/09/23
+ * bug fixes (mostly: colors on dendrograms)
 
 == version 0.5.8, 2014/09/3
  * new sequential methods available: rolling SVM,
