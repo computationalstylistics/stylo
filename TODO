@@ -1,0 +1,36 @@
+
+
+TO DO:
+
+
+define.plot.area()   does not have an executable example
+pronouns + encoding: perhaps iconv(...) should be moved to pronouns() ??
+
+
+
+Christof: a loop for different start.at values
+Fotis: custom list of files does not work for sample labels
+Peter: an external list of words: similar approach as for custom.files
+
+applicable scenarios:
+ 
+1. MDS, 100, En, pdf, png
+2. MDS, 1000, 100% culling, En, pdf, png
+3. PCA, corr., 100
+4. Cons.Tree
+...
+
+what about a disclaimer on the last tab? Something containing names of authors,
+bibliogr. ref., concise description, links to on-line manuals, CSG logo, ...
+
+
+common wordlist when the number of full-sized novels >100
+(picking the first 100 by chance? extracting randomly 1M words?,
+extract a number of words, say 50k, from each novel?)
+
+dendrograms: ward, complete, average, nj
+rooted consensus trees?
+
+the code for MDS and PCA in different flavors deserves some comments!
+
+

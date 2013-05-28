@@ -1,0 +1,87 @@
+
+# #################################################
+# Function for sampling
+# Usage: ...
+# Required argument: ...
+# Optional arguments: ....
+# #################################################
+
+make.samples <-
+function(tokenized.input.data,
+                        sample.size=10000,
+                        sampling="no.sampling",
+                        sampling.with.replacement=FALSE){
+  # checking the format of input data (vector? list?); converting to a list
+  if(is.list(tokenized.input.data) == FALSE) {
+    tokenized.input.data = list(tokenized.input.data) 
+  }
+  # checking if there are any names attached to the texts
+  if(is.character(names(tokenized.input.data)) == FALSE) {
+    # if not, some generic names will be assigned
+    names(tokenized.input.data) = 
+                         paste("paste",length(tokenized.input.data),sep="_")
+  }
+  # starting an empty list
+  corpus.cut.into.samples = list()
+  # iterating over subsequent texts of the input corpus
+  for(i in 1:length(tokenized.input.data)) {
+    # retrieving an appropriate text from the whole corpus (if applicable)
+    tokenized.text = tokenized.input.data[[i]]
+    # sanity check for text length: abort if the current text is extremely
+    # short or at least shorter than the specified sample size
+    if (length(tokenized.text) < 10 || 
+        (sampling == "normal.sampling" && length(tokenized.text) < sample.size) || 
+        (sampling == "random.sampling" && length(tokenized.text) < sample.size)) {
+      cat("\n\n",head(tokenized.text,100), "...\t", "This text is too short!", 
+          "\n\n")
+      stop("Corpus error...")
+    }
+    # at this point, each text in the corpus has been tokenized
+    # into an array of tokens which we can divide into samples
+    samples.from.text = list()
+    if (sampling == "normal.sampling"){
+      # initialize variables to sample the text
+      text.length = length(tokenized.text)
+      number.of.samples = floor(text.length/(sample.size))
+      cat(paste("\t", "- text length (in words): ", text.length, "\n", sep=""))
+      cat(paste("\t", "- nr. of samples: ", number.of.samples, "\n", sep=""))
+      cat(paste("\t", "- nr. of words dropped at the end of the text: ", 
+                text.length-(number.of.samples*sample.size), "\n", sep=""))
+      # iterate over the samples:
+      current.start.index = 1
+      for(sample.index in 1:number.of.samples) {
+        current.sample = tokenized.text[current.start.index:(current.start.index+sample.size-1)]
+        # flush current sample:
+        samples.from.text[[sample.index]] = current.sample
+        # assign a new id to current sample
+        id = paste(names(tokenized.input.data)[i],"-",sample.index,sep="")
+        names(samples.from.text)[sample.index] = id
+        # increment index for next iteration
+        current.start.index = current.start.index + sample.size
+        current.sample = c()
+      }
+    } else if(sampling == "random.sampling"){
+      # if random sampling was chosen, the text will be randomized and a sample 
+      # of a given length will be excerpted
+      current.sample = head(sample(tokenized.text, replace = sampling.with.replacement), sample.size)
+      samples.from.text[[1]] = current.sample 
+      # inheriting the sample's name
+      names(samples.from.text) = names(tokenized.input.data)[i]
+    } else if (sampling == "no.sampling"){
+      # entire texts will be used as a sample (regardless of its length)
+      current.sample = tokenized.text
+      samples.from.text[[1]] = current.sample
+      # inheriting the sample's name
+      names(samples.from.text) = names(tokenized.input.data)[i]
+    }
+    #
+    # estimating the number of samples already appended to the "new" corpus
+    n = length(corpus.cut.into.samples)
+    # appending newly created samples to the "new" corpus
+    for(s in 1:length(samples.from.text)) {
+      corpus.cut.into.samples[[n+s]] = samples.from.text[[s]]
+      names(corpus.cut.into.samples)[n+s] = names(samples.from.text)[s]
+    }
+  }
+return(corpus.cut.into.samples)
+}
