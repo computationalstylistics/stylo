@@ -948,6 +948,10 @@ return(preprocessed.text)
 # Arguments: 1. table with distances, 2. number of candidates to be displayed
 # #################################################
 
+# what about getting back to this old version in which ALL candidates
+# were listed, instead of listing only those misclassified?
+# it can be done as an option
+
 make.ranking.of.candidates = function(dist.matrix,candidates) {
   for(h in 1:length(dist.matrix[,1])) {
   ranked.candidates = order(dist.matrix[h,])
