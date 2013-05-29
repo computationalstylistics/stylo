@@ -18,11 +18,11 @@ test.corpus.dir = "secondary_set")
   \item{path}{if not specified, the current directory will be used 
     for input/output procedures (reading files, outputting the results).}
 
-  \item{primary.corpus.dir}{a subdirectory (within a working directory) that
+  \item{training.corpus.dir}{a subdirectory (within a working directory) that
     contains .....................; if not specified, the subdirectory 
     \code{primary_set} will be used.}
 
-  \item{secondary.corpus.dir}{a subdirectory (within a working directory) that
+  \item{test.corpus.dir}{a subdirectory (within a working directory) that
     contains .....................; if not specified, the subdirectory 
     \code{secondary_set} will be used.}
 }

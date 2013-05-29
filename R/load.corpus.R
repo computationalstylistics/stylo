@@ -11,7 +11,7 @@
 # btw: implementation will be very easy using %in%
 
 load.corpus <-
-function(corpus.dir="",files) {
+function(files, corpus.dir = "") {
   # first of all, retrieve the current path name
   original.path = getwd()
   # checking if the specified directory exists

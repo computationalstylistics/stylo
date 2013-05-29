@@ -4,7 +4,7 @@
 \description{Function for uploading text files from a specified directory}
 
 \usage{
-  load.corpus(files = c("first.txt","second.txt",...), corpus.dir = "")
+  load.corpus(files, corpus.dir = "")
 }
 \arguments{
   \item{files}{a vector of file names.}

@@ -2,23 +2,23 @@
 \alias{assign.plot.colors}
 \title{Assign colors to samples}
 \description{
-  Function that assigns unique colors to each class represented in a corpus: 
-  it is used for graph auto-coloring.
+Function that assigns unique colors to each class represented in a corpus: 
+it is used for graph auto-coloring.
 }
 \usage{
-  assign.plot.colors(x, col = "colors")
+assign.plot.colors(labels, col = "colors")
 }
 \arguments{
-  \item{x}{a vector containing names of samples represented in a corpus; it is 
-    essential to use underscore as a class delimiter. Consided the following 
-    examples: c("Sterne_Tristram", "Sterne_Sentimental", "Fielding_Tom", ...), 
-    where the classes are the authors' names, and c("M_Joyce_Dubliners", 
-    "F_Woolf_Night_and_day", "M_Conrad_Lord_Jim", ...), where the classes 
-    are M and F coded according to authors' gender.}
-  \item{col}{an optional argument indicating color palette: "colors" for 
-    full-color output (default), "grayscale" for grayscale (might be usefull 
-    for preparing publicable pictures), and "black", if one does not want 
-    to use colors.}
+\item{labels}{a vector containing names of samples represented in a corpus; 
+it is essential to use underscore as a class delimiter. Consider 
+the following examples: c("Sterne_Tristram", "Sterne_Sentimental",
+"Fielding_Tom", ...), where the classes are the authors' names, and 
+c("M_Joyce_Dubliners", "F_Woolf_Night_and_day", "M_Conrad_Lord_Jim", ...), 
+where the classes are M and F coded according to authors' gender.}
+\item{col}{an optional argument indicating color palette: "colors" for 
+full-color output (default), "grayscale" for grayscale (might be usefull 
+for preparing publicable pictures), and "black", if one does not want 
+to use colors.}
 }
 \details{
   Function for graph auto-coloring; depending on the user's choice, 

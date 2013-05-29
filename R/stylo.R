@@ -731,10 +731,11 @@ if((analysis.type == "CA") || (analysis.type == "BCT") || (analysis.type == "MDS
 # uses the function "assign.plot.colors()"
 # #################################################
 
-names.of.the.texts = gsub("(\\.txt)||(\\.xml)||(\\.html)||(\\.htm)","",rownames(table.with.all.freqs))
+names.of.texts = gsub("(\\.txt)||(\\.xml)||(\\.html)||(\\.htm)","",rownames(table.with.all.freqs))
 
 # using an appropriate function to assing colors to subsequent samples
-colors.of.pca.graph = assign.plot.colors(names.of.the.texts,col=colors.on.graphs)
+colors.of.pca.graph = assign.plot.colors(labels=names.of.texts,
+                            col=colors.on.graphs)
 
 
 

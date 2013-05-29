@@ -1,11 +1,11 @@
 Package: stylo
 Type: Package
 Title: functions for a variety of stylometric analyses
-Version: 0.5.0-37
-Date: 2013-05-27
+Version: 0.5.0-38
+Date: 2013-05-29
 Author: Maciej Eder, Jan Rybicki, Mike Kestemont
 Maintainer: Maciej Eder <maciejeder@gmail.com>
-Depends: tcltk2
+Depends: tcltk2, ape
 Description: A number of functions, supplemented by GUI, to perform various
              analyses in the field of computational stylistics, authorship 
              attribution, etc.

@@ -750,7 +750,7 @@ if (method == "mann.whitney"){
 		graph.filename <- paste(basename(getwd()),short.method.name, sep=" ")
 		if(write.png.file == TRUE) {
 			png(filename = paste(graph.filename,"%03d.png",sep=" "), 
-				width=7,height=7,res=300, unit="in")
+				width=7,height=7,res=300, units="in")
 			plot.current.task()
 			dev.off()}
 		if(write.pdf.file == TRUE) {
@@ -817,7 +817,7 @@ if(display.on.screen == TRUE){
 graph.filename <- paste(basename(getwd()),short.method.name, sep=" ")
 if(write.png.file == TRUE) {
 	png(filename = paste(graph.filename,"%03d.png",sep=" "), 
-	width=7,height=7,res=300, unit="in")
+	width=7,height=7,res=300, units="in")
 	plot.current.task()
 	dev.off()}
 if(write.pdf.file == TRUE) {

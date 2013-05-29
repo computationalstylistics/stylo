@@ -7,8 +7,6 @@
     stylistic. For a more detailed description, refer to miniHOWTO.}
 
 \usage{
-stylo()
-
 stylo(gui = TRUE, path = "", corpus.dir = "corpus")
 }
 
@@ -44,15 +42,13 @@ stylo(gui = TRUE, path = "", corpus.dir = "corpus")
 }
 
 \examples{
-  \dontrun{
-  #
-  # standard usage:
-  stylo()
-  #
-  # batch mode, custom name of corpus directory:
-  stylo(gui = FALSE, corpus.dir = "ShakespeareCanon")
-  #
-  }
+\dontrun{
+# standard usage:
+stylo()
+#
+# batch mode, custom name of corpus directory:
+stylo(gui = FALSE, corpus.dir = "ShakespeareCanon")
+}
 }
 
 \keyword{principal components analysis}

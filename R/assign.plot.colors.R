@@ -5,24 +5,24 @@
 # to matching strings of characters in texts' names
 # (as a delimiter, the underscore character is used);
 # alternatively, all the labels can be marked black. 
-# Required argument: a vector of text labels
+# Required argument: a vector of labels (text names)
 # Optional argument: col="colors" || "grayscale" || "back"
 # #################################################
 
 assign.plot.colors <-
-function(names.of.the.texts,col="colors") {
+function(labels,col="colors") {
   if(col == "black") {
     colors.of.pca.graph = "black"
   } else {
     color.numeric.values = c(1)
     current.color = 1
     # a loop for matching the subsequent strings of chars
-    for(w in 2:length(names.of.the.texts)) {
+    for(w in 2:length(labels)) {
       # if two samples have the same id, don't change the color
-      if(gsub("_.*","",names.of.the.texts)[w] %in%  
-                       gsub("_.*","",names.of.the.texts[1:(w-1)]) == TRUE) {
-        find.color = which(gsub("_.*","",names.of.the.texts) == 
-                               gsub("_.*","",names.of.the.texts)[w])[1]
+      if(gsub("_.*","",labels)[w] %in%  
+                       gsub("_.*","",labels[1:(w-1)]) == TRUE) {
+        find.color = which(gsub("_.*","",labels) == 
+                               gsub("_.*","",labels)[w])[1]
         current.color = color.numeric.values[find.color]
       # if the samples differ, assign the next color (actually, the color's id)
       } else {

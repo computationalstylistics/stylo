@@ -11,9 +11,9 @@
 
 
 classify <-
-function(gui=TRUE,path="",
-         training.corpus.dir="primary_set",
-         test.corpus.dir="secondary_set") {
+function(gui = TRUE, path = "",
+         training.corpus.dir = "primary_set",
+         test.corpus.dir = "secondary_set") {
 
 # so far, 'path', 'training.corpus' and 'test.corpus' are not used
 # (certainly: they are used, but their values are specified elsewhere)
