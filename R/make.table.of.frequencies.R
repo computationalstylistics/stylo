@@ -1,60 +1,77 @@
 
 # #################################################
 # FUNCTION: make.table.of.frequencies
-# preparing a huge table with all the frequencies (> mwf.list.cutoff).
-# Two arguments are required -- a vector with filenames
-# and a specified variable (list) containing a corpus
+# preparing a huge table with all the frequencies.
+# Two arguments are required: (1) text data: either 
+# a corpus (list), or a single text (vector); 
+# (2) a vector containig the words (a reference word list)
+# to rearrange particular frequency list in accordance
+# to this vector. Optional argument: (3) absent.sensitive
+# which is used to prevent building tables of non-existing
+# words. When switched on, the variables that contain but O
+# in all samples, will be excluded. Hovewer, in some cases
+# this is important to keep all the variables regardless of
+# their values. It is the case of comparing two corpora:
+# even if a given word did not occur in the whole corpus A,
+# it might have occured in the corpus B. In short: if 
+# you perform any analysis involving I and II set, switch
+# this option to FALSE.
 # #################################################
 
-# to implement: a sanity check if the generated table contains
-# at least one row (variable)
-
-# arguments: list of variables (wors, or features)
-# a corpus
-
-# names of samples: if exist, they should be retrieved from the list
-# containing corpus. Otherwise, some generic numeric values should be 
-# assigned. What about making it an optional argument?
-# If missing, the names from the list will be used.
-# If specified, a check will be needed if they match the number of samples
-
-
-# some code for random sampling should be definitely excluded from
-# this function
-
-
 make.table.of.frequencies <- 
-function(filenames,current.corpus) {
-  freq.list.of.all.the.samples = c()
-  freq.list.of.current.sample = c()
-    for (file in filenames) {
-    # loading the next sample from the list filenames.primary.set,
-    current.sample = current.corpus[[file]]
-    #
-    # if random sampling was chosen, the text will be randomized and 
-    # a sample of a given lenght will be excerpted
-    if(random.sampling == TRUE) {
-    current.sample = head(sample(current.sample,
-                        replace = sampling.with.replacement), 
-                        length.of.random.sample)
-    }
-    #
-    #
-    # preparing the frequency list of the current sample
-    raw.freq = table(current.sample) * 100 / length(current.sample)
-    # adjusting the frequency list to the main MFW list obtained above
-    freq.list.of.current.sample = raw.freq[mfw.list.of.all]
-    # taking the names (sc. words) from the main MFW list 
-    names(freq.list.of.current.sample) = mfw.list.of.all
-    # and sticking the current sample into the general frequency table
-    freq.list.of.all.the.samples = 
-               rbind(freq.list.of.all.the.samples, freq.list.of.current.sample)
-    # a short message on the screen:
-    cat(file, "\t", "excerpted successfully", "\n")
+function(corpus, words, absent.sensitive = TRUE) {
+  # variable initialization
+  frequency.table = c()
+  # checking the format of input data (vector? list?); converting to a list
+  if(is.list(corpus) == FALSE) {
+    corpus = list(corpus) 
   }
-  # adjusting names of the rows (=samples)
-  rownames(freq.list.of.all.the.samples) = c(filenames)
-# the result of the function
-return(freq.list.of.all.the.samples)
-}
+  # checking if there are any names attached to the texts
+  if(is.character(names(corpus)) == FALSE) {
+    # if not, some generic names will be assigned
+    names(corpus) = paste("sample",1:length(corpus),sep="_")
+  }
 
+  for(i in 1:length(corpus)) {
+    # loading the next sample (= next item) from the corpus
+    current.sample = corpus[[i]]
+    # preparing the frequency list of the current sample
+    raw.freqs = table(current.sample) * 100 / length(current.sample)
+    # adjusting the frequencies to the list of words passed as an argument
+    current.vector.of.freqs = raw.freqs[words]
+    # taking the names (sc. words) from the reference list of words
+    names(current.vector.of.freqs) = words
+    # sticking the current sample into the frequency table
+    frequency.table = rbind(frequency.table, current.vector.of.freqs)
+    # a short message on the screen (not applicable if there is only one text):
+    if(length(corpus) > 1) {
+      cat(".")
+    }
+  }
+  cat("\n")
+  # adjusting names of the samples
+  rownames(frequency.table) = names(corpus)
+  # all NA values will be set to 0
+  frequency.table[which(is.na(frequency.table))] = 0
+  #
+  # optionally, get rid of words that have not occurred in the corpus:
+  # if switched off (which makes sense when one compares two or more tables), 
+  # then the non-existing words will be represented in the table,
+  # and they will be filled with 0
+  if(absent.sensitive == TRUE) {
+    # if any of the requested words was not found in the corpus, ...
+    if( length(words[colSums(frequency.table) == 0]) > 0 ) {
+      # the word in question will be listed
+      cat("The following words could not be found the corpus:\n")
+      cat(words[colSums(frequency.table) == 0], "\n")
+    }
+    # filtering out the variables (words) that have not occurred
+    frequency.table = frequency.table[,(colSums(frequency.table) > 0)]
+  }
+  # complain if the frequency table is empty
+  if(length(frequency.table) == 0) {
+    stop("something must be wrong with the words you want to analyze")
+  }
+# the result of the function
+return(frequency.table)
+}

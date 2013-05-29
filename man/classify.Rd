@@ -34,8 +34,8 @@ test.corpus.dir = "secondary_set")
 \value{The function produces ..............................}
 
 \references{
-  Eder, M. and Rybicki, J. (2011). Stylometry with R. In: 
-    \code{Digital Humanities 2011: Conference Abstracts}. Stanford University,
+Eder, M. and Rybicki, J. (2011). Stylometry with R. In: 
+    Digital Humanities 2011: Conference Abstracts. Stanford University,
     Stanford, pp. 308-11.
 
 Burrows
@@ -49,19 +49,19 @@ Argamon
 \author{Maciej Eder, Mike Kestemont, Jan Rybicki}
 
 \seealso{
- \code{\link{stylo}}, \code{\link{rolling.delta}}, \code{\link{oppose}}}
+\code{\link{stylo}}, \code{\link{rolling.delta}}, \code{\link{oppose}}
+}
 
 \examples{
-  \dontrun{
-  #
-  # standard usage:
-  classify()
-  #
-  # batch mode, custom name of corpus directories:
-  classify(gui = FALSE, training.corpus.dir = "TrainingSet",
-         test.corpus.dir = "TestSet")
-  #
-  }
+\dontrun{
+#
+# standard usage:
+classify()
+#
+# batch mode, custom name of corpus directories:
+classify(gui = FALSE, training.corpus.dir = "TrainingSet",
+       test.corpus.dir = "TestSet")
+}
 }
 \keyword{classification}
 \keyword{support vector machines}

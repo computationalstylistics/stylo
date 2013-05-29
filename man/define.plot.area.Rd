@@ -29,8 +29,8 @@
   \code{\link{assign.plot.colors}}, \code{\link{stylo}} 
 }
 \examples{
-  \dontrun{ % this has to be done properly!!!!
-  define.plot.area(to.be.done)
-  }
+\dontrun{ % this has to be done properly!!!!
+define.plot.area(to.be.done)
+}
 }
 \keyword{scatterplot}
