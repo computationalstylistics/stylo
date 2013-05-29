@@ -436,57 +436,24 @@ if(dump.samples == TRUE){
 }
 
 
-#
-# #################################################
-# FUNCTION: make.parallel.frequency.lists()
-# preparing a huge table with all the frequencies (> mwf.list.cutoff).
-# Two arguments are required -- a vector with sample names
-# and a specified variable where the corpus is stored (in a list)
-# #################################################
-#
-make.parallel.frequency.lists = function(sample.names,current.corpus) {
-  freq.list.of.all.the.samples = c()
-  freq.list.of.current.sample = c()
-  for (g in 1:length(sample.names)) {
-	sample.name = sample.names[g]
-	current.sample = current.corpus[[sample.name]]
-	if (dump.samples == TRUE){
-		path = file.path(getwd(), "sample_dump")
-		path = file.path(path, paste(sample.name, ".txt", sep=""))
-		fileConn = file(path)
-		writeLines(current.corpus[[sample.name]], fileConn, sep=" ")
-		close(fileConn)
-	}
-    # loading the next sample from the list "sample.names"
-    # preparing the frequency list of the current text
-    raw.freq = table(current.sample) * 100 / length(current.sample)
-    # adjusting the frequency list to the main MFW list obtained above
-    freq.list.of.current.sample = raw.freq[mfw.list.of.all]
-    # taking the names (sc. words) from the main MFW list 
-    names(freq.list.of.current.sample) = mfw.list.of.all
-    # and inserting the current sample into the general frequency table
-    freq.list.of.all.the.samples = rbind(freq.list.of.all.the.samples, freq.list.of.current.sample)
-    # a short message on screen:
-    cat(".")
-  }
-  # adjusting names of the rows (=samples)
-  rownames(freq.list.of.all.the.samples) = c(sample.names)
-# the result of the function
-return(freq.list.of.all.the.samples)
-}
-#
+
+
+#################################################################
+#################################################################
+
 # preparing a huge table of all the frequencies for the whole corpus
-frequencies.0.culling = make.parallel.frequency.lists(names(loaded.corpus),loaded.corpus)
-# all NA values will be adjusted to 0
-frequencies.0.culling[which(is.na(frequencies.0.culling))] = 0
+frequencies.0.culling = make.table.of.frequencies(corpus = loaded.corpus,
+                            words = mfw.list.of.all)
+
+
+#################################################################
+#################################################################
+
+
 #
-# getting rid of zero values (this might happen in random sampling
-# or when custom wordlist are used)
-frequencies.0.culling = frequencies.0.culling[,grep("FALSE",(colSums(frequencies.0.culling))==0)]
 #
 #
-#
-# writing the frequency tables to text files (they can be re-used!)
+# writing the table with frequencies to a text file (it can be re-used!)
 write.table(t(frequencies.0.culling), 
             file="table_with_frequencies.txt", 
             sep="\t",
@@ -1220,7 +1187,7 @@ cat("removing most of the variables... \n")
 cat("type ls() if you want to see what was not removed\n")
 cat("if you are going to change the corpus, clean all: rm(list=ls())\n")
 cat("\n")
-cat("for suggestions how to cite this software type: citation(\"stylo\")\n")
+cat("for suggestions how to cite this software, type: citation(\"stylo\")\n")
 
 # a list of variables not to be removed
 do.not.remove = c("table.with.all.zscores", "table.with.all.freqs",
