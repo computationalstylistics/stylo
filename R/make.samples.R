@@ -19,7 +19,7 @@ function(tokenized.input.data,
   if(is.character(names(tokenized.input.data)) == FALSE) {
     # if not, some generic names will be assigned
     names(tokenized.input.data) = 
-                         paste("paste",length(tokenized.input.data),sep="_")
+                         paste("paste",1:length(tokenized.input.data),sep="_")
   }
   # starting an empty list
   corpus.cut.into.samples = list()
