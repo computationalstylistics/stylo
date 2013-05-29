@@ -7,6 +7,14 @@ define.plot.area()   does not have an executable example
 pronouns + encoding: perhaps iconv(...) should be moved to pronouns() ??
 
 
+GEPHI!!!! (to be copied from 0.4.9.2)
+
+culling could be easily implemented as a separate funcition
+
+functionalities not implemented in classify:
+interactive.files <<- FALSE
+use.custom.list.of.files <<- TRUE
+
 
 Christof: a loop for different start.at values
 Fotis: custom list of files does not work for sample labels

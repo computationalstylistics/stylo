@@ -1,13 +1,10 @@
 
 
-##############################################################################
-# this is simply the Classify script put into function(){ }
-
-# it needs to be thoroughly re-written:
+# there is still a lot of work with classify():
 # (1) gui should be extracted as a separated function
 # (2) it will be better to have initial settings stored in a separate function,
 #     provided that this is a good idea (cf. stylo() and stylo.default.settings())
-# (3) uploading corpora: the function load.corpus.and.parse should be used
+
 
 
 classify <-
@@ -15,9 +12,8 @@ function(gui = TRUE, path = "",
          training.corpus.dir = "primary_set",
          test.corpus.dir = "secondary_set") {
 
-# so far, 'path', 'training.corpus' and 'test.corpus' are not used
+# so far, 'training.corpus' and 'test.corpus' are not used
 # (certainly: they are used, but their values are specified elsewhere)
-
 
 
 
@@ -44,87 +40,12 @@ cat("using current directory...\n")
 
 
 
-#######  GENERAL SETTINGS (GUI/TEXT-MODE)  ###################################
-
-# If you wish to use a simple yet effective graphical interface (GUI),
-# just set the following option to TRUE, otherwise switch this option to FALSE
-# and edit manually the rest of variables (see below).
-# If you switch this option on, the values indicated in the following sections 
-# will serve as default for the GUI (you can adapt them to your needs)
-
-interactive.mode.with.GUI = TRUE
-
-
-#######  TEXT- AND LANGUAGE-DEPENDENT SETTINGS  ####################
-
-
-# format of corpus files; available choices are:
-# "plain", "xml", "xml.drama", "xml.notitles", "html"
-corpus.format = "plain"
-
-
-# how many MFW should be taken into analysis (if mfw.min value = max.mfw, 
-# then no multiple iterations will be computed)
-# start.at option enables skipping top frequency words: you should
-# indicate the desired start position of your list (in most cases you will 
-# probably prefer setting it to 1)
-
-mfw.min = 100
-mfw.max = 100
-mfw.incr = 100
-start.at = 1
-
-# culling rate specifies the number of texts in a corpus in which a given word 
-# must be found in order to be included in the analysis. Thus, a 100% culling 
-# rate limits the analysis to words that appear at least once in every text 
-# in the corpus; at a 50% culling rate, a word is included into the analysis 
-# when it appears in at least half of the texts in the corpus; a 0% culling 
-# rate (or no culling) means that no words are omitted.
-# about min=max: see above
-
-culling.min = 0
-culling.max = 0
-culling.incr = 20
-
-# Deleting pronouns (this is independent of the culling procedure).
-# If deleting pronouns option is switched to TRUE, choose one language
-# of the following: English, Polish, Latin, French, German, Italian, Hungarian
-# (the editable lists of pronouns are available below; see: advanced settings).
-# Additionally, there are a few variants of language settings available:
-# English.contr, English.all, and Latin.corr. Their meaning is as follows:
-#     "English.contr": treats the contractions as signle words, i.e. strings
-#         such as "don't", "you've" etc. will not be split into two words.
-#     "English.all": keeps the contractions (as above), and also prevents
-#         from splitting compound words (mother-in-law, double-decker, etc.)
-#     "Latin.corr": since some editions do not distinguish the letters v/u,
-#         this option provides a consistent conversion to "u" in each text.
-
-delete.pronouns = FALSE
-corpus.lang = "English.all"
-
-
-# Selection of features. In classical approaches, frequencies of the most
-# frequent words (MFW) are used as basis for multidimensional analyses.
-# It has been argued, however, that also other features are worh considering,
-# especially word and/or letter n-grams. The general concept of n-gram
-# is to combine a string of single words/letters into a sequence of n
-# elements. Given a sample sentence "This is a simple example", the letter 
-# 2-grams are as follows: "th", "hi", "is", "s ", " i", "is", "s ", " a", "a ",
-# " s", "si", "im", "mp", etc. The same sentence split into word 3-grams:
-# "this is a", "is a simple", "a simple example".
-# Another question is whether it really increases the accuracy of attribution;
-# further reading: Eder, M. (2011). Style-markers in authorship attribution: 
-# A cross-language study of the authorial fingerprint, "Studies in Polish
-# Linguistics" 6: 101-16.
-# Two types of n-grams are available: letters (option "l"), and words ("w").
-
-analyzed.features = "w"
-ngram.size = 1
+# most settings will be loaded using stylo.default.settings()
+# some classify-specific options, however, have to be declared here:
 
 
 
 #######  MATHEMATICAL SETTINGS (CLASSIFICATION METHOD)  #############
-
 
 # method of classification: choose one of the options described below
 # Delta ("delta"), k-nearest neighbor classification ("knn"),
@@ -132,80 +53,17 @@ ngram.size = 1
 # ("nsc"), or Support Vectors Machines ("svm")
 classification.method = "knn"
 
-
-
-#######  MATHEMATICAL SETTINGS (DISTANCE MEASURE)  #################
-
-# Strictly speaking, the choice of an appropriate distance measure
-# is the core of the statistical procedure provided by this script.
-# (However, the distance measures do not apply to the PCA method)
-# Although this choice is not easy, some of the following measures
-# seem to be more suitable for linguistic purposes than others.
-# On theoretical grounds, Euclidean Distance and Manhattan
-# Distance should be avoided in stylometry. Canberra Distance is quite 
-# troublesome but effective e.g. for Latin (it should be combined with 
-# careful culling settings and a limited number of MFW taken into analysis). 
-# For English, usually Classic Delta is a good choice. A theoretical 
-# explanation of the measures implemented in this script is forthcoming (?).
-#
-# The available distance measures (choose ONE) are as follows:
-#   "CD" --> Classic Delta as developed by Burrows
-#   "AL" --> Argamon's Linear Delta (based on Euclidean principles)
-#   "ED" --> Eder's Delta (explanation and mathematical equation: soon)
-#   "ES" --> Eder's Simple (explanation and mathematical equation: soon)
-#   "MH" --> Manhattan Distance (obvious and well documented)
-#   "CB" --> Canberra Distance (risky, but sometimes amazingly good)
-#   "EU" --> Euclidean Distance (basic, and the most "natural")
-
-distance.measure = "CD"
-
-
-
 # this is obsolete, but still required somewhere below (bug to be fixed)
 consensus.strength = 0.5
 
-
-
 # Delta is always active: output is directed to a file. You may specify
 # the number of final ranking candidates to be displayded (at least 1)
-
 number.of.candidates = 3
-
 
 # Report the number of correct guesses for each iteration (written to 
 # the log file). Ranking of the least unlikely candidates in the log file.
-
 how.many.correct.attributions = TRUE
 final.ranking.of.candidates = TRUE
-
-
-#######  ADVANCED SETTINGS (FOR EXPERTS ONLY)  ########################
-
-# Normally, the script is computing a big table of thousands 
-# of word frequencies. This is a non-trivial and time-consuming task.
-# If done once, there is no need to waste time and do it again, because
-# the tables are also written into output files. To retrieve all the word
-# frequencies from existing files, switch this option to TRUE.
-# BUT it MUST be set to FALSE when you switch corpora in the same R session!
-
-use.existing.freq.tables = TRUE
-
-# Some people like to see what's going on, and to be able to revise/edit
-# the list of words for analysis. To meet their wishes, the script
-# saves the list into a separate output file. You can either delete as many 
-# words as you want from this file, or mark the unwanted words with "#" 
-# (just like these comments are marked). Switching the following option on
-# prevents the script from overwriting the file, and provides that the wordlist
-# is loaded from there.
-
-use.existing.wordlist = TRUE
-
-# Usually, it is recommended to cut off the tail of the word-list;
-# if you do not want to cut the list, then the variable may be set to an 
-# absurdly big number, or to "mfw.list.cutoff = mfw.list.of.all"
-# (and then you are advised to use a fast computer)
-
-mfw.list.cutoff = 5000
 
 # How the z-scores should be calculated:
 # if the variable is set to FALSE, then the z-scores are relying
@@ -213,39 +71,31 @@ mfw.list.cutoff = 5000
 # this is the classical solution used by Burrows and Hoover).
 # Otherwise, the scaling is based on all the values
 # in the primary and the secondary sets.
-
 z.scores.of.all.samples = FALSE
 
 # The both talbes of frequencies are build using the pre-prepared word
 # list of the whole I set. Alternatively, one might want to prepare 
 # this list of both sets. Similarily culling: it can be calcutated either 
 # on the I set, or on both sets
-
 reference.wordlist.of.all.samples = FALSE
 culling.of.all.samples = TRUE
 
-
 # file with the final ranking of Delta results (log file)
-
 outputfile = "final_results.txt"
 
-
-# when analyzed texts are significantly unequal in length, it is not a bad
-# idea to prepare samples as randomly chosen "bags of words". If this option
-# is switched on, the desired size of a sample should be indicated.
-# Sampling with and without replacement is also available.
-# (Further reading: Eder, M. (2010). Does Size Matter? Authorship Attribution,
-# Short Samples, Big Problem. In "Digital Humanities 2010: Conference 
-# Abstracts." King's College London 2010, pp. 132-35.)
-#
-# ATTENTION: this makes sense only if "use.existing.freq.tables" is set "FALSE"
-
+# THIS WILL BE OBSOLETE ONCE make.parallel.freq.list is replaced
+# (carefully: it is used by GUI as well...)
 random.sampling = FALSE
-length.of.random.sample = 10000
-sampling.with.replacement = FALSE
 
-# the variables are now ready to use (unless the GUI option was chosen)
-# ###################################################################
+
+
+
+
+
+# loading the default settings as defined in the following function
+stylo.default.settings()
+
+
 
 
 
@@ -659,7 +509,7 @@ repeat{
 }
 
 
-} # <-- here the option "interactive.mode.with.GUI == TRUE" is completed
+} # <-- here the option "gui == TRUE" is completed
 
       
 # #################################################
@@ -778,165 +628,6 @@ var.name <- function(x) {
 
 
 
-
-# #################################################
-# Function for combining single features (words
-# or letters) into n-grams, or strings of n elements;
-# e.g. letter 2-grams of the sentence "This is a sentence"
-# are as follows: "th", "hi", "is", "s ", " i", "is", etc.
-# Required argument: name of the vector of words/letters
-# #################################################
-
-make.ngrams = function(input.text) {
-  txt = c()
-  if(ngram.size > 1) {
-    txt = input.text
-    for(n in 2:ngram.size) {
-    txt = paste(txt[1:(length(txt)-1)],input.text[n:length(input.text)])
-    }
-  } else {
-  # if n-gram size is set to 1, then nothing will happen
-  txt = input.text
-  }
-return(txt)
-}
-
-
-
-
-# #################################################
-# Generic function for splitting a given input text into
-# single words (chains of characters delimited with
-# spaces or punctuation marks). Alternatively, 
-# you can write here another rule for splitting.
-# Required argument: name of the text to be split.
-# ATTENTION: this is the only piece of coding in this script
-# that dependens on the operating system used
-# #################################################
-
-split.into.words = function(input.text) {
-  # splitting into units specified by regular expression;
-	# here, all sequences between non-letter characters are assumed to be words:
-	if(Sys.info()[["sysname"]] == "Windows") { 
-	### Windows
-		tokenized.text = c(unlist(strsplit(input.text, "\\W+|_+",perl=T)))
-	} else {
-	### Linux, Mac
-		tokenized.text = c(unlist(strsplit(input.text, "[^[:alpha:]]+")))
-	}
-	# trying to avoid empty strings:
-	tokenized.text = tokenized.text[nchar(tokenized.text)>0]
-	# trying to get rid of non-letter characters:
-	tokenized.text = tokenized.text[grep("[^[:digit:]]",tokenized.text)]
-return(tokenized.txt)
-}
-
-
-
-
-
-# #################################################
-# Function for splitting a given input text into
-# single words (chains of characters delimited with
-# spaces or punctuation marks). There is also an option
-# of splitting the text into letters and/or performing
-# splitting into n-grams
-# #################################################
-
-split.sample = function(input.text) {
-  # loading the file; optionally, fiddling with dashes and contractions:
-  #
-  # this is the standard procedure of splitting input texts
-  if(corpus.lang != "English.contr" && corpus.lang != "English.all") {
-    tokenized.sample = split.into.words(input.text)
-    }
-  # if Latin option with adjusting the v/u letters was switched on,
-  # smashing the distinction and converting both types to the letter u
-  if(corpus.lang == "Latin.corr") {
-    tokenized.sample = gsub("v","u",tokenized.sample)
-    }    
-  # this code is used for English corpora only
-  if(corpus.lang == "English.contr" || corpus.lang == "English.all") {
-    # replacing non-ASCII apostrophes with simple ' (standard ASCII char)
-    tokenized.sample = gsub(iconv("\u2019",from="UTF-8"),"'",input.text)
-    # getting rid of contractions ('t, 's, 've, 'd, 'll, 'em, 'im) by replacing
-    # their apostrophes with ^ (other apostrophes will not be replaced)
-    tokenized.sample = gsub("([[:alpha:]])'([tsdm]|ll|ve|em|im)\\b","\\1^\\2",
-                            tokenized.sample)
-    # adding spaces around dashes (to distinguish dashes and hyphens)
-    tokenized.sample = gsub("[-]{2,5}"," -- ",tokenized.sample)
-    # depending on which option was swithed on, either the contractions are
-    # kept, or all the peculiarities, i.e. both contractions and hyphens
-    if(corpus.lang == "English.contr") {
-      tokenized.sample=c(unlist(strsplit(tokenized.sample,"[^[:alpha:]^]+")))
-      }
-    if(corpus.lang == "English.all") {
-      tokenized.sample=c(unlist(strsplit(tokenized.sample,"[^[:alpha:]^-]+")))
-      # trying to clean the remaining dashes:
-      tokenized.sample = gsub("^[-]+$","",tokenized.sample)
-      }
-  }
-  # trying to avoid empty strings:
-  tokenized.sample = tokenized.sample[nchar(tokenized.sample)>0]
-  # trying to get rid of non-letter characters:
-  tokenized.sample = tokenized.sample[grep("[^[:digit:]]",tokenized.sample)]
-  #
-  #
-  # splitting the sample into letters (if analyzed.features was set to "l")
-  if(analyzed.features == "l") {
-    tokenized.sample = paste(tokenized.sample, collapse=" ")
-    tokenized.sample = unlist(strsplit(tokenized.sample,""))
-    }
-  #
-  # making n-grams (if the value "n" has been set to 2 or more) 
-  if(ngram.size > 1) {
-  tokenized.sample = make.ngrams(tokenized.sample)
-  }
-# the result of the function:
-return(tokenized.sample)
-}
-
-
-
-# #################################################
-# Function for adjusting different input formats:
-# xml (TEI) in two variants, html, and plain text files.
-# Required argument: name of the text to pre-process
-# #################################################
-
-delete.markup = function(input.text) {
-  if(corpus.format == "xml" || corpus.format == "xml.drama") {
-    # getting rid of TEI header (if exists)
-    if(length(grep("</teiheader>",input.text)) > 0) {
-      input.text = input.text[-c(1:(grep("</teiheader>",input.text)))]
-      }
-    # the whole text into one (very) long line
-    preprocessed.text = paste(input.text, collapse=" ")
-    # getting rid of dramatis personae
-    if(corpus.format == "xml.drama"){
-      preprocessed.text = gsub("<speaker>.*?</speaker>","",preprocessed.text)
-      }
-    # getting rid of comments and (editorial) notes
-    preprocessed.text = gsub("<note.*?</note>","",preprocessed.text)
-    # getting rid of all the remaining tags
-    preprocessed.text = gsub("<.*?>","",preprocessed.text)
-  }
-  if(corpus.format == "html") {
-    # getting rid of html header (if exists)
-    if(length(grep("<body",input.text)) > 0) {
-      input.text = input.text[-c(1:(grep("<body",input.text)))]
-      }
-    # the whole text into one (very) long line
-    preprocessed.text = paste(input.text, collapse=" ")
-    # getting rid of links (menus and similar stuff should be deleted, hopefully)
-    preprocessed.text = gsub("<a href.*?/a>","",preprocessed.text)
-    # getting rid of all the remaining tags
-    preprocessed.text = gsub("<.*?>","",preprocessed.text)
-  } else {
-  preprocessed.text = input.text
-  }
-return(preprocessed.text)
-}
 
 
 
@@ -1076,47 +767,33 @@ if(length(filenames.primary.set) < 2 || length(filenames.secondary.set) < 2) {
 #
 #
 #
-# loading the primary set from text files
-corpus.of.primary.set = list()
-setwd("primary_set")
-  for (file in filenames.primary.set) {
-  # loading the next file from the list filenames.primary.set,
-  current.file = tolower(scan(file,what="char",sep="\n", quiet=T))
-  # delete xml/html markup (if applicable)
-  current.file = delete.markup(current.file)
-  # deleting punctuation, splitting into words:
-  split.file = split.sample(current.file)
-  # if the current text is too short, abort the script
-  if(length(split.file) < 10) {
-    cat("\n\n",file, "\t", "this sample is VERY short!", "\n\n")
-    setwd(".."); stop("corpus error")
-    }
-  # appending the current text to the virtual corpus
-  corpus.of.primary.set[[file]] = split.file
-  cat(file, "\t", "loaded successfully", "\n")
-  }
-setwd("..")
-#
-# loading the secondary set from text files
-corpus.of.secondary.set = list()
-setwd("secondary_set")
-  for (file in filenames.secondary.set) {
-  # loading the next file from the list filenames.secondary.set,
-  current.file = tolower(scan(file,what="char",sep="\n", quiet=T))
-  # delete xml/html markup (if applicable)
-  current.file = delete.markup(current.file)
-  # deleting punctuation, splitting into words:
-  split.file = split.sample(current.file)
-  # if the current text is too short, abort the script
-  if(length(split.file) < 10) {
-    cat("\n\n",file, "\t", "this sample is VERY short!", "\n\n")
-    setwd(".."); stop("corpus error")
-    }
-  # appending the current text to the virtual corpus
-  corpus.of.secondary.set[[file]] = split.file
-  cat(file, "\t", "loaded successfully", "\n")
-  }
-setwd("..")
+#################################################################
+#################################################################
+
+corpus.of.primary.set = load.corpus.and.parse(files=filenames.primary.set,
+                         corpus.dir=training.corpus.dir,
+                         markup.type=corpus.format,
+                         language=corpus.lang,
+                         sample.size=sample.size,
+                         sampling=sampling,
+                         sampling.with.replacement=sampling.with.replacement,
+                         features=analyzed.features,
+                         ngram.size=ngram.size)
+
+corpus.of.secondary.set = load.corpus.and.parse(files=filenames.secondary.set,
+                         corpus.dir=test.corpus.dir,
+                         markup.type=corpus.format,
+                         language=corpus.lang,
+                         sample.size=sample.size,
+                         sampling=sampling,
+                         sampling.with.replacement=sampling.with.replacement,
+                         features=analyzed.features,
+                         ngram.size=ngram.size)
+
+
+#################################################################
+#################################################################
+
 # blank line on the screen
 cat("\n")
 #
@@ -1125,7 +802,7 @@ cat("\n")
 # both directories (primary_set and secondary_set) shoud contain some texts;
 # if the number of text samples is lower than 2, the script will stop
 if(length(corpus.of.primary.set) < 2 || length(corpus.of.secondary.set) < 2) {
-    cat("\n\n","either primary_set or secondary_set is empty!", "\n\n")
+    cat("\n\n","either the training set or the test set is empty!", "\n\n")
     stop("corpus error")
     }
 #
@@ -1144,23 +821,25 @@ if (use.existing.wordlist == TRUE && file.exists("wordlist.txt") == TRUE) {
 # (or both if "Z-scores all" is set to TRUE)
 #
 wordlist.of.primary.set = c()
+  cat("\n")
   for (file in 1 : length(corpus.of.primary.set)) {
     # loading the next sample from the list filenames.primary.set,
     current.text = corpus.of.primary.set[[file]]
     # putting samples together:
     wordlist.of.primary.set = c(wordlist.of.primary.set, current.text)
-    cat(names(corpus.of.primary.set[file]),"\t","tokenized successfully", "\n")
+    cat(".")
     }
 # including words of the secondary set in the reference wordlist (if specified)
   if (reference.wordlist.of.all.samples == TRUE) {
     wordlist.of.secondary.set = c()
+    cat("\n")
     for (file in 1 : length(corpus.of.secondary.set)) {
       # loading the next sample from the list filenames.secondary.set,
       current.text = corpus.of.secondary.set[[file]]
       # putting samples together:
       wordlist.of.secondary.set = c(wordlist.of.secondary.set, current.text)
-    cat(names(corpus.of.secondary.set[file]),"\t","tokenized successfully","\n")
-    } 
+    cat(".")
+    }
   } else {
   wordlist.of.secondary.set = c()}
 #
@@ -1196,61 +875,28 @@ cat(mfw.list.of.all, file="wordlist.txt", sep="\n",append=F)
 cat("\n")
 #
 #
-# #################################################
-# FUNCTION: make.paralel.frequency.lists()
-# preparing a huge table with all the frequencies (> mwf.list.cutoff).
-# Two arguments are required -- a vector with filenames
-# and a specified variable where the corpus is stored (in a list)
-# #################################################
-#
-make.paralel.frequency.lists = function(filenames,current.corpus) {
-  freq.list.of.all.the.samples = c()
-  freq.list.of.current.sample = c()
-    for (file in filenames) {
-    # loading the next sample from the list filenames.primary.set,
-    current.sample = current.corpus[[file]]
-    #
-    # if random sampling was chosen, the text will be randomized and 
-    # a sample of a given lenght will be excerpted
-    if(random.sampling == TRUE) {
-    current.sample = head(sample(current.sample,
-                        replace = sampling.with.replacement), 
-                        length.of.random.sample)
-    }
-    #
-    #
-    # preparing the frequency list of the current sample
-    raw.freq = table(current.sample) * 100 / length(current.sample)
-    # adjusting the frequency list to the main MFW list obtained above
-    freq.list.of.current.sample = raw.freq[mfw.list.of.all]
-    # taking the names (sc. words) from the main MFW list 
-    names(freq.list.of.current.sample) = mfw.list.of.all
-    # and sticking the current sample into the general frequency table
-    freq.list.of.all.the.samples = 
-               rbind(freq.list.of.all.the.samples, freq.list.of.current.sample)
-    # a short message on the screen:
-    cat(file, "\t", "excerpted successfully", "\n")
-  }
-  # adjusting names of the rows (=samples)
-  rownames(freq.list.of.all.the.samples) = c(filenames)
-# the result of the function
-return(freq.list.of.all.the.samples)
-}
-#
-#
-# preparing a huge table of all the frequencies for the primary set
-freq.I.set.0.culling = 
-  make.paralel.frequency.lists(filenames.primary.set,corpus.of.primary.set)
-# all NA values will be adjusted to 0
-freq.I.set.0.culling[which(is.na(freq.I.set.0.culling))] = 0
-#
-#
-# preparing a huge table of all the frequencies for the secondary set
-freq.II.set.0.culling = 
-  make.paralel.frequency.lists(filenames.secondary.set,corpus.of.secondary.set)
-# all NA values will be adjusted to 0
-freq.II.set.0.culling[which(is.na(freq.II.set.0.culling))] = 0
-#
+
+
+
+#################################################################
+#################################################################
+
+# preparing a huge table of all the frequencies for the training set
+freq.I.set.0.culling = make.table.of.frequencies(corpus = corpus.of.primary.set,
+                            words = mfw.list.of.all,
+                            absent.sensitive=FALSE)
+
+# preparing a huge table of all the frequencies for the test set
+freq.II.set.0.culling = make.table.of.frequencies(corpus = corpus.of.secondary.set,
+                            words = mfw.list.of.all,
+                            absent.sensitive=FALSE)
+
+#################################################################
+#################################################################
+
+
+
+
 #
 # writing the frequency tables to text files (they can be re-used!)
 write.table(t(freq.I.set.0.culling), 
@@ -1396,6 +1042,10 @@ secondary.set = freq.II.set.0.culling[,c(list.of.words.after.culling)]
 
 
 # starting the frequency list at frequency rank set in option start.at above
+
+# TO SAY THE TRUTH, IT CAN BE DONE MUCH EARLIER: at the moment when 
+# the frequency list for either I set or both sets is produced,
+# it can be cut and used for building freq. tables
 
 primary.set = primary.set[,start.at:length(primary.set[1,])]
 secondary.set = secondary.set[,start.at:length(secondary.set[1,])]
@@ -1607,13 +1257,15 @@ selected.dist =
 }  # <--- delta
 
 
-# tu kod dla SVM, kNN, NSC, NaiveBayes
+# the code for SVM, kNN, NSC, NaiveBayes
 #
 #
 #
 #
 #
 #
+
+# FOR SOME REASON, IT IS NEEDED AT SOME POINT, even if this is obsolete
 distance.name.on.graph = "to be deleted"
 
 
@@ -1829,8 +1481,8 @@ cat("type ls() if you want to see what was not removed\n")
 cat("if you are going to change the corpus, clean all: rm(list=ls())\n")
 cat("\n")
 cat("Results saved in", outputfile, "\n")
-cat("\n") 
-
+cat("\n")
+cat("for suggestions how to cite this software, type: citation(\"stylo\")\n")
 
 
 # a list of variables not to be removed
@@ -1842,7 +1494,6 @@ do.not.remove = c("zscores.table.both.sets", "freq.table.both.sets",
 list.of.variables = ls()
 rm(list=list.of.variables[!(list.of.variables %in% do.not.remove)])
 
-
-
 }
+
 

@@ -66,8 +66,8 @@ corpus.lang <<- "English.all"
 # Linguistics" 6: 99-114.
 # Two types of n-grams are available: characters (option "c"), and words ("w").
 
-analyzed.features <<- "c"
-ngram.size <<- 5
+analyzed.features <<- "w"
+ngram.size <<- 1
 
 
 #######  MATHEMATICAL SETTINGS (DISTANCE MEASURE)  #################
