@@ -48,7 +48,7 @@ stylo.default.settings()
 
 # optionally, displaying a GUI box
 if (gui == TRUE) {
-  stylo.gui()
+  gui.stylo()
   } 
 
 
@@ -119,12 +119,12 @@ if(txm.compatibility.mode == TRUE) {
 
 # Finally, we want to save some of the variable values for later use;
 # they are automatically loaded into the GUI at the next run of the script.
-cat("",file="config.txt",append=F)
+cat("",file="stylo_config.txt",append=F)
 var.name<-function(x) { 
       if(is.character(x)==TRUE) {
-      cat(paste(deparse(substitute(x))," = \"",x,"\"", sep=""),file="config.txt",sep="\n",append=T)
+      cat(paste(deparse(substitute(x))," = \"",x,"\"", sep=""),file="stylo_config.txt",sep="\n",append=T)
         } else {
-          cat(paste(deparse(substitute(x)),x, sep=" = "),file="config.txt",sep="\n",append=T) }
+          cat(paste(deparse(substitute(x)),x, sep=" = "),file="stylo_config.txt",sep="\n",append=T) }
         } 
 var.name(corpus.format)
 var.name(corpus.lang)

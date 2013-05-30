@@ -16,6 +16,9 @@ interactive.files <<- FALSE
 use.custom.list.of.files <<- TRUE
 
 
+gui.stylo() ---> columnspan=5 can be safely deleted from the entries on tab5
+
+
 Christof: a loop for different start.at values
 Fotis: custom list of files does not work for sample labels
 Peter: an external list of words: similar approach as for custom.files

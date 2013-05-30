@@ -51,19 +51,16 @@ cat("using current directory...\n")
 # Delta ("delta"), k-nearest neighbor classification ("knn"),
 # Naive Bayes classification ("naivebayes"), Nearest Shrunken Centroids
 # ("nsc"), or Support Vectors Machines ("svm")
-classification.method = "knn"
-
-# this is obsolete, but still required somewhere below (bug to be fixed)
-consensus.strength = 0.5
+classification.method <<- "delta"
 
 # Delta is always active: output is directed to a file. You may specify
 # the number of final ranking candidates to be displayded (at least 1)
-number.of.candidates = 3
+number.of.candidates <<- 3
 
 # Report the number of correct guesses for each iteration (written to 
 # the log file). Ranking of the least unlikely candidates in the log file.
-how.many.correct.attributions = TRUE
-final.ranking.of.candidates = TRUE
+how.many.correct.attributions <<- TRUE
+final.ranking.of.candidates <<- TRUE
 
 # How the z-scores should be calculated:
 # if the variable is set to FALSE, then the z-scores are relying
@@ -71,21 +68,21 @@ final.ranking.of.candidates = TRUE
 # this is the classical solution used by Burrows and Hoover).
 # Otherwise, the scaling is based on all the values
 # in the primary and the secondary sets.
-z.scores.of.all.samples = FALSE
+z.scores.of.all.samples <<- FALSE
 
 # The both talbes of frequencies are build using the pre-prepared word
 # list of the whole I set. Alternatively, one might want to prepare 
 # this list of both sets. Similarily culling: it can be calcutated either 
 # on the I set, or on both sets
-reference.wordlist.of.all.samples = FALSE
-culling.of.all.samples = TRUE
+reference.wordlist.of.all.samples <<- FALSE
+culling.of.all.samples <<- TRUE
 
 # file with the final ranking of Delta results (log file)
-outputfile = "final_results.txt"
+outputfile <<- "final_results.txt"
 
 # THIS WILL BE OBSOLETE ONCE make.parallel.freq.list is replaced
 # (carefully: it is used by GUI as well...)
-random.sampling = FALSE
+random.sampling <<- FALSE
 
 
 
@@ -94,11 +91,6 @@ random.sampling = FALSE
 
 # loading the default settings as defined in the following function
 stylo.default.settings()
-
-
-
-
-
 
 
 
@@ -122,401 +114,17 @@ classification.method = tolower(classification.method)
 # #################################################
 
 
+# this is obsolete, but still required somewhere below (bug to be fixed)
+consensus.strength = 0.5
 
 
 
 
 
-# #################################################
-#
-# the GUI module 
-#
-# #################################################
-
-# At the beginning of the script, you could decide whether use the GUI module 
-# or not; if the appropriate option was switched on, the GUI will start now
-
+# optionally, displaying a GUI box
 if (gui == TRUE) {
-  library(tcltk)
-  library(tcltk2)
-
-if(file.exists("classify_config.txt") == TRUE) {
-  source("classify_config.txt") }
-
-# ###################################################################
-
-.Tcl("font create myDefaultFont -family tahoma -size 8")
-.Tcl("option add *font myDefaultFont")  
-  cancel_pause <- FALSE
-  tt <- tktoplevel()
-  tktitle(tt) <- "Enter analysis parameters"
-
-  push_OK <- function(){
-      cancel_pause <<- TRUE
-      tkdestroy(tt)
-      }
-
-corpus.format <- tclVar(corpus.format)
-mfw.min <- tclVar(mfw.min)
-mfw.max <- tclVar(mfw.max)
-mfw.incr <- tclVar(mfw.incr)
-start.at <- tclVar(start.at)
-culling.min <- tclVar(culling.min)
-culling.max <- tclVar(culling.max)
-culling.incr <- tclVar(culling.incr)
-ngram.size <- tclVar(ngram.size)
-analyzed.features <- tclVar(analyzed.features)
-classification.method <- tclVar(classification.method)
-use.existing.freq.tables <- tclVar(use.existing.freq.tables)
-use.existing.wordlist <- tclVar(use.existing.wordlist)
-how.many.correct.attributions <- tclVar(how.many.correct.attributions)
-mfw.list.cutoff <- tclVar(mfw.list.cutoff)
-final.ranking.of.candidates <- tclVar(final.ranking.of.candidates)
-delete.pronouns <- tclVar(delete.pronouns)
-corpus.lang <- tclVar(corpus.lang)
-distance.measure <- tclVar(distance.measure)
-number.of.candidates <- tclVar(number.of.candidates)
-random.sampling <- tclVar(random.sampling)
-length.of.random.sample <- tclVar(length.of.random.sample)
-sampling.with.replacement <- tclVar(sampling.with.replacement)
-z.scores.of.all.samples <- tclVar(z.scores.of.all.samples)
-reference.wordlist.of.all.samples <- tclVar(reference.wordlist.of.all.samples)
-culling.of.all.samples <- tclVar(culling.of.all.samples)
-
-
-
-# layout of the GUI begins here:
-#
-tkgrid(tklabel(tt,text="    ")) # blank line (serving as the top margin)
-
-
-
-# first row: INPUT
-#
-entry_TXT <- tkradiobutton(tt)
-entry_XML <- tkradiobutton(tt)
-entry_XMLDrama <- tkradiobutton(tt)
-entry_XMLNoTitles <- tkradiobutton(tt)
-entry_HTML <- tkradiobutton(tt)
-#
-tkconfigure(entry_TXT,variable=corpus.format,value="plain")
-tkconfigure(entry_XML,variable=corpus.format,value="xml")
-tkconfigure(entry_XMLDrama,variable=corpus.format,value="xml.drama")
-tkconfigure(entry_XMLNoTitles,variable=corpus.format,value="xml.notitles")
-tkconfigure(entry_HTML,variable=corpus.format,value="html")
-#
-entrylabel_TXT <- tklabel(tt,text="plain text",anchor="w")
-entrylabel_XML <- tklabel(tt,text="xml",anchor="w")
-entrylabel_XMLDrama <- tklabel(tt,text="xml (plays)",anchor="w")
-entrylabel_XMLNoTitles <- tklabel(tt,text="xml (notitles)",anchor="w")
-entrylabel_HTML <- tklabel(tt,text="html",anchor="w")
-#
-tkgrid(tklabel(tt,text="  INPUT:           "),entrylabel_TXT,entrylabel_XML,entrylabel_XMLDrama,entrylabel_XMLNoTitles,entrylabel_HTML,sticky="w")
-tkgrid(tklabel(tt,text="                   "),entry_TXT,entry_XML,entry_XMLDrama,entry_XMLNoTitles,entry_HTML,sticky="w")
-
-
-# next row: LANGUAGE
-#
-entry_ENG <- tkradiobutton(tt)
-entry_EN2 <- tkradiobutton(tt)
-entry_EN3 <- tkradiobutton(tt)
-entry_POL <- tkradiobutton(tt)
-entry_LAT <- tkradiobutton(tt)
-entry_LA2 <- tkradiobutton(tt)
-entry_FRA <- tkradiobutton(tt)
-entry_GER <- tkradiobutton(tt)
-entry_HUN <- tkradiobutton(tt)
-entry_ITA <- tkradiobutton(tt)
-#
-tkconfigure(entry_ENG,variable=corpus.lang,value="English")
-tkconfigure(entry_EN2,variable=corpus.lang,value="English.contr")
-tkconfigure(entry_EN3,variable=corpus.lang,value="English.all")
-tkconfigure(entry_LAT,variable=corpus.lang,value="Latin")
-tkconfigure(entry_LA2,variable=corpus.lang,value="Latin.corr")
-tkconfigure(entry_POL,variable=corpus.lang,value="Polish")
-tkconfigure(entry_FRA,variable=corpus.lang,value="French")
-tkconfigure(entry_GER,variable=corpus.lang,value="German")
-tkconfigure(entry_HUN,variable=corpus.lang,value="Hungarian")
-tkconfigure(entry_ITA,variable=corpus.lang,value="Italian")
-#
-entrylabel_ENG <- tklabel(tt,text="English",anchor="w")
-entrylabel_POL <- tklabel(tt,text="Polish",anchor="w")
-entrylabel_LAT <- tklabel(tt,text="Latin",anchor="w")
-entrylabel_FRA <- tklabel(tt,text="French",anchor="w")
-entrylabel_GER <- tklabel(tt,text="German",anchor="w")
-entrylabel_HUN <- tklabel(tt,text="Hungarian",anchor="w")
-entrylabel_ITA <- tklabel(tt,text="Italian",anchor="w")
-entrylabel_EN2 <- tklabel(tt,text="English (contr.)",anchor="w")
-entrylabel_EN3 <- tklabel(tt,text="English (ALL)",anchor="w")
-entrylabel_LA2 <- tklabel(tt,text="Latin (u/v > u)",anchor="w")
-#
-tkgrid(tklabel(tt,text="  LANGUAGE:        "),entrylabel_ENG,entrylabel_EN2,entrylabel_EN3,entrylabel_LAT,entrylabel_LA2,sticky="w")
-tkgrid(tklabel(tt,text="                   "),entry_ENG,entry_EN2,entry_EN3,entry_LAT,entry_LA2,sticky="w")
-tkgrid(tklabel(tt,text="                   "),entrylabel_POL,entrylabel_FRA,entrylabel_GER,entrylabel_HUN,entrylabel_ITA,sticky="w")
-tkgrid(tklabel(tt,text="                   "),entry_POL,entry_FRA,entry_GER,entry_HUN,entry_ITA,sticky="w")
-# Tooltips for the above
-tk2tip(entrylabel_ENG, "Plain English: contractions and \ncompound words are split")
-tk2tip(entrylabel_POL, "Plain Polish: contractions and \ncompound words are split")
-tk2tip(entrylabel_EN2, "Modified English: \ncontractions are not split")
-tk2tip(entrylabel_EN3, "Further Modified English: contractions \nand compound words are not split")
-tk2tip(entrylabel_LAT, "Plain Latin: U and V \ntreated as distinct letters")
-tk2tip(entrylabel_FRA, "Plain French: contractions and \ncompound words are split")
-tk2tip(entrylabel_GER, "Plain German: contractions and \ncompound words are split")
-tk2tip(entrylabel_HUN, "Plain Hungarian: contractions and \ncompound words are split")
-tk2tip(entrylabel_ITA, "Plain Italian: contractions and \ncompound words are split")
-tk2tip(entrylabel_LA2, "Modified Latin: U and V \nboth treated as U")
-
-
-# next row: TEXT FEATURES
-
-entry_W <- tkradiobutton(tt)
-entry_L <- tkradiobutton(tt)
-entry_NGRAMSIZE <- tkentry(tt,textvariable=ngram.size,width="8")
-cb_RAND <- tkcheckbutton(tt)
-#
-tkconfigure(entry_W,variable=analyzed.features,value="w")
-tkconfigure(entry_L,variable=analyzed.features,value="l")
-tkconfigure(cb_RAND,variable=random.sampling)
-entry_SIZE <- tkentry(tt,textvariable=length.of.random.sample,width="10")
-#
-entrylabel_W <- tklabel(tt,text="words",anchor="w")
-entrylabel_L <- tklabel(tt,text="letters",anchor="w")
-entrylabel_NGRAMSIZE <- tklabel(tt,text="ngram size")
-cblabel_RAND <- tklabel(tt,text="Random sampling")
-entrylabel_SIZE <- tklabel(tt,text="Random sample size  ")
-#
-tkgrid(tklabel(tt,text="  FEATURES:        "),entrylabel_W,entrylabel_L,entrylabel_NGRAMSIZE,entrylabel_LA2,cblabel_RAND,entrylabel_SIZE,sticky="w")
-tkgrid(tklabel(tt,text="                   "),entry_W,entry_L,entry_NGRAMSIZE,entry_LA2,cb_RAND,entry_SIZE,sticky="w")
-# Tooltips for the above
-tk2tip(entrylabel_W, "Select this to work on words")
-tk2tip(entrylabel_L, "Select this to work on letters \n(does not make much sense unless you use ngrams)")
-tk2tip(entrylabel_NGRAMSIZE, "State your n for n-grams \nto work on word/letter clusters of n")
-tk2tip(cblabel_RAND, "when the analyzed texts are significantly unequal in length, \nit is not a bad idea to prepare samples as randomly chosen *bags of words*. \nIf this option is switched on, the desired size of a sample should be indicated.")
-tk2tip(entrylabel_SIZE, "Specify the random sample size. \nOnly relevant when random sampling is switched on.")
-
-
-
-# next row: CLASSIFICATION METHOD
-#
-entry_DELTA <- tkradiobutton(tt)
-entry_KNN <- tkradiobutton(tt)
-entry_SVM <- tkradiobutton(tt)
-entry_NBAYES <- tkradiobutton(tt)
-entry_NSC <- tkradiobutton(tt)
-#
-tkconfigure(entry_DELTA,variable=classification.method,value="delta")
-tkconfigure(entry_KNN,variable=classification.method,value="knn")
-tkconfigure(entry_SVM,variable=classification.method,value="svm")
-tkconfigure(entry_NBAYES,variable=classification.method,value="naivebayes")
-tkconfigure(entry_NSC,variable=classification.method,value="nsc")
-#
-entrylabel_DELTA <- tklabel(tt,text="Delta",anchor="w")
-entrylabel_KNN <- tklabel(tt,text="k-NN",anchor="w")
-entrylabel_SVM <- tklabel(tt,text="SVM",anchor="w")
-entrylabel_NBAYES <- tklabel(tt,text="NaiveBayes",anchor="w")
-entrylabel_NSC <- tklabel(tt,text="NSC",anchor="w")
-#
-tkgrid(tklabel(tt,text="  CLASSIFIER:      "),entrylabel_DELTA,entrylabel_KNN,entrylabel_SVM,entrylabel_NBAYES,entrylabel_NSC,sticky="w")
-tkgrid(tklabel(tt,text="                   "),entry_DELTA,entry_KNN,entry_SVM,entry_NBAYES,entry_NSC,sticky="w")
-# Tooltips for the above
-tk2tip(entrylabel_DELTA, "Burrows's Delta")
-tk2tip(entrylabel_KNN, "k-Nearest Neighbor Classification")
-tk2tip(entrylabel_SVM, "Support Vector Machines")
-tk2tip(entrylabel_NBAYES, "Naive Bayes Classification. To use this method, you should have \nat least two texts of each class (author, genre, etc.) in the primary set")
-tk2tip(entrylabel_NSC, "Nearest Shrunken Centroids Classification. To use this method, you should have \nat least two texts of each class (author, genre, etc.) in the primary set")
-
-# next row: MFW SETTINGS
-#
-entry_MFW_MIN <- tkentry(tt,textvariable=mfw.min,width="8")
-entry_MFW_MAX <- tkentry(tt,textvariable=mfw.max,width="8")
-entry_MFW_INCR <- tkentry(tt,textvariable=mfw.incr,width="8")
-entry_START_AT <- tkentry(tt,textvariable=start.at,width="8")
-entry_CUT_OFF <- tkentry(tt,textvariable=mfw.list.cutoff,width="8")
-#
-entrylabel_MFW_MIN <- tklabel(tt,text="Minimum")
-entrylabel_MFW_MAX <- tklabel(tt,text="Maximum")
-entrylabel_MFW_INCR <- tklabel(tt,text="Increment")
-entrylabel_START_AT <- tklabel(tt,text="Start at freq. rank")
-entrylabel_CUT_OFF <- tklabel(tt,text="List Cutoff")
-#
-tkgrid(tklabel(tt,text="  MFW SETTINGS:    "),entrylabel_MFW_MIN,entrylabel_MFW_MAX,entrylabel_MFW_INCR,entrylabel_START_AT,entrylabel_CUT_OFF,sticky="w")
-tkgrid(tklabel(tt,text="                   "),entry_MFW_MIN,entry_MFW_MAX,entry_MFW_INCR,entry_START_AT,entry_CUT_OFF,sticky="w")
-# Tooltips for the above
-tk2tip(entrylabel_MFW_MIN, "Set the minimum number of most frequent words. \nThe script will conduct its first analysis for \nthe number of words specified here")
-tk2tip(entrylabel_MFW_MAX, "Set the maximum number of most frequent words. \nThe script will conduct its final analysis for \nthe number of words specified here")
-tk2tip(entrylabel_MFW_INCR, "Set the increment added to \nthe minimum number of most frequent \nwords for each subsequent analysis.")
-tk2tip(entrylabel_START_AT, "Set the number of words from the top of \nthe frequencyl ist to skip in the analysis.")
-tk2tip(entrylabel_CUT_OFF, "Set the maximum size of the word frequency table. \nAnything above 5000 requires patience and a fast computer")
-
-
-# next row: CULLING
-#
-cb_ALL_C <- tkcheckbutton(tt)
-cb_DEL_PRON <- tkcheckbutton(tt)
-#
-entry_CUL_MIN <- tkentry(tt,textvariable=culling.min,width="8")
-entry_CUL_MAX <- tkentry(tt,textvariable=culling.max,width="8")
-entry_CUL_INCR <- tkentry(tt,textvariable=culling.incr,width="8")
-tkconfigure(cb_DEL_PRON,variable=delete.pronouns)
-tkconfigure(cb_ALL_C,variable=culling.of.all.samples)
-#
-entrylabel_CUL_MIN <- tklabel(tt,text="Minimum")
-entrylabel_CUL_MAX <- tklabel(tt,text="Maximum")
-entrylabel_CUL_INCR <- tklabel(tt,text="Increment")
-cblabel_DEL_PRON <- tklabel(tt,text="Delete pronouns")
-cblabel_ALL_C <- tklabel(tt,text="ALL culling")
-#
-tkgrid(tklabel(tt,text="  CULLING:         "),entrylabel_CUL_MIN,entrylabel_CUL_MAX, entrylabel_CUL_INCR,cblabel_DEL_PRON,cblabel_ALL_C,sticky="w")
-tkgrid(tklabel(tt,text="                   "),entry_CUL_MIN,entry_CUL_MAX,entry_CUL_INCR,cb_DEL_PRON,cb_ALL_C,sticky="w")
-# Tooltips for the above
-tk2tip(entrylabel_CUL_MIN, "State the minimum culling setting. \n0 means no words are omitted from the analysis. \n50 means a words needs to appear in \nat least 50% of the texts to be included in the analysis. \n100 means that only words appearing in all the texts \nwill be included in the analysis")
-tk2tip(entrylabel_CUL_MAX, "State the maximum culling setting. \n0 means no words are omitted from the analysis. \n50 means a words needs to appear in \nat least 50% of the texts to be included in the analysis. \n100 means that only words appearing in all the texts \nwill be included in the analysis")
-tk2tip(entrylabel_CUL_INCR, "State the increment added to the minimum culling \nsetting for each subsequent analysis.")
-tk2tip(cblabel_DEL_PRON, "Select if you want to omit pronouns in the analysis. \nThis improves attribution in some languages")
-tk2tip(cblabel_ALL_C, "If this is left unchecked, the culling procedure \nis based on data from the primary set alone. \nChecking this box ensures words present in ALL texts \nof BOTH sets ar affected by the culling.")
-
-
-
-
-
-# next row: VARIOUS
-#
-cb_QUEER <- tkcheckbutton(tt)
-cb_GUESS <- tkcheckbutton(tt)
-cb_FREQS <- tkcheckbutton(tt)
-cb_LISTS <- tkcheckbutton(tt)
-cb_ALL_L <- tkcheckbutton(tt)
-#
-tkconfigure(cb_QUEER,variable=final.ranking.of.candidates)
-tkconfigure(cb_GUESS,variable=how.many.correct.attributions)
-tkconfigure(cb_FREQS,variable=use.existing.freq.tables)
-tkconfigure(cb_LISTS,variable=use.existing.wordlist)
-tkconfigure(cb_ALL_L,variable=reference.wordlist.of.all.samples)
-#
-cblabel_QUEER <- tklabel(tt,text="Strange attributions")
-cblabel_GUESS <- tklabel(tt,text="Count good guesses")
-cblabel_FREQS <- tklabel(tt,text="Existing frequencies")
-cblabel_LISTS <- tklabel(tt,text="Existing wordlist")
-cblabel_ALL_L <- tklabel(tt,text="ALL wordlists")
-#
-tkgrid(tklabel(tt,text="  VARIOUS:         "),cblabel_QUEER,cblabel_GUESS,cblabel_FREQS,cblabel_LISTS,cblabel_ALL_L,sticky="w")
-tkgrid(tklabel(tt,text="                   "),cb_QUEER,cb_GUESS,cb_FREQS,cb_LISTS,cb_ALL_L,sticky="w")
-# Tooltips for the above
-tk2tip(cblabel_QUEER, "Select to list misattributions in the final results file.")
-tk2tip(cblabel_GUESS, "Select to count the proportion of correct attributions.")
-tk2tip(cblabel_FREQS, "Select to use the frequency lists generated by the previous analysis. \nThis speeds up the process dramatically. \nA very bad idea if you've just changed your selection of texts!")
-tk2tip(cblabel_LISTS, "Select to use the wordlist generated by \nthe previous analysis or a custom wordlist.")
-tk2tip(cblabel_ALL_L, "If this is left unchecked, both frequency tables \nare built using a pre-prepared wordlist of the primary set. \nChecking this box compiles the list \nbasing on both primary and secondary sets.")
-
-
-# next row: DELTA OPTIONS
-#
-entry_CD <- tkradiobutton(tt)
-entry_AL <- tkradiobutton(tt)
-entry_ED <- tkradiobutton(tt)
-entry_ES <- tkradiobutton(tt)
-entry_MH <- tkradiobutton(tt)
-entry_CB <- tkradiobutton(tt)
-entry_EU <- tkradiobutton(tt)
-cb_ALL_Z <- tkcheckbutton(tt)
-#
-tkconfigure(entry_CD,variable=distance.measure,value="CD")
-tkconfigure(entry_AL,variable=distance.measure,value="AL")
-tkconfigure(entry_ED,variable=distance.measure,value="ED")
-tkconfigure(entry_ES,variable=distance.measure,value="ES")
-tkconfigure(entry_MH,variable=distance.measure,value="MH")
-tkconfigure(entry_CB,variable=distance.measure,value="CB")
-tkconfigure(entry_EU,variable=distance.measure,value="EU")
-entry_CAND <- tkentry(tt,textvariable=number.of.candidates,width="8")
-tkconfigure(cb_ALL_Z,variable=z.scores.of.all.samples)
-#
-entrylabel_CD <- tklabel(tt,text="Classic Delta")
-entrylabel_AL <- tklabel(tt,text="Argamon's Delta")
-entrylabel_ED <- tklabel(tt,text="Eder's Delta")
-entrylabel_ES <- tklabel(tt,text="Eder's Simple")
-entrylabel_MH <- tklabel(tt,text="Manhattan")
-entrylabel_CB <- tklabel(tt,text="Canberra")
-entrylabel_EU <- tklabel(tt,text="Euclidean")
-entrylabel_CAND <- tklabel(tt,text="No. of candidates")
-cblabel_ALL_Z <- tklabel(tt,text="ALL z-scores")
-#
-tkgrid(tklabel(tt,text="  DELTA OPTIONS:   "),entrylabel_CD,entrylabel_AL,entrylabel_ED,entrylabel_ES,cblabel_ALL_Z,sticky="w")
-tkgrid(tklabel(tt,text="                   "),entry_CD,entry_AL,entry_ED,entry_ES,cb_ALL_Z,sticky="w")
-tkgrid(tklabel(tt,text="                   "),entrylabel_MH,entrylabel_CB,entrylabel_EU,entrylabel_CAND,sticky="w")
-tkgrid(tklabel(tt,text="                   "),entry_MH,entry_CB,entry_EU,entry_CAND,sticky="w")
-# Tooltips for the above
-tk2tip(entrylabel_CD, "Select the Classic Delta measure as developed by Burrows.")
-tk2tip(entrylabel_AL, "Select Argamon's Linear Delta (based on Euclidean principles).")
-tk2tip(entrylabel_ED, "Select Eder's Delta (explanation and mathematical equation: TBA).")
-tk2tip(entrylabel_ES, "Select Eder's Simple measure (explanation and mathematical equation: TBA).")
-tk2tip(entrylabel_MH, "Select Manhattan Distance (obvious and well documented).")
-tk2tip(entrylabel_CB, "Select Canberra Distance (risky, but sometimes amazingly good).")
-tk2tip(entrylabel_EU, "Select Euclidean Distance (basic and the most *natural*).")
-tk2tip(entrylabel_CAND, "Set the number of candidates in the final results file.")
-tk2tip(cblabel_ALL_Z, "If this is left unchecked, then the z-scores \nare based on the primary set only.")
-
-# next row: ADVANCED
-#
-#
-#
-#
-tkgrid(tklabel(tt,text="  SVM OPTIONS:     "),sticky="w")
-tkgrid(tklabel(tt,text="  k-NN OPTIONS:    "),sticky="w")
-
-
-
-# next row: the OK button
-#
-button_1 <- tkbutton(tt,text="     OK     ",command=push_OK,relief="groove")
-tkbind(button_1,"<Return>",push_OK) 
-tkgrid(button_1,columnspan="10")
-tkgrid(tklabel(tt,text="    ")) # blank line (i.e., bottom margin)
-
-
-
-##########
-
-repeat{
-  if(cancel_pause){
-    analyzed.features <- as.character(tclvalue(analyzed.features))
-    ngram.size <- as.numeric(tclvalue(ngram.size))
-    corpus.format <- as.character(tclvalue(corpus.format))
-    mfw.min <- as.numeric(tclvalue(mfw.min))
-    mfw.max <- as.numeric(tclvalue(mfw.max))
-    mfw.incr <- as.numeric(tclvalue(mfw.incr))
-    start.at <- as.numeric(tclvalue(start.at))
-    culling.min <- as.numeric(tclvalue(culling.min))
-    culling.max <- as.numeric(tclvalue(culling.max))
-    culling.incr <- as.numeric(tclvalue(culling.incr))
-    classification.method <- as.character(tclvalue(classification.method))
-    use.existing.freq.tables <- as.logical(as.numeric(tclvalue(use.existing.freq.tables)))
-    use.existing.wordlist <- as.logical(as.numeric(tclvalue(use.existing.wordlist)))
-    final.ranking.of.candidates <- as.logical(as.numeric(tclvalue(final.ranking.of.candidates)))
-    how.many.correct.attributions <- as.logical(as.numeric(tclvalue(how.many.correct.attributions)))
-    delete.pronouns <- as.logical(as.numeric(tclvalue(delete.pronouns)))
-    number.of.candidates <- as.numeric(tclvalue(number.of.candidates))
-    z.scores.of.all.samples <- as.logical(as.numeric(tclvalue(z.scores.of.all.samples)))
-    reference.wordlist.of.all.samples <- as.logical(as.numeric(tclvalue(reference.wordlist.of.all.samples)))
-    culling.of.all.samples <- as.logical(as.numeric(tclvalue(culling.of.all.samples)))
-    random.sampling <- as.logical(as.numeric(tclvalue(random.sampling)))
-    length.of.random.sample <- as.numeric(tclvalue(length.of.random.sample))
-    mfw.list.cutoff <- as.numeric(tclvalue(mfw.list.cutoff))
-    distance.measure <- as.character(tclvalue(distance.measure))
-    corpus.lang <- as.character(tclvalue(corpus.lang))
-    break
-  }
-.Tcl("font delete myDefaultFont")
-}
-
-
-} # <-- here the option "gui == TRUE" is completed
-
-      
-# #################################################
-# GUI module explicit feliciter (Phew!)
-# #################################################
-
-
+  gui.classify()
+  } 
 
 
 
@@ -679,6 +287,9 @@ return(corr.attrib)
 }
 
 # #############################################################################
+
+
+
 
 
 
