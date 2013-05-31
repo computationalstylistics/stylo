@@ -1,22 +1,23 @@
 citHeader("To cite Stylo in publications use:")
 
 citEntry(entry="InProceedings",
-         title = "Stylometry with R",
+         title = "Stylometry with R: a suite of tools",
          author = personList(as.person("Maciej Eder"),
+                             as.person("Mike Kestemont"),
                              as.person("Jan Rybicki")),
-         booktitle    = "Digital Humanities 2011: Conference Abstracts",
-         organization = "Stanford University",
-         address      = "Stanford",
-         year         = "2011",
-         pages        = "308--11",
-         url          = "http://dh2011abstracts.stanford.edu/xtf/view?docId=tei/ab-168.xml;query=stylometry%20R",
+         booktitle    = "Digital Humanities 2013: Conference Abstracts",
+         organization = "University of Nebraska--Lincoln",
+         address      = "Lincoln, NE",
+         year         = "2013",
+         pages        = "???--???",
+         url          = "http://dh2013.unl.edu/",
 
          textVersion =
-         paste("Eder, M. and Rybicki, J. (2011). ",
-               "Stylometry with R. ",
+         paste("Eder, M., Kestemont, M. and Rybicki, J. (2013). ",
+               "Stylometry with R: a suite of tools. ",
                "In: ",
-               "Digital Humanities 2011: Conference Abstracts. ",
-               "Stanford University, Stanford, pp. 308-11.",
+               "Digital Humanities 2013: Conference Abstracts. ",
+               "University of Nebraska--Lincoln, NE, pp. ???-???.",
                sep = "")
          )
 

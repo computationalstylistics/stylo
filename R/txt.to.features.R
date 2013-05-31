@@ -24,11 +24,11 @@ function(tokenized.text,features="w",ngram.size=1){
   # 2. making n-grams (if an appropriate option has been chosen):
   if(ngram.size > 1) {
     sample = make.ngrams(sample,ngram.size)
-    if(features == "c") {
-      # getting rid of additional spaces added around chars
-# it is a very proc time consuming task; thus, let's drop it
+#    # getting rid of additional spaces added around chars
+#    # it is a very proc time consuming task; thus, let's drop it
+#    if(features == "c") {
 #      sample = gsub(" ","",sample)
-    }
+#    }
   }
 #
 return(sample)

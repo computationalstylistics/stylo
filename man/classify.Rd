@@ -3,14 +3,13 @@
 \title{Machine-learning classification}
 \description{Function for .... It performs Delta (Burrows, 2002), k-Nearest
 Neighbors classification, Support Vectors Machines, Naive Bayes, and Nearest
-Shrunken Centroids (Jockers et al., 2008). Most of the options are derived 
-from \code{stylo}}
-
+Shrunken Centroids (Jockers and Witten, 2010). Most of the options are derived 
+from \code{stylo}
+}
 \usage{
 classify(gui = TRUE, path = "", training.corpus.dir = "primary_set",
 test.corpus.dir = "secondary_set")
 }
-
 \arguments{
   \item{gui}{an optional argument; if switched on, a simple yet effective 
     graphical interface (GUI) will appear. Default value is \code{TRUE}.}
@@ -34,16 +33,21 @@ test.corpus.dir = "secondary_set")
 \value{The function produces ..............................}
 
 \references{
-Eder, M. and Rybicki, J. (2011). Stylometry with R. In: 
-    Digital Humanities 2011: Conference Abstracts. Stanford University,
-    Stanford, pp. 308-11.
+Eder, M. Ketemont, M. and Rybicki, J. (2013). Stylometry with R:
+    a suite of tools. In: "Digital Humanities 2013: Conference Abstracts". 
+    University of Nebraska-Lincoln, Lincoln, NE, pp. ???-???.
 
-Burrows
+Burrows, J. F. (2002). "Delta": a measure of stylistic difference and 
+    a guide to likely authorship. "Literary and Linguistic Computing", 
+    17(3): 267-87.
 
-Jockers et al.
+Jockers, M. L. and Witten, D. M. (2010). A comparative study of machine 
+    learning methods for authorship attribution. "Literary and Linguistic
+    Computing", 25(2): 215-23.
 
-Argamon
-
+Argamon, S. (2008). Interpreting Burrows's Delta: geometric and 
+  probabilistic foundations. "Literary and Linguistic Computing", 
+  23(2): 131-47. 
 }
 
 \author{Maciej Eder, Mike Kestemont, Jan Rybicki}

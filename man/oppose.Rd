@@ -1,13 +1,13 @@
 \name{oppose}
 \alias{oppose}
 \title{Contrastive analysis of texts}
-\description{........................................................}
-
+\description{
+........................................................
+}
 \usage{
 oppose(gui = TRUE, path = "", primary.corpus.dir = "primary_set",
 secondary.corpus.dir = "secondary_set", test.corpus.dir = "test_set")
 }
-
 \arguments{
   \item{gui}{an optional argument; if switched on, a simple yet effective 
     graphical interface (GUI) will appear. Default value is \code{TRUE}.}
@@ -30,46 +30,48 @@ secondary.corpus.dir = "secondary_set", test.corpus.dir = "test_set")
 
 \details{
 It performs a contrastive analysis between two given sets of texts, 
-using Burrows's Zeta (2006) in its different flavors, including Craig's 
+using Burrows's Zeta (2007) in its different flavors, including Craig's 
 extensions (Craig and Kinney, 2009). The script generates a list of words 
 significantly preferred by a tested author, and another list containing 
 the words significantly avoided.
 }
-
-\value{The function produces ..............................}
-
+\value{
+The function produces ..............................
+}
 \references{
-  Eder, M. and Rybicki, J. (2011). Stylometry with R. In: 
-    \code{Digital Humanities 2011: Conference Abstracts}. Stanford University,
-    Stanford, pp. 308-11.
+Eder, M. Ketemont, M. and Rybicki, J. (2013). Stylometry with R:
+    a suite of tools. In: "Digital Humanities 2013: Conference Abstracts". 
+    University of Nebraska-Lincoln, Lincoln, NE, pp. ???-???.
 
-  Burrows, J. (2006) All the way through...
+Burrows, J. F. (2007). All the way through: testing for authorship 
+    in different frequency strata. "Literary and Linguistic Computing", 
+    22(1): 27-48.
 
-  Craig, and Kinney (2009)
+Craig, H. and Kinney, A. F. (eds), (2009). Shakespeare, Computers, and the 
+    Mystery of Authorship. Cambridge: Cambridge University Press.
 
-  Hoover
+Hoover [papers exploring Zeta]
 
-  Kilgariff A. (????). Comparing Corpora. "International Journal 
-    of Corpus Linguistics" 6(1):1-37.
+Kilgariff A. (????). Comparing Corpora. "International Journal of Corpus
+    Linguistics" 6(1): 1-37.
 }
 
 \author{Maciej Eder, Jan Rybicki, Mike Kestemont}
 
 \seealso{
- \code{\link{stylo}}, \code{\link{classify}}, \code{\link{rolling.delta}}}
-
-\examples{
-  \dontrun{
-  #
-  # standard usage:
-  oppose()
-  #
-  # batch mode, custom name of corpus directories:
-  oppose(gui = FALSE, primary.corpus.dir = "ShakespeareCanon",
-         secondary.corpus.dir = "MarloweSamples")
-  #
-  }
+\code{\link{stylo}}, \code{\link{classify}}, \code{\link{rolling.delta}}
 }
-
+\examples{
+\dontrun{
+#
+# standard usage:
+oppose()
+#
+# batch mode, custom name of corpus directories:
+oppose(gui = FALSE, primary.corpus.dir = "ShakespeareCanon",
+       secondary.corpus.dir = "MarloweSamples")
+#
+}
+}
 \keyword{zeta}
 \keyword{corpus linguistics}

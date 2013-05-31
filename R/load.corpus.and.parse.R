@@ -34,11 +34,7 @@ function(files,
   # deleting punctuation, splitting into words
   cat("slicing input text into single words...\n")
   loaded.corpus = lapply(loaded.corpus,txt.to.words.ext,language=language)
-
-#for(i in 1:length(loaded.corpus)) {
-#loaded.corpus[[i]] = txt.to.words.ext(loaded.corpus[[i]],language=language)
-#}
-
+  # normal sampling (if applicable); random sampling will be run later
   if(sampling == "normal.sampling") {
     loaded.corpus = 
       make.samples(loaded.corpus,sample.size,sampling,sampling.with.replacement)
@@ -48,17 +44,11 @@ function(files,
   cat("turning words into features, e.g. char n-grams (if applicable)...\n")
   loaded.corpus = lapply(loaded.corpus,txt.to.features,
                          features=features,ngram.size=ngram.size)
-
-#for(i in 1:length(loaded.corpus)) {
-#loaded.corpus[[i]] = txt.to.features(loaded.corpus[[i]],analyzed.features,ngram.size)
-#}
-
   # optionally, excerpt randomly a number of features from original data
   if(sampling == "random.sampling") {
     loaded.corpus = 
       make.samples(loaded.corpus,sample.size,sampling,sampling.with.replacement)
     }
-
 return(loaded.corpus)
 }
 

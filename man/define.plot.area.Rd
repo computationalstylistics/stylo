@@ -2,12 +2,12 @@
 \alias{define.plot.area}
 \title{Define area for scatterplots}
 \description{
-  Function that calculates the size of scatterplot, taking into consideration
-  additional margin to fit longer labels of samples, optional margin defined
-  by user, and some space to offset scatterplot labels from points.
+Function that calculates the size of scatterplot, taking into consideration
+additional margin to fit longer labels of samples, optional margin defined
+by user, and some space to offset scatterplot labels from points.
 }
 \usage{
-  define.plot.area(x.coord, y.coord, xymargins = 2, v.offset = 0)
+define.plot.area(x.coord, y.coord, xymargins = 2, v.offset = 0)
 }
 \arguments{
   \item{x.coord}{a vector of x coordinates, optionally with names.}
@@ -23,10 +23,10 @@
   their names (i.e. labels of points to be shown on scatterplot).
 }
 \author{
-  Maciej Eder
+Maciej Eder
 }
 \seealso{
-  \code{\link{assign.plot.colors}}, \code{\link{stylo}} 
+\code{\link{assign.plot.colors}}, \code{\link{stylo}} 
 }
 \examples{
 \dontrun{ % this has to be done properly!!!!

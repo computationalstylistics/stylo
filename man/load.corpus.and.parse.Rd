@@ -1,13 +1,13 @@
 \name{load.corpus.and.parse}
 \alias{load.corpus.and.parse}
 \title{Load text files and perform pre-processing}
-\description{A high-level function that ties up a number of other 
-  functions responsible for uploading texts, deleting markup, sampling, 
-  splitting into n-grams, etc. It is build on top of a number of functions 
-  and thus it requires a large number of arguments. The only required
-  argument, however, is a vector containing names of files to upload.
+\description{
+A high-level function that ties a number of other 
+functions responsible for uploading texts, deleting markup, sampling, 
+splitting into n-grams, etc. It is build on top of a number of functions 
+and thus it requires a large number of arguments. The only required
+argument, however, is a vector containing names of files to upload.
 }
-
 \usage{load.corpus.and.parse(files, corpus.dir = "", markup.type = "plain",
 language = "English", sample.size = 10000, sampling = "no.sampling",
 sampling.with.replacement = FALSE, features = "w", ngram.size = 1)
@@ -43,30 +43,26 @@ sampling.with.replacement = FALSE, features = "w", ngram.size = 1)
     details.}
 }
 \value{
-  The result of this function is a variable (list) \code{loaded.corpus}, 
-  its elements are particular uploaded texts.
+The result of this function is a variable (list) \code{loaded.corpus}, 
+its elements are particular uploaded texts.
 }
-
-\author{Maciej Eder, Jan Rybicki, Mike Kestemont}
+\author{Maciej Eder}
 
 \seealso{
-  \code{\link{load.corpus}}, \code{\link{delete.markup}}, 
-  \code{\link{txt.to.words.ext}}, \code{\link{txt.to.features}},
-  \code{\link{make.samples}}
+\code{\link{load.corpus}}, \code{\link{delete.markup}}, 
+\code{\link{txt.to.words.ext}}, \code{\link{txt.to.features}},
+\code{\link{make.samples}}
 }
 
 \examples{
-  \dontrun{
-  #
-  # to upload file1.txt and file2.txt, stored in subdirectory "my.files":
-  my.corpus = load.corpus(files = c("file1.txt","file2.txt"),
-                          corpus.dir = "my.files")
-  # to upload all XML files from current directory and get rid of tags:
-  my.corpus = load.corpus(files = list.files(pattern="[.]xml$"),
-                          markup.type="xml")
-  #
-  }
+\dontrun{
+#
+# to upload file1.txt and file2.txt, stored in subdirectory "my.files":
+my.corpus = load.corpus(files = c("file1.txt","file2.txt"),
+                        corpus.dir = "my.files")
+# to upload all XML files from current directory and get rid of tags:
+my.corpus = load.corpus(files = list.files(pattern="[.]xml$"),
+                        markup.type="xml")
 }
-
-
+}
 \keyword{text processing}

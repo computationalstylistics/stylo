@@ -21,20 +21,20 @@ for preparing publicable pictures), and "black", if one does not want
 to use colors.}
 }
 \details{
-  Function for graph auto-coloring; depending on the user's choice, 
-  it assigns colors or grayscale tones to matching strings of characters 
-  in texts' name (as a delimiter, the underscore character is used). 
-  Alternatively, all the labels can be marked black.
+Function for graph auto-coloring; depending on the user's choice, 
+it assigns colors or grayscale tones to matching strings of characters 
+in texts' name (as a delimiter, the underscore character is used). 
+Alternatively, all the labels can be marked black.
 }
 \value{
-  The function returns a vector of colors, using their conventional names 
-  (e.g. \code{red}, \code{maroon4}, \code{mediumturquoise}, \code{gold4}, 
-  \code{deepskyblue}, ...), or numeric values, when grayscale option was 
-  chosen (e.g. \code{#000000}, \code{#000000}, \code{#595959}, 
-  \code{#B2B2B2}, ...).
+The function returns a vector of colors, using their conventional names 
+(e.g. \code{red}, \code{maroon4}, \code{mediumturquoise}, \code{gold4}, 
+\code{deepskyblue}, ...), or numeric values, when grayscale option was 
+chosen (e.g. \code{#000000}, \code{#000000}, \code{#595959}, 
+\code{#B2B2B2}, ...).
 }
 \author{
-  Maciej Eder, Jan Rybicki, Mike Kestemont
+Maciej Eder
 }
 \examples{
 ### in this example, three discrete classes will be established, 
@@ -44,9 +44,8 @@ sample.names = c("Tacitus_Annales","Tacitus_Germania","Tacitus_Histories",
                  "Ceasar_Civil_wars","Caesar_Gallic_wars",
                  "Livius_Ab_Urbe_Condita")
 assign.plot.colors(sample.names)
-
-# as above, but using grayscale:
 #
+# as above, but using grayscale:
 assign.plot.colors(sample.names, col = "grayscale")
 }
 \keyword{scatterplot}

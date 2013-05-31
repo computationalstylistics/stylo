@@ -10,14 +10,20 @@
 # #################################################
 
 stylo <-
-function(gui=TRUE,path="",corpus.dir="corpus") {
+function(gui = TRUE, path = "", corpus.dir = "corpus") {
 
 
-# THIS SOLUTION IS RATHER UGLY; IT HAS TO BE CHANGED LATER
+# THIS SOLUTION IS RATHER UGLY; IT HAS TO BE CHANGED LATER:
+# ----> actually, it is obsolete, since the script is turned into function
 # Before defining any new objects (variables), all the existing R objects are 
 # recorded to preserve them from being removed; however, they are still 
 # vulnerable to being overwritten!
 variables.not.to.be.removed = ls()
+
+# this is needed at some point; in next versions, it should be 
+# removed from here
+all.connections = 0
+
 
 
 
@@ -61,8 +67,6 @@ if (gui == TRUE) {
 # Final settings (you are advised rather not to change them)
 # #############################################################################
 
-# Given a language option ("English", "Polish", "Latin" etc., as described 
-# above), this procedure selects one of the lists of pronouns
 # If no language was chosen (or if a desired language is not supported, or if 
 # there was a spelling mistake), then the variable will be set to "English". 
 
@@ -1104,6 +1108,36 @@ if(save.analyzed.freqs == TRUE) {
 
 
 
+
+##############################################
+##############################################
+# consensus tree as a network: preparing Gephi input data
+##############################################
+
+distances = distance.table
+# next, we need to create an empty matrix of the same size as the dist table
+connections = matrix(data=0,nrow=length(distances[,1]),ncol=length(distances[1,]))
+# iterate over the rows of dist matrix to retrieve subsequent nearest neighbors
+for(i in 1: length(distances[,1])) {
+  # establish a link between two nearest neighbors by assigning 3,
+  # 2nd runner-up will get 2, and 3rd runner-up will get 1
+  connections[i,(order(distances[i,])[2])] = 3
+  connections[i,(order(distances[i,])[3])] = 2
+  connections[i,(order(distances[i,])[4])] = 1
+}
+
+all.connections = all.connections + connections
+
+##############################################
+##############################################
+
+
+
+
+
+
+
+
 }    # <-- the internal loop for(i) returns here
 # #################################################
 
@@ -1113,6 +1147,42 @@ cat("\n")
 
 }    # <-- the main loop for(j) returns here
 # ################################################
+
+
+
+
+
+
+######################################################
+######################################################
+# network analysis: preparing a list of edges
+
+rownames(all.connections) = rownames(distances)
+colnames(all.connections) = colnames(distances)
+
+edges=c()
+for(i in 1:(length(all.connections[,1])) ) {
+  for(j in 1:(length(all.connections[1,])) ) {
+    from = rownames(all.connections)[i]
+    to = colnames(all.connections)[j]
+    weight = all.connections[i,j]
+    current.row = c(from, to, weight, "undirected")
+    # if there is a connection, record it in a common table
+    if(weight > 0) {
+      edges = rbind(edges, current.row)
+    }
+  }
+}
+
+colnames(edges) = c("Source","Target","Weight","Type")
+rownames(edges) = c(1:length(edges[,1]))
+edges = as.data.frame(edges)
+
+edges.filename = paste(graph.filename,"EDGES.csv",sep="")
+write.csv(file=edges.filename,quote=F,edges)
+
+######################################################
+######################################################
 
 
 
@@ -1198,7 +1268,6 @@ do.not.remove = c("table.with.all.zscores", "table.with.all.freqs",
 # removing the variables which are not on the above list
 list.of.variables = ls()
 rm(list=list.of.variables[!(list.of.variables %in% do.not.remove)])
-
 
 
 # #################################################

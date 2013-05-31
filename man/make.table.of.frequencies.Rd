@@ -26,16 +26,13 @@ in the whole corpus A, it might have occured in the corpus B. In short:
 if you perform any analysis involving I and II set, switch this option to 
 \code{FALSE}.}
 }
-
-\author{Maciej Eder, Jan Rybicki, Mike Kestemont}
+\author{Maciej Eder}
 
 \seealso{
 \code{\link{load.corpus}}, \code{\link{load.corpus.and.parse}}
 }
 
 \examples{
-
-
 # to get frequencies of (any) words from a single text:
 sample.txt = txt.to.words("My father had a small estate 
     in Nottinghamshire: I was the third of five sons.")
@@ -75,6 +72,4 @@ make.table.of.frequencies(my.corpus.clean, complete.word.list)
 my.word.pairs = lapply(my.corpus.clean, txt.to.features, ngram.size=2)
 make.table.of.frequencies(my.word.pairs, c("et legibus", "hoc tempore"))
 }
-
-
 \keyword{text processing}
