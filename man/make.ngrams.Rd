@@ -2,7 +2,7 @@
 \alias{make.ngrams}
 \title{Make text n-grams}
 \description{
-Funcion that combines a vector of text units (words, 
+Function that combines a vector of text units (words, 
 characters, POS-tags, other features) into pairs, triplets, or 
 longer sequences, often referred to as n-grams.
 }
@@ -24,7 +24,7 @@ a sentence" are as follows: "th", "hi", "is", "s ", " i", "is", "s ",
 4-grams would be, of course: "this", "his ", "is a", "s a ", " a s", etc.
 Word 2-grams: "this is", "is a", "a sentence". Another question is 
 whether it really increases the accuracy of stylometric tests; 
-further reading: see references. It has been shown, however (Eder, 2013)
+further reading: see references. However, it has been shown (Eder, 2013)
 that character n-grams are impressively robust when one deals with a dirty
 corpus (in terms of a high number of misspelled characters).
 }
@@ -32,7 +32,7 @@ corpus (in terms of a high number of misspelled characters).
 Alexis, A., Craig, H., and Elliot, J. (2013). Language chunking, 
     data sparseness, and the value of a long marker list: explorations with 
     word n-grams and authorial attribution. "LLC: The Journal of Digital 
-    Scholarship in the Humanities" (advanced access; doi:10.1093/llc/fqt028).
+    Scholarship in the Humanities" (advanced access; doi: 10.1093/llc/fqt028).
 
 Eder, M. (2011). Style-markers in authorship attribution: a cross-language 
     study of the authorial fingerprint. "Studies in Polish Linguistics", 
@@ -40,7 +40,7 @@ Eder, M. (2011). Style-markers in authorship attribution: a cross-language
 
 Eder, M. (2013). Mind your corpus: systematic errors in authorship
     attribution. "LLC: The Journal of Digital Scholarship in the Humanities"
-    (forthcoming).
+    in press (doi: 10.1093/llc/fqt039).
 
 Hoover, D. L. (2002). Frequent word sequences and statistical stylistics.
     "Literary and Linguistic Computing", 17: 157-80.
@@ -48,12 +48,16 @@ Hoover, D. L. (2002). Frequent word sequences and statistical stylistics.
 Hoover, D. L. (2003). Frequent collocations and authorial style.
     "Literary and Linguistic Computing", 18: 261-86.
 
+Hoover, D. L. (2012). The rarer they are, the more they are, the less
+    they matter. In: Digital Humanities 2012: Conference Abstracts,
+    Hamburg University, Hamburg, pp. 218-21.
+
 Koppel, M., Schler, J. and Argamon, S. (2009). Computational methods
-    in authorship attrubution. "Journal of the American Society for 
-    Information Science and Technology" 60(1): 9-26.
+    in authorship attribution. "Journal of the American Society for 
+    Information Science and Technology", 60(1): 9-26.
 
 Stamatatos, E. (2009). A survey of modern authorship attribution methods.
-    "Journal of the American Society for Information Science and Technology" 
+    "Journal of the American Society for Information Science and Technology", 
     60(3): 538-56.
 }
 \author{

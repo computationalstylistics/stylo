@@ -7,26 +7,25 @@
 # #################################################
 
 make.samples <-
-function(tokenized.input.data,
-                        sample.size=10000,
-                        sampling="no.sampling",
-                        sampling.with.replacement=FALSE){
+function(tokenized.text,
+            sample.size=10000,
+            sampling="no.sampling",
+            sampling.with.replacement=FALSE){
   # checking the format of input data (vector? list?); converting to a list
-  if(is.list(tokenized.input.data) == FALSE) {
-    tokenized.input.data = list(tokenized.input.data) 
+  if(is.list(tokenized.text) == FALSE) {
+    tokenized.text = list(tokenized.text) 
   }
   # checking if there are any names attached to the texts
-  if(is.character(names(tokenized.input.data)) == FALSE) {
+  if(is.character(names(tokenized.text)) == FALSE) {
     # if not, some generic names will be assigned
-    names(tokenized.input.data) = 
-                         paste("paste",1:length(tokenized.input.data),sep="_")
+    names(tokenized.text) = paste("paste",1:length(tokenized.text),sep="_")
   }
   # starting an empty list
   corpus.cut.into.samples = list()
   # iterating over subsequent texts of the input corpus
-  for(i in 1:length(tokenized.input.data)) {
+  for(i in 1:length(tokenized.text)) {
     # retrieving an appropriate text from the whole corpus (if applicable)
-    tokenized.text = tokenized.input.data[[i]]
+    tokenized.text = tokenized.text[[i]]
     # sanity check for text length: abort if the current text is extremely
     # short or at least shorter than the specified sample size
     if (length(tokenized.text) < 10 || 
@@ -54,7 +53,7 @@ function(tokenized.input.data,
         # flush current sample:
         samples.from.text[[sample.index]] = current.sample
         # assign a new id to current sample
-        id = paste(names(tokenized.input.data)[i],"-",sample.index,sep="")
+        id = paste(names(tokenized.text)[i],"-",sample.index,sep="")
         names(samples.from.text)[sample.index] = id
         # increment index for next iteration
         current.start.index = current.start.index + sample.size
@@ -66,13 +65,13 @@ function(tokenized.input.data,
       current.sample = head(sample(tokenized.text, replace = sampling.with.replacement), sample.size)
       samples.from.text[[1]] = current.sample 
       # inheriting the sample's name
-      names(samples.from.text) = names(tokenized.input.data)[i]
+      names(samples.from.text) = names(tokenized.text)[i]
     } else if (sampling == "no.sampling"){
       # entire texts will be used as a sample (regardless of its length)
       current.sample = tokenized.text
       samples.from.text[[1]] = current.sample
       # inheriting the sample's name
-      names(samples.from.text) = names(tokenized.input.data)[i]
+      names(samples.from.text) = names(tokenized.text)[i]
     }
     #
     # estimating the number of samples already appended to the "new" corpus

@@ -20,8 +20,9 @@ sampling.with.replacement = FALSE, features = "w", ngram.size = 1)
     (nothing will happen), \code{html} (all tags will be deleted as well 
     as HTML header), \code{xml} (TEI header, any text between <note> </note> 
     tags, and all the tags will be deleted), \code{xml.drama} (as above;
-    additionally speaker's names will be deleted, or strings within the 
-    tag <speaker> </speaker>); see \code{delete.markup} for further details.}
+    additionally speaker's names will be deleted, or strings within each 
+    pair of the tags <speaker> </speaker>); 
+    see \code{delete.markup} for further details.}
   \item{language}{an optional argument indicating the language; the values
     that will affect the function's behavior are: \code{English.contr},
     \code{English.all}, \code{Latin.corr} (see \code{txt.to.words.ext}
@@ -32,9 +33,9 @@ sampling.with.replacement = FALSE, features = "w", ngram.size = 1)
      \code{normal.sampling}, \code{random.sampling}. See \code{make.samples}
      for explanation.}
   \item{sampling.with.replacement}{optional argument which will be used only
-    if \code{random.sampling} was chosen; it indicates the way of colloecting
+    if \code{random.sampling} was chosen; it indicates the way of harvesting
     random words.}
-  \item{features}{an option for specifying the desired type of feature:
+  \item{features}{an option for specifying the desired type of features:
     \code{w} for words, \code{c} for characters (default: \code{w}). See
     \code{txt.to.features} for further details.}
   \item{ngram.size}{an optional argument (integer) indicating the value of n, 
@@ -60,9 +61,10 @@ its elements are particular uploaded texts.
 # to upload file1.txt and file2.txt, stored in subdirectory "my.files":
 my.corpus = load.corpus(files = c("file1.txt","file2.txt"),
                         corpus.dir = "my.files")
-# to upload all XML files from current directory and get rid of tags:
-my.corpus = load.corpus(files = list.files(pattern="[.]xml$"),
-                        markup.type="xml")
+# to upload all XML files from current directory, get rid of tags,
+# and split the texts into word pairs (2-grams):
+my.corpus = load.corpus(files = list.files(pattern = "[.]xml$"),
+                        markup.type = "xml", ngram.size = 2)
 }
 }
 \keyword{text processing}

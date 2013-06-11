@@ -13,18 +13,18 @@ make.table.of.frequencies(corpus, words, absent.sensitive = TRUE)
 \item{corpus}{textual data: either a corpus (stored in a list), or 
 a single text (vector); the data have to be split into words
 (or other features, such as character n-grams or word pairs).}
-\item{words}{a vector containig a reference word list that will be used
-to build a table of frequencies (it is assumed that the reference list 
+\item{words}{a vector containing a reference word list that will be used
+to build the table of frequencies (it is assumed that the reference list 
 contains the same type of features as the corpus, e.g. words, character
-n-grams, word pairs, etc.).}
+n-grams, word pairs, etc.; otherwise, an empty table would be build).}
 \item{absent.sensitive}{this optional argument is used to prevent building 
 tables of non-existing words. When switched on (default), the variables 
-that contain but O values in all samples, will be excluded. Hovewer, in some 
-cases this is important to keep all the variables regardless of their values. 
-It is the case of comparing two corpora: even if a given word did not occur 
-in the whole corpus A, it might have occured in the corpus B. In short: 
-if you perform any analysis involving I and II set, switch this option to 
-\code{FALSE}.}
+that contain but 0 values across all the samples, will be excluded. However, 
+in some cases this is important to keep all the variables regardless 
+of their values. It is the case of comparing two corpora: even if a given 
+word did not occur in the whole corpus A, it might have occurred in 
+the corpus B. In short: if you perform any analysis involving I and II set, 
+switch this option to \code{FALSE}.}
 }
 \author{Maciej Eder}
 
@@ -35,7 +35,7 @@ if you perform any analysis involving I and II set, switch this option to
 \examples{
 # to get frequencies of (any) words from a single text:
 sample.txt = txt.to.words("My father had a small estate 
-    in Nottinghamshire: I was the third of five sons.")
+             in Nottinghamshire: I was the third of five sons.")
 make.table.of.frequencies(sample.txt, c("a", "the", "of"))
 #
 # to get table of frequencies across a number of texts:
@@ -54,16 +54,16 @@ txt.3 = "Nam mores et instituta vitae resque domesticas ac familiaris
     maiores certe melioribus temperaverunt et institutis et legibus."
 my.corpus.raw = list(txt.1, txt.2, txt.3)
 my.corpus.clean = lapply(my.corpus.raw, txt.to.words)
-my.favourite.words = c("et", "in", "se", "rara", "avis")
-make.table.of.frequencies(my.corpus.clean, my.favourite.words)
+my.favorite.words = c("et", "in", "se", "rara", "avis")
+make.table.of.frequencies(my.corpus.clean, my.favorite.words)
 #
 # to include all the words from the reference list, no matter if they 
-# occured in the corpus:
-make.table.of.frequencies(my.corpus.clean, my.favourite.words,
+# occurred in the corpus:
+make.table.of.frequencies(my.corpus.clean, my.favorite.words,
     absent.sensitive=FALSE)
 #
-# to prepare a table of frequences of all the words represented in 
-# a corpus, in descendent order of their occurrences:
+# to prepare a table of frequencies of all the words represented in 
+# a corpus, in descendant order of their occurrences:
 complete.word.list = names(sort(table(unlist(my.corpus.clean)), 
     decreasing = TRUE))
 make.table.of.frequencies(my.corpus.clean, complete.word.list)

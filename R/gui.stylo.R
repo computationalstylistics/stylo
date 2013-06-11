@@ -12,7 +12,6 @@ gui.stylo <-
 function() {
   
   # loading required libraries
-  library(tcltk)
   library(tcltk2)
 
   # loading default settings

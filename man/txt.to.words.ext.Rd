@@ -2,7 +2,7 @@
 \alias{txt.to.words.ext}
 \title{Split text into words}
 \description{
-Function for splitting a string of characters into signe words,
+Function for splitting a string of characters into single words,
 getting rid of punctuation etc., and preserving some language-dependent
 idiosyncrasies, such as English contractions.
 }
@@ -21,7 +21,7 @@ Function for splitting a given input text into single words (chains
 of characters delimited with spaces or punctuation marks). It is build on 
 top of the function \code{txt.to.words} and it is designed to manage some 
 language-dependent text features during the process of splitting. In most
-languages, this is irrelevant. However, it migh be important for English
+languages, this is irrelevant. However, it might be important for English
 and Latin: \code{English.contr} treats the contractions as single words, 
 i.e. strings such as "don't", "you've" etc. will not be split into two words;
 \code{English.all} keeps the contractions (as above), and also prevents

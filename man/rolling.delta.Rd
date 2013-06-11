@@ -2,9 +2,8 @@
 \alias{rolling.delta}
 \title{Sequential stylometric analysis}
 \description{
-Function for .... 
-.............. ............... ............... ............
-See: details.
+Function that analyses collaborative works and tries to identify
+the authorship of their fragments.
 }
 \usage{
 rolling.delta(gui = TRUE, path = "", primary.corpus.dir = "primary_set",
@@ -18,12 +17,13 @@ secondary.corpus.dir = "secondary_set")
     for input/output procedures (reading files, outputting the results).}
 
   \item{primary.corpus.dir}{a subdirectory (within a working directory) that
-    contains .....................; if not specified, the subdirectory 
+    contains a bunch of texts written by probable candidates of a collaborative
+    work to be assessed. If not specified, the subdirectory 
     \code{primary_set} will be used.}
 
   \item{secondary.corpus.dir}{a subdirectory (within a working directory) that
-    contains .....................; if not specified, the subdirectory 
-    \code{secondary_set} will be used.}
+    contains the collaborative work one wants to test. If not specified, 
+    the subdirectory \code{secondary_set} will be used.}
 }
 \details{
 The procedure provided by this function analyses collaborative works 
@@ -31,19 +31,26 @@ and tries to identify the authorship of their fragments. The first step
 involves a "windowing" procedure (Dalen-Oskam and Zundert, 2007) 
 in which each reference text is segmented into consecutive, equal-sized 
 samples or windows. After "rolling" through the test text we can plot 
-the resulting series of Deltas for each reference text in a graph
-}
-\value{
-The function produces ..............................
+the resulting series of Delta scores for each reference text in a graph.
 }
 \references{
 Eder, M. Ketemont, M. and Rybicki, J. (2013). Stylometry with R:
     a suite of tools. In: "Digital Humanities 2013: Conference Abstracts". 
-    University of Nebraska-Lincoln, Lincoln, NE, pp. ???-???.
+    University of Nebraska-Lincoln, Lincoln, NE (in press).
 
-van Dalen-Oskam and van Zundert (2007).
+van Dalen-Oskam, K. and van Zundert, J. (2007). Delta for Middle Dutch: 
+    author and copyist distinction in Walewein. "Literary and Linguistic
+    Computing, 22(3): 345-62.
 
-Rybicki, Kestemont and Hoover (2013).
+Hoover, D. (2011). The Tutor's Story: a case study of mixed authorship.
+    In: "Digital Humanities 2011: Conference Abstracts". Stanford University,
+    Stanford, CA, pp. 149-51.
+
+Rybicki, J., Kestemont, M. and Hoover D. (2013). Collaborative authorship: 
+    Conrad, Ford and rolling delta. In: "Digital Humanities 2013: 
+    Conference Abstracts". University of Nebraska-Lincoln, Lincoln, NE 
+    (in press).
+
 }
 
 \author{Mike Kestemont, Jan Rybicki}

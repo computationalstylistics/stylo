@@ -341,7 +341,6 @@ if(distance.measure %in% c("CD","AL","ED","ES","MH","CB","EU") == FALSE) {
 # with R anyway.
 
 if (interactive.mode.with.GUI == TRUE) {
-	library(tcltk)
 	library(tcltk2)
 	
 	if(file.exists("config.txt") == TRUE) {

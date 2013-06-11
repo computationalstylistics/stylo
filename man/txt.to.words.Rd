@@ -16,7 +16,7 @@ The generic function for splitting a given input text into single words
 (chains of characters delimited with spaces or punctuation marks). 
 Alternatively, it can be redefined to use with another splitting rule.
 ATTENTION: this is the only piece of coding in this library that 
-dependens on the operating system used.
+depends on the operating system used.
 }
 \author{
 Maciej Eder, Jan Rybicki, Mike Kestemont

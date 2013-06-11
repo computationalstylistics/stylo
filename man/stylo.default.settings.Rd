@@ -2,8 +2,8 @@
 \alias{stylo.default.settings}
 \title{Setting variables}
 \description{
-Funcion that sets a bunch of global variables to be used by \code{stylo} 
-and modified using \code{gui.stylo}
+Function that sets a bunch of global variables to be used by \code{stylo} 
+and modified using \code{gui.stylo}.
 }
 \usage{
 stylo.default.settings()

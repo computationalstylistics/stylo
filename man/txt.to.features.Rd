@@ -19,7 +19,7 @@ txt.to.features(tokenized.text, features = "w", ngram.size = 1)
 \details{
 Function that carries out the necessary modifications for 
 feature selection: convert an input text into the type of sequence 
-needed (n-grams etc.) and returns a new vector of items. The funcion
+needed (n-grams etc.) and returns a new vector of items. The function
 invokes \code{make.ngrams} to combine single units into pairs, 
 triplets or longer n-grams; See  \code{help(make.ngrams)} for details.
 }

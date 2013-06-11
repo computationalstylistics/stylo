@@ -30,8 +30,9 @@ The function produces a number of files containing final results, plots,
 tables of distances, and so on (depending on which options have been chosen).
 }
 \references{
-Eder, M. and Rybicki, J. (2011). Stylometry with R. In: Digital Humanities 
-    2011: Conference Abstracts. Stanford University, Stanford, pp. 308-11.
+Eder, M. Ketemont, M. and Rybicki, J. (2013). Stylometry with R:
+    a suite of tools. In: "Digital Humanities 2013: Conference Abstracts". 
+    University of Nebraska-Lincoln, Lincoln, NE (in press).
 }
 
 \author{Maciej Eder, Jan Rybicki, Mike Kestemont}

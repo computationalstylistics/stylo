@@ -93,7 +93,7 @@ visualization = "default"
 # or not; if the appropriate option was switched on, the GUI will start now
 
 if (gui == TRUE) {
-  library(tcltk)
+  library(tcltk2)
 
 if(file.exists("oppose_config.txt") == TRUE) {
 	source("oppose_config.txt") }
@@ -671,7 +671,7 @@ if (method == "box.plot"){
 		dev.off()
 	}
 	if(write.png.file == TRUE) {
-		png(filename = paste("boxplot_", plot.token,"%03d",".png",sep=""),width=7,height=7,unit="in",res=300,pointsize=10)
+		png(filename = paste("boxplot_", plot.token,"%03d",".png",sep=""),width=7,height=7,units="in",res=300,pointsize=10)
 		plot.current.task()
 		dev.off()
 	}
@@ -893,7 +893,7 @@ words.avoided.by.primary.author = names(sort(differences[differences < 0 - thres
 		graph.filename <- paste(basename(getwd()),short.method.name, sep=" ")
 		if(write.png.file == TRUE) {
 			png(filename = paste(graph.filename,"%03d.png",sep=" "), 
-				width=7,height=7,res=300, unit="in")
+				width=7,height=7,res=300, units="in")
 			plot.current.task()
 			dev.off()}
 		if(write.pdf.file == TRUE) {
@@ -1004,7 +1004,7 @@ words.avoided.stats = sort(words.avoided.stats, decreasing=T)
 		graph.filename <- paste(basename(getwd()),short.method.name, sep=" ")
 		if(write.png.file == TRUE) {
 			png(filename = paste(graph.filename,"%03d.png",sep=" "), 
-				width=7,height=7,res=300, unit="in")
+				width=7,height=7,res=300, units="in")
 			plot.current.task()
 			dev.off()}
 		if(write.pdf.file == TRUE) {
@@ -1264,7 +1264,7 @@ if ((visualization == "markers") && (method != "box.plot")){
   graph.filename <- paste(basename(getwd()),short.method.name, sep=" ")
   if(write.png.file == TRUE) {
   png(filename = paste(graph.filename,"%03d.png",sep=" "), 
-           width=7,height=7,res=300, unit="in")
+           width=7,height=7,res=300, units="in")
   plot.current.task()
   dev.off()}
   if(write.pdf.file == TRUE) {

@@ -37,7 +37,7 @@ function(x.coord,y.coord,xymargins=2,v.offset=0) {
   top.offset = 0.005 * y.axis.size
   # (3) finally, get both y coordinates
   min.y = min(y.coord) - 0.01 * xymargins * y.axis.size
-  max.y = max(y.coord) + (0.01 * label.offset + 0.01 * xymargins) * y.axis.size
+  max.y = max(y.coord) + (0.01 * v.offset + 0.01 * xymargins) * y.axis.size
   #
   plot.area = list(c(min.x, max.x), c(min.y, max.y))
 return(plot.area)

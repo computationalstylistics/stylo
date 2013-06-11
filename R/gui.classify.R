@@ -23,8 +23,7 @@
 gui.classify <-
 function() {
   
-  # loading required libraries
-  library(tcltk)
+  # loading required library  #### it will not be needed
   library(tcltk2)
 
   # loading default settings
