@@ -20,8 +20,8 @@ for a detailed explanation what the particular variables are for
 and how to use them.
 }
 \value{
-When the function is done, several global variables are set and ready 
-to use. Type ls() to see them all.
+When the function is done, it returns a list containing some 50 elements, 
+or particular variables. 
 }
 \author{
 Jan Rybicki

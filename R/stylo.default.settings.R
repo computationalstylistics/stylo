@@ -1,6 +1,7 @@
 stylo.default.settings <-
 function() {
-# TODO: options for uploading custom settings
+
+
 
 
 
@@ -8,7 +9,7 @@ function() {
 
 # format of corpus files; available choices are:
 # "plain", "xml", "xml.drama", "xml.notitles", "html"
-corpus.format <<- "plain"
+corpus.format = "plain"
 
 # how many MFW ("Most frequent Words") should be taken into analysis 
 # (if mfw.min value = max.mfw, then no multiple iterations will be computed)
@@ -17,11 +18,11 @@ corpus.format <<- "plain"
 # probably prefer setting it to 1, the rank of the single most frequent word,
 # so that no words are skipped at the top of the frequency spectrum).
 
-mfw.min <<- 100
-mfw.max <<- 100
-mfw.incr <<- 100
+mfw.min = 100
+mfw.max = 100
+mfw.incr = 100
 
-start.at <<- 1
+start.at = 1
 
 # culling rate specifies the percentage of texts in a corpus in which a given word 
 # must be found in order to be included in the analysis. Thus, a 100% culling 
@@ -31,9 +32,9 @@ start.at <<- 1
 # rate (or no culling) means that no words are omitted.
 # about min=max: see above
 
-culling.min <<- 0
-culling.max <<- 0
-culling.incr <<- 20
+culling.min = 0
+culling.max = 0
+culling.incr = 20
 
 # Deleting pronouns (this is independent of the culling procedure).
 # If the "delete pronouns" option is switched to TRUE, choose one language
@@ -48,8 +49,8 @@ culling.incr <<- 20
 #     "Latin.corr": since some editions do not distinguish the letters v/u,
 #         this option provides a consistent conversion to "u" in each text.
 
-delete.pronouns <<- FALSE
-corpus.lang <<- "English.all"
+delete.pronouns = FALSE
+corpus.lang = "English.all"
 
 # Selection of features. In classical approaches, frequencies of the most
 # frequent words (MFW) are used as the basis for multidimensional analyses.
@@ -66,8 +67,8 @@ corpus.lang <<- "English.all"
 # Linguistics" 6: 99-114.
 # Two types of n-grams are available: characters (option "c"), and words ("w").
 
-analyzed.features <<- "w"
-ngram.size <<- 1
+analyzed.features = "w"
+ngram.size = 1
 
 
 #######  MATHEMATICAL SETTINGS (DISTANCE MEASURE)  #################
@@ -93,7 +94,7 @@ ngram.size <<- 1
 #   "CB" --> Canberra Distance (risky, but sometimes amazingly good)
 #   "EU" --> Euclidean Distance (basic, and the most "natural")
 
-distance.measure <<- "CD"
+distance.measure = "CD"
 
 
 ########  VISUALIZATION METHODS, LOGS, REPORTS, DISPLAY OPTIONS  ############
@@ -110,8 +111,8 @@ distance.measure <<- "CD"
 #   ATTENTION: this option requires the ape library, which you can install at
 # any time using the "install.packages()" command.
 
-consensus.strength <<- 0.5
-analysis.type <<- "CA"
+consensus.strength = 0.5
+analysis.type = "CA"
 
 
 # Do you want to display the graph on the screen?
@@ -119,12 +120,12 @@ analysis.type <<- "CA"
 # You can display the graph on the screen AND write to a file (the latter 
 # will be done with much better quality).
 
-display.on.screen <<- TRUE
-write.pdf.file <<- FALSE
-write.jpg.file <<- FALSE
-write.emf.file <<- FALSE    # Windows only
-write.png.file <<- FALSE
-dump.samples <<- FALSE
+display.on.screen = TRUE
+write.pdf.file = FALSE
+write.jpg.file = FALSE
+write.emf.file = FALSE    # Windows only
+write.png.file = FALSE
+dump.samples = FALSE
 
 # dimensions of the plot area (expressed in inches), font size,
 # thickness of the lines used to plot the graphs.
@@ -132,20 +133,20 @@ dump.samples <<- FALSE
 # is provided to reset the picture options -- if this is switched on,
 # the remaining options will be overwritten
 
-plot.options.reset <<- FALSE
-plot.custom.height <<- 7
-plot.custom.width <<- 7
-plot.font.size <<- 10
-plot.line.thickness <<- 1
+plot.options.reset = FALSE
+plot.custom.height = 7
+plot.custom.width = 7
+plot.font.size = 10
+plot.line.thickness = 1
 
 # custom offset between labels and point; custom margin size 
 # (in percentage of plot area)
-label.offset <<- 3
-add.to.margins <<- 2
+label.offset = 3
+add.to.margins = 2
 
 # how to represent samples on PCA or MDS graphs:
 # "labels" || "points" || "both"
-text.id.on.graphs <<- "labels"
+text.id.on.graphs = "labels"
 
 
 
@@ -154,22 +155,22 @@ text.id.on.graphs <<- "labels"
 # file names (the first string ending in "_").
 # Available options: "colors" || "grayscale" || "black"
 
-colors.on.graphs <<- "colors"
+colors.on.graphs = "colors"
 
 # Do you want titles on your graphs, listing the most important parameters?
 
-titles.on.graphs <<- TRUE
+titles.on.graphs = TRUE
 
 
 # Layout of dendrogram: horizontal/vertical (Cluster Analysis only)
 
-dendrogram.layout.horizontal <<- TRUE
+dendrogram.layout.horizontal = TRUE
 
 
 # Initialize pca VISUALIZATION options; choose one:
 # "classic", "loadings", "technical", "symbols"
 
-pca.visual.flavour <<- "classic" # || "technical" || "symbols"
+pca.visual.flavour = "classic"
 
 
 # Sometimes, you might want to save computed table(s) of distances
@@ -178,9 +179,9 @@ pca.visual.flavour <<- "classic" # || "technical" || "symbols"
 # in analysis, i.e. after culling, pronoun deletion, etc. Again, one might 
 # want to save the table of frequencies actually used
 
-save.distance.tables <<- FALSE
-save.analyzed.features <<- FALSE
-save.analyzed.freqs <<- FALSE
+save.distance.tables = FALSE
+save.analyzed.features = FALSE
+save.analyzed.freqs = FALSE
 
 
 #######  ADVANCED SETTINGS (FOR EXPERTS ONLY)  ########################
@@ -196,7 +197,7 @@ save.analyzed.freqs <<- FALSE
 # your n-grams (or if you suddenly realize you've picked the
 # wrong language!
 
-use.existing.freq.tables <<- FALSE
+use.existing.freq.tables = FALSE
 
 # Some people like to see what's going on, and to be able to revise/edit
 # the list of words for analysis. To meet their wishes, the script
@@ -206,11 +207,11 @@ use.existing.freq.tables <<- FALSE
 # Switching this option on prevents the script from overwriting the file, 
 # and makes sure that the wordlist is loaded from there.
 
-use.existing.wordlist <<- FALSE
+use.existing.wordlist = FALSE
 
 # Otherwise, select files manually.
 
-interactive.files <<- FALSE
+interactive.files = FALSE
 
 # Another option makes it possible to upload the files using an external list
 # of files. It should be named "files_to_analyze.txt" and be put into the working
@@ -218,17 +219,14 @@ interactive.files <<- FALSE
 # tabs, or newlines. The delimiters can be mixed and/or multiplied, thus even
 # a very untidy list will be interpreted correctly. 
 
-use.custom.list.of.files <<- TRUE
+use.custom.list.of.files = TRUE
 
 # Usually, it is recommended to cut off the tail of the word-list;
 # if you do not want to cut the list, then the variable may be set to an 
 # absurdly big number, or to "mfw.list.cutoff = mfw.list.of.all"
 # (and then you are advised to use a fast computer).
 
-mfw.list.cutoff <<- 5000
-
-
-
+mfw.list.cutoff = 5000
 
 
 
@@ -237,14 +235,14 @@ mfw.list.cutoff <<- 5000
 #######  SAMPLING OPTIONS  ############################################
 
 # "normal.sampling" || "random.sampling" || "no.sampling"
-sampling <<- "no.sampling"
+sampling = "no.sampling"
 
 # When dealing with longer text, one might want to divide these in samples of 
 # an equal size. This can be achieved by setting the sampling variable
 # (default="normal.sampling") and specifying the number of words per sample 
 # via the sample.size parameter: Integer, default=10000).
 
-sample.size <<- 10000 # expressed in words, also if you're using character n-grams
+sample.size = 10000 # expressed in words, also if you're using char n-grams
 
 # when the analyzed texts are significantly unequal in length, it is not a bad
 # idea to prepare samples as randomly chosen "bags of words". For this, set the
@@ -257,8 +255,10 @@ sample.size <<- 10000 # expressed in words, also if you're using character n-gra
 #
 # ATTENTION: this makes sense only if "use.existing.freq.tables" is set "FALSE"
 
-length.of.random.sample <<- 10000 # THIS IS IRRELEVANT! USE "SAMPLE.SIZE" INSTEAD
-sampling.with.replacement <<- FALSE # THIS IS NOT VISIBLE ON GUI
+length.of.random.sample = 10000 # THIS IS IRRELEVANT! USE "SAMPLE.SIZE" INSTEAD
+                               # it should be deleted from stylo.R, classify.R, 
+                               # gui.stylo.R and gui.classify.R
+sampling.with.replacement = FALSE # THIS IS NOT VISIBLE ON GUI
 
 # It is also possible to use the entire corpus texts as samples (regardless 
 # of their length and differences therein). For this, set the sampling variable 
@@ -272,19 +272,19 @@ sampling.with.replacement <<- FALSE # THIS IS NOT VISIBLE ON GUI
 # Normally, it should be switched off, since it is used only when the script
 # is invoked from inside the TXM environment. WARNING: experimental.
 
-txm.compatibility.mode <<- FALSE
+txm.compatibility.mode = FALSE
 
 
 # COMPATIBILITY MODE: to make old experiments replicable
 
 # original algorithm for estabilishing consensus trees, used in ver. < 0.4.8;
 # this is still available: if you want to replicate your old tests, say TRUE
-nj.consensus.tree <<- FALSE
+nj.consensus.tree = FALSE
 
 # in ver. 0.4.7, color dendrograms were available; they were produced using
 # the neighbor joining (NJ) algorithm. If you want to use it and/or you
 # want to replicate your experiments performed using ver. 0.4.7, say TRUE
-nj.cluster.analysis <<- FALSE
+nj.cluster.analysis = FALSE
     ######################################
           # loading the required library
           if(nj.cluster.analysis == TRUE) {
@@ -300,6 +300,49 @@ nj.cluster.analysis <<- FALSE
 
 
 
+
+#### additional variables for classify()
+
+#######  VARIABLES FOR classify() (CLASSIFICATION METHOD)  #############
+
+# method of classification: choose one of the options described below
+# Delta ("delta"), k-nearest neighbor classification ("knn"),
+# Naive Bayes classification ("naivebayes"), Nearest Shrunken Centroids
+# ("nsc"), or Support Vectors Machines ("svm")
+classification.method = "delta"
+
+# Delta is always active: output is directed to a file. You may specify
+# the number of final ranking candidates to be displayded (at least 1)
+number.of.candidates = 3
+
+# Report the number of correct guesses for each iteration (written to 
+# the log file). Ranking of the least unlikely candidates in the log file.
+how.many.correct.attributions = TRUE
+final.ranking.of.candidates = TRUE
+
+# How the z-scores should be calculated:
+# if the variable is set to FALSE, then the z-scores are relying
+# on the primary set only (this should be better in most cases; after all,
+# this is the classical solution used by Burrows and Hoover).
+# Otherwise, the scaling is based on all the values
+# in the primary and the secondary sets.
+z.scores.of.all.samples = FALSE
+
+# The both talbes of frequencies are build using the pre-prepared word
+# list of the whole I set. Alternatively, one might want to prepare 
+# this list of both sets. Similarily culling: it can be calcutated either 
+# on the I set, or on both sets
+reference.wordlist.of.all.samples = FALSE
+culling.of.all.samples = TRUE
+
+# file with the final ranking of classification results (log file)
+outputfile = "final_results.txt"
+
+
+
+
+
+
 # #################################################
 # sanity check for some of the initial variables -- just in case
 # #################################################
@@ -310,7 +353,20 @@ nj.cluster.analysis <<- FALSE
 # of correct spelling: then the default value will be assigned as well!
 
 if(distance.measure %in% c("CD","AL","ED","ES","MH","CB","EU") == FALSE) {
-  distance.measure <<- "CD"
+  distance.measure = "CD"
 }
 
+
+# the final stage involves creating a list and putting all the variables on it;
+# certainly, the list should not contain itself (!), it also should not 
+# contain the index "i" used to generate the list
+default.variables = list()
+for(i in ls()[!ls() %in% c("i","default.variables")]) {
+  default.variables[[i]] = get(i)
+}
+
+
+
+# the very final stage:
+return(default.variables)
 }

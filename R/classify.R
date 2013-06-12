@@ -10,12 +10,15 @@
 classify <-
 function(gui = TRUE, path = "",
          training.corpus.dir = "primary_set",
-         test.corpus.dir = "secondary_set") {
+         test.corpus.dir = "secondary_set", ...) {
 
 # so far, 'training.corpus' and 'test.corpus' are not used
 # (certainly: they are used, but their values are specified elsewhere)
 
 
+# if any command-line arguments have been passed by a user, they will
+# be stored on the following list and used to overwrite the defaults
+passed.arguments = list(...)
 
 
 # changing working directory (if applicable)
@@ -40,82 +43,31 @@ cat("using current directory...\n")
 
 
 
-# most settings will be loaded using stylo.default.settings()
-# some classify-specific options, however, have to be declared here:
-
-
-
-#######  MATHEMATICAL SETTINGS (CLASSIFICATION METHOD)  #############
-
-# method of classification: choose one of the options described below
-# Delta ("delta"), k-nearest neighbor classification ("knn"),
-# Naive Bayes classification ("naivebayes"), Nearest Shrunken Centroids
-# ("nsc"), or Support Vectors Machines ("svm")
-classification.method <<- "delta"
-
-# Delta is always active: output is directed to a file. You may specify
-# the number of final ranking candidates to be displayded (at least 1)
-number.of.candidates <<- 3
-
-# Report the number of correct guesses for each iteration (written to 
-# the log file). Ranking of the least unlikely candidates in the log file.
-how.many.correct.attributions <<- TRUE
-final.ranking.of.candidates <<- TRUE
-
-# How the z-scores should be calculated:
-# if the variable is set to FALSE, then the z-scores are relying
-# on the primary set only (this should be better in most cases; after all,
-# this is the classical solution used by Burrows and Hoover).
-# Otherwise, the scaling is based on all the values
-# in the primary and the secondary sets.
-z.scores.of.all.samples <<- FALSE
-
-# The both talbes of frequencies are build using the pre-prepared word
-# list of the whole I set. Alternatively, one might want to prepare 
-# this list of both sets. Similarily culling: it can be calcutated either 
-# on the I set, or on both sets
-reference.wordlist.of.all.samples <<- FALSE
-culling.of.all.samples <<- TRUE
-
-# file with the final ranking of Delta results (log file)
-outputfile <<- "final_results.txt"
-
-# THIS WILL BE OBSOLETE ONCE make.parallel.freq.list is replaced
-# (carefully: it is used by GUI as well...)
-random.sampling <<- FALSE
-
-
-
-
 
 
 # loading the default settings as defined in the following function
-stylo.default.settings()
+variables = stylo.default.settings()
 
 
 
 
+# Code that enables overwriting the variables with custom settings.
+# A magnificent snipped for combining two lists 
+# http://stackoverflow.com/questions/13811501/r-merge-lists-with-overwrite-and-recursion
+merge.lists <- function(a, b) {
+    a.names <- names(a)
+    b.names <- names(b)
+    m.names <- sort(unique(c(a.names, b.names)))
+    sapply(m.names, function(i) {
+        if (is.list(a[[i]]) & is.list(b[[i]])) merge.lists(a[[i]], b[[i]])
+        else if (i %in% b.names) b[[i]]
+        else a[[i]]
+    }, simplify = FALSE)
+}
 
-# #################################################
-# checking some of the initial variables -- just in case
-# #################################################
-
-# This prevents us from choosing a non-existing distance measure -- in such
-# case the default distance (Classic Delta) will be switched on. Be aware
-# of correct spelling: then the default value will be assigned as well!
-
-if(distance.measure %in% c("CD","AL","ED","ES","MH","CB","EU") == FALSE) {
-  distance.measure = "CD"
-  }
-
-classification.method = tolower(classification.method)
-
-
-# #################################################
-
-
-# this is obsolete, but still required somewhere below (bug to be fixed)
-consensus.strength = 0.5
+# if any variables have been passed as arguments, they will overwrite
+# the default settings
+variables = merge.lists(variables, passed.arguments)
 
 
 
@@ -123,8 +75,16 @@ consensus.strength = 0.5
 
 # optionally, displaying a GUI box
 if (gui == TRUE) {
-  gui.classify()
+  variables = gui.classify()
   } 
+
+# this function explodes the list "variables" into particular values
+# (actually, it does not explode the original list, but it makes
+# all the variables stored on this list available without accessing it);
+# instead of "variables$mfw.max", one can use simply "mfw.max"
+# see: help(attach) for more detailed explanation
+attach(variables)
+
 
 
 
@@ -141,30 +101,6 @@ if (gui == TRUE) {
 # there was a spelling mistake), then the variable will be set to "English". 
 
 pronouns = stylo.pronouns(language=corpus.lang)
-
-# A chosen language option should be followed by an assignment of 
-# the appropriate set of pronouns. The following code is responsible for it
-  if(corpus.lang == "English")
-      pronouns = eng.pronouns
-  if(corpus.lang == "Polish")
-      pronouns = pol.pronouns 
-  if(corpus.lang == "Latin")
-      pronouns = lat.pronouns
-  if(corpus.lang == "French")
-      pronouns = fra.pronouns
-  if(corpus.lang == "German" )
-      pronouns = ger.pronouns
-  if(corpus.lang == "Italian")
-      pronouns = ita.pronouns
-  if(corpus.lang == "Hungarian")
-      pronouns = hun.pronouns
-
-
-  # Windows users are a bit allergic to Unicode; let's make them happy
-  # by converting the chosen set of pronouns to local encoding
-  if(Sys.info()[["sysname"]] == "Windows") { 
-    pronouns = iconv(pronouns, from="UTF-8")
-  }
 
 
 # Since it it not so easy to perform, say, 17.9 iterations, or analyze
@@ -200,7 +136,6 @@ var.name <- function(x) {
  var.name(corpus.lang)
  var.name(analyzed.features)
  var.name(ngram.size)
- var.name(random.sampling)
  var.name(length.of.random.sample)
  var.name(classification.method)
  var.name(mfw.min)
@@ -589,6 +524,10 @@ perfect.guessing = length(authors.II.set[authors.II.set %in% authors.I.set])
   if(culling.min < 0) {
   culling.min = 0
   }
+# if max value is LOWER than min value, make them equal
+  if(culling.max < culling.min) {
+  culling.max = culling.min
+  }  
 # avoiding infinite loops
   if(culling.incr <= 1) {
   culling.incr = 10
@@ -667,16 +606,20 @@ secondary.set = secondary.set[,start.at:length(secondary.set[1,])]
   if(mfw.max > length(primary.set[1,])) {
   mfw.max = length(primary.set[1,])
   }
-# if too small, it is set to 1 (i.e., minimal value)
-  if(mfw.min < 1) {
-  mfw.min = 1
+# if too small, it is set to 2 (i.e., minimal value)
+  if(mfw.min < 2) {
+  mfw.min = 2
   }
-# if culling is too strong, sometimes strange things may happen; let's block it
-  if(mfw.min > mfw.max) {
-  mfw.min = mfw.max
+# if the max value is smaller than the min value, it will be adjusted
+  if(mfw.max < mfw.min) {
+  mfw.max = mfw.min
   }
-# MFW set to mfw.max for a while (it will change later on)
-mfw = mfw.max
+# avoiding infinite loops
+  if( (mfw.max != mfw.min) && (mfw.incr == 0) ) {
+  mfw.incr = 10
+  }
+
+
 
 
 
@@ -771,8 +714,12 @@ if(distance.measure == "EU") {
 
 
 
-for(i in (mfw.min/mfw.incr):(mfw.max/mfw.incr)) {
-mfw = i * mfw.incr
+
+
+for(i in seq(mfw.min,mfw.max,round(mfw.incr)) ) {
+mfw = i
+
+
 
 # for safety reasons, if MFWs > words in samples
 if(mfw > length(list.of.words.after.culling) ) {
@@ -1081,19 +1028,42 @@ cat("\nMFWs from ",mfw.min," to ",mfw.max.original,
 
 
 
+
+
+# creating an object (list) that will contain the final results,
+# tables of frequencies, etc.etc.
+results.classify = list()
+# adding a few elements on this list
+results.classify$accuracy = all.guesses
+results.classify$distance.table = distance.table
+results.classify$freqs.all = freq.table.both.sets
+results.classify$zscores.all = zscores.table.both.sets
+results.classify$freqs.training.set = freq.I.set.0.culling
+results.classify$freqs.test.set = freq.II.set.0.culling
+# the object has to be made immortal
+results.classify <<- results.classify
+
+
+
+
 # #################################################
 # final cleaning
 
 
 
 cat("\n")
-cat("removing most of the variables... \n")
-cat("type ls() if you want to see what was not removed\n")
-cat("if you are going to change the corpus, clean all: rm(list=ls())\n")
+cat("some of the variables used by this function will not vanish, \n")
+cat("in order to be re-usable in advanced applications;\n")
+cat("they are stored on a list 'results.classify';\n")
+cat("if you're familiar with lists, type: summary(results.classify),\n")
+cat("otherwise, don't touch it -- seriously!\n")
 cat("\n")
-cat("Results saved in", outputfile, "\n")
+cat("results saved in", outputfile, "\n")
 cat("\n")
 cat("for suggestions how to cite this software, type: citation(\"stylo\")\n")
+
+
+##### THIS IS OBSOLETE, SINCE THE VARIABLES VANISH ANYWAY.
 
 
 # a list of variables not to be removed
@@ -1105,6 +1075,7 @@ do.not.remove = c("zscores.table.both.sets", "freq.table.both.sets",
 list.of.variables = ls()
 rm(list=list.of.variables[!(list.of.variables %in% do.not.remove)])
 
+detach(variables)
 }
 
 

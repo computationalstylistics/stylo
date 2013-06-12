@@ -10,7 +10,13 @@
 # #################################################
 
 stylo <-
-function(gui = TRUE, path = "", corpus.dir = "corpus") {
+function(gui = TRUE, path = "", corpus.dir = "corpus", ...) {
+
+
+
+# if any command-line arguments have been passed by a user, they will
+# be stored on the following list and used to overwrite the defaults
+passed.arguments = list(...)
 
 
 # THIS SOLUTION IS RATHER UGLY; IT HAS TO BE CHANGED LATER:
@@ -19,6 +25,7 @@ function(gui = TRUE, path = "", corpus.dir = "corpus") {
 # recorded to preserve them from being removed; however, they are still 
 # vulnerable to being overwritten!
 variables.not.to.be.removed = ls()
+
 
 # this is needed at some point; in next versions, it should be 
 # removed from here
@@ -48,17 +55,46 @@ cat("using current directory...\n")
 
 
 
+
 # loading the default settings as defined in the following function
-stylo.default.settings()
+variables = stylo.default.settings()
+
+
+
+
+# Code that enables overwriting the variables with custom settings.
+# A magnificent snipped for combining two lists 
+# http://stackoverflow.com/questions/13811501/r-merge-lists-with-overwrite-and-recursion
+merge.lists <- function(a, b) {
+    a.names <- names(a)
+    b.names <- names(b)
+    m.names <- sort(unique(c(a.names, b.names)))
+    sapply(m.names, function(i) {
+        if (is.list(a[[i]]) & is.list(b[[i]])) merge.lists(a[[i]], b[[i]])
+        else if (i %in% b.names) b[[i]]
+        else a[[i]]
+    }, simplify = FALSE)
+}
+
+# if any variables have been passed as arguments, they will overwrite
+# the default settings
+variables = merge.lists(variables, passed.arguments)
+
+
 
 
 # optionally, displaying a GUI box
 if (gui == TRUE) {
-  gui.stylo()
+  variables = gui.stylo()
   } 
 
 
-
+# this function explodes the list "variables" into particular values
+# (actually, it does not explode the original list, but it makes
+# all the variables stored on this list available without accessing it);
+# instead of "variables$mfw.max", one can use simply "mfw.max"
+# see: help(attach) for more detailed explanation
+attach(variables)
 
 
 
@@ -504,6 +540,10 @@ if (analysis.type == "BCT") {
   if(culling.min < 0) {
   culling.min = 0
   }
+# if max value is LOWER than min value, make them equal
+  if(culling.max < culling.min) {
+  culling.max = culling.min
+  }  
 # avoiding infinite loops
   if(culling.incr <= 1) {
   culling.incr = 10
@@ -563,20 +603,20 @@ table.with.all.freqs = table.with.all.freqs[,start.at:length(table.with.all.freq
   if(mfw.max > length(table.with.all.freqs[1,])) {
   mfw.max = length(table.with.all.freqs[1,])
   }
-# if too small, it is set to 1 (i.e., minimal value)
-  if(mfw.min < 1) {
-  mfw.min = 1
+# if too small, it is set to 2 (i.e., minimal value)
+  if(mfw.min < 2) {
+  mfw.min = 2
   }
-# if culling is too strong, sometimes strange things may happen; let's block it
-  if(mfw.min > mfw.max) {
-  mfw.min = mfw.max
+# if the max value is smaller than the min value, it will be adjusted
+  if(mfw.max < mfw.min) {
+  mfw.max = mfw.min
   }
 # avoiding infinite loops
   if( (mfw.max != mfw.min) && (mfw.incr == 0) ) {
-  mfw.incr = 100
+  mfw.incr = 10
   }
-# MFW set to mfw.max for a while (it will change later on)
-mfw = mfw.max
+
+
 
 cat("\n\n")
 cat("culling @ ", current.culling,"\t","available words ",mfw.max,"\n")
@@ -1244,21 +1284,39 @@ if(length(bootstrap.list) <= 2) {
 # #################################################
 # final cleaning
 
-#### APART FROM GETTING BACK TO THE ORIGINAL DIRECTORY,
-#### THESE SETTINGS WILL BE OBSOLETE IN THE PACKAGE
-#### (when a funtion is done, all the objects vanish anyway!)
+
+
+
+# creating an object (list) that will contain the final results,
+# tables of frequencies, etc.etc.
+results.stylo = list()
+# adding a few elements on this list
+results.stylo$distance.table = distance.table
+results.stylo$freqs.all = frequencies.0.culling
+results.stylo$freqs.actually.used = table.with.all.freqs
+results.stylo$zscores.actually.used = table.with.all.zscores
+# the object has to be made immortal
+results.stylo <<- results.stylo
+
 
 
 # back to the original working directory
 setwd(original.path)
 
 
+
+
 cat("\n")
-cat("removing most of the variables... \n")
-cat("type ls() if you want to see what was not removed\n")
-cat("if you are going to change the corpus, clean all: rm(list=ls())\n")
+cat("some of the variables used by this function will not vanish, \n")
+cat("in order to be re-usable in advanced applications;\n")
+cat("they are stored on a list 'results.stylo';\n")
+cat("if you're familiar with lists, type: summary(results.stylo),\n")
+cat("otherwise, don't touch it -- seriously!\n")
 cat("\n")
 cat("for suggestions how to cite this software, type: citation(\"stylo\")\n")
+
+
+##### THIS IS OBSOLETE, SINCE THE VARIABLES VANISH ANYWAY.
 
 # a list of variables not to be removed
 do.not.remove = c("table.with.all.zscores", "table.with.all.freqs",
@@ -1269,6 +1327,7 @@ do.not.remove = c("table.with.all.zscores", "table.with.all.freqs",
 list.of.variables = ls()
 rm(list=list.of.variables[!(list.of.variables %in% do.not.remove)])
 
+detach(variables)
 
-# #################################################
+
 }

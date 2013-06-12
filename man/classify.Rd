@@ -9,7 +9,7 @@ are derived from the \code{stylo} function.
 }
 \usage{
 classify(gui = TRUE, path = "", training.corpus.dir = "primary_set",
-test.corpus.dir = "secondary_set")
+test.corpus.dir = "secondary_set", ...)
 }
 \arguments{
   \item{gui}{an optional argument; if switched on, a simple yet effective 
@@ -34,6 +34,9 @@ test.corpus.dir = "secondary_set")
     data, in terms of anonymous samples or other textual material that 
     one wants to be classified. If not specified, the subdirectory 
     \code{secondary_set} will be used.}
+
+  \item{...}{any variable as produced by \code{stylo.default.settings}
+    can be set here, to overwrite the default values.}
 }
 
 \details{There are numerous additional options that are passed to 

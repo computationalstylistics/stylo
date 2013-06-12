@@ -8,16 +8,21 @@ all-in-one tool for a variety of experiments in computational
 stylistic. For a more detailed description, refer to miniHOWTO.
 }
 \usage{
-stylo(gui = TRUE, path = "", corpus.dir = "corpus")
+stylo(gui = TRUE, path = "", corpus.dir = "corpus", ...)
 }
 \arguments{
   \item{gui}{an optional argument; if switched on, a simple yet effective 
     graphical interface (GUI) will appear. Default value is \code{TRUE}.}
+
   \item{path}{if not specified, the current directory will be used 
     for input/output procedures (reading files, outputting the results).}
+
   \item{corpus.dir}{a subdirectory (within a working directory) that
     contains corpus files; if not specified, the subdirectory \code{corpus} 
     will be used.}
+
+  \item{...}{any variable as produced by \code{stylo.default.settings}
+    can be set here, to overwrite the default values.}
 }
 \details{
 There is a lot of additional options that should be passed to this
