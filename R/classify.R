@@ -1,11 +1,9 @@
 
-
-# there is still a lot of work with classify():
-# (1) gui should be extracted as a separated function
-# (2) it will be better to have initial settings stored in a separate function,
-#     provided that this is a good idea (cf. stylo() and stylo.default.settings())
-
-
+# Function that performs a number of machine-learning methods
+# of classification used in computational stylistics: Delta (Burrows, 2002), 
+# k-Nearest Neighbors classification, Support Vectors Machines, Naive Bayes, 
+# and Nearest Shrunken Centroids (Jockers and Witten, 2010). Most of the options 
+# are derived from the 'stylo' function.
 
 classify <-
 function(gui = TRUE, path = "",
