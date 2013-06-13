@@ -11,6 +11,10 @@ GEPHI!!!! (to be copied from 0.4.9.2)
 
 culling could be easily implemented as a separate funcition
 
+
+Rd files: \keywords section should be moved to \alias
+
+
 functionalities not implemented in classify:
 interactive.files <<- FALSE
 use.custom.list.of.files <<- TRUE
