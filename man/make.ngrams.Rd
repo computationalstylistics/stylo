@@ -74,7 +74,7 @@ my.text = "Quousque tandem abutere, Catilina, patientia nostra?"
 my.vector.of.words = txt.to.words(my.text)
 # now, one can build a vector of word 2-grams:
 make.ngrams(my.vector.of.words, ngram.size = 2)
-# 
+
 # similarly, one can produce character n-grams:
 my.vector.of.chars = txt.to.features(my.vector.of.words, features = "c")
 make.ngrams(my.vector.of.chars, ngram.size = 4)

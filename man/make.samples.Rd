@@ -58,8 +58,9 @@ my.text = "Arma virumque cano, Troiae qui primus ab oris
            insignem pietate virum, tot adire labores
            impulerit. tantaene animis caelestibus irae?"
 my.words = txt.to.words(my.text)
+# split the above text into samples of 20 words:
 make.samples(my.words, sampling = "normal.sampling", sample.size = 20)
-#
+# excerpt randomly 50 words from the above text:
 make.samples(my.words, sampling = "random.sampling", sample.size = 50)
 }
 \keyword{text processing}

@@ -49,9 +49,12 @@ Eder, M. Ketemont, M. and Rybicki, J. (2013). Stylometry with R:
 \dontrun{
 # standard usage:
 stylo()
-#
+
 # batch mode, custom name of corpus directory:
 stylo(gui = FALSE, corpus.dir = "ShakespeareCanon")
+
+# batch mode, character 3-grams requested:
+stylo(gui = FALSE, analyzed.features = "c", ngram.size = 3)
 }
 }
 \keyword{principal components analysis}

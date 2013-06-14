@@ -32,7 +32,9 @@ Jan Rybicki
 \examples{
 \dontrun{
 gui.clssify()
-ls()
+
+my.variables = gui.classify()
+summary(my.variables)
 }
 }
 \keyword{variables}

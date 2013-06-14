@@ -73,13 +73,15 @@ Argamon, S. (2008). Interpreting Burrows's Delta: geometric and
 
 \examples{
 \dontrun{
-#
 # standard usage:
 classify()
-#
+
 # batch mode, custom name of corpus directories:
 classify(gui = FALSE, training.corpus.dir = "TrainingSet",
        test.corpus.dir = "TestSet")
+
+# batch mode, character 3-grams requested:
+classify(gui = FALSE, analyzed.features = "c", ngram.size = 3)
 }
 }
 \keyword{classification}

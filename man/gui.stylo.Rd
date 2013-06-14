@@ -32,7 +32,9 @@ Jan Rybicki
 \examples{
 \dontrun{
 gui.stylo()
-ls()
+
+my.variables = gui.stylo()
+summary(my.variables)
 }
 }
 \keyword{variables}

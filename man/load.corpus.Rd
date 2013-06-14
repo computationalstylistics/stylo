@@ -25,12 +25,12 @@ its elements are particular uploaded texts.
 }
 \examples{
 \dontrun{
-#
-# to upload file1.txt and file2.txt, stored in the subdirectory "my.files":
+# to upload file1.txt and file2.txt, stored in the subdirectory my.files:
 my.corpus = load.corpus(corpus.dir = "my.files",
-                        files = c("file1.txt","file2.txt"))
+                        files = c("file1.txt", "file2.txt") )
+
 # to upload all XML files from the current directory:
-my.corpus = load.corpus(files = list.files(pattern="[.]xml$"))
+my.corpus = load.corpus(files = list.files(pattern="[.]xml$") )
 }
 }
 \keyword{text processing}

@@ -60,14 +60,12 @@ Rybicki, J., Kestemont, M. and Hoover D. (2013). Collaborative authorship:
 }
 \examples{
 \dontrun{
-#
 # standard usage:
 rolling.delta()
-#
+
 # batch mode, custom name of corpus directories:
 rolling.delta(gui = FALSE, primary.corpus.dir = "MySamples",
        secondary.corpus.dir = "ReferenceCorpus")
-#
 }
 }
 \keyword{corpus linguistics}

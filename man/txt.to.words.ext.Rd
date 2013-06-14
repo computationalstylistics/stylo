@@ -39,7 +39,7 @@ Maciej Eder, Jan Rybicki, Mike Kestemont
 \examples{
 txt.to.words.ext("Nel mezzo del cammin di nostra vita / mi ritrovai per 
     una selva oscura, che la diritta via era smarrita.")
-#
+
 # to see the difference between particular options for English,
 # consider the following sentence from Joseph Conrad's "Nostromo":
 txt.to.words.ext("That's how your money-making is justified here.")

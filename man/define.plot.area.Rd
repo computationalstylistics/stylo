@@ -31,7 +31,7 @@ Maciej Eder
 \examples{
 # to establish plotting area for 4 given points:
 define.plot.area( c(1,2,3,4), c(-0.001,0.11,-0.023,0.09))
-#
+
 # to find plot coordinates, taking into consideration objects' names
 my.points = cbind(c(1,2,3,4),c(-0.001,0.11,-0.023,0.09))
 rownames(my.points) = c("first","second","third","very_long_fourth")
