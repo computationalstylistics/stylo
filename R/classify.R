@@ -1,11 +1,9 @@
 
-
-# there is still a lot of work with classify():
-# (1) gui should be extracted as a separated function
-# (2) it will be better to have initial settings stored in a separate function,
-#     provided that this is a good idea (cf. stylo() and stylo.default.settings())
-
-
+# Function that performs a number of machine-learning methods
+# of classification used in computational stylistics: Delta (Burrows, 2002), 
+# k-Nearest Neighbors classification, Support Vectors Machines, Naive Bayes, 
+# and Nearest Shrunken Centroids (Jockers and Witten, 2010). Most of the options 
+# are derived from the 'stylo' function.
 
 classify <-
 function(gui = TRUE, path = "",
@@ -1033,13 +1031,16 @@ cat("\nMFWs from ",mfw.min," to ",mfw.max.original,
 # creating an object (list) that will contain the final results,
 # tables of frequencies, etc.etc.
 results.classify = list()
-# adding a few elements on this list
-results.classify$accuracy = all.guesses
-results.classify$distance.table = distance.table
-results.classify$freqs.all = freq.table.both.sets
-results.classify$zscores.all = zscores.table.both.sets
-results.classify$freqs.training.set = freq.I.set.0.culling
-results.classify$freqs.test.set = freq.II.set.0.culling
+# elements that we want to add on this list
+variables.to.save = c("all.guesses", "distance.table", 
+                      "freq.table.both.sets", "zscores.table.both.sets",
+                      "freq.I.set.0.culling", "freq.II.set.0.culling")
+# checking if they really exist; getting rig of non-existing ones:
+filtered.variables = ls()[ls() %in% variables.to.save]
+# adding them on the list
+for(i in filtered.variables) {
+  results.classify[[i]] = get(i)
+}
 # the object has to be made immortal
 results.classify <<- results.classify
 

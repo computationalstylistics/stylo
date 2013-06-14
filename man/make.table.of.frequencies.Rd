@@ -37,7 +37,7 @@ switch this option to \code{FALSE}.}
 sample.txt = txt.to.words("My father had a small estate 
              in Nottinghamshire: I was the third of five sons.")
 make.table.of.frequencies(sample.txt, c("a", "the", "of"))
-#
+
 # to get table of frequencies across a number of texts:
 txt.1 = "Gallia est omnis divisa in partes tres, quarum unam incolunt 
     Belgae, aliam Aquitani, tertiam qui ipsorum lingua Celtae, nostra 
@@ -56,18 +56,18 @@ my.corpus.raw = list(txt.1, txt.2, txt.3)
 my.corpus.clean = lapply(my.corpus.raw, txt.to.words)
 my.favorite.words = c("et", "in", "se", "rara", "avis")
 make.table.of.frequencies(my.corpus.clean, my.favorite.words)
-#
+
 # to include all the words from the reference list, no matter if they 
 # occurred in the corpus:
 make.table.of.frequencies(my.corpus.clean, my.favorite.words,
     absent.sensitive=FALSE)
-#
+
 # to prepare a table of frequencies of all the words represented in 
 # a corpus, in descendant order of their occurrences:
 complete.word.list = names(sort(table(unlist(my.corpus.clean)), 
     decreasing = TRUE))
 make.table.of.frequencies(my.corpus.clean, complete.word.list)
-#
+
 # to create a table of frequencies of word pairs (word 2-grams):
 my.word.pairs = lapply(my.corpus.clean, txt.to.features, ngram.size=2)
 make.table.of.frequencies(my.word.pairs, c("et legibus", "hoc tempore"))

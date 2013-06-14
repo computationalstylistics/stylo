@@ -1127,7 +1127,7 @@ if(analysis.type != "BCT") {
 
 
 # writing distance table(s) to a file (if an appropriate option has been chosen)
-if(save.distance.tables == TRUE) {
+if(save.distance.tables == TRUE && exists("distance.table") == TRUE) {
   distance.table.filename = paste("distance_table_",mfw,"mfw_",current.culling,"c.txt",sep="")
   write.table(file=distance.table.filename, distance.table)
 }
@@ -1154,20 +1154,21 @@ if(save.analyzed.freqs == TRUE) {
 # consensus tree as a network: preparing Gephi input data
 ##############################################
 
-distances = distance.table
-# next, we need to create an empty matrix of the same size as the dist table
-connections = matrix(data=0,nrow=length(distances[,1]),ncol=length(distances[1,]))
-# iterate over the rows of dist matrix to retrieve subsequent nearest neighbors
-for(i in 1: length(distances[,1])) {
-  # establish a link between two nearest neighbors by assigning 3,
-  # 2nd runner-up will get 2, and 3rd runner-up will get 1
-  connections[i,(order(distances[i,])[2])] = 3
-  connections[i,(order(distances[i,])[3])] = 2
-  connections[i,(order(distances[i,])[4])] = 1
-}
+if(exists("distance.table") == TRUE) {
+  distances = distance.table
+  # next, we need to create an empty matrix of the same size as the dist table
+  connections = matrix(data=0,nrow=length(distances[,1]),ncol=length(distances[1,]))
+  # iterate over the rows of dist matrix to retrieve subsequent nearest neighbors
+  for(i in 1: length(distances[,1])) {
+    # establish a link between two nearest neighbors by assigning 3,
+    # 2nd runner-up will get 2, and 3rd runner-up will get 1
+    connections[i,(order(distances[i,])[2])] = 3
+    connections[i,(order(distances[i,])[3])] = 2
+    connections[i,(order(distances[i,])[4])] = 1
+  }
 
 all.connections = all.connections + connections
-
+}
 ##############################################
 ##############################################
 
@@ -1197,29 +1198,31 @@ cat("\n")
 ######################################################
 # network analysis: preparing a list of edges
 
-rownames(all.connections) = rownames(distances)
-colnames(all.connections) = colnames(distances)
+if(exists("distance.table") == TRUE) {
+  rownames(all.connections) = rownames(distances)
+  colnames(all.connections) = colnames(distances)
 
-edges=c()
-for(i in 1:(length(all.connections[,1])) ) {
-  for(j in 1:(length(all.connections[1,])) ) {
-    from = rownames(all.connections)[i]
-    to = colnames(all.connections)[j]
-    weight = all.connections[i,j]
-    current.row = c(from, to, weight, "undirected")
-    # if there is a connection, record it in a common table
-    if(weight > 0) {
-      edges = rbind(edges, current.row)
+  edges=c()
+  for(i in 1:(length(all.connections[,1])) ) {
+    for(j in 1:(length(all.connections[1,])) ) {
+      from = rownames(all.connections)[i]
+      to = colnames(all.connections)[j]
+      weight = all.connections[i,j]
+      current.row = c(from, to, weight, "undirected")
+      # if there is a connection, record it in a common table
+      if(weight > 0) {
+        edges = rbind(edges, current.row)
+      }
     }
   }
+
+  colnames(edges) = c("Source","Target","Weight","Type")
+  rownames(edges) = c(1:length(edges[,1]))
+  edges = as.data.frame(edges)
+
+  edges.filename = paste(graph.filename,"EDGES.csv",sep="")
+  write.csv(file=edges.filename,quote=F,edges)
 }
-
-colnames(edges) = c("Source","Target","Weight","Type")
-rownames(edges) = c(1:length(edges[,1]))
-edges = as.data.frame(edges)
-
-edges.filename = paste(graph.filename,"EDGES.csv",sep="")
-write.csv(file=edges.filename,quote=F,edges)
 
 ######################################################
 ######################################################
@@ -1290,12 +1293,16 @@ if(length(bootstrap.list) <= 2) {
 # creating an object (list) that will contain the final results,
 # tables of frequencies, etc.etc.
 results.stylo = list()
-# adding a few elements on this list
-results.stylo$distance.table = distance.table
-results.stylo$freqs.all = frequencies.0.culling
-results.stylo$freqs.actually.used = table.with.all.freqs
-results.stylo$zscores.actually.used = table.with.all.zscores
-# the object has to be made immortal
+# elements that we want to add on this list
+variables.to.save = c("distance.table", "frequencies.0.culling",
+                      "table.with.all.freqs", "table.with.all.zscores")
+# checking if they really exist; getting rig of non-existing ones:
+filtered.variables = ls()[ls() %in% variables.to.save]
+# adding them on the list
+for(i in filtered.variables) {
+  results.stylo[[i]] = get(i)
+}
+# the object (list) has to be made immortal
 results.stylo <<- results.stylo
 
 

@@ -33,11 +33,13 @@ Maciej Eder, Mike Kestemont
 \examples{
 # assume there is a text:
 my.text = "Quousque tandem abutere, Catilina, patientia nostra?"
-# which can be split into a vector of consecutive words:
+
+# it can be split into a vector of consecutive words:
 my.vector.of.words = txt.to.words(my.text)
+
 # now, one can build a vector of word 2-grams:
 txt.to.features(my.vector.of.words, ngram.size = 2)
-# 
+ 
 # similarly, one can produce character n-grams:
 txt.to.features(my.vector.of.words, features = "c", ngram.size = 4)
 }

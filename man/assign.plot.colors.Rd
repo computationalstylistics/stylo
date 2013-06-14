@@ -39,14 +39,13 @@ chosen (e.g. \code{#000000}, \code{#000000}, \code{#595959},
 Maciej Eder
 }
 \examples{
-### in this example, three discrete classes will be established, 
+# in this example, three discrete classes will be established, 
 # for Tacitus, Caesar, and Livius
-#
 sample.names = c("Tacitus_Annales","Tacitus_Germania","Tacitus_Histories",
                  "Ceasar_Civil_wars","Caesar_Gallic_wars",
                  "Livius_Ab_Urbe_Condita")
 assign.plot.colors(sample.names)
-#
+
 # as above, but using grayscale:
 assign.plot.colors(sample.names, col = "grayscale")
 }

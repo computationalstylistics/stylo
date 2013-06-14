@@ -57,10 +57,10 @@ its elements are particular uploaded texts.
 
 \examples{
 \dontrun{
-#
-# to upload file1.txt and file2.txt, stored in subdirectory "my.files":
-my.corpus = load.corpus(files = c("file1.txt","file2.txt"),
+# to upload file1.txt and file2.txt, stored in subdirectory my.files:
+my.corpus = load.corpus(files = c("file1.txt", "file2.txt"),
                         corpus.dir = "my.files")
+
 # to upload all XML files from current directory, get rid of tags,
 # and split the texts into word pairs (2-grams):
 my.corpus = load.corpus(files = list.files(pattern = "[.]xml$"),

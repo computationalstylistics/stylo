@@ -81,7 +81,7 @@ classification = FALSE
 naive.bayes = FALSE
 svm.classification = TRUE
 decision.tree.classification = FALSE
-visualization = "default"
+visualization = "words"
 
 # #################################################
 #

@@ -3,11 +3,8 @@
 TO DO:
 
 
-define.plot.area()   does not have an executable example
-pronouns + encoding: perhaps iconv(...) should be moved to pronouns() ??
 
-
-GEPHI!!!! (to be copied from 0.4.9.2)
+GEPHI support is still very rough
 
 culling could be easily implemented as a separate funcition
 
@@ -19,8 +16,6 @@ functionalities not implemented in classify:
 interactive.files <<- FALSE
 use.custom.list.of.files <<- TRUE
 
-
-gui.stylo() ---> columnspan=5 can be safely deleted from the entries on tab5
 
 man pages: keywords to be re-considered
 

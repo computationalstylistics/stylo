@@ -24,10 +24,10 @@ Maciej Eder, Jan Rybicki, Mike Kestemont
 }
 \examples{
 stylo.default.settings()
-#
+
 # to see which variables have been set:
 names(stylo.default.settings())
-#
+
 # to use the elements of the list as if they were independent variables:
 my.variables = stylo.default.settings()
 attach(my.variables)

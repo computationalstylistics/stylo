@@ -2,7 +2,10 @@
 \alias{oppose}
 \title{Contrastive analysis of texts}
 \description{
-Function that performs a contrastive analysis between two given sets of texts. It generates a list of words significantly preferred by a tested author (or, a bunch of authors), and another list containing the words significantly avoided. Some visualizations are available.
+Function that performs a contrastive analysis between two given sets 
+of texts. It generates a list of words significantly preferred by 
+a tested author (or, a bunch of authors), and another list containing 
+the words significantly avoided. Some visualizations are available.
 }
 \usage{
 oppose(gui = TRUE, path = "", primary.corpus.dir = "primary_set",
@@ -69,14 +72,12 @@ Kilgariff A. (2001). Comparing Corpora. "International Journal of Corpus
 }
 \examples{
 \dontrun{
-#
 # standard usage:
 oppose()
-#
+
 # batch mode, custom name of corpus directories:
 oppose(gui = FALSE, primary.corpus.dir = "ShakespeareCanon",
        secondary.corpus.dir = "MarloweSamples")
-#
 }
 }
 \keyword{zeta}
