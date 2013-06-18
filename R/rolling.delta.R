@@ -187,7 +187,7 @@ distance.measure = "CD"
 display.on.screen = FALSE
 write.pdf.file = FALSE
 write.jpg.file = FALSE
-write.emf.file = FALSE    # Windows only
+write.svg.file = FALSE
 write.png.file = TRUE
 
 #############################################################################
@@ -371,7 +371,7 @@ if (interactive.mode.with.GUI == TRUE) {
 	display.on.screen <- tclVar(display.on.screen)
 	write.pdf.file <- tclVar(write.pdf.file)
 	write.jpg.file <- tclVar(write.jpg.file)
-	write.emf.file <- tclVar(write.emf.file)
+	write.svg.file <- tclVar(write.svg.file)
 	write.png.file <- tclVar(write.png.file)	
 	text.slice.length <- tclVar(text.slice.length)
 	text.slice.stepsize <- tclVar(text.slice.stepsize)
@@ -745,14 +745,14 @@ if (interactive.mode.with.GUI == TRUE) {
 	cb_SCRN <- tkcheckbutton(f5)
 	cb_PDF <- tkcheckbutton(f5)
 	cb_JPG <- tkcheckbutton(f5)
-	cb_EMF <- tkcheckbutton(f5)
+	cb_SVG <- tkcheckbutton(f5)
 	cb_PNG <- tkcheckbutton(f5)
 	cb_PLOT.RESET <- tkcheckbutton(f5)	
 #
 	tkconfigure(cb_SCRN,variable=display.on.screen)
 	tkconfigure(cb_PDF,variable=write.pdf.file)
 	tkconfigure(cb_JPG,variable=write.jpg.file)
-	tkconfigure(cb_EMF,variable=write.emf.file)
+	tkconfigure(cb_SVG,variable=write.svg.file)
 	tkconfigure(cb_PNG,variable=write.png.file)
 	entry_PLOT.HEIGHT <- tkentry(f5,textvariable=plot.custom.height,width="8")
 	entry_PLOT.WIDTH <- tkentry(f5,textvariable=plot.custom.width,width="8")
@@ -763,7 +763,7 @@ if (interactive.mode.with.GUI == TRUE) {
 	cblabel_SCRN <- tklabel(f5, text="     Onscreen     ")
 	cblabel_PDF <- tklabel(f5,text="       PDF        ")
 	cblabel_JPG <- tklabel(f5,text="       JPG        ")
-	cblabel_EMF <- tklabel(f5,text="       EMF        ")
+	cblabel_SVG <- tklabel(f5,text="       SVG        ")
 	cblabel_PNG <- tklabel(f5,text="       PNG        ")
 	cblabel_PLOT.RESET <- tklabel(f5,text="Set default")
 	entrylabel_PLOT.HEIGHT <- tklabel(f5,text="Plot height")
@@ -772,8 +772,8 @@ if (interactive.mode.with.GUI == TRUE) {
 	entrylabel_PLOT.LINE <- tklabel(f5,text="Line width")
 	
 #
-	tkgrid(tklabel(f5,text="    GRAPHS:"), cblabel_SCRN,cblabel_PDF, cblabel_JPG,cblabel_EMF,cblabel_PNG,columnspan=5)
-	tkgrid(tklabel(f5,text="           "), cb_SCRN,cb_PDF,cb_JPG,cb_EMF,cb_PNG,columnspan=5)
+	tkgrid(tklabel(f5,text="    GRAPHS:"), cblabel_SCRN,cblabel_PDF, cblabel_JPG,cblabel_SVG,cblabel_PNG,columnspan=5)
+	tkgrid(tklabel(f5,text="           "), cb_SCRN,cb_PDF,cb_JPG,cb_SVG,cb_PNG,columnspan=5)
 	tkgrid(tklabel(f5,text="    ")) # blank line for aesthetic purposes
 	tkgrid(tklabel(f5,text=" PLOT SIZE:"), cblabel_PLOT.RESET,entrylabel_PLOT.HEIGHT, entrylabel_PLOT.WIDTH,entrylabel_PLOT.FONT,entrylabel_PLOT.LINE,columnspan=5)
 	tkgrid(tklabel(f5,text="           "),cb_PLOT.RESET,entry_PLOT.HEIGHT,entry_PLOT.WIDTH,entry_PLOT.FONT,entry_PLOT.LINE,columnspan=5)
@@ -783,7 +783,7 @@ if (interactive.mode.with.GUI == TRUE) {
 	tk2tip(cblabel_SCRN, "Select to have your diagram(s) displayed on R's standard graphics device.")
 	tk2tip(cblabel_PDF, "Select to save your diagram(s) as (a) PDF file(s).")
 	tk2tip(cblabel_JPG, "Select to save your diagram(s) as (a) JPG file(s).")
-	tk2tip(cblabel_EMF, "Select to save your diagram(s) as (a) EMF file(s). \nOnly works in Windows.")
+	tk2tip(cblabel_SVG, "Select to save your diagram(s) as (a) SVG file(s).")
 	tk2tip(cblabel_PNG, "Select to save your diagram(s) as (a) PNG file(s). \nProbably the best option for quality.")
 	tk2tip(cblabel_PLOT.RESET, "Restore graphic parameters to safe default values \n(7x7 inches, 10 points font size, normal line width).")
 	tk2tip(entrylabel_PLOT.HEIGHT, "Set custom plot height (in inches).")
@@ -885,7 +885,7 @@ tkgrid(tklabel(f6,text="    ")) # blank line for aesthetic purposes
 			display.on.screen <- as.logical(as.numeric(tclvalue(display.on.screen)))
 			write.pdf.file <- as.logical(as.numeric(tclvalue(write.pdf.file)))
 			write.jpg.file <- as.logical(as.numeric(tclvalue(write.jpg.file)))
-			write.emf.file <- as.logical(as.numeric(tclvalue(write.emf.file)))
+			write.svg.file <- as.logical(as.numeric(tclvalue(write.svg.file)))
 			write.png.file <- as.logical(as.numeric(tclvalue(write.png.file)))
 			text.slice.length <-as.numeric(tclvalue(text.slice.length))
 			text.slice.stepsize <-as.numeric(tclvalue(text.slice.stepsize))
@@ -1001,7 +1001,7 @@ var.name(distance.measure)
 var.name(display.on.screen)
 var.name(write.pdf.file)
 var.name(write.jpg.file)
-var.name(write.emf.file)
+var.name(write.svg.file)
 var.name(write.png.file)
 var.name(text.slice.length)
 var.name(text.slice.stepsize)
@@ -1520,8 +1520,8 @@ graph.title = gsub("(\\.txt$)||(\\.xml$)||(\\.html$)||(\\.htm$)","",filenames.se
     plot.current.task()
     dev.off()
     }
-  if(write.emf.file == TRUE) {
-    win.metafile(filename=paste(graph.title,"%03d",".emf",sep=""), 
+  if(write.svg.file == TRUE) {
+    win.metafile(filename=paste(graph.title,"%03d",".svg",sep=""), 
          width=plot.custom.width,height=plot.custom.height,
          pointsize=plot.font.size)
     plot.current.task()

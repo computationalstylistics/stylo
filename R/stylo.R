@@ -188,7 +188,7 @@ var.name(distance.measure)
 var.name(display.on.screen)
 var.name(write.pdf.file)
 var.name(write.jpg.file)
-var.name(write.emf.file)
+var.name(write.svg.file)
 var.name(write.png.file)
 var.name(save.distance.tables)
 var.name(save.analyzed.features)
@@ -225,7 +225,7 @@ if(text.id.on.graphs != "both") {
 
 # if a chosen plot area is really large (and a bitmap output has been chosen),
 # a warning will appear
-if(write.jpg.file == TRUE || write.emf.file == TRUE || write.png.file == TRUE){
+if(write.jpg.file == TRUE || write.png.file == TRUE){
   # if the desired height*width (at 300 dpi) exceeds 36Mpx
   if(300*plot.custom.width * 300*plot.custom.height > 36000000) {
     cat("\nYou have chosen a bitmap output format and quite a large plot area\n")
@@ -249,7 +249,7 @@ if(write.jpg.file == TRUE || write.emf.file == TRUE || write.png.file == TRUE){
     } else {
       cat("Withdrawing from the bitmap output, performing pdf instead\n")
       write.jpg.file = FALSE
-      write.emf.file = FALSE
+      write.svg.file = FALSE
       write.png.file = FALSE
       write.pdf.file = TRUE
     }
@@ -1099,21 +1099,10 @@ if(analysis.type != "BCT") {
     plot.current.task()
     dev.off()
     }
-  if(write.emf.file == TRUE) {
-    if(Sys.info()[["sysname"]] == "Windows") { 
-      ### Windows
-      win.metafile(filename = paste(graph.filename,"%03d",".emf",sep=""), 
+  if(write.svg.file == TRUE) {
+    svg(filename = paste(graph.filename,"%03d",".pdf",sep=""),
             width=plot.custom.width,height=plot.custom.height,
             pointsize=plot.font.size)
-      plot.current.task()
-      dev.off()
-      } else {
-      ### Linux, Mac
-      cat("\n\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
-      cat("EMF file format is not supported by", Sys.info()[["sysname"]],"\n")
-      cat("You're suggested to try again with PNG, JPG or PDF.\n")
-      cat("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
-      }
     }
   if(write.png.file == TRUE) {
     png(filename = paste(graph.filename,"%03d",".png",sep=""), 
@@ -1204,12 +1193,17 @@ if(exists("distance.table") == TRUE) {
 
   edges=c()
   for(i in 1:(length(all.connections[,1])) ) {
-    for(j in i:(length(all.connections[1,])) ) {
+    for(j in 1:(length(all.connections[1,])) ) {
       from = rownames(all.connections)[i]
       to = colnames(all.connections)[j]
-      # undirected, i.e. links "to" and "from" are summarized
+      # undirected, i.e. links "to" and "from" are summarized;
+      # it means that possible bias is partialy overcome
       weight = all.connections[i,j] + all.connections[j,i]
+      # directed: it matters whether a given sample points or is poited
+#      weight = all.connections[i,j]
+      #
       current.row = c(from, to, weight, "undirected")
+      #
       # if there is a connection, record it in a common table
       if(weight > 0) {
         edges = rbind(edges, current.row)
@@ -1268,8 +1262,8 @@ if(length(bootstrap.list) <= 2) {
     plot.current.task()
     dev.off()
     }
-  if(write.emf.file == TRUE) {
-    win.metafile(filename=paste(graph.filename,"%03d",".emf",sep=""), 
+  if(write.svg.file == TRUE) {
+    svg(filename=paste(graph.filename,"%03d",".svg",sep=""), 
          width=plot.custom.width,height=plot.custom.height,
          pointsize=plot.font.size)
     plot.current.task()

@@ -123,7 +123,7 @@ analysis.type = "CA"
 display.on.screen = TRUE
 write.pdf.file = FALSE
 write.jpg.file = FALSE
-write.emf.file = FALSE    # Windows only
+write.svg.file = FALSE
 write.png.file = FALSE
 dump.samples = FALSE
 
