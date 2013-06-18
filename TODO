@@ -2,14 +2,15 @@
 
 TO DO:
 
+exports
 
 
 GEPHI support is still very rough
 
 culling could be easily implemented as a separate funcition
 
+make.final.ranking --> should be a extracted as a separate function
 
-Rd files: \keywords section should be moved to \alias
 
 
 functionalities not implemented in classify:

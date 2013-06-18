@@ -1204,10 +1204,11 @@ if(exists("distance.table") == TRUE) {
 
   edges=c()
   for(i in 1:(length(all.connections[,1])) ) {
-    for(j in 1:(length(all.connections[1,])) ) {
+    for(j in i:(length(all.connections[1,])) ) {
       from = rownames(all.connections)[i]
       to = colnames(all.connections)[j]
-      weight = all.connections[i,j]
+      # undirected, i.e. links "to" and "from" are summarized
+      weight = all.connections[i,j] + all.connections[j,i]
       current.row = c(from, to, weight, "undirected")
       # if there is a connection, record it in a common table
       if(weight > 0) {
@@ -1295,7 +1296,8 @@ if(length(bootstrap.list) <= 2) {
 results.stylo = list()
 # elements that we want to add on this list
 variables.to.save = c("distance.table", "frequencies.0.culling",
-                      "table.with.all.freqs", "table.with.all.zscores")
+                      "table.with.all.freqs", "table.with.all.zscores",
+                      "edges")
 # checking if they really exist; getting rig of non-existing ones:
 filtered.variables = ls()[ls() %in% variables.to.save]
 # adding them on the list
