@@ -32,4 +32,3 @@ names(stylo.default.settings())
 my.variables = stylo.default.settings()
 attach(my.variables)
 }
-\keyword{variables}

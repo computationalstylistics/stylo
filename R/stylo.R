@@ -520,10 +520,10 @@ number.of.current.iteration = 0
 
 # load the ape library; make an empty bootstrap.results list
 # this will be executed only if the bootstrap option is checked
-if (analysis.type == "BCT") {
-    library(ape)
-    bootstrap.list = list()
-}
+#if (analysis.type == "BCT") {
+#    library(ape)
+#    bootstrap.list = list()
+#}
 
 
 # #################################################
@@ -1004,7 +1004,7 @@ if(analysis.type == "PCV" || analysis.type == "PCR") {
       COOR = data.frame(pca.results$x[,1:2], LABEL=labels)
       labels<-c(levels(COOR$LABEL))
       # visualize 
-      library(lattice)
+#      library(lattice)
       sps <- trellis.par.get("superpose.symbol")
       sps$pch <- 1:length(labels)
       trellis.par.set("superpose.symbol", sps)

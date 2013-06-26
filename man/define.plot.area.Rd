@@ -2,9 +2,10 @@
 \alias{define.plot.area}
 \title{Define area for scatterplots}
 \description{
-Function that calculates the size of scatterplot, taking into consideration
-additional margin to fit longer labels of samples, optional margin defined
-by user, and some space to offset scatterplot labels from points (if applicable).
+Function that calculates the size of a scatterplot, taking into consideration 
+additional margin to fit longer labels appearing on a graph (if applicable), 
+optional margin defined by user, and some space to offset scatterplot labels 
+from points (if applicable).
 }
 \usage{
 define.plot.area(x.coord, y.coord, xymargins = 2, v.offset = 0)

@@ -37,5 +37,4 @@ my.variables = gui.stylo()
 summary(my.variables)
 }
 }
-\keyword{variables}
-\keyword{gui}
+\keyword{GUI}

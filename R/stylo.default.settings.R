@@ -287,9 +287,9 @@ nj.consensus.tree = FALSE
 nj.cluster.analysis = FALSE
     ######################################
           # loading the required library
-          if(nj.cluster.analysis == TRUE) {
-            library(ape)
-            }
+        #  if(nj.cluster.analysis == TRUE) {
+        #    library(ape)
+        #    }
     ######################################
 
 

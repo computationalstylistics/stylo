@@ -34,13 +34,13 @@ samples or windows. After "rolling" through the test text we can plot
 the resulting series of Delta scores for each reference text in a graph.
 }
 \references{
-Eder, M. Ketemont, M. and Rybicki, J. (2013). Stylometry with R:
+Eder, M. Kestemont, M. and Rybicki, J. (2013). Stylometry with R:
     a suite of tools. In: "Digital Humanities 2013: Conference Abstracts". 
     University of Nebraska-Lincoln, Lincoln, NE (in press).
 
 van Dalen-Oskam, K. and van Zundert, J. (2007). Delta for Middle Dutch: 
     author and copyist distinction in Walewein. "Literary and Linguistic
-    Computing, 22(3): 345-62.
+    Computing", 22(3): 345-62.
 
 Hoover, D. (2011). The Tutor's Story: a case study of mixed authorship.
     In: "Digital Humanities 2011: Conference Abstracts". Stanford University,

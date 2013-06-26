@@ -5,7 +5,8 @@
 \description{
 It is quite a long story what this function does. Basically, it is an 
 all-in-one tool for a variety of experiments in computational
-stylistic. For a more detailed description, refer to miniHOWTO.
+stylistic. For a more detailed description, refer to miniHOWTO:
+\url{https://sites.google.com/site/computationalstylistics/preprints/STYLO\%20R\%20Script\%20Mini\%20HOWTO.pdf?attredirects=0}
 }
 \usage{
 stylo(gui = TRUE, path = "", corpus.dir = "corpus", ...)
@@ -35,7 +36,7 @@ The function produces a number of files containing final results, plots,
 tables of distances, and so on (depending on which options have been chosen).
 }
 \references{
-Eder, M. Ketemont, M. and Rybicki, J. (2013). Stylometry with R:
+Eder, M. Kestemont, M. and Rybicki, J. (2013). Stylometry with R:
     a suite of tools. In: "Digital Humanities 2013: Conference Abstracts". 
     University of Nebraska-Lincoln, Lincoln, NE (in press).
 }
@@ -61,3 +62,5 @@ stylo(gui = FALSE, analyzed.features = "c", ngram.size = 3)
 \keyword{multidimensional scaling}
 \keyword{cluster analysis}
 \keyword{bootstrap consensus trees}
+\keyword{dendrogram}
+\keyword{scatterplot}

@@ -24,7 +24,7 @@ gui.classify <-
 function() {
   
   # loading required library  #### it will not be needed
-  library(tcltk2)
+#  library(tcltk2)
 
   # loading default settings
   variables = stylo.default.settings()

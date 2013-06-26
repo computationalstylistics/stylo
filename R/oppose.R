@@ -93,7 +93,7 @@ visualization = "words"
 # or not; if the appropriate option was switched on, the GUI will start now
 
 if (gui == TRUE) {
-  library(tcltk2)
+  #library(tcltk2)
 
 if(file.exists("oppose_config.txt") == TRUE) {
 	source("oppose_config.txt") }
@@ -1282,7 +1282,7 @@ if (classification == TRUE && method != "box.plot") {
   #################################################################
   # naive Bayes classification
   if(naive.bayes == TRUE) {
-  library(e1071)
+#  library(e1071)
     model = naiveBayes(class ~ preferred + avoided, my.data[1:training.subset,])
     classification.results = predict(model, my.data[(training.subset+1):test.subset,-3], type="raw")
     final.probabilities = round(classification.results,2)
@@ -1291,7 +1291,7 @@ if (classification == TRUE && method != "box.plot") {
   #################################################################
   # support vector machines
   if(svm.classification == TRUE) {
-    library(e1071)
+#    library(e1071)
     model = svm(as.factor(class) ~ preferred + avoided, my.data[1:training.subset,],probability=T)
     ### plot(model, my.data[1:training.subset,])
     #classification.results = predict(model, my.data[(training.subset+1):test.subset,-3], probability=T)
@@ -1308,11 +1308,11 @@ if (classification == TRUE && method != "box.plot") {
     }
   #################################################################
   # decision trees
-  if(decision.tree.classification == TRUE) {
-    library(party)
-    model = ctree(as.factor(class) ~ ., my.data[1:training.subset,])
-    classification.results = predict(model, my.data[(training.subset+1):test.subset,-3])
-    }
+#  if(decision.tree.classification == TRUE) {
+#    library(party)
+#    model = ctree(as.factor(class) ~ ., my.data[1:training.subset,])
+#    classification.results = predict(model, my.data[(training.subset+1):test.subset,-3])
+#    }
 }
 
 

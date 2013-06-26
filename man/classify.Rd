@@ -48,7 +48,7 @@ the user can set/change them on GUI.}
 tables of distances, and so on (depending on which options have been chosen).}
 
 \references{
-Eder, M. Ketemont, M. and Rybicki, J. (2013). Stylometry with R:
+Eder, M. Kestemont, M. and Rybicki, J. (2013). Stylometry with R:
     a suite of tools. In: "Digital Humanities 2013: Conference Abstracts". 
     University of Nebraska-Lincoln, Lincoln, NE (in press).
 
@@ -88,4 +88,5 @@ classify(gui = FALSE, analyzed.features = "c", ngram.size = 3)
 \keyword{support vector machines}
 \keyword{nearest shrunken centroids}
 \keyword{naive Bayes}
-\keyword{k-NN}
+\keyword{Delta}
+\keyword{k-nearest neighbors}

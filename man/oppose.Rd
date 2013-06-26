@@ -46,7 +46,7 @@ a vector of words significantly preferred by a tested author, and another
 vector containing the words significantly avoided.
 }
 \references{
-Eder, M. Ketemont, M. and Rybicki, J. (2013). Stylometry with R:
+Eder, M. Kestemont, M. and Rybicki, J. (2013). Stylometry with R:
     a suite of tools. In: "Digital Humanities 2013: Conference Abstracts". 
     University of Nebraska-Lincoln, Lincoln, NE (in press).
 
@@ -65,7 +65,7 @@ Kilgariff A. (2001). Comparing Corpora. "International Journal of Corpus
     Linguistics" 6(1): 1-37.
 }
 
-\author{Maciej Eder, Jan Rybicki, Mike Kestemont}
+\author{Maciej Eder, Mike Kestemont, Jan Rybicki}
 
 \seealso{
 \code{\link{stylo}}, \code{\link{classify}}, \code{\link{rolling.delta}}
@@ -80,5 +80,5 @@ oppose(gui = FALSE, primary.corpus.dir = "ShakespeareCanon",
        secondary.corpus.dir = "MarloweSamples")
 }
 }
-\keyword{zeta}
+\keyword{Zeta}
 \keyword{corpus linguistics}

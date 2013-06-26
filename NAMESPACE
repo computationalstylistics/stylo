@@ -1,1 +1,35 @@
-exportPattern("^[[:alpha:]]+")
+
+import(
+  tcltk, 
+  tcltk2, 
+  ape, 
+  pamr, 
+  e1071, 
+  class, 
+  lattice
+)
+
+export(
+  assign.plot.colors,
+  classify,
+  define.plot.area,
+  delete.markup,
+  gui.classify,
+  gui.stylo,
+  load.corpus.and.parse,
+  load.corpus,
+  make.ngrams,
+  make.samples,
+  make.table.of.frequencies,
+  oppose,
+  rolling.delta,
+  stylo.default.settings,
+  stylo.pronouns,
+  stylo,
+  txt.to.features,
+  txt.to.words.ext,
+  txt.to.words
+)
+
+
+

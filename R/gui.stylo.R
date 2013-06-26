@@ -12,7 +12,8 @@ gui.stylo <-
 function() {
   
   # loading required libraries
-  library(tcltk2)
+  # (this will be obsolete when we solve the varibles import/export issues)
+#  library(tcltk2)
 
   # loading default settings
   variables = stylo.default.settings()

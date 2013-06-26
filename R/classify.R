@@ -830,7 +830,7 @@ distance.name.on.graph = "to be deleted"
 
 if(tolower(classification.method) == "knn") {
   #kNN classification:
-  library(class)
+#  library(class)
   #
   # training_set and test_set preparation; adding class labels to both sets
   classes.training = gsub("_.*","",rownames(zscores.primary.set))
@@ -853,7 +853,7 @@ if(tolower(classification.method) == "knn") {
 
 if(tolower(classification.method) == "naivebayes") {
   # Naive Bayes classification:
-  library(e1071)
+#  library(e1071)
   #
   # training_set and test_set preparation; adding class labels to both sets
   training.set = primary.set[,1:mfw]
@@ -878,7 +878,7 @@ if(tolower(classification.method) == "naivebayes") {
 
 if(tolower(classification.method) == "svm") {
   # Support Vector Machines classification:
-  library(e1071)
+#  library(e1071)
   #
   # training_set and test_set preparation; adding class labels to both sets
   training.set = primary.set[,1:mfw]
@@ -904,7 +904,7 @@ if(tolower(classification.method) == "svm") {
 
 if(tolower(classification.method) == "nsc") {
   # Nearest Shrunken Centroid classification:
-  library(pamr)
+#  library(pamr)
   #
   # training_set and test_set preparation; adding class labels to both sets
   training.set = primary.set[,1:mfw]

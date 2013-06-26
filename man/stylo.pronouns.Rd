@@ -37,4 +37,5 @@ stylo.pronouns()
 stylo.pronouns(language="Latin")
 my.stop.words = stylo.pronouns(language="German")
 }
-\keyword{language processing}
+\keyword{text processing}
+\keyword{corpus linguistics}
