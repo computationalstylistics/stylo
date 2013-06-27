@@ -1,6 +1,5 @@
 
 
-
 ##############################################################################
 # this is simply the Oppose script put into function(){ }
 
@@ -454,13 +453,13 @@ draw.polygons = function(summary.zeta.scores) {
 ############################################################################
 #
 # retrieving the names of samples
-filenames.primary.set = list.files("primary_set")
-filenames.secondary.set = list.files("secondary_set")
+filenames.primary.set = list.files(primary.corpus.dir)
+filenames.secondary.set = list.files(secondary.corpus.dir)
 #
 #
 # loading the primary set from text files
 corpus.of.primary.set = list()
-setwd("primary_set")
+setwd(primary.corpus.dir)
   for (file in filenames.primary.set) {
   # loading the next file from the list filenames.primary.set,
   current.file = tolower(scan(file,what="char",sep="\n",quiet=T))
@@ -480,7 +479,7 @@ setwd("..")
 
 # loading the secondary set from text files
 corpus.of.secondary.set = list()
-setwd("secondary_set")
+setwd(secondary.corpus.dir)
   for (file in filenames.secondary.set) {
   # loading the next file from the list filenames.secondary.set,
   current.file = tolower(scan(file,what="char",sep="\n",quiet=T))
