@@ -520,10 +520,10 @@ number.of.current.iteration = 0
 
 # load the ape library; make an empty bootstrap.results list
 # this will be executed only if the bootstrap option is checked
-#if (analysis.type == "BCT") {
+if (analysis.type == "BCT") {
 #    library(ape)
-#    bootstrap.list = list()
-#}
+    bootstrap.list = list()
+}
 
 
 # #################################################

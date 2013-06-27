@@ -2,6 +2,10 @@
 ===========================
 
 
+== version 0.5.0-48, 2013/06/26
+ * namespace issues solved
+ * documentation corrected (typos)
+
 == version 0.5.0-45, 2013/06/12
  * arguments can be passed from command-line
  * man pages cleaned and extended
