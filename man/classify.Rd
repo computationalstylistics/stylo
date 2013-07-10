@@ -50,7 +50,7 @@ tables of distances, and so on (depending on which options have been chosen).}
 \references{
 Eder, M. Kestemont, M. and Rybicki, J. (2013). Stylometry with R:
     a suite of tools. In: "Digital Humanities 2013: Conference Abstracts". 
-    University of Nebraska-Lincoln, Lincoln, NE (in press).
+    University of Nebraska-Lincoln, Lincoln, NE, pp. 487-89.
 
 Burrows, J. F. (2002). "Delta": a measure of stylistic difference and 
     a guide to likely authorship. "Literary and Linguistic Computing", 

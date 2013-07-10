@@ -36,7 +36,7 @@ the resulting series of Delta scores for each reference text in a graph.
 \references{
 Eder, M. Kestemont, M. and Rybicki, J. (2013). Stylometry with R:
     a suite of tools. In: "Digital Humanities 2013: Conference Abstracts". 
-    University of Nebraska-Lincoln, Lincoln, NE (in press).
+    University of Nebraska-Lincoln, Lincoln, NE, pp. 487-89.
 
 van Dalen-Oskam, K. and van Zundert, J. (2007). Delta for Middle Dutch: 
     author and copyist distinction in Walewein. "Literary and Linguistic
@@ -48,8 +48,8 @@ Hoover, D. (2011). The Tutor's Story: a case study of mixed authorship.
 
 Rybicki, J., Kestemont, M. and Hoover D. (2013). Collaborative authorship: 
     Conrad, Ford and rolling delta. In: "Digital Humanities 2013: 
-    Conference Abstracts". University of Nebraska-Lincoln, Lincoln, NE 
-    (in press).
+    Conference Abstracts". University of Nebraska-Lincoln, Lincoln, NE, 
+    pp. 368-71.
 
 }
 
