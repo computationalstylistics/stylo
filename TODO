@@ -2,14 +2,19 @@
 
 TO DO:
 
-exports
-
 
 GEPHI support is still very rough
 
-culling could be easily implemented as a separate funcition
+culling could be easily implemented as a separate function
 
 make.final.ranking --> should be a extracted as a separate function
+
+
+only one file in the II set should be allowed
+
+openNLP
+
+
 
 
 

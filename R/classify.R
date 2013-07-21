@@ -121,39 +121,6 @@ if(number.of.candidates < 1) {
   }
 
 
-# Finally, we want to save some variable values for later use
-cat("",file="classify_config.txt",append=F)
-var.name <- function(x) { 
-      if(is.character(x)==TRUE) {
-      cat(paste(deparse(substitute(x)),"=\"",x,"\"", sep=""),file="classify_config.txt",sep="\n",append=T)
-        } else {
-          cat(paste(deparse(substitute(x)),x, sep="="),file="classify_config.txt",sep="\n",append=T) }
-        }
-
- var.name(corpus.format)
- var.name(corpus.lang)
- var.name(analyzed.features)
- var.name(ngram.size)
- var.name(length.of.random.sample)
- var.name(classification.method)
- var.name(mfw.min)
- var.name(mfw.max)
- var.name(mfw.incr)
- var.name(start.at)
- var.name(mfw.list.cutoff)
- var.name(culling.min)
- var.name(culling.max)
- var.name(culling.incr)
- var.name(delete.pronouns)
- var.name(culling.of.all.samples)
- var.name(final.ranking.of.candidates)
- var.name(how.many.correct.attributions)
- var.name(use.existing.freq.tables)
- var.name(use.existing.wordlist)
- var.name(distance.measure)
- var.name(number.of.candidates)
- var.name(z.scores.of.all.samples)
- var.name(reference.wordlist.of.all.samples)
 
 
 # #############################################################################
@@ -459,6 +426,48 @@ write.table(t(freq.II.set.0.culling),
 #
 # #################################################
 # the module for loading the corpus terminates here
+# #################################################
+
+
+
+# #################################################
+# module for exporting config settings
+# #################################################
+
+# Finally, we want to save some variable values for later use
+cat("",file="classify_config.txt",append=F)
+var.name <- function(x) { 
+      if(is.character(x)==TRUE) {
+      cat(paste(deparse(substitute(x)),"=\"",x,"\"", sep=""),file="classify_config.txt",sep="\n",append=T)
+        } else {
+          cat(paste(deparse(substitute(x)),x, sep="="),file="classify_config.txt",sep="\n",append=T) }
+        }
+
+ var.name(corpus.format)
+ var.name(corpus.lang)
+ var.name(analyzed.features)
+ var.name(ngram.size)
+ var.name(length.of.random.sample)
+ var.name(classification.method)
+ var.name(mfw.min)
+ var.name(mfw.max)
+ var.name(mfw.incr)
+ var.name(start.at)
+ var.name(mfw.list.cutoff)
+ var.name(culling.min)
+ var.name(culling.max)
+ var.name(culling.incr)
+ var.name(delete.pronouns)
+ var.name(culling.of.all.samples)
+ var.name(final.ranking.of.candidates)
+ var.name(how.many.correct.attributions)
+ var.name(use.existing.freq.tables)
+ var.name(use.existing.wordlist)
+ var.name(distance.measure)
+ var.name(number.of.candidates)
+ var.name(z.scores.of.all.samples)
+ var.name(reference.wordlist.of.all.samples)
+
 # #################################################
 
 

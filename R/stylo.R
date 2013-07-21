@@ -157,60 +157,6 @@ if(txm.compatibility.mode == TRUE) {
 
 
 
-# Finally, we want to save some of the variable values for later use;
-# they are automatically loaded into the GUI at the next run of the script.
-cat("",file="stylo_config.txt",append=F)
-var.name<-function(x) { 
-      if(is.character(x)==TRUE) {
-      cat(paste(deparse(substitute(x))," = \"",x,"\"", sep=""),file="stylo_config.txt",sep="\n",append=T)
-        } else {
-          cat(paste(deparse(substitute(x)),x, sep=" = "),file="stylo_config.txt",sep="\n",append=T) }
-        } 
-var.name(corpus.format)
-var.name(corpus.lang)
-var.name(analyzed.features)
-var.name(ngram.size)
-var.name(mfw.min)
-var.name(mfw.max)
-var.name(mfw.incr)
-var.name(start.at)
-var.name(culling.min)
-var.name(culling.max)
-var.name(culling.incr)
-var.name(mfw.list.cutoff)
-var.name(delete.pronouns)
-var.name(analysis.type)
-var.name(use.existing.freq.tables)
-var.name(use.existing.wordlist)
-var.name(use.custom.list.of.files)
-var.name(consensus.strength)
-var.name(distance.measure)
-var.name(display.on.screen)
-var.name(write.pdf.file)
-var.name(write.jpg.file)
-var.name(write.svg.file)
-var.name(write.png.file)
-var.name(save.distance.tables)
-var.name(save.analyzed.features)
-var.name(save.analyzed.freqs)
-var.name(colors.on.graphs)
-var.name(titles.on.graphs)
-var.name(dendrogram.layout.horizontal)
-var.name(pca.visual.flavour)
-var.name(sampling)
-var.name(sample.size)
-var.name(length.of.random.sample)
-var.name(sampling.with.replacement)
-var.name(plot.custom.height)
-var.name(plot.custom.width)
-var.name(plot.font.size)
-var.name(plot.line.thickness)
-var.name(label.offset)
-var.name(add.to.margins)
-var.name(text.id.on.graphs)
-var.name(dump.samples)
-# #############################################################################
-
 
 
 
@@ -505,6 +451,74 @@ write.table(t(frequencies.0.culling),
 # #################################################
 # the module for loading the corpus terminates here
 # #################################################
+
+
+
+
+# #################################################
+# module for saving current config options
+# #################################################
+
+# Finally, we want to save some of the variable values for later use;
+# they are automatically loaded into the GUI at the next run of the script.
+cat("",file="stylo_config.txt",append=F)
+var.name<-function(x) { 
+      if(is.character(x)==TRUE) {
+      cat(paste(deparse(substitute(x))," = \"",x,"\"", sep=""),file="stylo_config.txt",sep="\n",append=T)
+        } else {
+          cat(paste(deparse(substitute(x)),x, sep=" = "),file="stylo_config.txt",sep="\n",append=T) }
+        } 
+var.name(corpus.format)
+var.name(corpus.lang)
+var.name(analyzed.features)
+var.name(ngram.size)
+var.name(mfw.min)
+var.name(mfw.max)
+var.name(mfw.incr)
+var.name(start.at)
+var.name(culling.min)
+var.name(culling.max)
+var.name(culling.incr)
+var.name(mfw.list.cutoff)
+var.name(delete.pronouns)
+var.name(analysis.type)
+var.name(use.existing.freq.tables)
+var.name(use.existing.wordlist)
+var.name(use.custom.list.of.files)
+var.name(consensus.strength)
+var.name(distance.measure)
+var.name(display.on.screen)
+var.name(write.pdf.file)
+var.name(write.jpg.file)
+var.name(write.svg.file)
+var.name(write.png.file)
+var.name(save.distance.tables)
+var.name(save.analyzed.features)
+var.name(save.analyzed.freqs)
+var.name(colors.on.graphs)
+var.name(titles.on.graphs)
+var.name(dendrogram.layout.horizontal)
+var.name(pca.visual.flavour)
+var.name(sampling)
+var.name(sample.size)
+var.name(length.of.random.sample)
+var.name(sampling.with.replacement)
+var.name(plot.custom.height)
+var.name(plot.custom.width)
+var.name(plot.font.size)
+var.name(plot.line.thickness)
+var.name(label.offset)
+var.name(add.to.margins)
+var.name(text.id.on.graphs)
+var.name(dump.samples)
+# #############################################################################
+
+
+
+
+
+
+
 
 
 # #################################################
