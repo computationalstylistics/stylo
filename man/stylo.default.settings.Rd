@@ -2,19 +2,17 @@
 \alias{stylo.default.settings}
 \title{Setting variables}
 \description{
-Function that sets a bunch of global variables to be used by \code{stylo} 
-and modified using \code{gui.stylo}.
+Function that sets a series of global variables to be used by \code{stylo} 
+and which can be modified by users via \code{gui.stylo}.
 }
 \usage{
 stylo.default.settings()
 }
 \details{
-This function is invoked from inside \code{stylo} and \code{gui.gui};
-it would be a rather weird idea to use it in other contexts.
+This function is typically called from inside \code{stylo} and \code{gui.gui}.
 }
 \value{
-The function returns a list containing some 50 elements, or particular
-variables. 
+The function returns a list of ca. 50 variables. 
 }
 \author{
 Maciej Eder, Jan Rybicki, Mike Kestemont

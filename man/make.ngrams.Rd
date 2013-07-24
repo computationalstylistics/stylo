@@ -4,29 +4,25 @@
 \description{
 Function that combines a vector of text units (words, 
 characters, POS-tags, other features) into pairs, triplets, or 
-longer sequences, often referred to as n-grams.
+longer sequences, commonly referred to as n-grams.
 }
 \usage{
 make.ngrams(input.text, ngram.size = 1)
 }
 \arguments{
-  \item{input.text}{a vector containing words or characters to be combined
+  \item{input.text}{a vector containing words or characters to be parsed
   into n-grams.}
-  \item{ngram.size}{an optional argument (integer) indicating the value of n, 
+  \item{ngram.size}{an optional argument (integer) indicating the value of \emph{n}, 
   or the size of n-grams to be produced. If this argument is missing, default
   value of 1 is used.}
 }
 \details{
-Function for combining single features (words or characters) into n-grams, 
-or strings of n elements. E.g. character 2-grams of the sentence "This is 
+Function for combining series of items (e.g. words or characters) into n-grams, 
+or strings of \emph{n} elements. E.g. character 2-grams of the sentence "This is 
 a sentence" are as follows: "th", "hi", "is", "s ", " i", "is", "s ", 
 " a", "a ", " s", "se", "en", "nt", "te", "en", "nc", "ce". Character
 4-grams would be, of course: "this", "his ", "is a", "s a ", " a s", etc.
-Word 2-grams: "this is", "is a", "a sentence". Another question is 
-whether it really increases the accuracy of stylometric tests; 
-further reading: see references. However, it has been shown (Eder, 2013)
-that character n-grams are impressively robust when one deals with a dirty
-corpus (in terms of a high number of misspelled characters).
+Word 2-grams: "this is", "is a", "a sentence". The issue whether using n-grams of items increases the accuracy of stylometric procedures has been heavily debated in the secondary literature (see the reference section for further reading). Eder (2013) e.g. shows that character n-grams are impressively robust for dealing with noisy corpora (in terms of a high number of misspelled characters).
 }
 \references{
 Alexis, A., Craig, H., and Elliot, J. (2013). Language chunking, 
@@ -68,15 +64,15 @@ Maciej Eder
 \code{\link{txt.to.features}}
 }
 \examples{
-# assume there is a text:
+# Consider the string my.text:
 my.text = "Quousque tandem abutere, Catilina, patientia nostra?"
 # which can be split into a vector of consecutive words:
 my.vector.of.words = txt.to.words(my.text)
-# now, one can build a vector of word 2-grams:
+# now, we create a vector of word 2-grams:
 make.ngrams(my.vector.of.words, ngram.size = 2)
 
-# similarly, one can produce character n-grams:
+# similarly, you can produce character n-grams:
 my.vector.of.chars = txt.to.features(my.vector.of.words, features = "c")
 make.ngrams(my.vector.of.chars, ngram.size = 4)
 }
-\keyword{text processing}
+%\keyword{text processing}

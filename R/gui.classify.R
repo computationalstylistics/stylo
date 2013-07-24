@@ -262,7 +262,7 @@ function() {
   tkgrid(tklabel(f1,text="LANGUAGE: "),entrylabel_ENG,entrylabel_EN2,entrylabel_EN3,entrylabel_LAT,entrylabel_LA2)
   tkgrid(tklabel(f1,text="          "),entry_ENG,entry_EN2,entry_EN3,entry_LAT,entry_LA2)
   tkgrid(tklabel(f1,text="          "),entrylabel_POL,entrylabel_HUN,entrylabel_FRA,entrylabel_ITA,entrylabel_SPA)
-  tkgrid(tklabel(f1,text="          "),entry_POL,entry_HUN,entry_FRA,entry_SPA,entry_ITA)
+  tkgrid(tklabel(f1,text="          "),entry_POL,entry_HUN,entry_FRA,entry_ITA,entry_SPA)
   tkgrid(tklabel(f1,text="          "),entrylabel_DUT,entrylabel_GER)
   tkgrid(tklabel(f1,text="          "),entry_DUT,entry_GER)
   tkgrid(tklabel(f1,text="    ")) # blank line for aesthetic purposes

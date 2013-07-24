@@ -2,26 +2,23 @@
 \alias{gui.classify}
 \title{GUI for classify}
 \description{
-Graphical user interface for \code{classify}. Actually, it does
-not make any sense to use it as a standalone function, but no one can
-prevent you, if you intend to do it. As a result, this function sets
-several variables needed for \code{classify}.
+Graphical user interface for \code{classify}. Via the GUI, this function can set
+the several variables needed for \code{classify}.
 }
 \usage{
 gui.classify()
 }
 \details{
-The function invokes \code{stylo.default.settings} to initialize a number
+The function calls \code{stylo.default.settings} to initialize a number
 of default variables. Then it reads the file \code{classify_config.txt} 
 (if the file exists and can be found in the current directory) to 
-overwrite the defaults. Then a GUI box appears, allowing variables' 
-customization. Refer to miniHOWTO (\url{https://sites.google.com/site/computationalstylistics/preprints/STYLO\%20R\%20Script\%20Mini\%20HOWTO.pdf?attredirects=0&d=1}) 
+overwrite any default values. Then a GUI box appears, allowing the variables' 
+customization by the user. Refer to miniHOWTO (\url{https://sites.google.com/site/computationalstylistics/preprints/STYLO\%20R\%20Script\%20Mini\%20HOWTO.pdf?attredirects=0&d=1}) 
 for a detailed explanation what the particular variables are for 
 and how to use them.
 }
 \value{
-When the function is done, it returns a list containing some 50 elements, 
-or particular variables. 
+The function returns a list containing some 50 variables. 
 }
 \author{
 Jan Rybicki
@@ -31,10 +28,10 @@ Jan Rybicki
 }
 \examples{
 \dontrun{
-gui.clssify()
+gui.classify()
 
 my.variables = gui.classify()
 summary(my.variables)
 }
 }
-\keyword{GUI}
+%\keyword{GUI}

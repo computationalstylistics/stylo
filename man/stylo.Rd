@@ -5,7 +5,7 @@
 \description{
 It is quite a long story what this function does. Basically, it is an 
 all-in-one tool for a variety of experiments in computational
-stylistic. For a more detailed description, refer to miniHOWTO:
+stylistics. For a more detailed description, refer to miniHOWTO:
 \url{https://sites.google.com/site/computationalstylistics/preprints/STYLO\%20R\%20Script\%20Mini\%20HOWTO.pdf?attredirects=0}
 }
 \usage{
@@ -18,22 +18,22 @@ stylo(gui = TRUE, path = "", corpus.dir = "corpus", ...)
   \item{path}{if not specified, the current directory will be used 
     for input/output procedures (reading files, outputting the results).}
 
-  \item{corpus.dir}{a subdirectory (within a working directory) that
-    contains corpus files; if not specified, the subdirectory \code{corpus} 
+  \item{corpus.dir}{the subdirectory (within the current working directory) that
+    contains the corpus files. If not specified, the default subdirectory \code{corpus} 
     will be used.}
 
-  \item{...}{any variable as produced by \code{stylo.default.settings}
-    can be set here, to overwrite the default values.}
+  \item{...}{any variable produced by \code{stylo.default.settings}
+    can be set here, in order to overwrite the default values.}
 }
 \details{
-There is a lot of additional options that should be passed to this
+There are a lot of additional options that should be passed to this
 function; they are all loaded when \code{stylo.default.settings} is 
-executed (it will be invoked automatically from inside the \code{stylo} 
+executed (which is typically called automatically from inside the \code{stylo} 
 function).
 }
 \value{
-The function produces a number of files containing final results, plots, 
-tables of distances, and so on (depending on which options have been chosen).
+Depending on which options have been chosen, the function produces a number of files containing results, plots, 
+tables of distances, etc.
 }
 \references{
 Eder, M. Kestemont, M. and Rybicki, J. (2013). Stylometry with R:
@@ -58,9 +58,9 @@ stylo(gui = FALSE, corpus.dir = "ShakespeareCanon")
 stylo(gui = FALSE, analyzed.features = "c", ngram.size = 3)
 }
 }
-\keyword{principal components analysis}
-\keyword{multidimensional scaling}
-\keyword{cluster analysis}
-\keyword{bootstrap consensus trees}
-\keyword{dendrogram}
-\keyword{scatterplot}
+%\keyword{principal components analysis}
+%\keyword{multidimensional scaling}
+%\keyword{cluster analysis}
+%\keyword{bootstrap consensus trees}
+%\keyword{dendrogram}
+%\keyword{scatterplot}

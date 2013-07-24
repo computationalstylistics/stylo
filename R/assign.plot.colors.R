@@ -1,12 +1,12 @@
 
 # #################################################
 # Function for graph auto-coloring; depending on
-# the user's choice, it assigns colors or grayscale tones
+# the user's choice, it assigns colors or greyscale tones
 # to matching strings of characters in texts' names
 # (as a delimiter, the underscore character is used);
 # alternatively, all the labels can be marked black. 
 # Required argument: a vector of labels (text names)
-# Optional argument: col="colors" || "grayscale" || "back"
+# Optional argument: col="colors" || "greyscale" || "black"
 # #################################################
 
 assign.plot.colors <-
@@ -39,7 +39,7 @@ function(labels,col="colors") {
       "greenyellow", "darkolivegreen4", "chocolate4"),10)
     }
   # define a vector of gray tones, instead of colors
-  if(col == "grayscale") {
+  if(col == "greyscale") {
     number.of.colors.required = max(color.numeric.values)
     available.colors = gray(seq(0,0.7,0.7/(number.of.colors.required-1)))
   }

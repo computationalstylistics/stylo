@@ -1,10 +1,10 @@
 \name{make.samples}
 \alias{make.samples}
 \title{Split text to samples}
-\description{Function that either splits an input text (a vector of words,
+\description{Function that either splits an input text (a vector of linguistic items, such as words,
 word n-grams, character n-grams, etc.) into equal-sized samples of a desired 
 length (expressed in words), or excerpts randomly a number of words from the
-original textual data.
+original text.
 }
 \usage{
 make.samples(tokenized.text, sample.size = 10000, 
@@ -17,20 +17,19 @@ make.samples(tokenized.text, sample.size = 10000,
   \item{sampling}{one of three values: \code{no.sampling} (default), 
      \code{normal.sampling}, \code{random.sampling}.}
   \item{sampling.with.replacement}{optional argument which will be used only
-    if \code{random.sampling} was chosen; it indicates the way of random
-    harvesting words.}
+    if \code{random.sampling} was chosen; it specifies the method to randomly harvest words from texts.}
 }
 \details{
 Normal sampling is probably a good choice when the input texts are 
-long: the advantage is that one enjoys a bigger number of samples which,
+long: the advantage is that one gets a bigger number of samples which,
 in a way, validate the results (when several independent samples excerpted
-from one text keep clustered together).
+from one text are clustered together).
 When the analyzed texts are significantly unequal in length, it is not 
 a bad idea to prepare samples as randomly chosen "bags of words". For this, 
 set the \code{sampling} variable to \code{random.sampling}. The desired 
-size of the sample should be indicated via the \code{sample.size} variable.
+size of the sample should be specified via the \code{sample.size} variable.
 Sampling with and without replacement is also available. It has been shown
-(Eder, 2010) that harvesting random samples from original texts improves
+by Eder (2010) that harvesting random samples from original texts improves
 the performance of authorship attribution methods.
 }
 \references{
@@ -63,4 +62,4 @@ make.samples(my.words, sampling = "normal.sampling", sample.size = 20)
 # excerpt randomly 50 words from the above text:
 make.samples(my.words, sampling = "random.sampling", sample.size = 50)
 }
-\keyword{text processing}
+%\keyword{text processing}

@@ -153,7 +153,7 @@ text.id.on.graphs = "labels"
 # Do you want the graphs colored? The script will automatically assign 
 # the same colors to those texts that have the same first segment of their 
 # file names (the first string ending in "_").
-# Available options: "colors" || "grayscale" || "black"
+# Available options: "colors" || "greyscale" || "black"
 
 colors.on.graphs = "colors"
 

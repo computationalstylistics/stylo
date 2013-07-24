@@ -1,28 +1,27 @@
 \name{delete.markup}
 \alias{delete.markup}
 \title{Delete HTML or XML tags}
-\description{Function for deleting markup (HTML, XML) from a string 
-  of characters. XML markup is assumed to follow TEI guidelines.}
+\description{Function for removing markup tags (e.g. HTML, XML) from a string 
+  of characters. All XML markup is assumed to be compliant with the TEI guidelines (\url{http://www.tei-c.org/}).}
 
 \usage{
 delete.markup(input.text, markup.type = "plain")
 }
 
 \arguments{
-  \item{input.text}{any string of characters (e.g. vector), presumably 
-    containing some markup tags to be deleted}
-  \item{markup.type}{choose one of the following values: \code{plain} 
-    (nothing will happen), \code{html} (all tags will be deleted as well 
-    as HTML header), \code{xml} (TEI header, any text between <note> </note> 
+  \item{input.text}{any string of characters (e.g. vector) containing markup tags that have to be deleted.}
+  \item{markup.type}{any of the following values: \code{plain} 
+    (nothing will happen), \code{html} (all <tags> will be deleted as well 
+    as HTML header), \code{xml} (TEI header, all strings between <note> </note> 
     tags, and all the tags will be deleted), \code{xml.drama} (as above;
-    additionally speaker's names will be deleted, or strings within each
-    pair of the tags <speaker> </speaker>).}
+    but, additionally, speaker's names will be deleted, or strings within each
+    the <speaker> </speaker> tags).}
 }
 \details{
   This function needs to be used carefully: while a document formatted
-  with an accordance to TEI guidelines will be parsed flawlessly, a HTML
-  page harvested randomly on the web might cause some side effects, e.g.
-  the footers, disclaimers, etc. will probably be not removed.
+  in compliance with the TEI guidelines will be parsed flawlessly, the cleaning up of an HTML
+  page harvested randomly on the web might cause some side effects, e.g. the footers, 
+  disclaimers, etc. will not be removed.
 }
 \author{
 Maciej Eder, Jan Rybicki, Mike Kestemont
@@ -41,4 +40,4 @@ Maciej Eder, Jan Rybicki, Mike Kestemont
   delete.markup("<speaker>Hamlet</speaker>Words, words, words...", 
            markup.type = "xml.drama")
 }
-\keyword{text processing}
+%\keyword{text processing}
