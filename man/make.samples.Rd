@@ -38,7 +38,7 @@ Eder, M. (2010). Does size matter? Authorship attribution, short samples,
     King's College London, pp. 132-35.
 }
 \author{
-Mike Kestemont
+Mike Kestemont, Maciej Eder
 }
 \seealso{
 \code{\link{txt.to.words}}, \code{\link{txt.to.words.ext}},

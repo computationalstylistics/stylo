@@ -25,13 +25,13 @@ function(tokenized.text,
   # iterating over subsequent texts of the input corpus
   for(i in 1:length(tokenized.text)) {
     # retrieving an appropriate text from the whole corpus (if applicable)
-    tokenized.text = tokenized.text[[i]]
+    current.text = tokenized.text[[i]]
     # sanity check for text length: abort if the current text is extremely
     # short or at least shorter than the specified sample size
-    if (length(tokenized.text) < 10 || 
-        (sampling == "normal.sampling" && length(tokenized.text) < sample.size) || 
-        (sampling == "random.sampling" && length(tokenized.text) < sample.size)) {
-      cat("\n\n",head(tokenized.text,100), "...\t", "This text is too short!", 
+    if (length(current.text) < 10 || 
+        (sampling == "normal.sampling" && length(current.text) < sample.size) || 
+        (sampling == "random.sampling" && length(current.text) < sample.size)) {
+      cat("\n\n",head(current.text,100), "...\t", "This text is too short!", 
           "\n\n")
       stop("Corpus error...")
     }
@@ -40,8 +40,9 @@ function(tokenized.text,
     samples.from.text = list()
     if (sampling == "normal.sampling"){
       # initialize variables to sample the text
-      text.length = length(tokenized.text)
+      text.length = length(current.text)
       number.of.samples = floor(text.length/(sample.size))
+      cat(names(tokenized.text)[i],"\n")
       cat(paste("\t", "- text length (in words): ", text.length, "\n", sep=""))
       cat(paste("\t", "- nr. of samples: ", number.of.samples, "\n", sep=""))
       cat(paste("\t", "- nr. of words dropped at the end of the text: ", 
@@ -49,11 +50,11 @@ function(tokenized.text,
       # iterate over the samples:
       current.start.index = 1
       for(sample.index in 1:number.of.samples) {
-        current.sample = tokenized.text[current.start.index:(current.start.index+sample.size-1)]
+        current.sample = current.text[current.start.index:(current.start.index+sample.size-1)]
         # flush current sample:
         samples.from.text[[sample.index]] = current.sample
         # assign a new id to current sample
-        id = paste(names(tokenized.text)[i],"-",sample.index,sep="")
+        id = paste(names(tokenized.text)[i],"_",sample.index,sep="")
         names(samples.from.text)[sample.index] = id
         # increment index for next iteration
         current.start.index = current.start.index + sample.size
@@ -62,7 +63,7 @@ function(tokenized.text,
     } else if(sampling == "random.sampling"){
       # if random sampling was chosen, the text will be randomized and a sample 
       # of a given length will be excerpted
-      current.sample = head(sample(tokenized.text, replace = sampling.with.replacement), sample.size)
+      current.sample = head(sample(current.text, replace = sampling.with.replacement), sample.size)
       samples.from.text[[1]] = current.sample 
       # inheriting the sample's name
       names(samples.from.text) = names(tokenized.text)[i]

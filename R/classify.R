@@ -312,7 +312,7 @@ cat("\n")
 #
 # both directories (primary_set and secondary_set) shoud contain some texts;
 # if the number of text samples is lower than 2, the script will stop
-if(length(corpus.of.primary.set) < 2 || length(corpus.of.secondary.set) < 2) {
+if(length(corpus.of.primary.set) < 2 || length(corpus.of.secondary.set) < 1) {
     cat("\n\n","either the training set or the test set is empty!", "\n\n")
     stop("corpus error")
     }
@@ -501,12 +501,6 @@ authors.I.set = c(gsub("_.*","",rownames(freq.I.set.0.culling)))
 authors.II.set = c(gsub("_.*","",rownames(freq.II.set.0.culling)))
 perfect.guessing = length(authors.II.set[authors.II.set %in% authors.I.set])
 
-# load the ape library; make an empty bootstrap.results list
-# this will be executed only if the bootstrap option was checked
-#if (make.consensus.tree == TRUE) {
-#    library(ape)
-#    bootstrap.list = list()
-#    }
 
 
 
@@ -585,14 +579,12 @@ if (delete.pronouns == TRUE) {
 
 # the above list-of-not-culled to be applied to both sets:
 primary.set = freq.I.set.0.culling[,c(list.of.words.after.culling)]
-    rownames(primary.set) = filenames.primary.set
+##    rownames(primary.set) = filenames.primary.set
 secondary.set = freq.II.set.0.culling[,c(list.of.words.after.culling)]
-    rownames(secondary.set) = filenames.secondary.set
+##    rownames(secondary.set) = filenames.secondary.set
 
 # #################################################
 # culling is done, but we are still inside the main loop
-
-
 
 
 
@@ -606,6 +598,8 @@ secondary.set = freq.II.set.0.culling[,c(list.of.words.after.culling)]
 
 primary.set = primary.set[,start.at:length(primary.set[1,])]
 secondary.set = secondary.set[,start.at:length(secondary.set[1,])]
+
+
 
 
 # Testing if the desired MFW number is acceptable,
@@ -649,10 +643,10 @@ primary.set.sd = c(sapply(as.data.frame(primary.set), sd))
 cat("Calculating z-scores... \n\n")
 
 
-
 # an additional table composed of relative word frequencies 
 # of joint primary and secondary sets
-freq.table.both.sets = rbind(primary.set[,1:mfw.max], secondary.set[,1:mfw.max])
+####freq.table.both.sets = rbind(primary.set[,1:mfw.max], secondary.set[,1:mfw.max])
+freq.table.both.sets = rbind(primary.set, secondary.set)
 
 
 
@@ -900,7 +894,9 @@ if(tolower(classification.method) == "svm") {
   training.classes = c(1:length(training.set[,1]))
   #
   # training a model
-  model = svm(classes ~ ., data = input.data, subset = training.classes)
+  model = svm(classes ~ ., data = input.data, subset = training.classes,
+              kernel = "linear"
+              )
   #
   # testing the model on "new" data (i.e. the test.set)
   classification.results = predict(model, input.data[,-1])
@@ -923,9 +919,12 @@ if(tolower(classification.method) == "nsc") {
   classes = c(classes.training, classes.test)
   input.data = as.data.frame(rbind(training.set,test.set))
   training.classes = c(1:length(training.set[,1]))
-  mydata=list(x=t(input.data),y=as.factor(classes))
+  mydata=list(x=t(input.data),y=as.factor(classes),geneid=as.character(1:length(colnames(training.set))), genenames=colnames(training.set))
   # training a model
   model = pamr.train(mydata,sample.subset=c(1:length(classes.training)))
+
+  nsc.distinctive.features = pamr.listgenes(model,mydata,threshold=2,genenames=TRUE)[,2]
+
   # testing the model on "new" data (i.e. the test.set)
   classification.results = pamr.predict(model,mydata$x,threshold=1)
   classification.results = as.character(classification.results)
@@ -1041,7 +1040,7 @@ cat("\nMFWs from ",mfw.min," to ",mfw.max.original,
 # tables of frequencies, etc.etc.
 results.classify = list()
 # elements that we want to add on this list
-variables.to.save = c("all.guesses", "distance.table", 
+variables.to.save = c("all.guesses", "distance.table", "nsc.distinctive.features",
                       "freq.table.both.sets", "zscores.table.both.sets",
                       "freq.I.set.0.culling", "freq.II.set.0.culling")
 # checking if they really exist; getting rig of non-existing ones:
