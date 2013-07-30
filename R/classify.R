@@ -39,6 +39,14 @@ cat("using current directory...\n")
 }
 
 
+if(is.character(training.corpus.dir)==FALSE | nchar(training.corpus.dir)==0) {
+training.corpus.dir = "primary_set"
+}
+if(is.character(test.corpus.dir) == FALSE | nchar(test.corpus.dir) == 0) {
+test.corpus.dir = "secondary_set"
+}
+
+
 
 
 
@@ -257,22 +265,22 @@ if(use.existing.freq.tables == TRUE
 #
 # Retrieving the names of samples
 #
-filenames.primary.set = list.files("primary_set")
-filenames.secondary.set = list.files("secondary_set")
+filenames.primary.set = list.files(training.corpus.dir)
+filenames.secondary.set = list.files(test.corpus.dir)
 #
 # Checking whether required files and subdirectories exist
-if(file.exists("primary_set")==FALSE || file.exists("secondary_set")==FALSE) {
+if(file.exists(training.corpus.dir)==FALSE || file.exists(test.corpus.dir)==FALSE) {
     cat("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
     "Working directory should contain two subdirectories: 
-    \"primary_set\" and \"secondary_set\"\n",
-    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n")
+    \"",training.corpus.dir,"\" and \"",test.corpus.dir,"\"\n",
+    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
     stop("corpus prepared incorrectly")
     }
 if(length(filenames.primary.set) < 2 || length(filenames.secondary.set) < 2) {
     cat("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
-    "Both subdirectories \"primary_set\" and \"secondary_set\"
-    should contain at least two text samples!\n",
-    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n")
+    "Both subdirectories \"",training.corpus.dir,"\" and \"",
+    test.corpus.dir,"\" should contain at least two text samples!\n",
+    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
     stop("corpus prepared incorrectly")
     }
 #
@@ -1040,17 +1048,16 @@ cat("\nMFWs from ",mfw.min," to ",mfw.max.original,
 # tables of frequencies, etc.etc.
 results.classify = list()
 # elements that we want to add on this list
-variables.to.save = c("all.guesses", "distance.table", "nsc.distinctive.features",
-                      "freq.table.both.sets", "zscores.table.both.sets",
-                      "freq.I.set.0.culling", "freq.II.set.0.culling")
-# checking if they really exist; getting rig of non-existing ones:
+variables.to.save = c("misclassified.samples",
+                  "all.guesses", "distance.table", "nsc.distinctive.features",
+                  "freq.table.both.sets", "zscores.table.both.sets",
+                  "freq.I.set.0.culling", "freq.II.set.0.culling")
+# checking if they really exist; getting rid of non-existing ones:
 filtered.variables = ls()[ls() %in% variables.to.save]
 # adding them on the list
 for(i in filtered.variables) {
   results.classify[[i]] = get(i)
 }
-# the object has to be made immortal
-results.classify <<- results.classify
 
 
 
@@ -1059,32 +1066,32 @@ results.classify <<- results.classify
 # final cleaning
 
 
-
 cat("\n")
-cat("some of the variables used by this function will not vanish, \n")
-cat("in order to be re-usable in advanced applications;\n")
-cat("they are stored on a list 'results.classify';\n")
-cat("if you're familiar with lists, type: summary(results.classify),\n")
-cat("otherwise, don't touch it -- seriously!\n")
+cat("Some results should have been written into a few files; you should\n")
+cat("be able to find them in your current (working) directory. These include\n")
+cat("a list of words used to build a table of frequencies, the table itself,\n")
+cat("a file containg recent configuration, classification results, etc.\n")
+cat("Advanced users: you can pipe the results to a variable, e.g.:\n")
+cat("    my.results = classify()\n")
+cat("this will create a list containing some presumably interesting stuff.\n")
+cat("The list created, you can type, e.g.:\n")
+cat("    summary(my.results)\n")
+cat("to see which variables are stored there.\n")
 cat("\n")
-cat("results saved in", outputfile, "\n")
 cat("\n")
 cat("for suggestions how to cite this software, type: citation(\"stylo\")\n")
+cat("\n")
+cat("\n")
 
 
-##### THIS IS OBSOLETE, SINCE THE VARIABLES VANISH ANYWAY.
-
-
-# a list of variables not to be removed
-do.not.remove = c("zscores.table.both.sets", "freq.table.both.sets",
-                  "freq.I.set.0.culling", "freq.II.set.0.culling",
-                  "distance.table","outputfile","all.guesses")
-
-# removing the variables which are not on the above list
-list.of.variables = ls()
-rm(list=list.of.variables[!(list.of.variables %in% do.not.remove)])
-
+# to follow the 'good practice' rules:
 detach(variables)
+
+# back to the original working directory
+setwd(original.path)
+
+# return (tacitly) the value of the function 
+invisible(results.classify)
 }
 
 

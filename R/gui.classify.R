@@ -594,7 +594,7 @@ function() {
       variables$final.ranking.of.candidates = as.logical(as.numeric(tclvalue(final.ranking.of.candidates)))
       variables$how.many.correct.attributions = as.logical(as.numeric(tclvalue(how.many.correct.attributions)))
       variables$delete.pronouns = as.logical(as.numeric(tclvalue(delete.pronouns)))
-  	  variables$dump.samples = as.logical(as.numeric(tclvalue(dump.samples)))
+      variables$dump.samples = as.logical(as.numeric(tclvalue(dump.samples)))
       variables$save.distance.tables = as.logical(as.numeric(tclvalue(save.distance.tables)))
       variables$save.analyzed.features = as.logical(as.numeric(tclvalue(save.analyzed.features)))
       variables$save.analyzed.freqs = as.logical(as.numeric(tclvalue(save.analyzed.freqs)))

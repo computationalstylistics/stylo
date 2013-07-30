@@ -19,13 +19,6 @@ function(gui = TRUE, path = "", corpus.dir = "corpus", ...) {
 passed.arguments = list(...)
 
 
-# THIS SOLUTION IS RATHER UGLY; IT HAS TO BE CHANGED LATER:
-# ----> actually, it is obsolete, since the script is turned into function
-# Before defining any new objects (variables), all the existing R objects are 
-# recorded to preserve them from being removed; however, they are still 
-# vulnerable to being overwritten!
-variables.not.to.be.removed = ls()
-
 
 # this is needed at some point; in next versions, it should be 
 # removed from here
@@ -53,6 +46,9 @@ if(is.character(path) == TRUE & nchar(path) > 0) {
 cat("using current directory...\n")
 }
 
+if(is.character(corpus.dir) == FALSE | nchar(corpus.dir) == 0) {
+corpus.dir = "corpus"
+}
 
 
 
@@ -307,14 +303,16 @@ if (interactive.files == TRUE) {
 # Checking whether the required files and subdirectory exist
 if(file.exists(corpus.dir) == FALSE) {
     cat("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
-    "Hey! The working directory should contain the subdirectory \"corpus\"\n",
-    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n")
+    "Hey! The working directory should contain the subdirectory \"",
+    corpus.dir,"\"\n",
+    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
     stop("Corpus prepared incorrectly")
     }
 if(length(corpus.filenames) < 2 && sampling != "normal.sampling")  {
     cat("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
-    "Ho! The subdirectory \"corpus\" should contain at least two text samples!\n",
-    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n")
+    "Ho! The subdirectory \"",corpus.dir,"\" should contain at least 
+    two text samples!\n",
+    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
     stop("Corpus prepared incorrectly")
     }
 #
@@ -1306,45 +1304,44 @@ results.stylo = list()
 variables.to.save = c("distance.table", "frequencies.0.culling",
                       "table.with.all.freqs", "table.with.all.zscores",
                       "edges")
-# checking if they really exist; getting rig of non-existing ones:
+# checking if they really exist; getting rid of non-existing ones:
 filtered.variables = ls()[ls() %in% variables.to.save]
 # adding them on the list
 for(i in filtered.variables) {
   results.stylo[[i]] = get(i)
 }
-# the object (list) has to be made immortal
-results.stylo <<- results.stylo
 
 
+
+
+
+cat("\n")
+cat("Some results should have been written into a few files; you should\n")
+cat("be able to find them in your current (working) directory. These include\n")
+cat("a list of words used to build a table of frequencies, the table itself,\n")
+cat("a file containg recent configuration, etc.\n")
+cat("Advanced users: you can pipe the results to a variable, e.g.:\n")
+cat("    my.results = stylo()\n")
+cat("this will create a list containing some presumably interesting stuff.\n")
+cat("The list created, you can type, e.g.:\n")
+cat("    summary(my.results)\n")
+cat("to see which variables are stored there.\n")
+cat("\n")
+cat("\n")
+cat("for suggestions how to cite this software, type: citation(\"stylo\")\n")
+cat("\n")
+cat("\n")
+
+
+# to follow the 'good practice' rules:
+detach(variables)
 
 # back to the original working directory
 setwd(original.path)
 
+# remove the only global variable that was used at some point
+rm(colLab, envir = globalenv())
 
-
-
-cat("\n")
-cat("some of the variables used by this function will not vanish, \n")
-cat("in order to be re-usable in advanced applications;\n")
-cat("they are stored on a list 'results.stylo';\n")
-cat("if you're familiar with lists, type: summary(results.stylo),\n")
-cat("otherwise, don't touch it -- seriously!\n")
-cat("\n")
-cat("for suggestions how to cite this software, type: citation(\"stylo\")\n")
-
-
-##### THIS IS OBSOLETE, SINCE THE VARIABLES VANISH ANYWAY.
-
-# a list of variables not to be removed
-do.not.remove = c("table.with.all.zscores", "table.with.all.freqs",
-                  "frequencies.0.culling", "distance.table",
-                  variables.not.to.be.removed)
-
-# removing the variables which are not on the above list
-list.of.variables = ls()
-rm(list=list.of.variables[!(list.of.variables %in% do.not.remove)])
-
-detach(variables)
-
-
+# return (tacitly) the value of the function 
+invisible(results.stylo)
 }

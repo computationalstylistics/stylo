@@ -32,8 +32,7 @@ executed (which is typically called automatically from inside the \code{stylo}
 function).
 }
 \value{
-Depending on which options have been chosen, the function produces a number of files containing results, plots, 
-tables of distances, etc.
+The function returns a list of variables, including a table of word frequencies, vector of features used, a distance table and some more stuff. Additionally, depending on which options have been chosen, the function produces a number of files containing results, plots, tables of distances, etc.
 }
 \references{
 Eder, M. Kestemont, M. and Rybicki, J. (2013). Stylometry with R:
@@ -52,10 +51,12 @@ Eder, M. Kestemont, M. and Rybicki, J. (2013). Stylometry with R:
 stylo()
 
 # batch mode, custom name of corpus directory:
-stylo(gui = FALSE, corpus.dir = "ShakespeareCanon")
+my.test = stylo(gui = FALSE, corpus.dir = "ShakespeareCanon")
+summary(my.test)
 
 # batch mode, character 3-grams requested:
 stylo(gui = FALSE, analyzed.features = "c", ngram.size = 3)
+
 }
 }
 %\keyword{principal components analysis}

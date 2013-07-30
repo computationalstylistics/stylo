@@ -3,7 +3,7 @@
 \title{Machine-learning classification}
 \description{Function that performs a number of machine-learning methods
 for classification used in computational stylistics: Delta (Burrows, 2002), 
-k-Nearest Neighbors, Support Vectors Machines, Na\"ive Bayes, 
+k-Nearest Neighbors, Support Vector Machines, Naive Bayes, 
 and Nearest Shrunken Centroids (Jockers and Witten, 2010). Most of the options 
 are derived from the \code{stylo} function.
 }
@@ -40,8 +40,9 @@ this function; so far, they are all loaded when stylo.default.settings
 is executed (it will be invoked automatically from inside this function);
 the user can set/change them in the GUI.}
 
-\value{Depending on which options have been chosen, the function produces a number of files containing final results, 
-tables of distances, etc.}
+\value{
+The function returns a list of variables, including tables of word frequencies, vector of features used, a distance table and some more stuff. Additionally, depending on which options have been chosen, the function produces a number of files containing results, features used, tables of distances, etc.
+}
 
 \references{
 Eder, M. Kestemont, M. and Rybicki, J. (2013). Stylometry with R:
@@ -73,11 +74,13 @@ Argamon, S. (2008). Interpreting Burrows's Delta: geometric and
 classify()
 
 # batch mode, custom name of corpus directories:
-classify(gui = FALSE, training.corpus.dir = "TrainingSet",
+my.test = classify(gui = FALSE, training.corpus.dir = "TrainingSet",
        test.corpus.dir = "TestSet")
+summary(my.test)
 
 # batch mode, character 3-grams requested:
 classify(gui = FALSE, analyzed.features = "c", ngram.size = 3)
+
 }
 }
 %\keyword{classification}
