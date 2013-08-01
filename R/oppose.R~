@@ -1315,20 +1315,5 @@ if (classification == TRUE && method != "box.plot") {
 }
 
 
-# creating an object (list) that will contain the final results,
-# tables of frequencies, etc.etc.
-results.oppose = list()
-# elements that we want to add on this list
-variables.to.save = c("words.preferred.by.primary.author",
-                      "words.avoided.by.primary.author",
-                      "classification.results")
-# checking if they really exist; getting rid of non-existing ones:
-filtered.variables = ls()[ls() %in% variables.to.save]
-# adding them on the list
-for(i in filtered.variables) {
-  results.oppose[[i]] = get(i)
-}
-
-
 
 }

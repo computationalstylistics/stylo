@@ -13,7 +13,7 @@ load.corpus(files, corpus.dir = "")
     not specified, the current working directory will be used.}
 }
 \value{
-The function returns the variable \code{loaded.corpus}, containing as elements the texts loaded.
+The function returns a variable (list), containing as elements the texts loaded.
 }
 
 \author{Maciej Eder}

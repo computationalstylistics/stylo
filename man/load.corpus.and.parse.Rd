@@ -42,7 +42,7 @@ sampling.with.replacement = FALSE, features = "w", ngram.size = 1)
     details.}
 }
 \value{
-The result of this function is a variable \code{loaded.corpus}: a list containing 
+The result of this function is a variable (list) containing 
 as elements the samples (entire texts or sampled subsets) split into 
 words/characters and combined into n-grams (if applicable).
 }
