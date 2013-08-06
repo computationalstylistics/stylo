@@ -53,7 +53,7 @@ corpus.dir = "corpus"
 
 
 # loading the default settings as defined in the following function
-variables = stylo.default.settings()
+variables = stylo.default.settings(...)
 
 
 
@@ -74,14 +74,14 @@ merge.lists <- function(a, b) {
 
 # if any variables have been passed as arguments, they will overwrite
 # the default settings
-variables = merge.lists(variables, passed.arguments)
+#variables = merge.lists(variables, passed.arguments)
 
 
 
 
 # optionally, displaying a GUI box
 if (gui == TRUE) {
-  variables = gui.stylo()
+  variables = gui.stylo(...)
   } 
 
 

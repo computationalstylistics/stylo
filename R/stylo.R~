@@ -302,7 +302,7 @@ if (interactive.files == TRUE) {
 #
 # Checking whether the required files and subdirectory exist
 if(file.exists(corpus.dir) == FALSE) {
-    cat("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
+    cat("\n\n", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
     "Hey! The working directory should contain the subdirectory \"",
     corpus.dir,"\"\n",
     "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
