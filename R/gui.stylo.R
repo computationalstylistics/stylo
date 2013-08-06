@@ -122,9 +122,7 @@ attach(variables)
   add.to.margins <- tclVar(add.to.margins)
   label.offset <- tclVar(label.offset)
   dump.samples <- tclVar(dump.samples)
-  allow.writing <- tclVar(allow.writing)
 
-  
   
   
   f1 <- tkframe(tt)
@@ -215,17 +213,11 @@ attach(variables)
   tkconfigure(t5.but,state="normal", background="aliceblue")
   
   
-  cb_WRITING <- tkcheckbutton(tt)
-  tkconfigure(cb_WRITING,variable=allow.writing)
-  cblabel_WRITING <- tklabel(tt,text="Allow writing to disk")
-  tk2tip(cblabel_WRITING, "R normally does not save files in the user's home filespace; \nhowever, since the library 'stylo' is somewhat different, \nthe user might allow writing some results into working directory.")
-
   # the OK button: active on each tab
   #
   button_1 <- tkbutton(tt,text="       OK       ",command=push_OK,relief="raised",background="aliceblue")
   tkbind(button_1,"<Return>",push_OK)
-  tkgrid(cblabel_WRITING,tklabel(tt,text="        "),tklabel(tt,text="        "),columnspan=1)
-  tkgrid(cb_WRITING,tklabel(tt,text="        "),button_1,columnspan=1)
+  tkgrid(button_1,columnspan=10)
   tk2tip(button_1, "Press this only if you've visited all the tabs, or if you know\nyou want to leave values in some as they are.")
   
   
@@ -731,7 +723,6 @@ attach(variables)
       variables$text.id.on.graphs = as.character(tclvalue(text.id.on.graphs))
       variables$add.to.margins = as.numeric(tclvalue(add.to.margins))
       variables$label.offset = as.numeric(tclvalue(label.offset))
-      variables$allow.writing = as.logical(as.numeric(tclvalue(allow.writing)))
       break
     }
   .Tcl("font delete myDefaultFont")

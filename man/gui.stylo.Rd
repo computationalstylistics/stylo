@@ -5,7 +5,11 @@
 Graphical user interface for \code{stylo}. This function sets several variables needed for \code{stylo}.
 }
 \usage{
-gui.stylo()
+gui.stylo(...)
+}
+\arguments{
+  \item{...}{any variable as produced by \code{stylo.default.settings}
+    can be set here to overwrite the default values.}
 }
 \details{
 The function calls \code{stylo.default.settings} to initialize a number

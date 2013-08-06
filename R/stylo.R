@@ -53,33 +53,13 @@ corpus.dir = "corpus"
 
 
 # loading the default settings as defined in the following function
+# (it absorbes the arguments passed from command-line)
 variables = stylo.default.settings(...)
 
 
 
-
-# Code that enables overwriting the variables with custom settings.
-# A magnificent snipped for combining two lists 
-# http://stackoverflow.com/questions/13811501/r-merge-lists-with-overwrite-and-recursion
-merge.lists <- function(a, b) {
-    a.names <- names(a)
-    b.names <- names(b)
-    m.names <- sort(unique(c(a.names, b.names)))
-    sapply(m.names, function(i) {
-        if (is.list(a[[i]]) & is.list(b[[i]])) merge.lists(a[[i]], b[[i]])
-        else if (i %in% b.names) b[[i]]
-        else a[[i]]
-    }, simplify = FALSE)
-}
-
-# if any variables have been passed as arguments, they will overwrite
-# the default settings
-#variables = merge.lists(variables, passed.arguments)
-
-
-
-
 # optionally, displaying a GUI box
+# (it absorbes the arguments passed from command-line)
 if (gui == TRUE) {
   variables = gui.stylo(...)
   } 

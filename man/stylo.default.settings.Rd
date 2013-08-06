@@ -6,7 +6,11 @@ Function that sets a series of global variables to be used by \code{stylo}
 and which can be modified by users via \code{gui.stylo}.
 }
 \usage{
-stylo.default.settings()
+stylo.default.settings(...)
+}
+\arguments{
+  \item{...}{any variable as produced by this function
+    can be set here to overwrite the default values.}
 }
 \details{
 This function is typically called from inside \code{stylo} and \code{gui.gui}.

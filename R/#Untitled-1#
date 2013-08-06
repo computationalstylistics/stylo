@@ -1,2 +1,0 @@
-         training.corpus.dir = "primary_set",
-         test.corpus.dir = "secondary_set"

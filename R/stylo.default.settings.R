@@ -10,17 +10,6 @@ passed.arguments = list(...)
 
 
 
-#######  SAVING FILES: USER'S CONFIRMATION  ########################
-
-# R normally does not save files in the user's home filespace; however,
-# since the library 'stylo' is somewhat different, the user might allow
-# writing some results into working directory.
-
-allow.writing = TRUE
-
-
-
-
 #######  TEXT- AND LANGUAGE-DEPENDENT SETTINGS  ####################
 
 # format of corpus files; available choices are:

@@ -10,8 +10,6 @@ function(gui = TRUE, path = "",
          training.corpus.dir = "primary_set",
          test.corpus.dir = "secondary_set", ...) {
 
-# so far, 'training.corpus' and 'test.corpus' are not used
-# (certainly: they are used, but their values are specified elsewhere)
 
 
 # if any command-line arguments have been passed by a user, they will
@@ -48,41 +46,19 @@ test.corpus.dir = "secondary_set"
 
 
 
-
-
-
 # loading the default settings as defined in the following function
-variables = stylo.default.settings()
-
-
-
-
-# Code that enables overwriting the variables with custom settings.
-# A magnificent snipped for combining two lists 
-# http://stackoverflow.com/questions/13811501/r-merge-lists-with-overwrite-and-recursion
-merge.lists <- function(a, b) {
-    a.names <- names(a)
-    b.names <- names(b)
-    m.names <- sort(unique(c(a.names, b.names)))
-    sapply(m.names, function(i) {
-        if (is.list(a[[i]]) & is.list(b[[i]])) merge.lists(a[[i]], b[[i]])
-        else if (i %in% b.names) b[[i]]
-        else a[[i]]
-    }, simplify = FALSE)
-}
-
-# if any variables have been passed as arguments, they will overwrite
-# the default settings
-variables = merge.lists(variables, passed.arguments)
-
-
+# (it absorbes the arguments passed from command-line)
+variables = stylo.default.settings(...)
 
 
 
 # optionally, displaying a GUI box
+# (it absorbes the arguments passed from command-line)
 if (gui == TRUE) {
-  variables = gui.classify()
+  variables = gui.classify(...)
   } 
+
+
 
 # this function explodes the list "variables" into particular values
 # (actually, it does not explode the original list, but it makes

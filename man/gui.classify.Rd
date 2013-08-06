@@ -6,7 +6,11 @@ Graphical user interface for \code{classify}. Via the GUI, this function can set
 the several variables needed for \code{classify}.
 }
 \usage{
-gui.classify()
+gui.classify(...)
+}
+\arguments{
+  \item{...}{any variable as produced by \code{stylo.default.settings}
+    can be set here to overwrite the default values.}
 }
 \details{
 The function calls \code{stylo.default.settings} to initialize a number
