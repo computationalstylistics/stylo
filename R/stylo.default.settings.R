@@ -102,6 +102,15 @@ ngram.size = 1
 distance.measure = "CD"
 
 
+
+# Method of building a dendrogram; choose one of the following linkage methods:
+# "nj", "ward", "single", "complete", "average", "mcquitty", "median", 
+# "centroid"
+linkage = "ward"
+
+
+
+
 ########  VISUALIZATION METHODS, LOGS, REPORTS, DISPLAY OPTIONS  ############
 
 # Statistical method to be used; choose one:
@@ -224,7 +233,7 @@ interactive.files = FALSE
 # tabs, or newlines. The delimiters can be mixed and/or multiplied, thus even
 # a very untidy list will be interpreted correctly. 
 
-use.custom.list.of.files = TRUE
+use.custom.list.of.files = FALSE
 
 # Usually, it is recommended to cut off the tail of the word-list;
 # if you do not want to cut the list, then the variable may be set to an 
@@ -280,22 +289,6 @@ sampling.with.replacement = FALSE # THIS IS NOT VISIBLE ON GUI
 txm.compatibility.mode = FALSE
 
 
-# COMPATIBILITY MODE: to make old experiments replicable
-
-# original algorithm for estabilishing consensus trees, used in ver. < 0.4.8;
-# this is still available: if you want to replicate your old tests, say TRUE
-nj.consensus.tree = FALSE
-
-# in ver. 0.4.7, color dendrograms were available; they were produced using
-# the neighbor joining (NJ) algorithm. If you want to use it and/or you
-# want to replicate your experiments performed using ver. 0.4.7, say TRUE
-nj.cluster.analysis = FALSE
-    ######################################
-          # loading the required library
-        #  if(nj.cluster.analysis == TRUE) {
-        #    library(ape)
-        #    }
-    ######################################
 
 
 

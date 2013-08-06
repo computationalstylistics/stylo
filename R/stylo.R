@@ -816,50 +816,47 @@ if(analysis.type == "CA") {
   # the following task will be plotted
   plot.current.task = function(){ 
     par(mar=dendrogram.margins)
-        ########################################################################
-        ########################################################################
-        # color graphs, but using different clustering algorithm (i.e. neighbor joining)
-        # this algorighm was used in old versions of the script ( >= 0.4.7)
-        if(nj.cluster.analysis == TRUE) {
+        # neighbor joining clustering algorithm needs a different call:
+        if(linkage == "nj") {
           plot(nj(distance.table), font=1, tip.color=colors.of.pca.graph)
-          # alternatively, a traditional approach:
+        # any other linkage algorithm is produced by hclust()
         } else {
-        ########################################################################
-    # clustering the distances stored in the distance.table
-    clustered.data = hclust(as.dist(distance.table),"ward")
-    # reordering the vector of colors to fit the order of clusters
-    colors.on.dendrogram = colors.of.pca.graph[clustered.data$order]
-    # converting the clusters into common dendrogram format
-    tree.with.clusters = as.dendrogram(clustered.data,hang=0)
-    # now, preparing the procedure for changing leaves‘ color attributes
-      # (this snippet is taken from "help(dendrapply)" and slightly adjusted)
-      local({
-        colLab <<- function(n) {
-            if(is.leaf(n)) {
-              a <- attributes(n)
-              i <<- i+1
-              attr(n, "nodePar") <-
-                  c(a$nodePar, lab.col = mycols[i], pch = NA)
-            }
-            n
+          # clustering the distances stored in the distance.table
+          clustered.data = hclust(as.dist(distance.table),method=linkage)
+          # reordering the vector of colors to fit the order of clusters
+          colors.on.dendrogram = colors.of.pca.graph[clustered.data$order]
+          # converting the clusters into common dendrogram format
+          tree.with.clusters = as.dendrogram(clustered.data,hang=0)
+          # now, preparing the procedure for changing leaves‘ color attributes
+          # (this snippet is taken from "help(dendrapply)" and slightly adjusted)
+          local({
+                  colLab <<- function(n) {
+                          if(is.leaf(n)) {
+                                  a <- attributes(n)
+                                  i <<- i+1
+                                  attr(n, "nodePar") <-
+                                  c(a$nodePar, lab.col = mycols[i], pch = NA)
+                          }
+                          n
+                  }
+                  mycols = colors.on.dendrogram
+                  i <- 0
+          })
+          # adding the attributes to subsequent leaves of the dendrogram,
+          # using the above colLab(n) function
+          dendrogram.with.colors = dendrapply(tree.with.clusters, colLab)
+          # finally, ploting the whole stuff
+          plot(dendrogram.with.colors,
+          main = graph.title,
+          horiz = dendrogram.layout.horizontal) 
+          if(dendrogram.layout.horizontal == TRUE) {
+                  title(sub=graph.subtitle) 
+          } else {
+                  title(sub=graph.subtitle, outer=TRUE, line=-1)  
+          }
         }
-        mycols = colors.on.dendrogram
-        i <- 0
-      })
-    # adding the attributes to subsequent leaves of the dendrogram,
-    # using the above colLab(n) function
-    dendrogram.with.colors = dendrapply(tree.with.clusters, colLab)
-    # finally, ploting the whole stuff
-    plot(dendrogram.with.colors,
-           main = graph.title,
-           horiz = dendrogram.layout.horizontal) 
-    if(dendrogram.layout.horizontal == TRUE) {
-      title(sub=graph.subtitle) 
-    } else {
-      title(sub=graph.subtitle, outer=TRUE, line=-1)  
     }
-  }
-}}
+}
 
 
 # prepares a 2-dimensional plot (MDS) for plotting
@@ -1025,10 +1022,11 @@ if (analysis.type == "BCT") {
 ########################################################################
 ########################################################################
 # compatibility mode: to make one's old experiments reproducible
-  if(nj.cluster.analysis == TRUE) {
+  if(linkage == "nj") {
     current.bootstrap.results = nj(as.dist(distance.table))
     } else {
-  current.bootstrap.results = as.phylo(hclust(as.dist(distance.table),"ward"))
+  current.bootstrap.results = as.phylo(hclust(as.dist(distance.table),
+                                       method=linkage))
   }
 ########################################################################
   # adds the current dendrogram to the list of all dendrograms
