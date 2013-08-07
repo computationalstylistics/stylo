@@ -25,7 +25,7 @@ and how to use them.
 The function returns a list containing some 50 variables. 
 }
 \author{
-Jan Rybicki
+Jan Rybicki, Maciej Eder
 }
 \seealso{
 \code{\link{classify}}, \code{\link{gui.stylo}}

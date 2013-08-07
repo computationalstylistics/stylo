@@ -431,27 +431,41 @@ var.name <- function(x) {
  var.name(corpus.lang)
  var.name(analyzed.features)
  var.name(ngram.size)
- var.name(length.of.random.sample)
- var.name(classification.method)
  var.name(mfw.min)
  var.name(mfw.max)
  var.name(mfw.incr)
  var.name(start.at)
- var.name(mfw.list.cutoff)
  var.name(culling.min)
  var.name(culling.max)
  var.name(culling.incr)
+ var.name(mfw.list.cutoff)
  var.name(delete.pronouns)
- var.name(culling.of.all.samples)
- var.name(final.ranking.of.candidates)
- var.name(how.many.correct.attributions)
  var.name(use.existing.freq.tables)
  var.name(use.existing.wordlist)
- var.name(distance.measure)
- var.name(number.of.candidates)
+ var.name(classification.method)
+ var.name(culling.of.all.samples)
  var.name(z.scores.of.all.samples)
  var.name(reference.wordlist.of.all.samples)
+ var.name(distance.measure)
+ var.name(svm.kernel)
+ var.name(svm.degree)
+ var.name(svm.coef0)
+ var.name(svm.cost)
+ var.name(k.value)
+ var.name(l.value)
+ var.name(sampling)
+ var.name(sample.size)
+ var.name(length.of.random.sample)
+ var.name(final.ranking.of.candidates)
+ var.name(how.many.correct.attributions)
+ var.name(number.of.candidates)
+ var.name(save.distance.tables)
+ var.name(save.analyzed.features)
+ var.name(save.analyzed.freqs)
+ 
 
+ 
+ 
 # #################################################
 
 
@@ -826,12 +840,11 @@ if(tolower(classification.method) == "knn") {
   test.set = cbind(classes.test,zscores.secondary.set[,1:mfw])
 #  input.data = as.data.frame(rbind(training.set,test.set))
   #
-  # number of nearest neighbors to be considered
-  k.value = 1
   # classes that will be used for training the classifier (=classes of I set)
   classes = factor(training.set[,1])
-  # training and classification
-  classification.results = knn(training.set[,-1],test.set[,-1],classes,k=k.value)
+  # training and classification ('k' and 'l' are set in 'stylo.default.settings')
+  classification.results = knn(training.set[,-1],test.set[,-1],
+                              classes, k = k.value, l = l.value)
   # cross-validation: 
   #knn.cv(training.set[,-1],classes,k=k.value,prob=T)
   classification.results = as.character(classification.results)
@@ -879,8 +892,8 @@ if(tolower(classification.method) == "svm") {
   #
   # training a model
   model = svm(classes ~ ., data = input.data, subset = training.classes,
-              kernel = "linear"
-              )
+              kernel = svm.kernel, degree = svm.degree,
+              coef0 = svm.coef0, cost = svm.cost)
   #
   # testing the model on "new" data (i.e. the test.set)
   classification.results = predict(model, input.data[,-1])
@@ -907,7 +920,7 @@ if(tolower(classification.method) == "nsc") {
   # training a model
   model = pamr.train(mydata,sample.subset=c(1:length(classes.training)))
 
-  nsc.distinctive.features = pamr.listgenes(model,mydata,threshold=2,genenames=TRUE)[,2]
+  nsc.distinctive.features = pamr.listgenes(model,mydata,threshold=5,genenames=TRUE)[,2]
 
   # testing the model on "new" data (i.e. the test.set)
   classification.results = pamr.predict(model,mydata$x,threshold=1)

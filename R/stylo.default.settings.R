@@ -318,6 +318,34 @@ number.of.candidates = 3
 how.many.correct.attributions = TRUE
 final.ranking.of.candidates = TRUE
 
+
+
+# SVM settings (refer to help(svm) from library(e1071) for details)
+#
+# kernel: choose linear, polynomial or radial:
+# "linear" = u'*v 
+# "polynomial" = (gamma*u'*v + coef0)^degree
+# "radial" = exp(-gamma*|u-v|^2)
+svm.kernel = "linear"
+# degree: parameter needed for kernel of type "polynomial" (default: 3)
+svm.degree = 3
+# coef0: parameter needed for kernel of type "polynomial" (default: 0)
+svm.coef0 = 0
+# cost: cost of constraints violation (default: 1); it is the "C"-constant 
+# of the regularization term in the Lagrange formulation.
+svm.cost = 1
+
+
+
+# k-NN settings:
+#
+# k value in k-NN, or number of neighbors considered:
+k.value = 1
+# minimum vote for definite decision, otherwise 'doubt'. (More precisely, 
+# less than 'k-l' dissenting votes are allowed, even if k is increased by ties.)
+l.value = 0
+
+
 # How the z-scores should be calculated:
 # if the variable is set to FALSE, then the z-scores are relying
 # on the primary set only (this should be better in most cases; after all,

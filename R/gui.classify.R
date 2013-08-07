@@ -117,6 +117,12 @@ attach(variables)
   number.of.candidates <- tclVar(number.of.candidates)
   final.ranking.of.candidates <- tclVar(final.ranking.of.candidates)
   how.many.correct.attributions <- tclVar(how.many.correct.attributions)
+  k.value <- tclVar(k.value)
+  l.value <- tclVar(l.value)
+  svm.kernel <- tclVar(svm.kernel)
+  svm.degree <- tclVar(svm.degree)
+  svm.coef0 <- tclVar(svm.coef0)
+  svm.cost <- tclVar(svm.cost)
   #
   delete.pronouns <- tclVar(delete.pronouns)
   corpus.lang <- tclVar(corpus.lang)
@@ -518,13 +524,52 @@ attach(variables)
   tk2tip(entrylabel_EU, "Select Euclidean Distance (basic and the most *natural*).")
   
   # next row: OTHER METHODS
+  
+  entry_LINEAR <- tkradiobutton(f3)
+  entry_POLYNOMIAL <- tkradiobutton(f3)
+  entry_RADIAL <- tkradiobutton(f3)
   #
-  tkgrid(tklabel(f3,text="  SVM OPTIONS:     "))
-  tkgrid(tklabel(f3,text="    ")) # blank line for aesthetic purposes
-  tkgrid(tklabel(f3,text="  k-NN OPTIONS:    "))
+  tkconfigure(entry_LINEAR,variable=svm.kernel,value="linear")
+  tkconfigure(entry_POLYNOMIAL,variable=svm.kernel,value="polynomial")
+  tkconfigure(entry_RADIAL,variable=svm.kernel,value="radial")
+  #
+  entrylabel_LINEAR <- tklabel(f3,text="Linear")
+  entrylabel_POLYNOMIAL <- tklabel(f3,text="Polynomial")
+  entrylabel_RADIAL <- tklabel(f3,text="Radial")
+  #
+  entry_DEGREE <- tkentry(f3,textvariable=svm.degree,width="5")
+  entry_COEF0 <- tkentry(f3,textvariable=svm.coef0,width="5")
+  entry_COST <- tkentry(f3,textvariable=svm.cost,width="5")
+  #
+  entrylabel_DEGREE <- tklabel(f3,text="degree")
+  entrylabel_COEF0 <- tklabel(f3,text="coef0")
+  entrylabel_COST <- tklabel(f3,text="cost")
+  #
+  tk2tip(entrylabel_LINEAR, "Linear kernel used in training and predicting.\n = u'*v")
+  tk2tip(entrylabel_POLYNOMIAL, "Polynomial kernel used in training and predicting.\n = (gamma*u'*v + coef0)^degree")
+  tk2tip(entrylabel_RADIAL, "Radial kernel used in training and predicting.\n  = exp(-gamma*|u-v|^2)")
+  tk2tip(entrylabel_DEGREE, "Parameter needed for kernel of type \"polynomial\" (default: 3).")
+  tk2tip(entrylabel_COEF0, "Parameter needed for kernel of type \"polynomial\" (default: 0).")
+  tk2tip(entrylabel_COST, "Cost of constraints violation (default: 1);\n it is the \"C\"-constant of the regularization\n term in the Lagrange formulation.")  
+  #
+  entry_K <- tkentry(f3,textvariable=k.value,width="5")
+  entry_L <- tkentry(f3,textvariable=l.value,width="5")
+  #  
+  entrylabel_K <- tklabel(f3,text="k value")
+  entrylabel_L <- tklabel(f3,text="l value")
+  # Tooltips for the above
+  tk2tip(entrylabel_K, "Specify the \"k\" value, or number of neighbors considered.")
+  tk2tip(entrylabel_L, "Minimum vote for definite decision, otherwise \"doubt\".\n(More precisely, less than \"k-l\" dissenting votes are allowed,\neven if k is increased by ties.)")
+  #
+  tkgrid(tklabel(f3,text="  SVM OPTIONS:     "),entrylabel_LINEAR,entrylabel_POLYNOMIAL,entrylabel_RADIAL,entrylabel_DEGREE,entrylabel_COEF0)
+  tkgrid(tklabel(f3,text="    "),entry_LINEAR,entry_POLYNOMIAL,entry_RADIAL,entry_DEGREE,entry_COEF0)
+  tkgrid(tklabel(f3,text="    "),tklabel(f3,text="    "),tklabel(f3,text="    "),tklabel(f3,text="    "),tklabel(f3,text="    "),entrylabel_COST) # blank line for aesthetic purposes
+  tkgrid(tklabel(f3,text="  k-NN OPTIONS:    "),entrylabel_K,entrylabel_L,tklabel(f3,text="    "),tklabel(f3,text="    "),entry_COST)
+  tkgrid(tklabel(f3,text="    "),entry_K,entry_L)
   tkgrid(tklabel(f3,text="    ")) # blank line for aesthetic purposes
 
-
+  
+  
   # next tab: SAMPLING
   entry_SAMP <- tkradiobutton(f4)
   entry_RAND <- tkradiobutton(f4)
@@ -651,6 +696,12 @@ attach(variables)
       variables$distance.measure = as.character(tclvalue(distance.measure))
       variables$corpus.lang = as.character(tclvalue(corpus.lang))
       variables$consensus.strength = as.numeric(tclvalue(consensus.strength))
+      variables$k.value = as.numeric(tclvalue(k.value))
+      variables$l.value = as.numeric(tclvalue(l.value))
+      variables$svm.kernel = as.character(tclvalue(svm.kernel))
+      variables$svm.degree = as.numeric(tclvalue(svm.degree))      
+      variables$svm.coef0 = as.numeric(tclvalue(svm.coef0))
+      variables$svm.cost = as.numeric(tclvalue(svm.cost))
     break
     }
   .Tcl("font delete myDefaultFont")

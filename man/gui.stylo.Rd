@@ -21,10 +21,10 @@ for a detailed explanation what the particular variables are for
 and how to use them.
 }
 \value{
-The function returns ca. 50 variables. 
+The function returns a list containing ca. 50 variables. 
 }
 \author{
-Jan Rybicki
+Jan Rybicki, Maciej Eder
 }
 \seealso{
 \code{\link{stylo}}, \code{\link{stylo.default.settings}}

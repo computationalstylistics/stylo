@@ -252,30 +252,8 @@ repeat{
   }
 }
 
-# Finally, we want to save some of the variable values for later use;
-# they are automatically loaded into the GUI at the next run of the script.
-	cat("",file="oppose_config.txt",append=F)
-	var.name<-function(x) { 
-		if(is.character(x)==TRUE) {
-			cat(paste(deparse(substitute(x)),"=\"",x,"\"", sep=""),file="oppose_config.txt",sep="\n",append=T)
-        } else {
-			cat(paste(deparse(substitute(x)),x, sep="="),file="oppose_config.txt",sep="\n",append=T) }
-	} 
-	var.name(text.slice.length)
-	var.name(text.slice.overlap)
-	var.name(rare.occurrences.threshold)
-	var.name(threshold)
-	var.name(method)
-	var.name(display.on.screen)
-	var.name(write.pdf.file)
-	var.name(write.png.file)
-	var.name(use.color.graphs)
-	var.name(titles.on.graph)
-	var.name(identify.points)
-	var.name(visualization)
-	var.name(classification)
-	var.name(plot.token)
 } # <-- here the option "interactive.mode.with.GUI == TRUE" is completed
+
       
 # #################################################
 # GUI module explicit feliciter (Phew!)
@@ -599,6 +577,40 @@ if(i == 1) {
   }
 
 }  # <-- loop uploading the current corpus returns here
+
+
+
+
+
+#########################################################################
+# Finally, we want to save some of the variable values for later use;
+# they are automatically loaded into the GUI at the next run of the script.
+	cat("",file="oppose_config.txt",append=F)
+	var.name<-function(x) { 
+		if(is.character(x)==TRUE) {
+			cat(paste(deparse(substitute(x)),"=\"",x,"\"", sep=""),file="oppose_config.txt",sep="\n",append=T)
+        } else {
+			cat(paste(deparse(substitute(x)),x, sep="="),file="oppose_config.txt",sep="\n",append=T) }
+	} 
+	var.name(text.slice.length)
+	var.name(text.slice.overlap)
+	var.name(rare.occurrences.threshold)
+	var.name(threshold)
+	var.name(method)
+	var.name(display.on.screen)
+	var.name(write.pdf.file)
+	var.name(write.png.file)
+	var.name(use.color.graphs)
+	var.name(titles.on.graph)
+	var.name(identify.points)
+	var.name(visualization)
+	var.name(classification)
+	var.name(plot.token)
+#########################################################################
+
+
+
+
 
 
 
@@ -1315,6 +1327,10 @@ if (classification == TRUE && method != "box.plot") {
 }
 
 
+
+
+
+
 # creating an object (list) that will contain the final results,
 # tables of frequencies, etc.etc.
 results.oppose = list()
@@ -1331,4 +1347,27 @@ for(i in filtered.variables) {
 
 
 
+
+cat("\n")
+cat("Some results should have been written into a few files; you should\n")
+cat("be able to find them in your current (working) directory. These include\n")
+cat("a list of words significantly preferred in the primary set,\n")
+cat("words significantly avoided (or, preferred in the secondary set), etc.\n")
+cat("Advanced users: you can pipe the results to a variable, e.g.:\n")
+cat("    my.results = oppose()\n")
+cat("this will create a list containing some presumably interesting stuff.\n")
+cat("The list created, you can type, e.g.:\n")
+cat("    summary(my.results)\n")
+cat("to see which variables are stored there.\n")
+cat("\n")
+cat("\n")
+cat("for suggestions how to cite this software, type: citation(\"stylo\")\n")
+cat("\n")
+cat("\n")
+
+
+
+
+# return (tacitly) the value of the function 
+invisible(results.oppose)
 }

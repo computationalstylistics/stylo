@@ -42,6 +42,9 @@ as introduced by Kilgariff (2001) is available. The function generates
 a vector of words significantly preferred by a tested author, and another 
 vector containing the words significantly avoided.
 }
+\value{
+The function returns a list of variables, including a list of words significantly preferred in the primary set, words significantly avoided (or, preferred in the secondary set), and possibly some other results, if applicable.
+}
 \references{
 Eder, M. Kestemont, M. and Rybicki, J. (2013). Stylometry with R:
     a suite of tools. In: "Digital Humanities 2013: Conference Abstracts". 
