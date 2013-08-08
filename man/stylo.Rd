@@ -5,8 +5,8 @@
 \description{
 It is quite a long story what this function does. Basically, it is an 
 all-in-one tool for a variety of experiments in computational
-stylistics. For a more detailed description, refer to miniHOWTO:
-\url{https://sites.google.com/site/computationalstylistics/preprints/STYLO\%20R\%20Script\%20Mini\%20HOWTO.pdf?attredirects=0}
+stylistics. For a more detailed description, refer to HOWTO available at:
+\url{https://sites.google.com/site/computationalstylistics/}
 }
 \usage{
 stylo(gui = TRUE, path = "", corpus.dir = "corpus", ...)

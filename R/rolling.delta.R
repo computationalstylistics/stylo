@@ -1521,7 +1521,7 @@ graph.title = gsub("(\\.txt$)||(\\.xml$)||(\\.html$)||(\\.htm$)","",filenames.se
     dev.off()
     }
   if(write.svg.file == TRUE) {
-    win.metafile(filename=paste(graph.title,"%03d",".svg",sep=""), 
+    svg(filename=paste(graph.title,"%03d",".svg",sep=""), 
          width=plot.custom.width,height=plot.custom.height,
          pointsize=plot.font.size)
     plot.current.task()
@@ -1535,10 +1535,6 @@ graph.title = gsub("(\\.txt$)||(\\.xml$)||(\\.html$)||(\\.htm$)","",filenames.se
     dev.off()
 
 }
-
-
-
-
 
 
 }

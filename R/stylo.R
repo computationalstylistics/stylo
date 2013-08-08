@@ -65,12 +65,83 @@ if (gui == TRUE) {
   } 
 
 
-# this function explodes the list "variables" into particular values
-# (actually, it does not explode the original list, but it makes
-# all the variables stored on this list available without accessing it);
-# instead of "variables$mfw.max", one can use simply "mfw.max"
-# see: help(attach) for more detailed explanation
-attach(variables)
+
+
+
+
+
+
+# #############################################################################
+# Explicit assignment of all the variables, in order to avoid attach()
+# #############################################################################
+
+add.to.margins = variables$add.to.margins
+analysis.type = variables$analysis.type
+analyzed.features = variables$analyzed.features
+classification.method = variables$classification.method
+colors.on.graphs = variables$colors.on.graphs
+consensus.strength = variables$consensus.strength
+corpus.format = variables$corpus.format
+corpus.lang = variables$corpus.lang
+culling.incr = variables$culling.incr
+culling.max = variables$culling.max
+culling.min = variables$culling.min
+culling.of.all.samples = variables$culling.of.all.samples
+delete.pronouns = variables$delete.pronouns
+dendrogram.layout.horizontal = variables$dendrogram.layout.horizontal
+display.on.screen = variables$display.on.screen
+distance.measure = variables$distance.measure
+dump.samples = variables$dump.samples
+final.ranking.of.candidates = variables$final.ranking.of.candidates
+how.many.correct.attributions = variables$how.many.correct.attributions
+interactive.files = variables$interactive.files
+k.value = variables$k.value
+l.value = variables$l.value
+label.offset = variables$label.offset
+length.of.random.sample = variables$length.of.random.sample
+linkage = variables$linkage
+mfw.incr = variables$mfw.incr
+mfw.list.cutoff = variables$mfw.list.cutoff
+mfw.max = variables$mfw.max
+mfw.min = variables$mfw.min
+ngram.size = variables$ngram.size
+number.of.candidates = variables$number.of.candidates
+outputfile = variables$outputfile
+passed.arguments = variables$passed.arguments
+pca.visual.flavour = variables$pca.visual.flavour
+plot.custom.height = variables$plot.custom.height
+plot.custom.width = variables$plot.custom.width
+plot.font.size = variables$plot.font.size
+plot.line.thickness = variables$plot.line.thickness
+plot.options.reset = variables$plot.options.reset
+reference.wordlist.of.all.samples = variables$reference.wordlist.of.all.samples
+sample.size = variables$sample.size
+sampling = variables$sampling
+sampling.with.replacement = variables$sampling.with.replacement
+save.analyzed.features = variables$save.analyzed.features
+save.analyzed.freqs = variables$save.analyzed.freqs
+save.distance.tables = variables$save.distance.tables
+start.at = variables$start.at
+svm.coef0 = variables$svm.coef0
+svm.cost = variables$svm.cost
+svm.degree = variables$svm.degree
+svm.kernel = variables$svm.kernel
+text.id.on.graphs = variables$text.id.on.graphs
+titles.on.graphs = variables$titles.on.graphs
+txm.compatibility.mode = variables$txm.compatibility.mode
+use.custom.list.of.files = variables$use.custom.list.of.files
+use.existing.freq.tables = variables$use.existing.freq.tables
+use.existing.wordlist = variables$use.existing.wordlist
+write.jpg.file = variables$write.jpg.file
+write.pdf.file = variables$write.pdf.file
+write.png.file = variables$write.png.file
+write.svg.file = variables$write.svg.file
+z.scores.of.all.samples = variables$z.scores.of.all.samples
+# #############################################################################
+
+
+
+
 
 
 
@@ -117,6 +188,11 @@ if(plot.options.reset == TRUE) {
 if(txm.compatibility.mode == TRUE) {
   # checking if a frequency table has been passed from TXM to R
   if(exists("txm.generated.freq.table") == TRUE) {
+    # sanity check
+    if(exists("variable.name") == FALSE) {
+      variable.name = c()
+      stop("TXM does not seem to pass any data to analyze")
+    }
     # inheriting the table from TXM
     frequencies.0.culling = t(variable.name)
     # transposing the table
@@ -829,8 +905,7 @@ if(analysis.type == "CA") {
           tree.with.clusters = as.dendrogram(clustered.data,hang=0)
           # now, preparing the procedure for changing leaves‘ color attributes
           # (this snippet is taken from "help(dendrapply)" and slightly adjusted)
-          local({
-                  colLab <<- function(n) {
+                  colLab = function(n) {
                           if(is.leaf(n)) {
                                   a <- attributes(n)
                                   i <<- i+1
@@ -841,7 +916,6 @@ if(analysis.type == "CA") {
                   }
                   mycols = colors.on.dendrogram
                   i <- 0
-          })
           # adding the attributes to subsequent leaves of the dendrogram,
           # using the above colLab(n) function
           dendrogram.with.colors = dendrapply(tree.with.clusters, colLab)
@@ -999,7 +1073,7 @@ if(analysis.type == "PCV" || analysis.type == "PCR") {
       trellis.par.set("superpose.symbol", sps)
       ltheme <- canonical.theme(color = FALSE)      
       lattice.options(default.theme = ltheme)
-      pl<-xyplot(data=COOR, x=PC2~PC1, xlab=paste(PC1_lab,"\n",graph.subtitle, sep=""), ylab=PC2_lab, groups=LABEL, sub="", key=list(columns=2, text=list(labels), points=Rows(sps, 1:length(labels))),
+      pl<-xyplot(data=COOR, x=PC2~PC1, xlab=paste(PC1_lab,"\n",graph.subtitle, sep=""), ylab=PC2_lab, groups=COOR$LABEL, sub="", key=list(columns=2, text=list(labels), points=Rows(sps, 1:length(labels))),
              panel=function(x, ...){
              panel.xyplot(x, ...)
              panel.abline(v=0, lty=3)
@@ -1090,7 +1164,7 @@ if(analysis.type != "BCT") {
     dev.off()
     }
   if(write.svg.file == TRUE) {
-    svg(filename = paste(graph.filename,"%03d",".pdf",sep=""),
+    svg(filename = paste(graph.filename,"%03d",".svg",sep=""),
             width=plot.custom.width,height=plot.custom.height,
             pointsize=plot.font.size)
     }
@@ -1311,16 +1385,15 @@ cat("\n")
 cat("\n")
 
 
-# to follow the 'good practice' rules:
-detach(variables)
+
 
 # back to the original working directory
 setwd(original.path)
 
 # remove the only global variable that was used at some point
-if(exists("colLab") == TRUE) {
-  rm(colLab, envir = globalenv())
-}
+#if(exists("colLab") == TRUE) {
+#  rm(colLab, envir = globalenv())
+#}
 
 # return (tacitly) the value of the function 
 invisible(results.stylo)
