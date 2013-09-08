@@ -2,10 +2,15 @@
 ===========================
 
 
+== version 0.5.2, 2013/09/07
+ * CRAN-related issue with .Rbuildignore fixed
+ * network analysis support significantly improved
+ * improvements in man pages
+
 == version 0.5.1, 2013/08/07
  * bug fixes, minor improvements
  * different options for k-NN and SVM
- * submitted to CRAN
+ * submitted to CRAN, 
 
 == version 0.5.58, 2013/08/06
  * batch mode improved

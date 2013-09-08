@@ -32,7 +32,7 @@ Alexis, A., Craig, H., and Elliot, J. (2013). Language chunking,
 
 Eder, M. (2011). Style-markers in authorship attribution: a cross-language 
     study of the authorial fingerprint. "Studies in Polish Linguistics", 
-    6: 99-114. \url{http://www.unesco.uj.edu.pl/media/SPL-Vol.-65.pdf}.
+    6: 99-114. \url{http://www.wuj.pl/UserFiles/File/SPL\%206/6-SPL-Vol-6.pdf}.
 
 Eder, M. (2013). Mind your corpus: systematic errors in authorship
     attribution. "LLC: The Journal of Digital Scholarship in the Humanities"

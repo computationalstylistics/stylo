@@ -57,13 +57,13 @@ words/characters and combined into n-grams (if applicable).
 \examples{
 \dontrun{
 # to load file1.txt and file2.txt, stored in the subdirectory my.files:
-my.corpus = load.corpus(files = c("file1.txt", "file2.txt"),
+my.corpus = load.corpus.and.parse(files = c("file1.txt", "file2.txt"),
                         corpus.dir = "my.files")
 
 # to load all XML files from the current directory, while getting rid of
 # all markup tags in the file, and split the texts into consecutive 
 # word pairs (2-grams):
-my.corpus = load.corpus(files = list.files(pattern = "[.]xml$"),
+my.corpus = load.corpus.and.parse(files = list.files(pattern = "[.]xml$"),
                         markup.type = "xml", ngram.size = 2)
 }
 }

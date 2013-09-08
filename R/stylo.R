@@ -99,7 +99,6 @@ k.value = variables$k.value
 l.value = variables$l.value
 label.offset = variables$label.offset
 length.of.random.sample = variables$length.of.random.sample
-linkage = variables$linkage
 mfw.incr = variables$mfw.incr
 mfw.list.cutoff = variables$mfw.list.cutoff
 mfw.max = variables$mfw.max
@@ -138,6 +137,20 @@ write.png.file = variables$write.png.file
 write.svg.file = variables$write.svg.file
 z.scores.of.all.samples = variables$z.scores.of.all.samples
 # #############################################################################
+
+
+
+# variables not available on GUI (yet)
+
+# a. linkage algorighm
+linkage = variables$linkage
+
+# b. network analysis support
+network = variables$network
+network.tables = variables$network.tables
+network.type = variables$network.type
+linked.neighbors = variables$linked.neighbors
+edge.weights = variables$edge.weights
 
 
 
@@ -1187,7 +1200,8 @@ if(save.distance.tables == TRUE && exists("distance.table") == TRUE) {
 
 # writing the words (or features) actually used in the analysis
 if(save.analyzed.features == TRUE) {
-  cat(colnames(table.with.all.freqs[,1:mfw]),
+  list.of.features = colnames(table.with.all.freqs[,1:mfw])
+  cat(list.of.features,
      file=paste("features_analyzed_",mfw,"mfw_",current.culling,"c.txt",sep=""),
      sep="\n")
 }
@@ -1204,10 +1218,10 @@ if(save.analyzed.freqs == TRUE) {
 
 ##############################################
 ##############################################
-# consensus tree as a network: preparing Gephi input data
+# network analysis, stage I: preparing edges/nodes
 ##############################################
 
-if(exists("distance.table") == TRUE) {
+if((exists("distance.table") == TRUE) & (network == TRUE)) {
   distances = distance.table
   # next, we need to create an empty matrix of the same size as the dist table
   connections = matrix(data=0,nrow=length(distances[,1]),ncol=length(distances[1,]))
@@ -1215,11 +1229,21 @@ if(exists("distance.table") == TRUE) {
   for(i in 1: length(distances[,1])) {
     # establish a link between two nearest neighbors by assigning 3,
     # 2nd runner-up will get 2, and 3rd runner-up will get 1
-    connections[i,(order(distances[i,])[2])] = 3
-    connections[i,(order(distances[i,])[3])] = 2
-    connections[i,(order(distances[i,])[4])] = 1
+    # original implementation:
+    #connections[i,(order(distances[i,])[2])] = 3
+    #connections[i,(order(distances[i,])[3])] = 2
+    #connections[i,(order(distances[i,])[4])] = 1
+    # 
+    for(k in 1:linked.neighbors) {
+      connections[i,(order(distances[i,])[k+1])] = linked.neighbors - k + 1
+    }
   }
-
+  # optionally, apply a transformation function to the links' weights
+  if(edge.weights == "quadratic") {
+    connections = connections^2
+  } else if(edge.weights == "log") {
+    connections = log(connections +1)
+  }
 all.connections = all.connections + connections
 }
 ##############################################
@@ -1246,41 +1270,101 @@ cat("\n")
 
 
 
-
 ######################################################
 ######################################################
-# network analysis: preparing a list of edges
+# network analysis, stage II: preparing a list of edges
 
-if(exists("distance.table") == TRUE) {
+if((exists("distance.table") == TRUE) & (network == TRUE)) {
   rownames(all.connections) = rownames(distances)
   colnames(all.connections) = colnames(distances)
 
-  edges=c()
-  for(i in 1:(length(all.connections[,1])) ) {
-    for(j in 1:(length(all.connections[1,])) ) {
-      from = rownames(all.connections)[i]
-      to = colnames(all.connections)[j]
-      # undirected, i.e. links "to" and "from" are summarized;
-      # it means that possible bias is partialy overcome
-      weight = all.connections[i,j] + all.connections[j,i]
-      # directed: it matters whether a given sample points or is poited
-#      weight = all.connections[i,j]
-      #
-      current.row = c(from, to, weight, "undirected")
-      #
-      # if there is a connection, record it in a common table
-      if(weight > 0) {
-        edges = rbind(edges, current.row)
+  if(network.tables == "edges") {
+    # only one table (list of edges) will be created;
+    # the simplest way to get a network in Gephi
+    edges=c()
+    for(i in 1:(length(all.connections[,1])) ) {
+      for(j in 1:(length(all.connections[1,])) ) {
+        from = rownames(all.connections)[i]
+        to = colnames(all.connections)[j]
+        if(network.type == "undirected") {
+          # undirected, i.e. links "to" and "from" are summarized;
+          # it means that possible bias is partialy overcome
+          weight = all.connections[i,j] + all.connections[j,i]
+          current.row = c(from, to, weight, "undirected")
+        } else {
+          # directed: it matters whether a given sample points or is poited
+          weight = all.connections[i,j]
+          current.row = c(from, to, weight, "directed")
+        }
+        # if there is a connection, record it in a common table
+        if(weight > 0) {
+          edges = rbind(edges, current.row)
+        }
       }
     }
+    #
+    # assigning column names and row names
+    colnames(edges) = c("Source","Target","Weight","Type")
+    rownames(edges) = c(1:length(edges[,1]))
+    # for some reason, the table has to be explicitly declared
+    edges = as.data.frame(edges)
+    # preparing a file name
+    edges.filename = paste(graph.filename,"EDGES.csv",sep="")
+    # writing to a file
+    write.csv(file=edges.filename,quote=F,edges)
+    #
+    #
+  } else {
+    # two tables (list of edges, list of nodes) will be created;
+    # this can be used with Gephi, and it is potentially more flexible
+    edges=c()
+    for(i in 1:(length(all.connections[,1])) ) {
+      for(j in 1:(length(all.connections[1,])) ) {
+        from = c(1:length(rownames(all.connections)))[i]
+        to = c(1:length(colnames(all.connections)))[j]
+        if(network.type == "undirected") {
+          # undirected, i.e. links "to" and "from" are summarized;
+          # it means that possible bias is partialy overcome
+          weight = all.connections[i,j] + all.connections[j,i]
+          # a trick to start counting naming the nodes from 0
+          current.row = c(from -1, to -1, weight, "undirected")
+        } else {
+          # directed: it matters whether a given sample points or is poited
+          weight = all.connections[i,j]
+          # a trick to start counting naming the nodes from 0
+          current.row = c(from -1, to -1, weight, "directed")
+        }
+        # if there is a connection, record it in a common table
+        if(weight > 0) {
+          edges = rbind(edges, current.row)
+        }
+      }
+    }
+    #
+    # assigning column names and row names
+    colnames(edges) = c("Source","Target","Weight","Type")
+    rownames(edges) = c(1:length(edges[,1]))
+    # for some reason, the table has to be explicitly declared
+    edges = as.data.frame(edges)
+    #
+    # preparing the table of nodes
+    node.id = c(1:length(rownames(all.connections))) -1
+    node.names = rownames(all.connections)
+    node.classes = gsub("_.*","",node.names)
+    node.classes.numeric = as.numeric(factor(gsub("_.*","",node.names)))
+    nodes = cbind(node.id,node.names,node.classes,node.classes.numeric)
+    colnames(nodes) = c("Id","Label","Classes","Group")
+    nodes = as.data.frame(nodes)
+    #
+    # preparing a file name (edges)
+    edges.filename = paste(graph.filename,"EDGES.csv",sep="")
+    # writing to a file (edges)
+    write.csv(file=edges.filename,quote=F,edges)
+    # preparing a file name (nodes)
+    nodes.filename = paste(graph.filename,"NODES.csv",sep="")
+    # writing to a file (nodes)
+    write.csv(file=nodes.filename,quote=F,nodes)
   }
-
-  colnames(edges) = c("Source","Target","Weight","Type")
-  rownames(edges) = c(1:length(edges[,1]))
-  edges = as.data.frame(edges)
-
-  edges.filename = paste(graph.filename,"EDGES.csv",sep="")
-  write.csv(file=edges.filename,quote=F,edges)
 }
 
 ######################################################
@@ -1355,7 +1439,8 @@ results.stylo = list()
 # elements that we want to add on this list
 variables.to.save = c("distance.table", "frequencies.0.culling",
                       "table.with.all.freqs", "table.with.all.zscores",
-                      "edges")
+                      "list.of.features",
+                      "all.connections", "edges", "nodes")
 # checking if they really exist; getting rid of non-existing ones:
 filtered.variables = ls()[ls() %in% variables.to.save]
 # adding them on the list

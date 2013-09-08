@@ -35,8 +35,8 @@ function(labels,col="colors") {
   if(col == "colors") {
     available.colors = rep(c("red","green","blue","black","orange","purple",
       "darkgrey","brown","maroon4","mediumturquoise","gold4", "deepskyblue",
-      "yellowgreen","grey","chartreuse4", "khaki", "navy", "palevioletred",
-      "greenyellow", "darkolivegreen4", "chocolate4"),10)
+      "greenyellow","grey","chartreuse4", "khaki", "navy", "palevioletred",
+      "darkolivegreen4", "chocolate4", "yellowgreen"),10)
     }
   # define a vector of gray tones, instead of colors
   if(col == "greyscale") {
