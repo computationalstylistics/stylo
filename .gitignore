@@ -4,5 +4,8 @@
 # Example code in package build process
 *-Ex.R
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 .DS_Store
