@@ -20,19 +20,23 @@ sampling.with.replacement = FALSE, features = "w", ngram.size = 1)
     (nothing will happen), \code{html} (all tags will be deleted as well 
     as HTML header), \code{xml} (TEI header, any text between <note> </note> 
     tags, and all the tags will be deleted), \code{xml.drama} (as above;
-    additionally, speaker's names will be deleted, or strings within the <speaker> </speaker> tags); 
+    additionally, speaker's names will be deleted, or strings within the 
+    <speaker> </speaker> tags), \code{xml.notitles} (as above; but, 
+    additionally, all the chapter/section (sub)titles will be deleted, 
+    or strings within each the <head> </head> tags); 
     see \code{delete.markup} for further details.}
-  \item{language}{an optional argument indicating the language of the texts analyzed; the values
-    that will affect the function's behavior are: \code{English.contr},
-    \code{English.all}, \code{Latin.corr} (see \code{txt.to.words.ext}
-    for explanation). The default value is \code{English}.}
+  \item{language}{an optional argument indicating the language of the texts 
+    analyzed; the values that will affect the function's behavior are: 
+    \code{English.contr}, \code{English.all}, \code{Latin.corr} (see 
+    \code{txt.to.words.ext} for explanation). The default value is \code{English}.}
   \item{sample.size}{desired size of samples, expressed in number of words;
     default value is 10,000.}
   \item{sampling}{one of three values: \code{no.sampling} (default), 
      \code{normal.sampling}, \code{random.sampling}. See \code{make.samples}
      for explanation.}
   \item{sampling.with.replacement}{optional argument which will be used only
-    if \code{random.sampling} was chosen; it specifies the method used to randomly harvest words from texts.}
+    if \code{random.sampling} was chosen; it specifies the method used to 
+    randomly harvest words from texts.}
   \item{features}{an option for specifying the desired type of features:
     \code{w} for words, \code{c} for characters (default: \code{w}). See
     \code{txt.to.features} for further details.}
