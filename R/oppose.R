@@ -275,7 +275,6 @@ split.sample = function(input.text) {
   # loading the file, splitting into pieces specified by regular expression;
   # here, all sequences between non-letter characters are assumed to be words:
   ### Linux, Mac
-  tokenized.sample = c(unlist(strsplit(input.text, "[^[:alpha:]]+")))
     if(Sys.info()[["sysname"]] == "Windows") { 
 	### Windows
 	tokenized.text = c(unlist(strsplit(input.text, "\\W+|_+",perl=T)))
