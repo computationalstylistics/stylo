@@ -297,7 +297,6 @@ txm.compatibility.mode = FALSE
 
 #######  NETWORK ANALYSIS OPTIONS  ######################################
 
-# linkage = ......
 
 # Network analysis is not available "just like this" from inside the 'stylo' package;
 # instead, it produces a table of edges (and, optionally, another table of nodes).
@@ -323,7 +322,7 @@ network.type = "undirected"  # directed|undirected
 linked.neighbors = 3
 
 # the connections' weights are differentiated: the nearest neighbor has the strongest
-# link, then comes the first runner-up, and so forth. The difference in between the 
+# link, then comes the first runner-up, and so forth. The difference between the 
 # assigned weights might be "linear" = 1, 2, 3, ..., n; "quadratic" = 1, 4, 9, ..., n^2; 
 # or "log" (logarithmic) = log(1+(1, 2, 3, ..., n))
 # 
@@ -401,7 +400,24 @@ culling.of.all.samples = TRUE
 outputfile = "final_results.txt"
 
 
+# Deeper integration with R
+#
+# From the ver. 0.5.3, input data might be passed as R object,
+# e.g. a corpus can be prepared (parsed) separately and attached at
+# some point. It needs to have a form of a list containing particular samples
+# and particular units (words, chars, POS tags) combined into n-grams.
+# Also, an existing vector of features (an R object) can be used.
+# If you have any table of frequencies stored in your R memory, you
+# can skip the entire step of corpus preparation.
+frequencies = NULL
+parsed.corpus = NULL
+features = NULL
 
+# what about the training and the test corpus?
+
+# relative/raw frequencies
+# in a vast majority of cases, relative freqs is the choice
+relative.frequencies = TRUE
 
 
 

@@ -152,8 +152,13 @@ network.type = variables$network.type
 linked.neighbors = variables$linked.neighbors
 edge.weights = variables$edge.weights
 
+# c. optional deeper integration with R
+frequencies = variables$frequencies
+parsed.corpus = variables$parsed.corpus
+features = variables$features
 
-
+# d. other options
+relative.frequencies = variables$relative.frequencies
 
 
 
@@ -290,15 +295,67 @@ if(write.jpg.file == TRUE || write.png.file == TRUE){
 
 
 # checking if an appropriate frequency table exists
-if(exists("frequencies.0.culling") == FALSE 
-              && file.exists("table_with_frequencies.txt") == FALSE ) {
-  use.existing.freq.tables = FALSE
+#if(exists("frequencies.0.culling") == FALSE 
+#              && file.exists("table_with_frequencies.txt") == FALSE ) {
+#  use.existing.freq.tables = FALSE
+#}
+
+
+# the following code needs to be rewritten!!!
+
+
+# Checking if the option "frequencies" has been used.
+#
+# Firstly, chcecking if an object longer than 1 element exists
+if(length(frequencies) > 1) {
+  # if yes, then checking if it is a table with values
+  if(is.matrix(frequencies) == TRUE | is.data.frame(frequencies) == TRUE) {
+    # if yes, then convert the table into a matrix (just in case)
+    frequencies = as.matrix(frequencies)
+    # link the table into the variable used for calculations
+    frequencies.0.culling = frequencies
+    # switch one of the initial options
+    use.existing.freq.tables = TRUE
+  } else {
+    cat("\n")
+    cat("You seem to have chosen an existing table with frequencies\n")
+    cat("Unfortunately, something is wrong: check if your variable\n")
+    cat("has a form of matrix/date frame\n")
+    cat("\n")
+    stop("Wrong format of the table of frequencies")
+  }
+  # additionally, checking if the table is long enough
+  if(length(frequencies[,1]) < 2 | length(frequencies[1,]) < 2 ) {
+    cat("\n")
+    cat("There is not enough samples and/or features to be analyzed.\n")
+    cat("Try to use tables of at least two rows by two columns.\n")
+    cat("\n")
+    stop("Wrong size of the table of frequencies")
+  }
+  # this option will crach eventually: frequencies=rbind(c(1,2,3),c(4,5,6))
+  # supposedly because of the rowname problem
+  # thus, another sanity check should be performed here
+  # if(blah, blah, blah)
 }
+# Secondly, checking if a table stored on a hard-drive can be used
+if(length(frequencies) == 1 & is.character(frequencies) == TRUE) {
+  # does the file exist? do you really want to use it?
+  if(file.exists(frequencies) == TRUE) {
+  # in the future, filename with frequencies will be set here
+  # so far, it must be "table_with_frequencies.txt"
+  } else {
+  # if there's no such a file, then don't try to use it
+  use.existing.freq.tables = FALSE
+  }
+}
+
+
+
 
 
 if(use.existing.freq.tables == TRUE) { 
       if(exists("frequencies.0.culling")) {
-      cat("\n", "using frequency table stored as variables...", "\n")
+      cat("\n", "using frequency table stored as a variable...", "\n")
         } else {
           cat("\n", "reading file with frequency table...", "\n")
           frequencies.0.culling = t(read.table("table_with_frequencies.txt"))
@@ -308,7 +365,7 @@ if(use.existing.freq.tables == TRUE) {
       corpus.filenames = rownames(frequencies.0.culling)
       #
       # checking whether an existing wordlist should be used
-      if (use.existing.wordlist == TRUE && file.exists("wordlist.txt") == TRUE){
+      if (use.existing.wordlist == TRUE & file.exists("wordlist.txt") == TRUE){
           cat("\n", "reading a wordlist from file...", "\n")
           mfw.list.of.all = scan("wordlist.txt",what="char",sep="\n")
           mfw.list.of.all = c(grep("^[^#]",mfw.list.of.all,value=TRUE))
@@ -346,7 +403,7 @@ if (interactive.files == TRUE) {
   # alternatively, one can use the files listed in "files_to_analyze.txt";
   # the listed files can be separated by spaces, tabs, or newlines
   if(use.custom.list.of.files == TRUE 
-      && file.exists("files_to_analyze.txt") == TRUE) { 
+      & file.exists("files_to_analyze.txt") == TRUE) { 
     # a message on the screen
     cat("\n")
     cat("external list of files will be used for uploading the corpus\n\n")
@@ -402,7 +459,23 @@ cat(paste("Performing no sampling (using entire text as sample)", "\n", sep=""))
 #################################################################
 #################################################################
 
-loaded.corpus = load.corpus.and.parse(files=corpus.filenames,
+
+
+if(length(parsed.corpus) > 0) {
+  if(is.list(parsed.corpus) == TRUE & length(parsed.corpus) > 1) {
+    loaded.corpus = parsed.corpus
+  } else {
+  cat("\n")
+  cat("The object you've specified as your corpus cannot be used.\n")
+  cat("It should be a list containing particular text samples\n")
+  cat("(vectors containing sequencies of words/n-grams or other features).\n")
+  cat("The samples (elements of the list) should have their names.\n")
+  cat("Alternatively, try to build your corpus from text files (default).\n")
+  cat("\n")
+  stop("Wrong corpus format")
+  } 
+} else {
+  loaded.corpus = load.corpus.and.parse(files=corpus.filenames,
                          corpus.dir=corpus.dir,
                          markup.type=corpus.format,
                          language=corpus.lang,
@@ -411,9 +484,13 @@ loaded.corpus = load.corpus.and.parse(files=corpus.filenames,
                          sampling.with.replacement=sampling.with.replacement,
                          features=analyzed.features,
                          ngram.size=ngram.size)
+}
+
+
 
 #################################################################
 #################################################################
+
 
 
 
@@ -448,7 +525,6 @@ wordlist.of.loaded.corpus = c()
     current.text = loaded.corpus[[file]]
     # putting samples together:
     wordlist.of.loaded.corpus = c(wordlist.of.loaded.corpus, current.text)
-#    cat(names(loaded.corpus[file]),"\t","tokenized successfully", "\n")
     }
 #
 # preparing a sorted frequency list of the whole set
@@ -496,7 +572,7 @@ if(dump.samples == TRUE){
 
 # preparing a huge table of all the frequencies for the whole corpus
 frequencies.0.culling = make.table.of.frequencies(corpus = loaded.corpus,
-                            words = mfw.list.of.all)
+                     words = mfw.list.of.all, relative = relative.frequencies)
 
 
 #################################################################

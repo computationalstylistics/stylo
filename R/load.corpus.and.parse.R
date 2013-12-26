@@ -1,6 +1,6 @@
 
 #################################################################
-# A high-level function that ties up a number of other functions responsible
+# A high-level function that ties a number of other functions responsible
 # for uploading texts, deleting markup, sampling, splitting into n-grams, etc.
 # It is build on top of a number of functions and thus it requires a large
 # number of arguments. See:

@@ -34,7 +34,7 @@ function(input.text,language="English") {
     # Of course, if your corpus is Cockney, you should edit the 
     # "([tsdm]|ll|ve|em|im)" statement accordingly.
     tokenized.text = gsub("([[:alpha:]])'([tsdm]|ll|ve|em|im)\\b","\\1^\\2",
-                            tokenized.text) #'
+                            tokenized.text) 
     # adding spaces around dashes (to distinguish dashes and hyphens)
     tokenized.text = gsub("[-]{2,5}"," -- ",tokenized.text)
     # depending on which option was swithed on, either the contractions are

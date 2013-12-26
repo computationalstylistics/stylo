@@ -129,6 +129,14 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
 # #############################################################################
 
 
+# d. other options
+relative.frequencies = variables$relative.frequencies
+
+
+
+
+
+
 
 
 
@@ -232,6 +240,13 @@ return(corr.attrib)
 }
 
 # #############################################################################
+
+
+
+
+
+
+
 
 
 
@@ -384,6 +399,7 @@ wordlist.of.primary.set = c()
     # putting samples together:
     wordlist.of.primary.set = c(wordlist.of.primary.set, current.text)
     cat(".")
+    if(file/25 == floor(file/25)) { cat("\n")} # a newline every 25th sample
     }
 # including words of the secondary set in the reference wordlist (if specified)
   if (reference.wordlist.of.all.samples == TRUE) {
@@ -395,6 +411,7 @@ wordlist.of.primary.set = c()
       # putting samples together:
       wordlist.of.secondary.set = c(wordlist.of.secondary.set, current.text)
     cat(".")
+    if(file/25 == floor(file/25)) { cat("\n")} # a newline every 25th sample
     }
   } else {
   wordlist.of.secondary.set = c()}
@@ -440,12 +457,14 @@ cat("\n")
 # preparing a huge table of all the frequencies for the training set
 freq.I.set.0.culling = make.table.of.frequencies(corpus = corpus.of.primary.set,
                             words = mfw.list.of.all,
-                            absent.sensitive=FALSE)
+                            absent.sensitive = FALSE,
+                            relative = relative.frequencies)
 
 # preparing a huge table of all the frequencies for the test set
 freq.II.set.0.culling = make.table.of.frequencies(corpus = corpus.of.secondary.set,
                             words = mfw.list.of.all,
-                            absent.sensitive=FALSE)
+                            absent.sensitive = FALSE,
+                            relative = relative.frequencies)
 
 #################################################################
 #################################################################

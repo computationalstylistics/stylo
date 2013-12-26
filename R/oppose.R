@@ -274,7 +274,6 @@ repeat{
 split.sample = function(input.text) {
   # loading the file, splitting into pieces specified by regular expression;
   # here, all sequences between non-letter characters are assumed to be words:
-  ### Linux, Mac
     if(Sys.info()[["sysname"]] == "Windows") { 
 	### Windows
 	tokenized.text = c(unlist(strsplit(input.text, "\\W+|_+",perl=T)))
@@ -282,7 +281,7 @@ split.sample = function(input.text) {
 	### Linux, Mac
 	tokenized.text = c(unlist(strsplit(input.text, "[^[:alpha:]]+")))
 	}
-  tokenized.sample = tokenized.sample[grep("[^[:digit:]]",tokenized.sample)]
+  tokenized.text = tokenized.text[grep("[^[:digit:]]",tokenized.text)]
 }
 
 
