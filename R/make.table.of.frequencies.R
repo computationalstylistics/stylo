@@ -69,7 +69,7 @@ function(corpus, words, absent.sensitive = TRUE, relative = TRUE) {
     # if any of the requested words was not found in the corpus, ...
     if( length(words[colSums(frequency.table) == 0]) > 0 ) {
       # the word in question will be listed
-      cat("The following words could not be found in the corpus:\n")
+      cat("The following words/features could not be found in the corpus:\n")
       cat(words[colSums(frequency.table) == 0], "\n")
     }
     # filtering out the variables (words) that have not occurred
@@ -77,7 +77,7 @@ function(corpus, words, absent.sensitive = TRUE, relative = TRUE) {
   }
   # complain if the frequency table is empty
   if(length(frequency.table) == 0) {
-    stop("something must be wrong with the words you want to analyze")
+    stop("something must be wrong with the words/features you want to analyze")
   }
 # the result of the function
 return(frequency.table)

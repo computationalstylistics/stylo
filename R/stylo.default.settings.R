@@ -410,8 +410,14 @@ outputfile = "final_results.txt"
 # If you have any table of frequencies stored in your R memory, you
 # can skip the entire step of corpus preparation.
 frequencies = NULL
+training.frequencies = NULL
+test.frequencies = NULL
 parsed.corpus = NULL
+training.corpus = NULL
+test.corpus = NULL
 features = NULL
+
+
 
 # what about the training and the test corpus?
 
