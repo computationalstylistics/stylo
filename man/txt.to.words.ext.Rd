@@ -7,14 +7,20 @@ removing punctuation etc., and preserving some language-dependent
 idiosyncracies, such as common contractions in English.
 }
 \usage{
-txt.to.words.ext(input.text, language = "English")
+txt.to.words.ext(input.text, language = "English", splitting.rule = NULL)
 }
 \arguments{
-  \item{input.text}{a string of characters or text.}
-  \item{language}{an optional argument specifying the language of the texts analyzed. Values
-    that will affect the function's output are: \code{English.contr},
-    \code{English.all}, \code{Latin.corr} (their meaning is explained below).
-    The default value is \code{English}.}
+  \item{input.text}{a string of characters, usually a text.}
+  \item{language}{an optional argument specifying the language of the texts 
+    analyzed. Values that will affect the function's output are: 
+    \code{English.contr}, \code{English.all}, \code{Latin.corr} (their 
+    meaning is explained below). The default value is \code{English}.}
+  \item{splitting.rule}{if you are not satisfied with the default language
+    settings (or your input string of characters is not a regular text,
+    but a sequence of, say, dance movements represented using symbolic signs),
+    you can indicate your custom splitting regular expression here. This
+    option will overwrite the above language settings. For further details,
+    refer to \code{help(txt.to.words)}.}
 }
 \details{
 Function for splitting a given input text into single words (chains 

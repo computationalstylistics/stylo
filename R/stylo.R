@@ -10,7 +10,12 @@
 # #################################################
 
 stylo <-
-function(gui = TRUE, path = "", corpus.dir = "corpus", ...) {
+function(gui = TRUE, 
+         frequencies = NULL,
+         parsed.corpus = NULL,
+         features = NULL,
+         path = NULL, 
+         corpus.dir = "corpus", ...) {
 
 
 
@@ -20,11 +25,6 @@ passed.arguments = list(...)
 
 
 
-# this is needed at some point; in next versions, it should be 
-# removed from here
-all.connections = 0
-
-
 
 
 # changing working directory (if applicable)
@@ -32,22 +32,22 @@ all.connections = 0
 # first of all, retrieve the current path name
 original.path = getwd()
 # then check if anywone wants to change the working dir
-if(is.character(path) == TRUE & nchar(path) > 0) {
+if(is.character(path) == TRUE & length(path) > 0) {
   # checking if the desired file exists and if it is a directory
   if(file.exists(path) == TRUE & file.info(path)[2] == TRUE) {
-  # if yes, then set the new working directory
-  setwd(path)
+    # if yes, then set the new working directory
+    setwd(path)
   } else {
-  # otherwise, stop the script
-  stop("there is no directory ", getwd(), "/", path)
+    # otherwise, stop the script
+    stop("there is no directory ", getwd(), "/", path)
   }
 } else {
-# if the argument was empty, then relax
-cat("using current directory...\n")
+  # if the argument was empty, then relax
+  cat("using current directory...\n")
 }
 
 if(is.character(corpus.dir) == FALSE | nchar(corpus.dir) == 0) {
-corpus.dir = "corpus"
+  corpus.dir = "corpus"
 }
 
 
@@ -62,7 +62,7 @@ variables = stylo.default.settings(...)
 # (it absorbes the arguments passed from command-line)
 if (gui == TRUE) {
   variables = gui.stylo(...)
-  } 
+} 
 
 
 
@@ -152,17 +152,9 @@ network.type = variables$network.type
 linked.neighbors = variables$linked.neighbors
 edge.weights = variables$edge.weights
 
-# c. optional deeper integration with R
-frequencies = variables$frequencies
-training.frequencies = variables$training.frequencies
-test.frequencies = variables$test.frequencies
-parsed.corpus = variables$parsed.corpus
-training.corpus = variables$training.corpus
-test.corpus = variables$test.corpus
-features = variables$features
-
-# d. other options
+# newly-added options
 relative.frequencies = variables$relative.frequencies
+splitting.rule = variables$splitting.rule
 
 
 
@@ -250,16 +242,20 @@ if(txm.compatibility.mode == TRUE) {
   }
 ###############################################################################
 # sanity check: if an appropriate argument has been used, pipe it to "frequencies"
-  if( length(frequencies) == 0 & length(training.frequencies) > 0 ) {
-    frequencies = training.frequencies
-  }
-  if( length(frequencies) == 0 & length(test.frequencies) > 0 ) {
-    frequencies = test.frequencies
-  }
+#  if( length(frequencies) == 0 & length(training.frequencies) > 0 ) {
+#    frequencies = training.frequencies
+#  }
+#  if( length(frequencies) == 0 & length(test.frequencies) > 0 ) {
+#    frequencies = test.frequencies
+#  }
 ###############################################################################
 
 
 
+
+
+# Network analysis: variable initialization
+all.connections = 0
 
 
 
@@ -442,8 +438,18 @@ corpus.exists = FALSE
       } else {
         # if everything is right, select the subset of columns from the table:
         frequencies = frequencies[,colnames(frequencies) %in% features]
-      }
+     }
   }
+
+
+  # If no custom features were chosen, take them from the variables' names
+  if(features.exist == FALSE & corpus.exists == TRUE) {
+     features = colnames(frequencies)
+     # this is stupid, but this obsolete variable is needed somewhere (?)
+     mfw.list.of.all = features
+  }
+
+
 
   # Additionally, check if the table with frequencies is long enough
   if(corpus.exists == TRUE) {
@@ -461,7 +467,6 @@ corpus.exists = FALSE
 if(corpus.exists == TRUE) {
   frequencies.0.culling = frequencies
 }
-
 
 
 
@@ -553,13 +558,19 @@ if(corpus.exists == FALSE) {
           "Hey! The working directory should contain the subdirectory \"",
           corpus.dir,"\"\n",
           "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
+      # back to the original working directory
+      setwd(original.path)
+      # error message
       stop("Corpus prepared incorrectly")
     }
-    if(length(corpus.filenames) < 2 && sampling != "normal.sampling")  {
+    if(length(corpus.filenames) <2 & sampling != "normal.sampling")  {
       cat("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
           "Ho! The subdirectory \"",corpus.dir,"\" should contain at least 
           two text samples!\n",
           "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
+      # back to the original working directory
+      setwd(original.path)
+      # error message
       stop("Corpus prepared incorrectly")
     }
 
@@ -579,15 +590,16 @@ if(corpus.exists == FALSE) {
     }
 
   # loading text files, splitting, parsing, n-gramming, samping, and so forth
-  loaded.corpus = load.corpus.and.parse(files=corpus.filenames,
-                         corpus.dir=corpus.dir,
-                         markup.type=corpus.format,
-                         language=corpus.lang,
-                         sample.size=sample.size,
-                         sampling=sampling,
-                         sampling.with.replacement=sampling.with.replacement,
-                         features=analyzed.features,
-                         ngram.size=ngram.size)
+  loaded.corpus = load.corpus.and.parse(files = corpus.filenames,
+                         corpus.dir = corpus.dir,
+                         markup.type = corpus.format,
+                         language = corpus.lang,
+                         splitting.rule = splitting.rule,
+                         sample.size = sample.size,
+                         sampling = sampling,
+                         sampling.with.replacement = sampling.with.replacement,
+                         features = analyzed.features,
+                         ngram.size = ngram.size)
 }
 ###############################################################################
 
@@ -609,7 +621,7 @@ if(exists("frequencies.0.culling") == FALSE) {
 
   # the directory with corpus must contain enough texts;
   # if the number of text samples is lower than 2, the script will abort.
-  if( (length(corpus.filenames) < 2) & (sampling == "no.sampling") ) {
+  if( (length(loaded.corpus) < 2) & (sampling == "no.sampling") ) {
       cat("\n\n","your corpus folder seems to be empty!", "\n\n")
       stop("corpus error")
   }
@@ -662,7 +674,6 @@ if(exists("frequencies.0.culling") == FALSE) {
 
   }   # <----- conditional expr. if(features.exist == TRUE) terminates here
 
-
   # blank line on the screen
   cat("\n")
   
@@ -671,12 +682,25 @@ if(exists("frequencies.0.culling") == FALSE) {
 	  if (file.exists("sample_dump")){
 		# a dump-dir seems to have been created during a previous run
 		# tmp delete the dump-dir to remove all of its previous contents
-		unlink("sample_dump", recursive=TRUE) 
+		unlink("sample_dump", recursive = TRUE) 
 	  }
 	# (re)create the dump-dir
 	dir.create("sample_dump")
   }
 
+
+  # preparing a huge table of all the frequencies for the whole corpus
+  frequencies.0.culling = make.table.of.frequencies(corpus = loaded.corpus,
+                                               words = mfw.list.of.all, 
+                                               relative = relative.frequencies)
+
+
+  # writing the table with frequencies to a text file (it can be re-used!)
+  write.table( t(frequencies.0.culling), 
+              file = "table_with_frequencies.txt", 
+              sep = "\t",
+              row.names = TRUE,
+              col.names = TRUE)
 
 }
 ###############################################################################
@@ -697,12 +721,12 @@ if(exists("frequencies.0.culling") == FALSE) {
 # Finally, we want to save some of the variable values for later use;
 # they are automatically loaded into the GUI at the next run of the script.
 cat("",file="stylo_config.txt",append=F)
-var.name<-function(x) { 
-      if(is.character(x)==TRUE) {
-      cat(paste(deparse(substitute(x))," = \"",x,"\"", sep=""),file="stylo_config.txt",sep="\n",append=T)
-        } else {
-          cat(paste(deparse(substitute(x)),x, sep=" = "),file="stylo_config.txt",sep="\n",append=T) }
-        } 
+var.name <- function(x) { 
+      if(is.character(x) == TRUE) {
+        cat(paste(deparse(substitute(x))," = \"",x,"\"", sep=""),file="stylo_config.txt",sep="\n",append=T)
+      } else {
+        cat(paste(deparse(substitute(x)),x, sep=" = "),file="stylo_config.txt",sep="\n",append=T) }
+      } 
 var.name(corpus.format)
 var.name(corpus.lang)
 var.name(analyzed.features)
@@ -832,13 +856,20 @@ if (delete.pronouns == TRUE) {
       list.of.words.after.culling[!(list.of.words.after.culling %in% pronouns)]
 }
 
+
+# just in case: get rid of empty "words" (strings containing no characters)
+list.of.words.after.culling = 
+           list.of.words.after.culling[nchar(list.of.words.after.culling) >0]
+
+
 # the above list-of-not-culled to be applied to the wordlist:
 table.with.all.freqs = frequencies.0.culling[,c(list.of.words.after.culling)]
 
 # the names of the samples are passed to the frequency table
-if(use.existing.freq.tables == FALSE) {
-  rownames(table.with.all.freqs) = names(loaded.corpus)
-}
+#if(use.existing.freq.tables == FALSE) {
+#  rownames(table.with.all.freqs) = names(loaded.corpus)
+#}
+
   
 # #################################################
 # culling is done, but we are still inside the main loop
@@ -1367,9 +1398,10 @@ if(save.distance.tables == TRUE && exists("distance.table") == TRUE) {
 }
 
 # writing the words (or features) actually used in the analysis
+features.actually.used = colnames(table.with.all.freqs[,1:mfw])
+#
 if(save.analyzed.features == TRUE) {
-  list.of.features = colnames(table.with.all.freqs[,1:mfw])
-  cat(list.of.features,
+  cat(features.actually.used,
      file=paste("features_analyzed_",mfw,"mfw_",current.culling,"c.txt",sep=""),
      sep="\n")
 }
@@ -1513,7 +1545,7 @@ if((exists("distance.table") == TRUE) & (network == TRUE)) {
     colnames(edges) = c("Source","Target","Weight","Type")
     rownames(edges) = c(1:length(edges[,1]))
     # for some reason, the table has to be explicitly declared
-    edges = as.data.frame(edges)
+    edges = as.data.frame(edges, stringsAsFactors=FALSE)
     #
     # preparing the table of nodes
     node.id = c(1:length(rownames(all.connections))) -1
@@ -1522,7 +1554,7 @@ if((exists("distance.table") == TRUE) & (network == TRUE)) {
     node.classes.numeric = as.numeric(factor(gsub("_.*","",node.names)))
     nodes = cbind(node.id,node.names,node.classes,node.classes.numeric)
     colnames(nodes) = c("Id","Label","Classes","Group")
-    nodes = as.data.frame(nodes)
+    nodes = as.data.frame(nodes, stringsAsFactors=FALSE)
     #
     # preparing a file name (edges)
     edges.filename = paste(graph.filename,"EDGES.csv",sep="")
@@ -1535,6 +1567,10 @@ if((exists("distance.table") == TRUE) & (network == TRUE)) {
   }
 }
 
+# finally, removing the network if it does not really exist 
+if(length(all.connections) == 1) {
+ rm(all.connections)
+}
 ######################################################
 ######################################################
 
@@ -1595,20 +1631,102 @@ if(length(bootstrap.list) <= 2) {
 }}
 
 
-# #################################################
-# final cleaning
 
+
+
+
+# #################################################
+# praparing final resutls: building a class
+
+
+
+# something's wrong with the variable "features"; needs to be corrected above
+features = mfw.list.of.all
+# just to give it a more comprehensive name:
+if(exists("pca.results") == TRUE ) {
+  pca.coordinates = pca.results$x[,1:3]
+}
+if(exists("all.connections") == TRUE ) {
+  table.edges = all.connections
+}
+if(exists("edges") == TRUE & length(edges) >1) {
+  list.of.edges = edges
+}
+if(exists("nodes") == TRUE ) {
+  list.of.nodes = nodes
+}
+
+
+
+
+
+
+
+
+
+
+if(exists("distance.table")) {
+  attr(distance.table, "description") = "final distances between each pair of samples"
+  class(distance.table) = "stylo.data"
+}
+if(exists("frequencies.0.culling")) {
+  attr(frequencies.0.culling, "description") = "frequencies of words/features accross the corpus"
+  class(frequencies.0.culling) = "stylo.data"
+}
+if(exists("table.with.all.freqs")) {
+  attr(table.with.all.freqs, "description") = "frequencies of words/features accross the corpus"
+  class(table.with.all.freqs) = "stylo.data"
+}
+if(exists("table.with.all.zscores")) {
+  attr(table.with.all.zscores, "description") = "z-scored frequencies accross the corpus"
+  class(table.with.all.zscores) = "stylo.data"
+}
+if(exists("features")) {
+  attr(features, "description") = "features (e.g. words, n-grams, ...) applied to data"
+  class(features) = "stylo.data"
+}
+if(exists("features.actually.used")) {
+  attr(features.actually.used, "description") = "features (e.g. frequent words) actually analyzed"
+  class(features.actually.used) = "stylo.data"
+}
+if(exists("table.of.edges")) {
+  attr(table.of.edges, "description") = "edges of a network of stylometric similarities"
+# this does not work:
+#  class(table.of.edges) = "stylo.data"
+}
+if(exists("list.of.edges")) {
+  attr(list.of.edges, "description") = "edges of a network of stylometric similarities"
+# this does not work:
+#  class(list.of.edges) = "stylo.data"
+}
+if(exists("list.of.nodes")) {
+  attr(list.of.nodes, "description") = "nodes of a network of stylometric similarities"
+# this does not work:
+#  class(list.of.nodes) = "stylo.data"
+}
+if(exists("pca.coordinates")) {
+  attr(pca.coordinates, "description") = "PCA coordinates (PC1, PC2 and PC3)"
+# this does not work:
+#  class(pca.coordinates) = "stylo.data"
+}
 
 
 
 # creating an object (list) that will contain the final results,
 # tables of frequencies, etc.etc.
+# This list will be turned into the class "styloresults"
 results.stylo = list()
 # elements that we want to add on this list
-variables.to.save = c("distance.table", "frequencies.0.culling",
-                      "table.with.all.freqs", "table.with.all.zscores",
-                      "list.of.features",
-                      "all.connections", "edges", "nodes")
+variables.to.save = c("distance.table", 
+                      "frequencies.0.culling",
+                      "table.with.all.freqs", 
+                      "table.with.all.zscores",
+                      "features", 
+                      "features.actually.used",
+                      "pca.coordinates",
+                      "table.of.edges", 
+                      "list.of.edges", 
+                      "list.of.nodes")
 # checking if they really exist; getting rid of non-existing ones:
 filtered.variables = ls()[ls() %in% variables.to.save]
 # adding them on the list
@@ -1617,37 +1735,26 @@ for(i in filtered.variables) {
 }
 
 
-cat(head(features),"!!!!!!\n\n")
+
+# adding some information about the current function call
+# to the final list of results
+results.stylo$call = match.call()
+results.stylo$name = call("stylo")
 
 
-cat("\n")
-cat("Some results should have been written into a few files; you should\n")
-cat("be able to find them in your current (working) directory. These include\n")
-cat("a list of words used to build a table of frequencies, the table itself,\n")
-cat("a file containg recent configuration, etc.\n")
-cat("Advanced users: you can pipe the results to a variable, e.g.:\n")
-cat("    my.results = stylo()\n")
-cat("this will create a list containing some presumably interesting stuff.\n")
-cat("The list created, you can type, e.g.:\n")
-cat("    summary(my.results)\n")
-cat("to see which variables are stored there.\n")
-cat("\n")
-cat("\n")
-cat("for suggestions how to cite this software, type: citation(\"stylo\")\n")
-cat("\n")
-cat("\n")
-
+# This assings the list of final resutls to the class "stylo.resutls";
+# the same class will be used to handle the output of classify(),
+# rolling.delta() and oppose(). See the files "print.stylo.results.R"
+# and "summary.stylo.results.R" (no help files are provided, since
+# these two functions are not visible for the users).
+class(results.stylo) <- "stylo.results"
 
 
 
 # back to the original working directory
 setwd(original.path)
 
-# remove the only global variable that was used at some point
-#if(exists("colLab") == TRUE) {
-#  rm(colLab, envir = globalenv())
-#}
 
-# return (tacitly) the value of the function 
-invisible(results.stylo)
+# return the value of the function
+return(results.stylo)
 }

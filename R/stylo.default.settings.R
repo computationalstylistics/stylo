@@ -409,13 +409,13 @@ outputfile = "final_results.txt"
 # Also, an existing vector of features (an R object) can be used.
 # If you have any table of frequencies stored in your R memory, you
 # can skip the entire step of corpus preparation.
-frequencies = NULL
-training.frequencies = NULL
-test.frequencies = NULL
-parsed.corpus = NULL
-training.corpus = NULL
-test.corpus = NULL
-features = NULL
+#frequencies = NULL
+#training.frequencies = NULL
+#test.frequencies = NULL
+#parsed.corpus = NULL
+#training.corpus = NULL
+#test.corpus = NULL
+#features = NULL
 
 
 

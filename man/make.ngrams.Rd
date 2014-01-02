@@ -25,18 +25,17 @@ a sentence" are as follows: "th", "hi", "is", "s ", " i", "is", "s ",
 Word 2-grams: "this is", "is a", "a sentence". The issue whether using n-grams of items increases the accuracy of stylometric procedures has been heavily debated in the secondary literature (see the reference section for further reading). Eder (2013) e.g. shows that character n-grams are impressively robust for dealing with noisy corpora (in terms of a high number of misspelled characters).
 }
 \references{
-Alexis, A., Craig, H., and Elliot, J. (2013). Language chunking, 
+Alexis, A., Craig, H., and Elliot, J. (2014). Language chunking, 
     data sparseness, and the value of a long marker list: explorations with 
-    word n-grams and authorial attribution. "LLC: The Journal of Digital 
-    Scholarship in the Humanities" (advanced access; doi: 10.1093/llc/fqt028).
+    word n-grams and authorial attribution. "Literary and Linguistic
+    Computing", 29, advanced access (doi: 10.1093/llc/fqt028).
 
 Eder, M. (2011). Style-markers in authorship attribution: a cross-language 
     study of the authorial fingerprint. "Studies in Polish Linguistics", 
     6: 99-114. \url{http://www.wuj.pl/UserFiles/File/SPL\%206/6-SPL-Vol-6.pdf}.
 
 Eder, M. (2013). Mind your corpus: systematic errors in authorship
-    attribution. "LLC: The Journal of Digital Scholarship in the Humanities"
-    in press (doi: 10.1093/llc/fqt039).
+    attribution. "Literary and Linguistic Computing", 28(4): 603-14.
 
 Hoover, D. L. (2002). Frequent word sequences and statistical stylistics.
     "Literary and Linguistic Computing", 17: 157-80.

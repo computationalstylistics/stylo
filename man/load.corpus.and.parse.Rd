@@ -8,9 +8,12 @@ converting samples to n-grams, etc. It is build on top of a number of functions
 and thus it requires a large number of arguments. The only obligatory
 argument, however, is a vector containing the names of the files to be loaded.
 }
-\usage{load.corpus.and.parse(files, corpus.dir = "", markup.type = "plain",
-language = "English", sample.size = 10000, sampling = "no.sampling",
-sampling.with.replacement = FALSE, features = "w", ngram.size = 1)
+\usage{
+load.corpus.and.parse(files, corpus.dir = "", markup.type = "plain",
+                      language = "English", splitting.rule = NULL,
+                      sample.size = 10000, sampling = "no.sampling",
+                      sampling.with.replacement = FALSE, features = "w", 
+                      ngram.size = 1)
 }
 \arguments{
   \item{files}{a vector of file names.}
@@ -29,6 +32,12 @@ sampling.with.replacement = FALSE, features = "w", ngram.size = 1)
     analyzed; the values that will affect the function's behavior are: 
     \code{English.contr}, \code{English.all}, \code{Latin.corr} (see 
     \code{txt.to.words.ext} for explanation). The default value is \code{English}.}
+  \item{splitting.rule}{if you are not satisfied with the default language
+    settings (or your input string of characters is not a regular text,
+    but a sequence of, say, dance movements represented using symbolic signs),
+    you can indicate your custom splitting regular expression here. This
+    option will overwrite the above language settings. For further details,
+    refer to \code{help(txt.to.words)}.}
   \item{sample.size}{desired size of samples, expressed in number of words;
     default value is 10,000.}
   \item{sampling}{one of three values: \code{no.sampling} (default), 

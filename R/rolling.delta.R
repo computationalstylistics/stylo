@@ -1500,8 +1500,7 @@ for (n in primary.set.clean.text.names){
 }
 
 
-# The core code for the graphic output (if bootstrap consensus tree 
-# is specified, the plot will be initiated later)
+# Graphic output
 graph.title = gsub("(\\.txt$)||(\\.xml$)||(\\.html$)||(\\.htm$)","",filenames.secondary.set[1])
   if(display.on.screen == TRUE) {
     plot.current.task()
@@ -1537,4 +1536,65 @@ graph.title = gsub("(\\.txt$)||(\\.xml$)||(\\.html$)||(\\.htm$)","",filenames.se
 }
 
 
+
+
+
+
+
+# #################################################
+# praparing final resutls: building a class
+
+
+# some fake output
+variable.to.be.done = c(0,0,0,0)
+yet.another.variable = "nothing to be shown"
+
+
+
+if(exists("plot.indices")) {
+  attr(plot.indices, "description") = "final results [tbd]"
+}
+if(exists("plot.scores.all")) {
+  attr(plot.scores.all, "description") = "a list containing final results"
+}
+if(exists("variable.to.be.done")) {
+  attr(variable.to.be.done, "description") = "so far, there's nothing here"
+}
+if(exists("yet.another.variable")) {
+  attr(yet.another.variable, "description") = "another empty variable"
+}
+
+
+# creating an object (list) that will contain the final results,
+# [so far, there's nothing to show, alas...]
+# This list will be turned into the class "stylo.results"
+results.rolling.delta = list()
+# elements that we want to add on this list
+variables.to.save = c("plot.indices", 
+                      "plot.scores.all",
+                      "variable.to.be.done",
+                      "yet.another.variable")
+# checking if they really exist; getting rid of non-existing ones:
+filtered.variables = ls()[ls() %in% variables.to.save]
+# adding them on the list
+for(i in filtered.variables) {
+  results.rolling.delta[[i]] = get(i)
+}
+
+
+# adding some information about the current function call
+# to the final list of results
+results.rolling.delta$call = match.call()
+results.rolling.delta$name = call("rolling.delta")
+
+
+# This assings the list of final results to the class "stylo.resutls";
+# the same class will be used to handle the output of classify(),
+# rolling.delta() and oppose(). See the files "print.stylo.results.R"
+# and "summary.stylo.results.R" (no help files are provided, since
+# these two functions are not visible for the users).
+class(results.rolling.delta) <- "stylo.results"
+
+# return the value of the function 
+return(results.rolling.delta)
 }

@@ -8,12 +8,48 @@ and Nearest Shrunken Centroids (Jockers and Witten, 2010). Most of the options
 are derived from the \code{stylo} function.
 }
 \usage{
-classify(gui = TRUE, path = "", training.corpus.dir = "primary_set",
-test.corpus.dir = "secondary_set", ...)
+classify(gui = TRUE, training.frequencies = NULL, test.frequencies = NULL,
+         training.corpus = NULL, test.corpus = NULL, features = NULL, 
+         path = NULL, training.corpus.dir = "primary_set",
+         test.corpus.dir = "secondary_set", ...)
 }
 \arguments{
   \item{gui}{an optional argument; if switched on, a simple yet effective 
     graphical user interface (GUI) will appear. Default value is \code{TRUE}.}
+
+  \item{training.frequencies}{using this optional argument, one can 
+    load a custom table containing frequencies/counts for several variables, 
+    e.g. most frequent words, across a number of text samples (for the 
+    training set). It can be either 
+    an R object (matrix or data frame), or a filename containing 
+    tab-delimited data. If you use an R object, make sure that the rows
+    contain samples, and the columns - variables (words). If you use
+    an external file, the variables should go vertically (i.e. in rows):
+    this is because files containing vertically-oriented tables are far 
+    more flexible and easily editable using, say, Excel or any text editor. 
+    To flip your table horizontally/vertically use the generic function t().}
+
+  \item{test.frequencies}{using this optional argument, one can 
+    load a custom table containing frequencies/counts for the 
+    test set). Further details: immediately above.}
+
+  \item{training.corpus}{another option is to pass a pre-processed corpus
+    as an argument (here: the training set). It is assumed that this object 
+    is a list, each element of which is a vector containing one tokenized 
+    sample. The example shown below will give you some hints how to prepare 
+    such a corpus.}
+
+  \item{test.corpus}{if \code{training.corpus} is used, then you should also 
+    prepare a similar R object containing the test set.}
+
+  \item{features}{usually, a number of the most frequent features (words,
+    word n-grams, character n-grams) are extracted automatically from the
+    corpus, and they are used as variables for further analysis. However,
+    in some cases it makes sense to use a set of tailored features, e.g.
+    the words that are associated with emotions or, say, a specific subset 
+    of function words. This optional argument allows to pass either a
+    filename containing your custom list of features, or a vector 
+    (R object) of features to be assessed.}
 
   \item{path}{if not specified, the current directory will be used 
     for input/output procedures (reading files, outputting the results).}
@@ -70,8 +106,33 @@ Argamon, S. (2008). Interpreting Burrows's Delta: geometric and
 
 \examples{
 \dontrun{
-# standard usage:
+# standard usage (it builds a corpus from a collection of text files):
 classify()
+
+# loading word frequencies from two tab-delimited files:
+classify(training.frequencies = "table_with_training_frequencies.txt",
+         test.frequencies = "table_with_test_frequencies.txt")
+
+# using two existing sub-corpora (a list containing tokenized texts):
+txt1 = c("now", "i", "am", "alone", "o", "what", "a", "slave", "am", "i")
+txt2 = c("what", "do", "you", "read", "my", "lord")
+  setTRAIN = list(txt1, txt2)
+  names(setTRAIN) = c("hamlet_sample1","polonius_sample1")
+txt4 = c("to", "be", "or", "not", "to", "be")
+txt5 = c("though", "this", "be", "madness", "yet", "there", "is", "method")
+txt6 = c("the", "rest", "is", "silence")
+  setTEST = list(txt4, txt5, txt6)
+  names(setTEST) = c("hamlet_sample2", "polonius_sample2", "uncertain_1")
+classify(training.corpus = setTRAIN, test.corpus = setTEST)
+
+
+# using a custom set of features (words, n-grams) to be analyzed:
+my.selection.of.function.words = c("the", "and", "of", "in", "if", "into", 
+                                   "within", "on", "upon", "since")
+classify(features = my.selection.of.function.words)
+
+# loading a custom set of features (words, n-grams) from a file:
+classify(features = "wordlist.txt")
 
 # batch mode, custom name of corpus directories:
 my.test = classify(gui = FALSE, training.corpus.dir = "TrainingSet",
