@@ -29,7 +29,7 @@ function(files,
   # dropping file extensions from sample names
   names(loaded.corpus) = gsub("(\\.txt$)||(\\.xml$)||(\\.html$)||(\\.htm$)","",
                          names(loaded.corpus) )
-  # deleteing xml/html markup by applying the function "delete.markup"
+  # deleting xml/html markup by applying the function "delete.markup"
   loaded.corpus = lapply(loaded.corpus,delete.markup,markup.type=markup.type)
   # deleting punctuation, splitting into words
   cat("slicing input text into single words...\n")
