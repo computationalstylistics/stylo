@@ -2,12 +2,29 @@
 ===========================
 
 
+== version 0.5.3, 2014/01/2
+ * custom regular expressions to tokenize input texts
+ * support for external corpora or frequencies
+ * support for external set of features (e.g. frequent words)
+ * class "stylo.results" for formatting final results
+ * class "stylo.corpus" for formatting loaded corpora
+ * class "stylo.data" for formatting tables and vectors
+ * PCA coordinates piped to final results
+ * optional choice between relative/raw frequencies
+ * xml support improved (bug fixed)
+ * codepage bug in oppose() fixed
+
+== version 0.5.2, 2013/09/07
+ * CRAN-related issue with .Rbuildignore fixed
+ * network analysis support significantly improved
+ * improvements in man pages
+
 == version 0.5.1, 2013/08/07
  * bug fixes, minor improvements
  * different options for k-NN and SVM
- * submitted to CRAN
+ * submitted to CRAN for the first time (!)
 
-== version 0.5.58, 2013/08/06
+== version 0.5.0-58, 2013/08/06
  * batch mode improved
  * several clustering algorithms available
 

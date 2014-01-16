@@ -19,7 +19,7 @@
 # #################################################
 
 make.table.of.frequencies <- 
-function(corpus, words, absent.sensitive = TRUE) {
+function(corpus, words, absent.sensitive = TRUE, relative = TRUE) {
   # variable initialization
   frequency.table = c()
   # checking the format of input data (vector? list?); converting to a list
@@ -36,7 +36,13 @@ function(corpus, words, absent.sensitive = TRUE) {
     # loading the next sample (= next item) from the corpus
     current.sample = corpus[[i]]
     # preparing the frequency list of the current sample
-    raw.freqs = table(current.sample) * 100 / length(current.sample)
+    if(relative == TRUE) {
+      # either relative frequencies...
+      raw.freqs = table(current.sample) * 100 / length(current.sample)
+    } else {
+      # ...or raw frequencies
+      raw.freqs = table(current.sample)
+    }
     # adjusting the frequencies to the list of words passed as an argument
     current.vector.of.freqs = raw.freqs[words]
     # taking the names (sc. words) from the reference list of words
@@ -46,6 +52,7 @@ function(corpus, words, absent.sensitive = TRUE) {
     # a short message on the screen (not applicable if there is only one text):
     if(length(corpus) > 1) {
       cat(".")
+      if(i/25 == floor(i/25)) { cat("\n")} # a newline every 25th sample
     }
   }
   cat("\n")
@@ -62,7 +69,7 @@ function(corpus, words, absent.sensitive = TRUE) {
     # if any of the requested words was not found in the corpus, ...
     if( length(words[colSums(frequency.table) == 0]) > 0 ) {
       # the word in question will be listed
-      cat("The following words could not be found in the corpus:\n")
+      cat("The following words/features could not be found in the corpus:\n")
       cat(words[colSums(frequency.table) == 0], "\n")
     }
     # filtering out the variables (words) that have not occurred
@@ -70,7 +77,7 @@ function(corpus, words, absent.sensitive = TRUE) {
   }
   # complain if the frequency table is empty
   if(length(frequency.table) == 0) {
-    stop("something must be wrong with the words you want to analyze")
+    stop("something must be wrong with the words/features you want to analyze")
   }
 # the result of the function
 return(frequency.table)

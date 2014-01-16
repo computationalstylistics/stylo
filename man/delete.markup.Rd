@@ -9,13 +9,16 @@ delete.markup(input.text, markup.type = "plain")
 }
 
 \arguments{
-  \item{input.text}{any string of characters (e.g. vector) containing markup tags that have to be deleted.}
+  \item{input.text}{any string of characters (e.g. vector) containing markup 
+    tags that have to be deleted.}
   \item{markup.type}{any of the following values: \code{plain} 
     (nothing will happen), \code{html} (all <tags> will be deleted as well 
     as HTML header), \code{xml} (TEI header, all strings between <note> </note> 
     tags, and all the tags will be deleted), \code{xml.drama} (as above;
     but, additionally, speaker's names will be deleted, or strings within each
-    the <speaker> </speaker> tags).}
+    the <speaker> </speaker> tags), \code{xml.notitles} (as above; but, 
+    additionally, all the chapter/section (sub)titles will be deleted, 
+    or strings within each the <head> </head> tags).}
 }
 \details{
   This function needs to be used carefully: while a document formatted

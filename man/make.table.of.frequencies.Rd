@@ -4,7 +4,8 @@
 \description{Function that collects a collection of frequency lists and combines them in a single frequency table. To this end a number of rearrangements inside particular lists are carried out. The table is produced using a reference list of words (passed as an argument).
 }
 \usage{
-make.table.of.frequencies(corpus, words, absent.sensitive = TRUE)
+make.table.of.frequencies(corpus, words, absent.sensitive = TRUE, 
+  relative = TRUE)
 }
 \arguments{
 \item{corpus}{textual data: either a corpus (represented as a list), or 
@@ -20,6 +21,7 @@ containing 0 values across all samples, will be excluded. However,
 in some cases this is important to keep all the variables regardless 
 of their values. This is e.g. the case when comparing two corpora: even if a given 
 word did not occur in corpus A, it might be present in corpus B. In short: whenever you perform any analysis involving two or multiple sets of texts, switch this option to \code{FALSE}.}
+\item{relative}{when this argument is switched to \code{TRUE} (default), relative frequencies are computed instead of raw frequencies.}
 }
 \author{Maciej Eder}
 

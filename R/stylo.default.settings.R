@@ -293,8 +293,43 @@ txm.compatibility.mode = FALSE
 
 
 
-# the variables are now ready to use
-# ###################################################################
+
+
+#######  NETWORK ANALYSIS OPTIONS  ######################################
+
+
+# Network analysis is not available "just like this" from inside the 'stylo' package;
+# instead, it produces a table of edges (and, optionally, another table of nodes).
+
+# An output file (or files) will be generated when this option is set TRUE;
+# if this is set FALSE, next options are immaterial
+network = FALSE
+
+# Output format: either one table (edges), or two (edges and nodes);
+# "edges" | "both"
+network.tables = "edges"
+
+# When "undirected" type of network is chosen (default), then the connections 'from'
+# and 'to' are counted together (they are neither distinguished nor differentiated).
+# When "directed" network is chosen, then the incoming connections and the outcoming
+# ones are counted separately
+network.type = "undirected"  # directed|undirected
+
+# If this value is set to 1, then a link between a given sample and its nearest 
+# neighbor is established; when it is set to 2, two neighbors are connected 
+# (the nearest neighbor and the firs runner-up), etc. Default value is 3, which means
+# that the nearest neighbor and two runners-up are taken into consideration
+linked.neighbors = 3
+
+# the connections' weights are differentiated: the nearest neighbor has the strongest
+# link, then comes the first runner-up, and so forth. The difference between the 
+# assigned weights might be "linear" = 1, 2, 3, ..., n; "quadratic" = 1, 4, 9, ..., n^2; 
+# or "log" (logarithmic) = log(1+(1, 2, 3, ..., n))
+# 
+edge.weights = "linear" # "linear", "log", "quadratic"
+
+
+
 
 
 
@@ -365,7 +400,30 @@ culling.of.all.samples = TRUE
 outputfile = "final_results.txt"
 
 
+# Deeper integration with R
+#
+# From the ver. 0.5.3, input data might be passed as R object,
+# e.g. a corpus can be prepared (parsed) separately and attached at
+# some point. It needs to have a form of a list containing particular samples
+# and particular units (words, chars, POS tags) combined into n-grams.
+# Also, an existing vector of features (an R object) can be used.
+# If you have any table of frequencies stored in your R memory, you
+# can skip the entire step of corpus preparation.
+#frequencies = NULL
+#training.frequencies = NULL
+#test.frequencies = NULL
+#parsed.corpus = NULL
+#training.corpus = NULL
+#test.corpus = NULL
+#features = NULL
 
+
+
+# what about the training and the test corpus?
+
+# relative/raw frequencies
+# in a vast majority of cases, relative freqs is the choice
+relative.frequencies = TRUE
 
 
 

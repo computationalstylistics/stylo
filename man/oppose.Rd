@@ -9,7 +9,7 @@ the words significantly avoided by the former when compared to another set of te
 }
 \usage{
 oppose(gui = TRUE, path = "", primary.corpus.dir = "primary_set",
-secondary.corpus.dir = "secondary_set", test.corpus.dir = "test_set")
+       secondary.corpus.dir = "secondary_set", test.corpus.dir = "test_set")
 }
 \arguments{
   \item{gui}{an optional argument; if switched on, a simple yet effective 

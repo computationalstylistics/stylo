@@ -38,5 +38,13 @@ function(files, corpus.dir = "") {
     loaded.corpus[[file]] = current.file
   }
   setwd(original.path)
+  
+  # assigning a class
+  class(loaded.corpus) = "stylo.corpus"
+  # adding some information about the current function call
+  # to the final list of results
+  attr(loaded.corpus, "call") = match.call()
+
+# returning the value
 return(loaded.corpus)
 }

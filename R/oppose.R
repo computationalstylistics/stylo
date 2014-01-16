@@ -274,8 +274,6 @@ repeat{
 split.sample = function(input.text) {
   # loading the file, splitting into pieces specified by regular expression;
   # here, all sequences between non-letter characters are assumed to be words:
-  ### Linux, Mac
-  tokenized.sample = c(unlist(strsplit(input.text, "[^[:alpha:]]+")))
     if(Sys.info()[["sysname"]] == "Windows") { 
 	### Windows
 	tokenized.text = c(unlist(strsplit(input.text, "\\W+|_+",perl=T)))
@@ -283,7 +281,7 @@ split.sample = function(input.text) {
 	### Linux, Mac
 	tokenized.text = c(unlist(strsplit(input.text, "[^[:alpha:]]+")))
 	}
-  tokenized.sample = tokenized.sample[grep("[^[:digit:]]",tokenized.sample)]
+  tokenized.text = tokenized.text[grep("[^[:digit:]]",tokenized.text)]
 }
 
 
@@ -1331,12 +1329,56 @@ if (classification == TRUE && method != "box.plot") {
 
 
 
-# creating an object (list) that will contain the final results,
-# tables of frequencies, etc.etc.
+
+# #################################################
+# praparing final resutls: building a class
+
+
+# renaming some of the variables (for the sake of attractiveness)
+if(exists("words.preferred.by.primary.author")) {
+  words.preferred = words.preferred.by.primary.author
+}
+if(exists("words.avoided.by.primary.author")) {
+  words.avoided = words.avoided.by.primary.author
+}
+
+# some fake output
+variable.to.be.done = c(0,0,0,0)
+yet.another.variable = "nothing to be shown"
+
+
+
+
+if(exists("words.preferred")) {
+  attr(words.preferred, "description") = "features (words) preferred in the primary set"
+  class(words.preferred) = "stylo.data"
+}
+if(exists("words.avoided")) {
+  attr(words.avoided, "description") = "features (words) avoided in the primary set"
+  class(words.avoided) = "stylo.data"
+}
+if(exists("classification.results")) {
+  attr(classification.results, "description") = "so far, there's nothing here"
+}
+if(exists("variable.to.be.done")) {
+  attr(variable.to.be.done, "description") = "so far, there's nothing here"
+}
+if(exists("yet.another.variable")) {
+  attr(yet.another.variable, "description") = "another empty variable"
+}
+
+
+
+
+
+
+# Creating an object (list) that will contain the final results,
+# including the preferred and avoided words
+# This list will be turned into the class "stylo.results"
 results.oppose = list()
 # elements that we want to add on this list
-variables.to.save = c("words.preferred.by.primary.author",
-                      "words.avoided.by.primary.author",
+variables.to.save = c("words.preferred",
+                      "words.avoided",
                       "classification.results")
 # checking if they really exist; getting rid of non-existing ones:
 filtered.variables = ls()[ls() %in% variables.to.save]
@@ -1347,27 +1389,19 @@ for(i in filtered.variables) {
 
 
 
-
-cat("\n")
-cat("Some results should have been written into a few files; you should\n")
-cat("be able to find them in your current (working) directory. These include\n")
-cat("a list of words significantly preferred in the primary set,\n")
-cat("words significantly avoided (or, preferred in the secondary set), etc.\n")
-cat("Advanced users: you can pipe the results to a variable, e.g.:\n")
-cat("    my.results = oppose()\n")
-cat("this will create a list containing some presumably interesting stuff.\n")
-cat("The list created, you can type, e.g.:\n")
-cat("    summary(my.results)\n")
-cat("to see which variables are stored there.\n")
-cat("\n")
-cat("\n")
-cat("for suggestions how to cite this software, type: citation(\"stylo\")\n")
-cat("\n")
-cat("\n")
+# adding some information about the current function call
+# to the final list of results
+results.oppose$call = match.call()
+results.oppose$name = call("oppose")
 
 
+# This assings the list of final results to the class "stylo.resutls";
+# the same class will be used to handle the output of classify(),
+# rolling.delta() and oppose(). See the files "print.stylo.results.R"
+# and "summary.stylo.results.R" (no help files are provided, since
+# these two functions are not visible for the users).
+class(results.oppose) <- "stylo.results"
 
-
-# return (tacitly) the value of the function 
-invisible(results.oppose)
+# return the value of the function
+return(results.oppose)
 }

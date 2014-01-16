@@ -52,7 +52,7 @@ Rybicki, J., Kestemont, M. and Hoover D. (2013). Collaborative authorship:
 
 }
 
-\author{Mike Kestemont, Jan Rybicki}
+\author{Mike Kestemont, Jan Rybicki, Maciej Eder}
 
 \seealso{
 \code{\link{stylo}}, \code{\link{classify}}, \code{\link{oppose}}

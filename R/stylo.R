@@ -10,7 +10,12 @@
 # #################################################
 
 stylo <-
-function(gui = TRUE, path = "", corpus.dir = "corpus", ...) {
+function(gui = TRUE, 
+         frequencies = NULL,
+         parsed.corpus = NULL,
+         features = NULL,
+         path = NULL, 
+         corpus.dir = "corpus", ...) {
 
 
 
@@ -20,11 +25,6 @@ passed.arguments = list(...)
 
 
 
-# this is needed at some point; in next versions, it should be 
-# removed from here
-all.connections = 0
-
-
 
 
 # changing working directory (if applicable)
@@ -32,22 +32,22 @@ all.connections = 0
 # first of all, retrieve the current path name
 original.path = getwd()
 # then check if anywone wants to change the working dir
-if(is.character(path) == TRUE & nchar(path) > 0) {
+if(is.character(path) == TRUE & length(path) > 0) {
   # checking if the desired file exists and if it is a directory
   if(file.exists(path) == TRUE & file.info(path)[2] == TRUE) {
-  # if yes, then set the new working directory
-  setwd(path)
+    # if yes, then set the new working directory
+    setwd(path)
   } else {
-  # otherwise, stop the script
-  stop("there is no directory ", getwd(), "/", path)
+    # otherwise, stop the script
+    stop("there is no directory ", getwd(), "/", path)
   }
 } else {
-# if the argument was empty, then relax
-cat("using current directory...\n")
+  # if the argument was empty, then relax
+  cat("using current directory...\n")
 }
 
 if(is.character(corpus.dir) == FALSE | nchar(corpus.dir) == 0) {
-corpus.dir = "corpus"
+  corpus.dir = "corpus"
 }
 
 
@@ -62,7 +62,7 @@ variables = stylo.default.settings(...)
 # (it absorbes the arguments passed from command-line)
 if (gui == TRUE) {
   variables = gui.stylo(...)
-  } 
+} 
 
 
 
@@ -99,7 +99,6 @@ k.value = variables$k.value
 l.value = variables$l.value
 label.offset = variables$label.offset
 length.of.random.sample = variables$length.of.random.sample
-linkage = variables$linkage
 mfw.incr = variables$mfw.incr
 mfw.list.cutoff = variables$mfw.list.cutoff
 mfw.max = variables$mfw.max
@@ -141,6 +140,21 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
 
 
 
+# variables not available on GUI (yet)
+
+# a. linkage algorighm
+linkage = variables$linkage
+
+# b. network analysis support
+network = variables$network
+network.tables = variables$network.tables
+network.type = variables$network.type
+linked.neighbors = variables$linked.neighbors
+edge.weights = variables$edge.weights
+
+# newly-added options
+relative.frequencies = variables$relative.frequencies
+splitting.rule = variables$splitting.rule
 
 
 
@@ -210,7 +224,38 @@ if(txm.compatibility.mode == TRUE) {
 
 
 
+###############################################################################
+# Backward compatibility: if "use.existing.freq.tables" is switched on, then
+# a file with a frequency table will be used, provided that it exists
+  if(use.existing.freq.tables == TRUE 
+                            & file.exists("table_with_frequencies.txt") == TRUE ) { 
+    frequencies = "table_with_frequencies.txt"
+  } else {
+    use.existing.freq.tables = FALSE
+  }
+# Backward compatibility: if "use.existing.wordlist" is switched on, then
+# the file "wordlist.txt" be used, provided that it does exist
+  if(use.existing.wordlist == TRUE & file.exists("wordlist.txt") == TRUE ) { 
+    features = "wordlist.txt"
+  } else {
+    use.existing.wordlist = FALSE
+  }
+###############################################################################
+# sanity check: if an appropriate argument has been used, pipe it to "frequencies"
+#  if( length(frequencies) == 0 & length(training.frequencies) > 0 ) {
+#    frequencies = training.frequencies
+#  }
+#  if( length(frequencies) == 0 & length(test.frequencies) > 0 ) {
+#    frequencies = test.frequencies
+#  }
+###############################################################################
 
+
+
+
+
+# Network analysis: variable initialization
+all.connections = 0
 
 
 
@@ -276,235 +321,395 @@ if(write.jpg.file == TRUE || write.png.file == TRUE){
 # created from scratch.
 
 
-# checking if an appropriate frequency table exists
-if(exists("frequencies.0.culling") == FALSE 
-              && file.exists("table_with_frequencies.txt") == FALSE ) {
-  use.existing.freq.tables = FALSE
-}
 
-
-if(use.existing.freq.tables == TRUE) { 
-      if(exists("frequencies.0.culling")) {
-      cat("\n", "using frequency table stored as variables...", "\n")
-        } else {
-          cat("\n", "reading file with frequency table...", "\n")
-          frequencies.0.culling = t(read.table("table_with_frequencies.txt"))
-          cat("\n", "frequency table loaded successfully", "\n\n")
-        }
-      # extracting names of the texts
-      corpus.filenames = rownames(frequencies.0.culling)
-      #
-      # checking whether an existing wordlist should be used
-      if (use.existing.wordlist == TRUE && file.exists("wordlist.txt") == TRUE){
-          cat("\n", "reading a wordlist from file...", "\n")
-          mfw.list.of.all = scan("wordlist.txt",what="char",sep="\n")
-          mfw.list.of.all = c(grep("^[^#]",mfw.list.of.all,value=TRUE))
-          #
-          # adjusting the size of the frequency table according to the existing wordlist
-          frequencies.0.culling = 
-                       frequencies.0.culling[,colnames(frequencies.0.culling) 
-                       %in% mfw.list.of.all]
+###############################################################################
+# Checking if the argument "features" has been used
+#
+# variable initialization:
+features.exist = FALSE
+#
+  # Firstly, checking if the variable has at least two elements
+  if(length(features) > 1) {
+      # if yes, then checking whether it is a vector
+      if(is.vector(features) == TRUE) {
+        # if yes, then convert the above object into characters, just in case
+        features = as.character(features)
+        # link the table into the variable used for calculations
+        mfw.list.of.all = features
       } else {
-          # the wordlist will be created from the existing frequency tables
-          mfw.list.of.all = colnames(frequencies.0.culling)
-          # some comments into the file containing the wordlist
-          cat("# This file contains the words that were used in the table",
-          "# of frequencies uploaded from an external file. The current list",
-          "# can be used for the next tasks, and for this purpose it can be",
-          "# manually revised, edited, deleted, culled, etc.", 
-          "# You can either delete unwanted words, or mark them with \"#\"",
-          "# -----------------------------------------------------------------",
-          "",
-          file="wordlist.txt", sep="\n")
-          # the current wordlist into a file
-          cat(mfw.list.of.all, file="wordlist.txt", sep="\n",append=F)
-        }
-# if the existing table will not be used, then begin producing the new table
-  } else {
-#
-# Retrieving the names of texts
-#
-# first, it's possible to choose the files manually
-if (interactive.files == TRUE) {
-    setwd(corpus.dir)
-  corpus.filenames = basename(tk_choose.files(default = "", caption = "Select at least 2 files", multi = TRUE))
-  setwd("..")
-} else {
-  # alternatively, one can use the files listed in "files_to_analyze.txt";
-  # the listed files can be separated by spaces, tabs, or newlines
-  if(use.custom.list.of.files == TRUE 
-      && file.exists("files_to_analyze.txt") == TRUE) { 
-    # a message on the screen
-    cat("\n")
-    cat("external list of files will be used for uploading the corpus\n\n")
-    # retrieving the filenames from a file
-    corpus.filenames = scan("files_to_analyze.txt",what="char",sep="\n",quiet=T)
-    # getting rid of spaces and/or tabs
-    corpus.filenames = unlist(strsplit(corpus.filenames,"[ \t]+"))
-      # checking whether all the files indicated on the list really exist
-      if( length(setdiff(corpus.filenames,list.files(corpus.dir))) > 0 ){
-        # if not, then sent a message and list the suspicious filenames
-        cat("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
-        cat("the following files have not been found:\n")
-        cat(setdiff(corpus.filenames, list.files(corpus.dir)),"\n\n")
-        cat("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
-        # use only those files that match
-        corpus.filenames = intersect(corpus.filenames, list.files(corpus.dir))
+        cat("\n")
+        cat("You seem to have chosen an existing set of features\n")
+        cat("Unfortunately, something is wrong: check if your variable\n")
+        cat("has a form of vector\n")
+        cat("\n")
+        stop("Wrong format: a vector of features was expected")
       }
+    # selecting the above vector as a valid set of features
+    features.exist = TRUE
+  }
+  # Secondly, checking if the variable has exactly one element;
+  # presumably, this is a file name where a list of words is stored
+  if(length(features) == 1) {
+    # to prevent using non-letter characters (e.g. integers)
+    features = as.character(features) 
+      # does the file exist? 
+      if(file.exists(features) == TRUE) {
+        # file with a vector of features will be loaded
+        cat("\n", "reading a custom set of features from a file...", "\n",sep="")
+        # reading a file: newlines are supposed to be delimiters
+        features = scan(features,what="char",sep="\n")
+        # getting rid of the lines beginning with the "#" char
+        features = c(grep("^[^#]",features,value=TRUE))
+      } else {
+        # if there's no such a file, then don't try to use it
+        cat("\n", "file \"",features, "\" could not be found\n",sep="")
+        stop("Wrong file name")
+      }
+    # selecting the above vector as a valid set of features
+    features.exist = TRUE
+  } 
+###############################################################################
+
+
+
+
+
+###############################################################################
+# Checking if the argument "frequencies" has been used
+# variable initialization:
+corpus.exists = FALSE
+#
+  # Firstly, checking if the variable has at least two elements
+  if(length(frequencies) > 1) {
+      # if yes, then checking whether it is a table or matrix
+      if(is.matrix(frequencies) == TRUE | is.data.frame(frequencies) == TRUE) {
+        # if yes, then convert the above object into a matrix (just in case)
+        frequencies = as.matrix(frequencies)
+      } else {
+        cat("\n")
+        cat("You seem to have chosen an existing table with frequencies\n")
+        cat("Unfortunately, something is wrong: check if your variable\n")
+        cat("has a form of matrix/data frame\n")
+        cat("\n")
+        stop("Wrong format of the table of frequencies")
+      }
+      # this code makes sure that the table has variables' names
+      if(length(colnames(frequencies)) == 0) {
+        colnames(frequencies) = paste("var",1:length(frequencies[1,]),sep="_")
+      }
+      # this code makes sure that the table has samples' names
+      if(length(rownames(frequencies)) == 0) {
+        rownames(frequencies) = paste("sample",1:length(frequencies[,1]),sep="_")
+      }
+    # selecting the above matrix as a valid corpus
+    corpus.exists = TRUE
+  }
+  # Secondly, checking if the variable has exactly one element;
+  # presumably, this is a file name where a table is stored
+  if(length(frequencies) == 1) {
+    # to prevent using non-letter characters (e.g. integers)
+    frequencies = as.character(frequencies) 
+      # does the file exist?
+      if(file.exists(frequencies) == TRUE) {
+        # file with frequencies will be loaded
+        cat("\n", "reading a file containing frequencies...", "\n",sep="")
+        frequencies = t(read.table(frequencies))
+      } else {
+        # if there's no such a file, then don't try to use it
+        cat("\n", "file \"",frequencies, "\" could not be found\n",sep="")
+        stop("Wrong file name")
+      }
+    # selecting the above matrix as a valid corpus
+    corpus.exists = TRUE
+  } 
+
+
+  # If a custom set of features was indicated, try to pick the matching variables only
+  if(features.exist == TRUE & corpus.exists == TRUE) {
+      # checking if the chosen features do match the columns of the table
+      if(length(grep("TRUE",colnames(frequencies) %in% features)) < 2) {
+        cat("The features you want to analyze do not match the variables' names:\n")
+        cat("\n")
+        cat("Available features:",head(colnames(frequencies)), "...\n")
+        cat("Chosen features:", head(features), "...\n")
+        cat("\n")
+        cat("Check the rotation of your table and the names of its rows and columns.\n")
+        stop("Input data mismatch")
+      } else {
+        # if everything is right, select the subset of columns from the table:
+        frequencies = frequencies[,colnames(frequencies) %in% features]
+     }
+  }
+
+
+  # If no custom features were chosen, take them from the variables' names
+  if(features.exist == FALSE & corpus.exists == TRUE) {
+     features = colnames(frequencies)
+     # this is stupid, but this obsolete variable is needed somewhere (?)
+     mfw.list.of.all = features
+  }
+
+
+
+  # Additionally, check if the table with frequencies is long enough
+  if(corpus.exists == TRUE) {
+    if(length(frequencies[,1]) < 2 | length(frequencies[1,]) < 2 ) {
+      cat("\n")
+      cat("There is not enough samples and/or features to be analyzed.\n")
+      cat("Try to use tables of at least two rows by two columns.\n")
+      cat("\n")
+      stop("Wrong size of the table of frequencies")
+    }
+  }
+###############################################################################
+
+
+if(corpus.exists == TRUE) {
+  frequencies.0.culling = frequencies
+}
+
+
+
+
+# If the tables with frequencies could not loaded so far (for any reason), try to load
+# an external corpus (R object) passed as an argument 
+
+###############################################################################
+# Checking if the argument "parsed.corpus" has been used
+#
+
+  # checking if the variable "parsed.corpus" is empty
+  if(corpus.exists == FALSE & length(parsed.corpus) > 0) {
+      # if the variable was used, check its format
+      if(is.list(parsed.corpus) == TRUE & length(parsed.corpus) > 1) {
+          # checking if the samples have their names; otherwise, assign generic ones:
+          if( length(names(parsed.corpus)) != length(parsed.corpus) ) {
+            names(parsed.corpus) = paste("sample",1:length(parsed.corpus),sep="_")
+          }
+        # if everything is fine, use this variable as a valid corpus
+        loaded.corpus = parsed.corpus
+        cat("Corpus loaded successfully.\n")  
+        corpus.exists = TRUE
+      } else {
+        cat("\n")
+        cat("The object you've specified as your corpus cannot be used.\n")
+        cat("It should be a list containing particular text samples\n")
+        cat("(vectors containing sequencies of words/n-grams or other features).\n")
+        cat("The samples (elements of the list) should have their names.\n")
+        cat("Alternatively, try to build your corpus from text files (default).\n")
+        cat("\n")
+        stop("Wrong corpus format")
+      } 
+  }
+###############################################################################
+
+
+
+
+# If there's still no corpus available, then load and parse text files.
+# They are supposed to be stored in a specified corpus subfolder and to follow
+# a strictly defined naming convention.
+
+###############################################################################
+# Building a corpus from text files
+
+if(corpus.exists == FALSE) {
+
+  # Retrieving the names of texts.
+  # It's possible to choose the files manually (choose an appropriate option!)
+  if (interactive.files == TRUE) {
+    # go to corpus directory
+    setwd(corpus.dir)
+    corpus.filenames = basename(tk_choose.files(default = "", 
+                                caption = "Select at least 2 files", multi = TRUE))
+    # back to the working directory
+    setwd("..")
   } else {
-  corpus.filenames = list.files(corpus.dir)
+    # alternatively, one can use the files listed in "files_to_analyze.txt";
+    # the listed files can be separated by spaces, tabs, or newlines
+      if(use.custom.list.of.files ==TRUE & file.exists("files_to_analyze.txt") ==TRUE) { 
+        # a message on the screen
+        cat("\n")
+        cat("external list of files will be used for uploading the corpus\n\n")
+        # retrieving the filenames from a file
+        corpus.filenames = scan("files_to_analyze.txt",what="char",sep="\n",quiet=T)
+        # getting rid of spaces and/or tabs
+        corpus.filenames = unlist(strsplit(corpus.filenames,"[ \t]+"))
+          # checking whether all the files indicated on the list really exist
+          if( length(setdiff(corpus.filenames,list.files(corpus.dir))) > 0 ){
+            # if not, then sent a message and list the suspicious filenames
+            cat("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
+            cat("the following files have not been found:\n")
+            cat(setdiff(corpus.filenames, list.files(corpus.dir)),"\n\n")
+            cat("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
+            # use only those files that match
+            corpus.filenames = intersect(corpus.filenames, list.files(corpus.dir))
+          }
+      } else {
+        # Generic solution: all the files from a specified directory will be used
+        corpus.filenames = list.files(corpus.dir)
+      }
   }
-}
-#
-# Checking whether the required files and subdirectory exist
-if(file.exists(corpus.dir) == FALSE) {
-    cat("\n\n", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
-    "Hey! The working directory should contain the subdirectory \"",
-    corpus.dir,"\"\n",
-    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
-    stop("Corpus prepared incorrectly")
+
+  
+  # Checking whether the required files and subdirectory exist
+    if(file.exists(corpus.dir) == FALSE) {
+      cat("\n\n", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
+          "Hey! The working directory should contain the subdirectory \"",
+          corpus.dir,"\"\n",
+          "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
+      # back to the original working directory
+      setwd(original.path)
+      # error message
+      stop("Corpus prepared incorrectly")
     }
-if(length(corpus.filenames) < 2 && sampling != "normal.sampling")  {
-    cat("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
-    "Ho! The subdirectory \"",corpus.dir,"\" should contain at least 
-    two text samples!\n",
-    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
-    stop("Corpus prepared incorrectly")
+    if(length(corpus.filenames) <2 & sampling != "normal.sampling")  {
+      cat("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
+          "Ho! The subdirectory \"",corpus.dir,"\" should contain at least 
+          two text samples!\n",
+          "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
+      # back to the original working directory
+      setwd(original.path)
+      # error message
+      stop("Corpus prepared incorrectly")
     }
-#
-# loading the corpus from individual text files
-loaded.corpus = list()
-if (sampling == "normal.sampling"){
-  cat(paste("Performing sampling (using sample size = ", sample.size," words)\n", sep=""))
-} else if(sampling == "random.sampling"){
-  cat(paste("Performing random sampling (using random sample size = ", " words)\n", sep=""))
-} else if (sampling == "no.sampling"){
-cat(paste("Performing no sampling (using entire text as sample)", "\n", sep=""))
-} else {
-  stop("Exception raised: something is wrong with the sampling parameter you have specified...")
-}
 
 
-
-#################################################################
-#################################################################
-
-loaded.corpus = load.corpus.and.parse(files=corpus.filenames,
-                         corpus.dir=corpus.dir,
-                         markup.type=corpus.format,
-                         language=corpus.lang,
-                         sample.size=sample.size,
-                         sampling=sampling,
-                         sampling.with.replacement=sampling.with.replacement,
-                         features=analyzed.features,
-                         ngram.size=ngram.size)
-
-#################################################################
-#################################################################
-
-
-
-cat(paste("Total nr. of samples in the corpus: ", length(loaded.corpus), "\n"))
-
-
-# the directory with corpus must contain enough texts;
-# if the number of text samples is lower than 2, the script will abort.
-if( (length(corpus.filenames) < 2) & (sampling == "no.sampling") ) {
-    cat("\n\n","your corpus folder seems to be empty!", "\n\n")
-    stop("corpus error")
-}
-#
-#
-# We need a list of the most frequent words used in the current corpus, 
-# in descending order, without frequencies (just a list of words). It can be 
-# either loaded from a file (then set the option "use.existing.wordlist=TRUE"), 
-# or created by the code provided below:
-#
-if (use.existing.wordlist == TRUE && file.exists("wordlist.txt") == TRUE) {
-          cat("\n", "reading a wordlist from file...", "\n")
-          # loading the wordlist fil  e, changing to lowercase
-          mfw.list.of.all = tolower(scan("wordlist.txt",what="char",sep="\n"))
-          # getting rid of commented lines in the wordlist file
-          mfw.list.of.all = c(grep("^[^#]",mfw.list.of.all,value=TRUE))
-} else {
-# Extracting all the words used in the corpus
-#
-wordlist.of.loaded.corpus = c()
-  for (file in 1 : length(loaded.corpus)) {
-    # loading the next sample from the list "corpus.filenames"
-    current.text = loaded.corpus[[file]]
-    # putting samples together:
-    wordlist.of.loaded.corpus = c(wordlist.of.loaded.corpus, current.text)
-#    cat(names(loaded.corpus[file]),"\t","tokenized successfully", "\n")
+  # some messages on the screen
+    if (sampling == "normal.sampling"){
+      cat(paste("Performing sampling (using sample size = ", sample.size,
+            " words)\n", sep=""))
+    } else if(sampling == "random.sampling"){
+      cat(paste("Performing random sampling (using random sample size = ", 
+            " words)\n", sep=""))
+    } else if (sampling == "no.sampling"){
+      cat(paste("Performing no sampling (using entire text as sample)", "\n", sep=""))
+    } else {
+      stop("Exception raised: something is wrong with the sampling parameter you have 
+            specified...")
     }
-#
-# preparing a sorted frequency list of the whole set
-mfw.list.of.all = sort(table(c(wordlist.of.loaded.corpus)),decreasing=T)
-  # if the whole list is long, then cut off the tail, as specified in the GUI 
-  # by the cutoff value
-  if (length(mfw.list.of.all) > mfw.list.cutoff) {
-    mfw.list.of.all = mfw.list.of.all[1:mfw.list.cutoff]
+
+  # loading text files, splitting, parsing, n-gramming, samping, and so forth
+  loaded.corpus = load.corpus.and.parse(files = corpus.filenames,
+                         corpus.dir = corpus.dir,
+                         markup.type = corpus.format,
+                         language = corpus.lang,
+                         splitting.rule = splitting.rule,
+                         sample.size = sample.size,
+                         sampling = sampling,
+                         sampling.with.replacement = sampling.with.replacement,
+                         features = analyzed.features,
+                         ngram.size = ngram.size)
+}
+###############################################################################
+
+
+
+
+# At this point, a corpus SHOULD be available. If there's still no frequency
+# table, it will be build at this stage
+
+###############################################################################
+# building the table of frequencies
+
+if(exists("frequencies.0.culling") == FALSE) {
+
+  # a message
+  cat("\n")
+  cat("Total nr. of samples in the corpus: ", length(loaded.corpus), "\n")
+
+
+  # the directory with corpus must contain enough texts;
+  # if the number of text samples is lower than 2, the script will abort.
+  if( (length(loaded.corpus) < 2) & (sampling == "no.sampling") ) {
+      cat("\n\n","your corpus folder seems to be empty!", "\n\n")
+      stop("corpus error")
   }
-# the only thing we need are words ordered by frequency (no frequencies)
-mfw.list.of.all = names(mfw.list.of.all)
-#
-# some comments into the file containing the wordlist
-cat("# This file contains the words that were used for building the table",
-  "# of frequencies. It can be also used for further tasks, and for this",
-  "# purpose it can be manually revised, edited, deleted, culled, etc.", 
-  "# You can either delete unwanted words, or mark them with \"#\"",
-  "# -----------------------------------------------------------------------",
-  "",
-      file="wordlist.txt", sep="\n")
-# the current wordlist into the "wordlist.txt" file
-cat(mfw.list.of.all, file="wordlist.txt", sep="\n",append=T)
-#
-}   # <----- conditional expr. "use.existing.wordlist" terminates here
-#
-# blank line on the screen
-cat("\n")
-	  
-# empty the dump-dir if it already existed and create it if it did not previously exist:
-if(dump.samples == TRUE){
-	if (file.exists("sample_dump")){
+
+  # If an external vector of features (usually: the most frequent words) has not 
+  # been specified (cf. the argument "features"), then we need a list of the most 
+  # frequent words (or n-grams, or anything else) used in the current corpus, 
+  # in descending order, without frequencies (just a list of words/features). 
+  if (features.exist == TRUE) {
+    cat("\n")
+    cat("using an existing wordlist (vector of features)...\n")
+    mfw.list.of.all = features
+  } else {
+    # Extracting all the words used in the corpus
+    wordlist.of.loaded.corpus = c()
+    for (file in 1 : length(loaded.corpus)) {
+      # loading the next sample from the list "corpus.filenames"
+      current.text = loaded.corpus[[file]]
+      # putting the files together:
+      wordlist.of.loaded.corpus = c(wordlist.of.loaded.corpus, current.text)
+      # short message on screen
+      cat(".")
+      if(file/25 == floor(file/25)) { cat("\n")} # a newline every 25th sample
+    }
+    
+    # Preparing a sorted frequency list of the whole primary set (or both sets).
+    # short message
+    cat("\n")
+    cat("The corpus consists of", length(c(wordlist.of.loaded.corpus)),"tokens\n")
+    # the core procedure: frequency list
+    mfw.list.of.all = sort(table(c(wordlist.of.loaded.corpus)),decreasing=T)
+    # if the whole list is long, then cut off the tail, as specified in the GUI 
+    # by the cutoff value
+      if (length(mfw.list.of.all) > mfw.list.cutoff) {
+        mfw.list.of.all = mfw.list.of.all[1:mfw.list.cutoff]
+      }
+    # the only thing we need are words ordered by frequency (no frequencies)
+    mfw.list.of.all = names(mfw.list.of.all)
+
+    # Saving the list of features.
+    # some comments into the file containing wordlist
+    cat("# This file contains the words that were used for building the table",
+      "# of frequencies. It can be also used for further tasks, and for this",
+      "# purpose it can be manually revised, edited, deleted, culled, etc.", 
+      "# You can either delete unwanted words, or mark them with \"#\"",
+      "# -----------------------------------------------------------------------",
+      "", file="wordlist.txt", sep="\n")
+    # the current wordlist into a file
+    cat(mfw.list.of.all, file="wordlist.txt", sep="\n",append=T)
+
+  }   # <----- conditional expr. if(features.exist == TRUE) terminates here
+
+  # blank line on the screen
+  cat("\n")
+  
+  # empty the dump-dir if it already existed and create it if it did not previously exist
+  if(dump.samples == TRUE){
+	  if (file.exists("sample_dump")){
 		# a dump-dir seems to have been created during a previous run
 		# tmp delete the dump-dir to remove all of its previous contents
-		unlink("sample_dump", recursive=TRUE) 
-	}
+		unlink("sample_dump", recursive = TRUE) 
+	  }
 	# (re)create the dump-dir
 	dir.create("sample_dump")
+  }
+
+
+  # preparing a huge table of all the frequencies for the whole corpus
+  frequencies.0.culling = make.table.of.frequencies(corpus = loaded.corpus,
+                                               words = mfw.list.of.all, 
+                                               relative = relative.frequencies)
+
+
+  # writing the table with frequencies to a text file (it can be re-used!)
+  write.table( t(frequencies.0.culling), 
+              file = "table_with_frequencies.txt", 
+              sep = "\t",
+              row.names = TRUE,
+              col.names = TRUE)
+
 }
-
-
-
-
-#################################################################
-#################################################################
-
-# preparing a huge table of all the frequencies for the whole corpus
-frequencies.0.culling = make.table.of.frequencies(corpus = loaded.corpus,
-                            words = mfw.list.of.all)
-
-
-#################################################################
-#################################################################
-
-
-#
-#
-#
-# writing the table with frequencies to a text file (it can be re-used!)
-write.table(t(frequencies.0.culling), 
-            file="table_with_frequencies.txt", 
-            sep="\t",
-            row.names=TRUE,
-            col.names=TRUE)
-}  # <----- conditional expr. "use.existing.freq.tables" terminates here
-#
+###############################################################################
 #
 # #################################################
 # the module for loading the corpus terminates here
 # #################################################
+
+
 
 
 
@@ -516,12 +721,12 @@ write.table(t(frequencies.0.culling),
 # Finally, we want to save some of the variable values for later use;
 # they are automatically loaded into the GUI at the next run of the script.
 cat("",file="stylo_config.txt",append=F)
-var.name<-function(x) { 
-      if(is.character(x)==TRUE) {
-      cat(paste(deparse(substitute(x))," = \"",x,"\"", sep=""),file="stylo_config.txt",sep="\n",append=T)
-        } else {
-          cat(paste(deparse(substitute(x)),x, sep=" = "),file="stylo_config.txt",sep="\n",append=T) }
-        } 
+var.name <- function(x) { 
+      if(is.character(x) == TRUE) {
+        cat(paste(deparse(substitute(x))," = \"",x,"\"", sep=""),file="stylo_config.txt",sep="\n",append=T)
+      } else {
+        cat(paste(deparse(substitute(x)),x, sep=" = "),file="stylo_config.txt",sep="\n",append=T) }
+      } 
 var.name(corpus.format)
 var.name(corpus.lang)
 var.name(analyzed.features)
@@ -651,13 +856,20 @@ if (delete.pronouns == TRUE) {
       list.of.words.after.culling[!(list.of.words.after.culling %in% pronouns)]
 }
 
+
+# just in case: get rid of empty "words" (strings containing no characters)
+list.of.words.after.culling = 
+           list.of.words.after.culling[nchar(list.of.words.after.culling) >0]
+
+
 # the above list-of-not-culled to be applied to the wordlist:
 table.with.all.freqs = frequencies.0.culling[,c(list.of.words.after.culling)]
 
 # the names of the samples are passed to the frequency table
-if(use.existing.freq.tables == FALSE) {
-  rownames(table.with.all.freqs) = names(loaded.corpus)
-}
+#if(use.existing.freq.tables == FALSE) {
+#  rownames(table.with.all.freqs) = names(loaded.corpus)
+#}
+
   
 # #################################################
 # culling is done, but we are still inside the main loop
@@ -1186,8 +1398,10 @@ if(save.distance.tables == TRUE && exists("distance.table") == TRUE) {
 }
 
 # writing the words (or features) actually used in the analysis
+features.actually.used = colnames(table.with.all.freqs[,1:mfw])
+#
 if(save.analyzed.features == TRUE) {
-  cat(colnames(table.with.all.freqs[,1:mfw]),
+  cat(features.actually.used,
      file=paste("features_analyzed_",mfw,"mfw_",current.culling,"c.txt",sep=""),
      sep="\n")
 }
@@ -1204,10 +1418,10 @@ if(save.analyzed.freqs == TRUE) {
 
 ##############################################
 ##############################################
-# consensus tree as a network: preparing Gephi input data
+# network analysis, stage I: preparing edges/nodes
 ##############################################
 
-if(exists("distance.table") == TRUE) {
+if((exists("distance.table") == TRUE) & (network == TRUE)) {
   distances = distance.table
   # next, we need to create an empty matrix of the same size as the dist table
   connections = matrix(data=0,nrow=length(distances[,1]),ncol=length(distances[1,]))
@@ -1215,11 +1429,21 @@ if(exists("distance.table") == TRUE) {
   for(i in 1: length(distances[,1])) {
     # establish a link between two nearest neighbors by assigning 3,
     # 2nd runner-up will get 2, and 3rd runner-up will get 1
-    connections[i,(order(distances[i,])[2])] = 3
-    connections[i,(order(distances[i,])[3])] = 2
-    connections[i,(order(distances[i,])[4])] = 1
+    # original implementation:
+    #connections[i,(order(distances[i,])[2])] = 3
+    #connections[i,(order(distances[i,])[3])] = 2
+    #connections[i,(order(distances[i,])[4])] = 1
+    # 
+    for(k in 1:linked.neighbors) {
+      connections[i,(order(distances[i,])[k+1])] = linked.neighbors - k + 1
+    }
   }
-
+  # optionally, apply a transformation function to the links' weights
+  if(edge.weights == "quadratic") {
+    connections = connections^2
+  } else if(edge.weights == "log") {
+    connections = log(connections +1)
+  }
 all.connections = all.connections + connections
 }
 ##############################################
@@ -1246,43 +1470,107 @@ cat("\n")
 
 
 
-
 ######################################################
 ######################################################
-# network analysis: preparing a list of edges
+# network analysis, stage II: preparing a list of edges
 
-if(exists("distance.table") == TRUE) {
+if((exists("distance.table") == TRUE) & (network == TRUE)) {
   rownames(all.connections) = rownames(distances)
   colnames(all.connections) = colnames(distances)
 
-  edges=c()
-  for(i in 1:(length(all.connections[,1])) ) {
-    for(j in 1:(length(all.connections[1,])) ) {
-      from = rownames(all.connections)[i]
-      to = colnames(all.connections)[j]
-      # undirected, i.e. links "to" and "from" are summarized;
-      # it means that possible bias is partialy overcome
-      weight = all.connections[i,j] + all.connections[j,i]
-      # directed: it matters whether a given sample points or is poited
-#      weight = all.connections[i,j]
-      #
-      current.row = c(from, to, weight, "undirected")
-      #
-      # if there is a connection, record it in a common table
-      if(weight > 0) {
-        edges = rbind(edges, current.row)
+  if(network.tables == "edges") {
+    # only one table (list of edges) will be created;
+    # the simplest way to get a network in Gephi
+    edges=c()
+    for(i in 1:(length(all.connections[,1])) ) {
+      for(j in 1:(length(all.connections[1,])) ) {
+        from = rownames(all.connections)[i]
+        to = colnames(all.connections)[j]
+        if(network.type == "undirected") {
+          # undirected, i.e. links "to" and "from" are summarized;
+          # it means that possible bias is partialy overcome
+          weight = all.connections[i,j] + all.connections[j,i]
+          current.row = c(from, to, weight, "undirected")
+        } else {
+          # directed: it matters whether a given sample points or is poited
+          weight = all.connections[i,j]
+          current.row = c(from, to, weight, "directed")
+        }
+        # if there is a connection, record it in a common table
+        if(weight > 0) {
+          edges = rbind(edges, current.row)
+        }
       }
     }
+    #
+    # assigning column names and row names
+    colnames(edges) = c("Source","Target","Weight","Type")
+    rownames(edges) = c(1:length(edges[,1]))
+    # for some reason, the table has to be explicitly declared
+    edges = as.data.frame(edges)
+    # preparing a file name
+    edges.filename = paste(graph.filename,"EDGES.csv",sep="")
+    # writing to a file
+    write.csv(file=edges.filename,quote=F,edges)
+    #
+    #
+  } else {
+    # two tables (list of edges, list of nodes) will be created;
+    # this can be used with Gephi, and it is potentially more flexible
+    edges=c()
+    for(i in 1:(length(all.connections[,1])) ) {
+      for(j in 1:(length(all.connections[1,])) ) {
+        from = c(1:length(rownames(all.connections)))[i]
+        to = c(1:length(colnames(all.connections)))[j]
+        if(network.type == "undirected") {
+          # undirected, i.e. links "to" and "from" are summarized;
+          # it means that possible bias is partialy overcome
+          weight = all.connections[i,j] + all.connections[j,i]
+          # a trick to start counting naming the nodes from 0
+          current.row = c(from -1, to -1, weight, "undirected")
+        } else {
+          # directed: it matters whether a given sample points or is poited
+          weight = all.connections[i,j]
+          # a trick to start counting naming the nodes from 0
+          current.row = c(from -1, to -1, weight, "directed")
+        }
+        # if there is a connection, record it in a common table
+        if(weight > 0) {
+          edges = rbind(edges, current.row)
+        }
+      }
+    }
+    #
+    # assigning column names and row names
+    colnames(edges) = c("Source","Target","Weight","Type")
+    rownames(edges) = c(1:length(edges[,1]))
+    # for some reason, the table has to be explicitly declared
+    edges = as.data.frame(edges, stringsAsFactors=FALSE)
+    #
+    # preparing the table of nodes
+    node.id = c(1:length(rownames(all.connections))) -1
+    node.names = rownames(all.connections)
+    node.classes = gsub("_.*","",node.names)
+    node.classes.numeric = as.numeric(factor(gsub("_.*","",node.names)))
+    nodes = cbind(node.id,node.names,node.classes,node.classes.numeric)
+    colnames(nodes) = c("Id","Label","Classes","Group")
+    nodes = as.data.frame(nodes, stringsAsFactors=FALSE)
+    #
+    # preparing a file name (edges)
+    edges.filename = paste(graph.filename,"EDGES.csv",sep="")
+    # writing to a file (edges)
+    write.csv(file=edges.filename,quote=F,edges)
+    # preparing a file name (nodes)
+    nodes.filename = paste(graph.filename,"NODES.csv",sep="")
+    # writing to a file (nodes)
+    write.csv(file=nodes.filename,quote=F,nodes)
   }
-
-  colnames(edges) = c("Source","Target","Weight","Type")
-  rownames(edges) = c(1:length(edges[,1]))
-  edges = as.data.frame(edges)
-
-  edges.filename = paste(graph.filename,"EDGES.csv",sep="")
-  write.csv(file=edges.filename,quote=F,edges)
 }
 
+# finally, removing the network if it does not really exist 
+if(length(all.connections) == 1) {
+ rm(all.connections)
+}
 ######################################################
 ######################################################
 
@@ -1343,19 +1631,102 @@ if(length(bootstrap.list) <= 2) {
 }}
 
 
-# #################################################
-# final cleaning
 
+
+
+
+# #################################################
+# praparing final resutls: building a class
+
+
+
+# something's wrong with the variable "features"; needs to be corrected above
+features = mfw.list.of.all
+# just to give it a more comprehensive name:
+if(exists("pca.results") == TRUE ) {
+  pca.coordinates = pca.results$x[,1:3]
+}
+if(exists("all.connections") == TRUE ) {
+  table.edges = all.connections
+}
+if(exists("edges") == TRUE & length(edges) >1) {
+  list.of.edges = edges
+}
+if(exists("nodes") == TRUE ) {
+  list.of.nodes = nodes
+}
+
+
+
+
+
+
+
+
+
+
+if(exists("distance.table")) {
+  attr(distance.table, "description") = "final distances between each pair of samples"
+  class(distance.table) = "stylo.data"
+}
+if(exists("frequencies.0.culling")) {
+  attr(frequencies.0.culling, "description") = "frequencies of words/features accross the corpus"
+  class(frequencies.0.culling) = "stylo.data"
+}
+if(exists("table.with.all.freqs")) {
+  attr(table.with.all.freqs, "description") = "frequencies of words/features accross the corpus"
+  class(table.with.all.freqs) = "stylo.data"
+}
+if(exists("table.with.all.zscores")) {
+  attr(table.with.all.zscores, "description") = "z-scored frequencies accross the corpus"
+  class(table.with.all.zscores) = "stylo.data"
+}
+if(exists("features")) {
+  attr(features, "description") = "features (e.g. words, n-grams, ...) applied to data"
+  class(features) = "stylo.data"
+}
+if(exists("features.actually.used")) {
+  attr(features.actually.used, "description") = "features (e.g. frequent words) actually analyzed"
+  class(features.actually.used) = "stylo.data"
+}
+if(exists("table.of.edges")) {
+  attr(table.of.edges, "description") = "edges of a network of stylometric similarities"
+# this does not work:
+#  class(table.of.edges) = "stylo.data"
+}
+if(exists("list.of.edges")) {
+  attr(list.of.edges, "description") = "edges of a network of stylometric similarities"
+# this does not work:
+#  class(list.of.edges) = "stylo.data"
+}
+if(exists("list.of.nodes")) {
+  attr(list.of.nodes, "description") = "nodes of a network of stylometric similarities"
+# this does not work:
+#  class(list.of.nodes) = "stylo.data"
+}
+if(exists("pca.coordinates")) {
+  attr(pca.coordinates, "description") = "PCA coordinates (PC1, PC2 and PC3)"
+# this does not work:
+#  class(pca.coordinates) = "stylo.data"
+}
 
 
 
 # creating an object (list) that will contain the final results,
 # tables of frequencies, etc.etc.
+# This list will be turned into the class "styloresults"
 results.stylo = list()
 # elements that we want to add on this list
-variables.to.save = c("distance.table", "frequencies.0.culling",
-                      "table.with.all.freqs", "table.with.all.zscores",
-                      "edges")
+variables.to.save = c("distance.table", 
+                      "frequencies.0.culling",
+                      "table.with.all.freqs", 
+                      "table.with.all.zscores",
+                      "features", 
+                      "features.actually.used",
+                      "pca.coordinates",
+                      "table.of.edges", 
+                      "list.of.edges", 
+                      "list.of.nodes")
 # checking if they really exist; getting rid of non-existing ones:
 filtered.variables = ls()[ls() %in% variables.to.save]
 # adding them on the list
@@ -1365,36 +1736,25 @@ for(i in filtered.variables) {
 
 
 
+# adding some information about the current function call
+# to the final list of results
+results.stylo$call = match.call()
+results.stylo$name = call("stylo")
 
 
-cat("\n")
-cat("Some results should have been written into a few files; you should\n")
-cat("be able to find them in your current (working) directory. These include\n")
-cat("a list of words used to build a table of frequencies, the table itself,\n")
-cat("a file containg recent configuration, etc.\n")
-cat("Advanced users: you can pipe the results to a variable, e.g.:\n")
-cat("    my.results = stylo()\n")
-cat("this will create a list containing some presumably interesting stuff.\n")
-cat("The list created, you can type, e.g.:\n")
-cat("    summary(my.results)\n")
-cat("to see which variables are stored there.\n")
-cat("\n")
-cat("\n")
-cat("for suggestions how to cite this software, type: citation(\"stylo\")\n")
-cat("\n")
-cat("\n")
-
+# This assings the list of final resutls to the class "stylo.resutls";
+# the same class will be used to handle the output of classify(),
+# rolling.delta() and oppose(). See the files "print.stylo.results.R"
+# and "summary.stylo.results.R" (no help files are provided, since
+# these two functions are not visible for the users).
+class(results.stylo) <- "stylo.results"
 
 
 
 # back to the original working directory
 setwd(original.path)
 
-# remove the only global variable that was used at some point
-#if(exists("colLab") == TRUE) {
-#  rm(colLab, envir = globalenv())
-#}
 
-# return (tacitly) the value of the function 
-invisible(results.stylo)
+# return the value of the function
+return(results.stylo)
 }
