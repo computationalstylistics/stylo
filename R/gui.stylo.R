@@ -498,6 +498,7 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   entry_PCA1 <- tkradiobutton(f3)
   entry_PCA2 <- tkradiobutton(f3)
   entry_CONS_TREE <- tkradiobutton(f3)
+  entry_tSNE <- tkradiobutton(f3)
   entry_CONSS <- tkentry(f3,textvariable=consensus.strength,width="8")
   #
   tkconfigure(entry_CA,variable=analysis.type,value="CA") # cluster.analysis
@@ -505,17 +506,19 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   tkconfigure(entry_PCA1,variable=analysis.type,value="PCV") # pca.covariance.table
   tkconfigure(entry_PCA2,variable=analysis.type,value="PCR") # pca.correlation.table
   tkconfigure(entry_CONS_TREE,variable=analysis.type,value="BCT") # make.consensus.tree
+  tkconfigure(entry_tSNE,variable=analysis.type,value="tSNE") # make.tSNE
   
   #
   entrylabel_CA <- tklabel(f3,text="Cluster Analysis")
   entrylabel_MDS <- tklabel(f3,text="MDS")
   entrylabel_PCA1 <- tklabel(f3,text="PCA (cov.)")
   entrylabel_PCA2 <- tklabel(f3,text="PCA (corr.)")
+  entrylabel_tSNE <- tklabel(f3,text="tSNE")
   entrylabel_CONS_TREE <- tklabel(f3,text="Consensus Tree")
   entrylabel_CONSS <- tklabel(f3,text="Consensus strength")
   #
-  tkgrid(tklabel(f3,text=" STATISTICS:"),entrylabel_CA,entrylabel_MDS,entrylabel_PCA1,entrylabel_PCA2)
-  tkgrid(tklabel(f3,text="            "),entry_CA,entry_MDS,entry_PCA1,entry_PCA2)
+  tkgrid(tklabel(f3,text=" STATISTICS:"),entrylabel_CA,entrylabel_MDS,entrylabel_PCA1,entrylabel_PCA2,entrylabel_tSNE)
+  tkgrid(tklabel(f3,text="            "),entry_CA,entry_MDS,entry_PCA1,entry_PCA2, entry_tSNE)
   tkgrid(tklabel(f3,text="            "),entrylabel_CONS_TREE,entrylabel_CONSS)
   tkgrid(tklabel(f3,text="            "),entry_CONS_TREE,entry_CONSS)
   
@@ -524,6 +527,7 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   tk2tip(entrylabel_MDS, "Select to perform Multidimensional Scaling of Delta distance table. \nThis only makes sense if there is a single iteration \n(or only a few), so set MFW_MIN and MFW_MAX \nto equal values, which in turn makes the MFW_INCR setting immaterial. \nThen do the same for your culling settings.")
   tk2tip(entrylabel_PCA1, "Select to perform Principal Components Analysis based on a covariance matrix of Delta distance table. \nThis only makes sense if there is a single iteration (or only a few), so set MFW_MIN and MFW_MAX \nto equal values, which in turn makes the MFW_INCR setting immaterial. \nThen do the same for your culling settings.")
   tk2tip(entrylabel_PCA2, "Select to perform Principal Components Analysis based on a correlation matrix of Delta distance table. \nThis only makes sense if there is a single iteration (or only a few), so set MFW_MIN and MFW_MAX \nto equal values, which in turn makes the MFW_INCR setting immaterial. \nThen do the same for your culling settings.")
+  tk2tip(entrylabel_tSNE, "Select to perform a tSNE visualization (t-Distributed Stochastic Neighbor Embedding).\nThis only makes sense if there is a single iteration (or perhaps a few), so set MFW_MIN and MFW_MAX \nto equal values, which in turn makes the MFW_INCR setting immaterial. \nThen do the same for your culling settings.")
   tk2tip(entrylabel_CONS_TREE, "Select to perform multiple iterations of Cluster Analysis of Delta distance table \nresulting in a Bootstrap COnsensus Tree. This only makes sense \nif you have at least three valid iterations, so set MFW_MIN and MFW_MAX, \nand/or CUL_MIN and CUL_MAX to different values.")
   tk2tip(entrylabel_CONSS, "Select to set the consensus strength for the Bootstrap Tree. \nOnly makes sense if you select that option is checked above. \nLegal values are from 0.4 (40% underlying CA graphs need to agree \non a given connection) to 1 (all underlying CA graphs need to agree).")
   
