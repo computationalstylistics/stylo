@@ -3,7 +3,7 @@ stylo
 
 R package for stylometric analyses.
 
-It provides a number of functions, supplemented by GUI, to perform various
+This package provides a number of functions, supplemented by a GUI, to perform various
 analyses in the field of computational stylistics, authorship attribution, etc.
 
 See:
