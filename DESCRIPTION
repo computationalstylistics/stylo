@@ -1,8 +1,8 @@
 Package: stylo
 Type: Package
 Title: Functions for a variety of stylometric analyses
-Version: 0.5.3
-Date: 2014-1-2
+Version: 0.5.4
+Date: 2014-1-16
 Author: Maciej Eder, Jan Rybicki, Mike Kestemont
 Maintainer: Maciej Eder <maciejeder@gmail.com>
 URL: https://sites.google.com/site/computationalstylistics/

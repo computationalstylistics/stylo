@@ -23,6 +23,10 @@ function(gui = TRUE,
 passed.arguments = list(...)
 
 
+# variable's initialization
+cross.validation.summary = c()
+
+
 # changing working directory (if applicable)
 #
 # first of all, retrieve the current path name
@@ -140,6 +144,8 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
 relative.frequencies = variables$relative.frequencies
 splitting.rule = variables$splitting.rule
 
+cv = variables$cv
+cv.folds = variables$cv.folds
 
 
 
@@ -970,7 +976,6 @@ cat("Calculating z-scores... \n\n")
 
 # an additional table composed of relative word frequencies 
 # of joint primary and secondary sets
-####freq.table.both.sets = rbind(primary.set[,1:mfw.max], secondary.set[,1:mfw.max])
 freq.table.both.sets = rbind(primary.set, secondary.set)
 
 
@@ -1042,7 +1047,7 @@ if(distance.measure == "EU") {
 
 
 
-for(i in seq(mfw.min,mfw.max,round(mfw.incr)) ) {
+for(i in seq(mfw.min, mfw.max, round(mfw.incr)) ) {
 mfw = i
 
 
@@ -1052,9 +1057,7 @@ if(mfw > length(list.of.words.after.culling) ) {
   mfw = length(list.of.words.after.culling)
   }
 
-# the general counter for different purposes
-number.of.current.iteration = number.of.current.iteration + 1
-
+  
 
 
 # the current task (number of MFW currently analyzed) echoed on the screen
@@ -1066,14 +1069,20 @@ cat(mfw, " ")
 
 
 
+# FOR SOME REASON, IT IS NEEDED AT SOME POINT, even if this is obsolete
+distance.name.on.graph = "standard classification"
 
 
-# #################################################
-# module for Delta
-# #################################################
 
-if(tolower(classification.method) == "delta") {
 
+
+
+
+
+
+# Delta in its various flavours
+
+perform.delta = function(zscores.table.both.sets) {
 # calculating classic Delta distances
 if(distance.measure == "CD") {
   distance.name.on.graph = "Classic Delta distance"
@@ -1138,52 +1147,39 @@ no.of.candid = length(secondary.set[,1])
 selected.dist = 
           as.matrix(distance.table[no.of.possib+1:no.of.candid,1:no.of.possib])
 
-}  # <--- delta
-
-
-# the code for SVM, kNN, NSC, NaiveBayes
-#
-#
-#
-#
-#
-#
-
-# FOR SOME REASON, IT IS NEEDED AT SOME POINT, even if this is obsolete
-distance.name.on.graph = "standard classification"
-
-
-
-
-if(tolower(classification.method) == "knn") {
-  #kNN classification:
-#  library(class)
-  #
-  # training_set and test_set preparation; adding class labels to both sets
-  classes.training = gsub("_.*","",rownames(zscores.primary.set))
-  training.set = cbind(classes.training,zscores.primary.set[,1:mfw])
-  classes.test = gsub("_.*","",rownames(zscores.secondary.set))
-  test.set = cbind(classes.test,zscores.secondary.set[,1:mfw])
-#  input.data = as.data.frame(rbind(training.set,test.set))
-  #
-  # classes that will be used for training the classifier (=classes of I set)
-  classes = factor(training.set[,1])
-  # training and classification ('k' and 'l' are set in 'stylo.default.settings')
-  classification.results = knn(training.set[,-1],test.set[,-1],
-                              classes, k = k.value, l = l.value)
-  # cross-validation: 
-  #knn.cv(training.set[,-1],classes,k=k.value,prob=T)
-  classification.results = as.character(classification.results)
+return(selected.dist)
 }
 
 
-if(tolower(classification.method) == "naivebayes") {
-  # Naive Bayes classification:
-#  library(e1071)
+
+
+perform.knn = function(training.set, test.set, k.value=1) {
+  #kNN classification:
+  # library(class)
   #
   # training_set and test_set preparation; adding class labels to both sets
-  training.set = primary.set[,1:mfw]
-  test.set = secondary.set[,1:mfw]
+  classes.training = gsub("_.*","",rownames(training.set))
+  classes.test = gsub("_.*","",rownames(test.set))
+  training.set = cbind(classes.training,training.set)
+  test.set = cbind(classes.test,test.set)
+  #
+  # classes that will be used for training the classifier (=classes of I set)
+  classes = factor(training.set[,1])
+  # training and classification
+  classification.results = knn(training.set[,-1],test.set[,-1],classes,k=k.value)
+  # cross-validation: 
+  #knn.cv(training.set[,-1],classes,k=k.value,prob=T)
+  # get final results
+  classification.results = as.character(classification.results)
+return(classification.results)
+}
+
+
+perform.naivebayes = function(training.set, test.set) {
+  # Naive Bayes classification:
+  #  library(e1071)
+  #
+  # training_set and test_set preparation; adding class labels to both sets
   classes.training = gsub("_.*","",rownames(training.set))
   classes.test = gsub("_.*","",rownames(test.set))
   classes = c(classes.training, classes.test)
@@ -1198,17 +1194,16 @@ if(tolower(classification.method) == "naivebayes") {
   classification.results = predict(model, input.data[,-1])
   classification.results = as.character(classification.results)
   classification.results = classification.results[-c(1:length(classes.training))]
+return(classification.results)
 }
 
 
 
-if(tolower(classification.method) == "svm") {
+perform.svm = function(training.set, test.set) {
   # Support Vector Machines classification:
-#  library(e1071)
+  # library(e1071)
   #
   # training_set and test_set preparation; adding class labels to both sets
-  training.set = primary.set[,1:mfw]
-  test.set = secondary.set[,1:mfw]
   classes.training = gsub("_.*","",rownames(training.set))
   classes.test = gsub("_.*","",rownames(test.set))
   classes = c(classes.training, classes.test)
@@ -1217,26 +1212,26 @@ if(tolower(classification.method) == "svm") {
   training.classes = c(1:length(training.set[,1]))
   #
   # training a model
-  model = svm(classes ~ ., data = input.data, subset = training.classes,
-              kernel = svm.kernel, degree = svm.degree,
-              coef0 = svm.coef0, cost = svm.cost)
+  model = svm(classes ~ ., data = input.data, subset = training.classes)
   #
   # testing the model on "new" data (i.e. the test.set)
   classification.results = predict(model, input.data[,-1])
   classification.results = as.character(classification.results)
   classification.results = classification.results[-c(1:length(classes.training))]
-#plot(cmdscale(dist(input.data[,-1])),col=as.integer(input.data[,1]),pch=c("o","+"))
+  #plot(cmdscale(dist(input.data[,-1])),col=as.integer(input.data[,1]),pch=c("o","+"))
+return(classification.results)
 }
 
 
 
-if(tolower(classification.method) == "nsc") {
-  # Nearest Shrunken Centroid classification:
-#  library(pamr)
+
+
+
+perform.nsc = function(training.set, test.set) {
+# Nearest Shrunken Centroid classification:
+  #  library(pamr)
   #
   # training_set and test_set preparation; adding class labels to both sets
-  training.set = primary.set[,1:mfw]
-  test.set = secondary.set[,1:mfw]
   classes.training = gsub("_.*","",rownames(training.set))
   classes.test = gsub("_.*","",rownames(test.set))
   classes = c(classes.training, classes.test)
@@ -1252,6 +1247,7 @@ if(tolower(classification.method) == "nsc") {
   classification.results = pamr.predict(model,mydata$x,threshold=1)
   classification.results = as.character(classification.results)
   classification.results = classification.results[-c(1:length(classes.training))]
+return(classification.results)
 }
 
 
@@ -1260,8 +1256,41 @@ if(tolower(classification.method) == "nsc") {
 
 
 
+if(tolower(classification.method) == "delta") {
+  selected.dist = perform.delta(zscores.table.both.sets)
+}
 
 
+if(tolower(classification.method) == "knn") {
+  classification.results = perform.knn(training.set = primary.set[,1:mfw], 
+                                       test.set = secondary.set[,1:mfw],
+                                       k.value = k.value)
+}
+
+
+if(tolower(classification.method) == "svm") {
+  classification.results = perform.svm(training.set = primary.set[,1:mfw], 
+                                       test.set = secondary.set[,1:mfw])
+}
+
+
+if(tolower(classification.method) == "naivebayes") {
+  classification.results = perform.naivebayes(training.set= primary.set[,1:mfw], 
+                                              test.set = secondary.set[,1:mfw])
+}
+
+
+if(tolower(classification.method) == "nsc") {
+  classification.results = perform.nsc(training.set = primary.set[,1:mfw], 
+                                       test.set = secondary.set[,1:mfw])
+}
+
+
+
+
+
+
+classes.test = gsub("_.*","",rownames(secondary.set))
 
 
 
@@ -1272,11 +1301,13 @@ if(final.ranking.of.candidates == TRUE) {
       make.ranking.of.candidates(selected.dist,number.of.candidates)
     } else {
       misclassified.samples = 
-                   paste(rownames(test.set), "\t-->\t",
+                   paste(rownames(secondary.set), "\t-->\t",
                    classification.results)[classes.test!=classification.results]
       cat(misclassified.samples,file=outputfile,append=T,sep="\n")    
     }
 }
+
+
 
 
 # returns the number of correct attributions
@@ -1303,6 +1334,124 @@ if(how.many.correct.attributions == TRUE) {
 
 
 
+
+
+
+
+
+
+if(cv == "thorough") {
+
+  cat("\n")
+  cat("cross-validation...\n")
+ 
+  # an additional table combined of frequencies of set I and II
+  # just for feeding the bootstrap module 
+  freq.table.both.sets.binded = rbind(primary.set[,1:mfw],secondary.set[,1:mfw])
+
+  #bootstrap.output = "bootstrap_output.txt"
+  # cleaning the bootstrapfile
+  #cat("",file=bootstrap.output,append=F)
+
+  # creating an empty matrix for the final success scores
+  cross.validation.results = c()
+  cross.validation.results.all = c()
+
+  # starting two emtpy vectors
+  total.no.of.correct.attrib.cv = c()
+  total.no.of.possible.attrib.cv = c()
+  
+  
+
+  # the beginning of k-fold cross-validation turns
+  for(iterations in 1 : cv.folds) {
+
+      # this shuffles the names of samples
+      names.of.the.texts = sample(rownames(freq.table.both.sets.binded))
+      freq.table.both.sets.binded = freq.table.both.sets.binded[names.of.the.texts,]
+
+      # variable's initialization: first sample goes to I set
+      names.of.I.set = names.of.the.texts[1]
+
+      # this looks for classes that were not represented so far in I set
+      for(w in 2:length(names.of.the.texts)) {
+          if(gsub("_.*","",names.of.the.texts,perl=T)[w] 
+              %in% 
+              gsub("_.*","",names.of.I.set,perl=T) == FALSE) {
+              names.of.I.set = c(names.of.I.set,names.of.the.texts[w])
+          }
+      }
+
+  # establishing the I set:
+  training.set = freq.table.both.sets.binded[names.of.I.set,]
+
+  # establishing the II set
+  test.set = 
+        freq.table.both.sets.binded[!(names.of.the.texts %in% names.of.I.set),]
+
+  # both sets binded again, after rearrangements 
+  freq.table.both.sets.binded = rbind(training.set,test.set)
+
+
+  if(tolower(classification.method) == "delta") {
+    current.zscores = scale(freq.table.both.sets.binded)
+    selected.dist1 = perform.delta(current.zscores)
+  }
+  if(tolower(classification.method) == "knn") {
+    classification.results = perform.knn(training.set,test.set)
+  }
+  if(tolower(classification.method) == "svm") {
+    classification.results = perform.svm(training.set,test.set)
+  }
+  if(tolower(classification.method) == "nsc") {
+    # not available yet
+  }
+
+
+  
+  # retrieving the names of classes
+  classes.test = gsub("_.*","",rownames(test.set))
+
+
+  
+    # returns the number of correct attributions
+    if(how.many.correct.attributions == TRUE) {
+        if(tolower(classification.method) == "delta") {
+          no.of.correct.attrib = make.number.of.correct.attributions(selected.dist1)
+        } else {
+          no.of.correct.attrib = sum(as.numeric(classes.test == 
+                                     classification.results))
+        }
+      # 
+      total.no.of.correct.attrib.cv = 
+                         c(total.no.of.correct.attrib.cv, no.of.correct.attrib)
+      total.no.of.possible.attrib.cv = 
+                         c(total.no.of.possible.attrib.cv, perfect.guessing)
+      cat("\n",file=outputfile,append=T)
+      cat(mfw, " MFW , culled @ ",current.culling,"%,  ",
+               no.of.correct.attrib," of ", perfect.guessing,"\t(",
+               round(no.of.correct.attrib / perfect.guessing * 100, 1),"%)",
+               "\n",file=outputfile,append=T,sep="")
+      #
+      cross.validation.results = c(cross.validation.results, no.of.correct.attrib)
+    }
+
+  }
+
+  
+  cross.validation.results.all = cbind(cross.validation.results.all, cross.validation.results)
+  colnames(cross.validation.results.all) = paste(mfw, "@", current.culling, sep="")
+}   # <-- if cv = "thorough"
+
+
+
+
+
+
+if(exists("cross.validation.results.all")) {
+  cross.validation.summary = cbind(cross.validation.summary, cross.validation.results.all)
+  rownames(cross.validation.summary) = 1:cv.folds
+}
 
 
 
@@ -1452,6 +1601,7 @@ variables.to.save = c("misclassified.samples",
                       "zscores.both.sets",
                       "frequencies.both.sets", 
                       "frequencies.training.set",
+                      "cross.validation.summary",
                       "frequencies.test.set")
 # checking if they really exist; getting rid of non-existing ones:
 filtered.variables = ls()[ls() %in% variables.to.save]

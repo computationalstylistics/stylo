@@ -409,21 +409,25 @@ outputfile = "final_results.txt"
 # Also, an existing vector of features (an R object) can be used.
 # If you have any table of frequencies stored in your R memory, you
 # can skip the entire step of corpus preparation.
-#frequencies = NULL
-#training.frequencies = NULL
-#test.frequencies = NULL
-#parsed.corpus = NULL
-#training.corpus = NULL
-#test.corpus = NULL
-#features = NULL
+#
+# these options have been moved directly to stylo() and classify()
 
-
-
-# what about the training and the test corpus?
 
 # relative/raw frequencies
 # in a vast majority of cases, relative freqs is the choice
 relative.frequencies = TRUE
+
+
+
+# Cross validation options: classify() only
+# choose one: "none", "standard", "thorough"
+cv = "none"
+cv.folds = 10
+# no.of.samples.per.class
+
+
+
+
 
 
 
