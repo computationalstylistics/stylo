@@ -7,7 +7,8 @@ removing punctuation etc., and preserving some language-dependent
 idiosyncracies, such as common contractions in English.
 }
 \usage{
-txt.to.words.ext(input.text, language = "English", splitting.rule = NULL, preserve.case = FALSE)
+txt.to.words.ext(input.text, language = "English", splitting.rule = NULL, 
+                 preserve.case = FALSE)
 }
 \arguments{
   \item{input.text}{a string of characters, usually a text.}
