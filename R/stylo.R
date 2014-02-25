@@ -9,6 +9,7 @@
 # the subdirectory containing the texts (default: "corpus")
 # #################################################
 
+
 stylo <-
 function(gui = TRUE, 
          frequencies = NULL,
@@ -104,6 +105,7 @@ mfw.list.cutoff = variables$mfw.list.cutoff
 mfw.max = variables$mfw.max
 mfw.min = variables$mfw.min
 ngram.size = variables$ngram.size
+preserve.case = variables$preserve.case
 number.of.candidates = variables$number.of.candidates
 outputfile = variables$outputfile
 passed.arguments = variables$passed.arguments
@@ -599,7 +601,8 @@ if(corpus.exists == FALSE) {
                          sampling = sampling,
                          sampling.with.replacement = sampling.with.replacement,
                          features = analyzed.features,
-                         ngram.size = ngram.size)
+                         ngram.size = ngram.size,
+                         preserve.case = preserve.case)
 }
 ###############################################################################
 
@@ -731,6 +734,7 @@ var.name(corpus.format)
 var.name(corpus.lang)
 var.name(analyzed.features)
 var.name(ngram.size)
+var.name(preserve.case)
 var.name(mfw.min)
 var.name(mfw.max)
 var.name(mfw.incr)
@@ -950,11 +954,6 @@ if((analysis.type == "CA") || (analysis.type == "BCT") || (analysis.type == "MDS
     cat("Calculating Euclidean distances... \n")
   }
 }
-
-
-
-
-
 
 
 
@@ -1192,6 +1191,24 @@ if(analysis.type == "MDS") {
   }
 }
 
+if(analysis.type == "tSNE") {
+    # set some string information variables
+    name.of.the.method = "t-Distributed Stochastic Neighbor Embedding"
+    short.name.of.the.method = "t-SNE"
+    distance.name.on.file = "tSNE"
+    distance.name.on.graph = "t-SNE"
+    graph.title = ""
+    plot.current.task = function(){
+        ecb = function(x,y){
+            if(titles.on.graphs == TRUE) {
+                graph.title = paste(basename(getwd()),"\nt-SNE visualisation")
+            }
+            plot(x, t='n', main=graph.title, xlab="", ylab="", yaxt="n", xaxt="n")
+            text(x,rownames(table.with.all.freqs[,1:mfw]), cex=0.3)
+        }
+    tsne(X=table.with.all.freqs[,1:mfw], initial_dims=50, epoch_callback=ecb, perplexity=50, max_iter=2000)
+    }
+}
 
 # prepares Principal Components Analysis (PCA) for plotting
 if(analysis.type == "PCV" || analysis.type == "PCR") {
@@ -1323,16 +1340,17 @@ if (analysis.type == "BCT") {
 if(ngram.size > 1) {
   ngram.value = paste(ngram.size,"-grams", sep="")
   } else {
-  ngram.value = "" }
+  ngram.value = ""
+  }
   #
-  if(titles.on.graphs == TRUE) {
-  graph.title = paste(basename(getwd()),"\n",name.of.the.method)
+if(titles.on.graphs == TRUE) {
+   graph.title = paste(basename(getwd()),"\n",name.of.the.method)
   if(analysis.type == "BCT") {
   graph.subtitle = paste(mfw.info," MF",toupper(analyzed.features)," ",ngram.value," Culled @ ",culling.info,"%\n",
                     pronouns.info," ",distance.name.on.graph," Consensus ",consensus.strength," ",start.at.info, sep="") 
-          } else {
-          graph.subtitle = paste(mfw.info," MF",toupper(analyzed.features)," ",ngram.value," Culled @ ",culling.info,"%\n",
-                    pronouns.info," ",distance.name.on.graph," ",start.at.info, sep="") }
+  } else {
+      graph.subtitle = paste(mfw.info," MF",toupper(analyzed.features)," ",ngram.value," Culled @ ",culling.info,"%\n",
+      pronouns.info," ",distance.name.on.graph," ",start.at.info, sep="") }
   } else {
   graph.title = ""
   graph.subtitle = "" }

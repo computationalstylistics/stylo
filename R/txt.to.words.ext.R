@@ -15,24 +15,26 @@
 txt.to.words.ext <-
 function(input.text, 
          language="English", 
-         splitting.rule = NULL) {
+         splitting.rule = NULL,
+         preserve.case = FALSE) {
   # if a custom splitting rule was detected...
-  if(length(splitting.rule) > 0 ) {
+  if(length(splitting.rule) > 0) {
       # sanity check
       if(length(splitting.rule) == 1) {
         # just in case, convert to characters
         splitting.rule = as.character(splitting.rule)
         # splitting into units specified by custom regular expression
-        tokenized.text = txt.to.words(input.text, splitting.rule)
+        tokenized.text = txt.to.words(input.text, splitting.rule, preserve.case=preserve.case)
       } else {
         stop("Wrong splitting regexp")
       }
+  
   # if no custom splitting rule was detected...
   } else {
     # Loading the file; optionally, fiddling with apostrophes and contractions:    #
     # This is the standard procedure of splitting input texts
     if(language != "English.contr" & language != "English.all") {
-      tokenized.text = txt.to.words(input.text)
+      tokenized.text = txt.to.words(input.text, preserve.case=preserve.case)
     }
     # if the Latin option with adjusting the v/u letters is on,
     # this smashes the distinction and converts both types to the letter u

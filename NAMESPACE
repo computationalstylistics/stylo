@@ -6,7 +6,8 @@ import(
   pamr, 
   e1071, 
   class, 
-  lattice
+  lattice,
+  tsne
 )
 
 export(

@@ -9,7 +9,7 @@
 # delete.markup(input.text,markup.type="plain")
 # txt.to.words.ext(input.text,language="English")
 # make.samples(tokenized.input.data,sample.size=10000,sampling="no.sampling",
-#   sampling.with.replacement=FALSE
+#   sampling.with.replacement=FALSE)
 # txt.to.features(tokenized.text,features="w",ngram.size=1)
 #
 #################################################################
@@ -24,7 +24,8 @@ function(files,
          sampling = "no.sampling",
          sampling.with.replacement = FALSE,
          features = "w",
-         ngram.size = 1) {
+         ngram.size = 1,
+         preserve.case = FALSE) {
 
   loaded.corpus = load.corpus(files=files,corpus.dir=corpus.dir)
   # dropping file extensions from sample names
@@ -37,7 +38,8 @@ function(files,
   cat("slicing input text into single words...\n")
   loaded.corpus = lapply(loaded.corpus, txt.to.words.ext,
                                         language = language,
-                                        splitting.rule = splitting.rule)
+                                        splitting.rule = splitting.rule,
+                                        preserve.case = preserve.case)
   # normal sampling (if applicable); random sampling will be run later
   if(sampling == "normal.sampling") {
     loaded.corpus = make.samples(loaded.corpus,

@@ -10,9 +10,11 @@
 # #################################################
 
 txt.to.words <-
-function(input.text, splitting.rule = NULL) {
-  # converting all the letters to lowercase
-  input.text = tolower(input.text)
+function(input.text, splitting.rule = NULL, preserve.case=FALSE) {
+  # converting characters to lowercase if necessary
+  if (!(preserve.case)){
+      input.text = tolower(input.text)
+  }
      # if no custom splitting rule was detected...
     if(length(splitting.rule) == 0 ) {
       # splitting into units specified by regular expression; here, 

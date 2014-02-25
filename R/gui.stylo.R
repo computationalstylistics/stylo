@@ -96,6 +96,7 @@ mfw.list.cutoff = variables$mfw.list.cutoff
 mfw.max = variables$mfw.max
 mfw.min = variables$mfw.min
 ngram.size = variables$ngram.size
+preserve.case = variables$preserve.case
 number.of.candidates = variables$number.of.candidates
 outputfile = variables$outputfile
 passed.arguments = variables$passed.arguments
@@ -157,6 +158,7 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   culling.max <- tclVar(culling.max)
   culling.incr <- tclVar(culling.incr)
   ngram.size <- tclVar(ngram.size)
+  preserve.case <- tclVar(preserve.case)
   analyzed.features <- tclVar(analyzed.features)
   use.existing.freq.tables <- tclVar(use.existing.freq.tables)
   use.existing.wordlist <- tclVar(use.existing.wordlist)
@@ -344,6 +346,7 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   entry_ITA <- tkradiobutton(f1)
   entry_DUT <- tkradiobutton(f1)
   entry_SPA <- tkradiobutton(f1)
+  entry_OTH <- tkradiobutton(f1)
   #
   tkconfigure(entry_ENG,variable=corpus.lang,value="English")
   tkconfigure(entry_EN2,variable=corpus.lang,value="English.contr")
@@ -357,6 +360,7 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   tkconfigure(entry_ITA,variable=corpus.lang,value="Italian")
   tkconfigure(entry_DUT,variable=corpus.lang,value="Dutch")
   tkconfigure(entry_SPA,variable=corpus.lang,value="Spanish")
+  tkconfigure(entry_OTH,variable=corpus.lang,value="Other")
   #
   entrylabel_ENG <- tklabel(f1,text="    English     ")
   entrylabel_POL <- tklabel(f1,text="    Polish      ")
@@ -370,11 +374,14 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   entrylabel_LA2 <- tklabel(f1,text="Latin (u/v > u) ")
   entrylabel_DUT <- tklabel(f1,text="     Dutch      ")
   entrylabel_SPA <- tklabel(f1,text="    Spanish     ")
+  entrylabel_OTH <- tklabel(f1,text="     Other      ")
   #
   tkgrid(tklabel(f1,text="LANGUAGE: "),entrylabel_ENG,entrylabel_EN2,entrylabel_EN3,entrylabel_LAT,entrylabel_LA2)
   tkgrid(tklabel(f1,text="          "),entry_ENG,entry_EN2,entry_EN3,entry_LAT,entry_LA2)
   tkgrid(tklabel(f1,text="          "),entrylabel_POL,entrylabel_HUN,entrylabel_FRA,entrylabel_ITA,entrylabel_SPA)
   tkgrid(tklabel(f1,text="          "),entry_POL,entry_HUN,entry_FRA,entry_ITA,entry_SPA)
+  tkgrid(tklabel(f1,text="          "),entrylabel_DUT,entrylabel_GER, entrylabel_OTH)
+  tkgrid(tklabel(f1,text="          "),entry_DUT,entry_GER, entry_OTH)
   tkgrid(tklabel(f1,text="          "),entrylabel_DUT,entrylabel_GER)
   tkgrid(tklabel(f1,text="          "),entry_DUT,entry_GER)
   tkgrid(tklabel(f1,text="    ")) # blank line for aesthetic purposes
@@ -392,27 +399,32 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   tk2tip(entrylabel_LA2, "Modified Latin: U and V \nboth treated as U")
   tk2tip(entrylabel_DUT, "Plain Dutch: contractions and \ncompound words are split")
   tk2tip(entrylabel_SPA, "Plain Castilian: contractions and \ncompound words are split")
+  tk2tip(entrylabel_OTH, "Other language than the ones listed above.")
   
   # next row: TEXT FEATURES
   entry_W <- tkradiobutton(f2)
   entry_L <- tkradiobutton(f2)
   cb_NGRAMS <- tkcheckbutton(f2)
   entry_NGRAMSIZE <- tkentry(f2,textvariable=ngram.size,width="8")
+  cb_PRESERVECASE <- tkcheckbutton(f2)
   #
   tkconfigure(entry_W,variable=analyzed.features,value="w")
   tkconfigure(entry_L,variable=analyzed.features,value="c")
+  tkconfigure(cb_PRESERVECASE,variable=preserve.case)
   #
   entrylabel_W <- tklabel(f2,text="words")
   entrylabel_L <- tklabel(f2,text="chars")
   entrylabel_NGRAMSIZE <- tklabel(f2,text="ngram size")
+  entrylabel_PRESERVECASE <- tklabel(f2,text="preserve case")
   #
-  tkgrid(tklabel(f2,text="        FEATURES:"),entrylabel_W,entrylabel_L,entrylabel_NGRAMSIZE)
-  tkgrid(tklabel(f2,text="                 "),entry_W,entry_L,entry_NGRAMSIZE)
+  tkgrid(tklabel(f2,text="        FEATURES:"),entrylabel_W,entrylabel_L,entrylabel_NGRAMSIZE, entrylabel_PRESERVECASE)
+  tkgrid(tklabel(f2,text="                 "),entry_W,entry_L,entry_NGRAMSIZE, cb_PRESERVECASE)
   
   # Tooltips for the above
   tk2tip(entrylabel_W, "Select this to work on words")
   tk2tip(entrylabel_L, "Select this to work on characters \n(does not make much sense unless you use ngrams)")
   tk2tip(entrylabel_NGRAMSIZE, "State your n for n-grams \nto work on word/char clusters of n")
+  tk2tip(entrylabel_PRESERVECASE, "Whether or not to lowercase all characters")
   tkgrid(tklabel(f2,text="    ")) # blank line for aesthetic purposes
   
   # next row: MFW SETTINGS
@@ -456,7 +468,8 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   tkgrid(tklabel(f2,text="         CULLING:"),entrylabel_CUL_MIN,entrylabel_CUL_MAX, entrylabel_CUL_INCR,entrylabel_CUT_OFF,cblabel_DEL_PRON)
   tkgrid(tklabel(f2,text="                 "),entry_CUL_MIN,entry_CUL_MAX,entry_CUL_INCR,entry_CUT_OFF,cb_DEL_PRON)
   tkgrid(tklabel(f2,text="    ")) # blank line for aesthetic purposes
-    
+
+
   # next row: LISTS & FILES
   #
   cb_FREQS <- tkcheckbutton(f2)
@@ -498,6 +511,7 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   entry_PCA1 <- tkradiobutton(f3)
   entry_PCA2 <- tkradiobutton(f3)
   entry_CONS_TREE <- tkradiobutton(f3)
+  entry_tSNE <- tkradiobutton(f3)
   entry_CONSS <- tkentry(f3,textvariable=consensus.strength,width="8")
   #
   tkconfigure(entry_CA,variable=analysis.type,value="CA") # cluster.analysis
@@ -505,17 +519,19 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   tkconfigure(entry_PCA1,variable=analysis.type,value="PCV") # pca.covariance.table
   tkconfigure(entry_PCA2,variable=analysis.type,value="PCR") # pca.correlation.table
   tkconfigure(entry_CONS_TREE,variable=analysis.type,value="BCT") # make.consensus.tree
+  tkconfigure(entry_tSNE,variable=analysis.type,value="tSNE") # make.tSNE
   
   #
   entrylabel_CA <- tklabel(f3,text="Cluster Analysis")
   entrylabel_MDS <- tklabel(f3,text="MDS")
   entrylabel_PCA1 <- tklabel(f3,text="PCA (cov.)")
   entrylabel_PCA2 <- tklabel(f3,text="PCA (corr.)")
+  entrylabel_tSNE <- tklabel(f3,text="tSNE")
   entrylabel_CONS_TREE <- tklabel(f3,text="Consensus Tree")
   entrylabel_CONSS <- tklabel(f3,text="Consensus strength")
   #
-  tkgrid(tklabel(f3,text=" STATISTICS:"),entrylabel_CA,entrylabel_MDS,entrylabel_PCA1,entrylabel_PCA2)
-  tkgrid(tklabel(f3,text="            "),entry_CA,entry_MDS,entry_PCA1,entry_PCA2)
+  tkgrid(tklabel(f3,text=" STATISTICS:"),entrylabel_CA,entrylabel_MDS,entrylabel_PCA1,entrylabel_PCA2,entrylabel_tSNE)
+  tkgrid(tklabel(f3,text="            "),entry_CA,entry_MDS,entry_PCA1,entry_PCA2, entry_tSNE)
   tkgrid(tklabel(f3,text="            "),entrylabel_CONS_TREE,entrylabel_CONSS)
   tkgrid(tklabel(f3,text="            "),entry_CONS_TREE,entry_CONSS)
   
@@ -524,6 +540,7 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   tk2tip(entrylabel_MDS, "Select to perform Multidimensional Scaling of Delta distance table. \nThis only makes sense if there is a single iteration \n(or only a few), so set MFW_MIN and MFW_MAX \nto equal values, which in turn makes the MFW_INCR setting immaterial. \nThen do the same for your culling settings.")
   tk2tip(entrylabel_PCA1, "Select to perform Principal Components Analysis based on a covariance matrix of Delta distance table. \nThis only makes sense if there is a single iteration (or only a few), so set MFW_MIN and MFW_MAX \nto equal values, which in turn makes the MFW_INCR setting immaterial. \nThen do the same for your culling settings.")
   tk2tip(entrylabel_PCA2, "Select to perform Principal Components Analysis based on a correlation matrix of Delta distance table. \nThis only makes sense if there is a single iteration (or only a few), so set MFW_MIN and MFW_MAX \nto equal values, which in turn makes the MFW_INCR setting immaterial. \nThen do the same for your culling settings.")
+  tk2tip(entrylabel_tSNE, "Select to perform a tSNE visualization (t-Distributed Stochastic Neighbor Embedding).\nThis only makes sense if there is a single iteration (or perhaps a few), so set MFW_MIN and MFW_MAX \nto equal values, which in turn makes the MFW_INCR setting immaterial. \nThen do the same for your culling settings.")
   tk2tip(entrylabel_CONS_TREE, "Select to perform multiple iterations of Cluster Analysis of Delta distance table \nresulting in a Bootstrap COnsensus Tree. This only makes sense \nif you have at least three valid iterations, so set MFW_MIN and MFW_MAX, \nand/or CUL_MIN and CUL_MAX to different values.")
   tk2tip(entrylabel_CONSS, "Select to set the consensus strength for the Bootstrap Tree. \nOnly makes sense if you select that option is checked above. \nLegal values are from 0.4 (40% underlying CA graphs need to agree \non a given connection) to 1 (all underlying CA graphs need to agree).")
   
@@ -751,6 +768,7 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
     if(cancel_pause){
       variables$analyzed.features = as.character(tclvalue(analyzed.features))
       variables$ngram.size = as.numeric(tclvalue(ngram.size))
+      variables$preserve.case = as.logical(as.numeric(tclvalue(preserve.case)))
       variables$corpus.format = as.character(tclvalue(corpus.format))
       variables$mfw.min = as.numeric(tclvalue(mfw.min))
       variables$mfw.max = as.numeric(tclvalue(mfw.max))
