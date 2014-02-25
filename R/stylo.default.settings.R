@@ -74,7 +74,10 @@ corpus.lang = "English.all"
 
 analyzed.features = "w"
 ngram.size = 1
+<<<<<<< HEAD
 preserve.case = FALSE
+=======
+>>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
 
 
 #######  MATHEMATICAL SETTINGS (DISTANCE MEASURE)  #################

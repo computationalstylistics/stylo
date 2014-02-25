@@ -13,7 +13,11 @@ load.corpus.and.parse(files, corpus.dir = "", markup.type = "plain",
                       language = "English", splitting.rule = NULL,
                       sample.size = 10000, sampling = "no.sampling",
                       sampling.with.replacement = FALSE, features = "w", 
+<<<<<<< HEAD
                       ngram.size = 1, preserve.case = FALSE)
+=======
+                      ngram.size = 1)
+>>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
 }
 \arguments{
   \item{files}{a vector of file names.}
@@ -53,7 +57,10 @@ load.corpus.and.parse(files, corpus.dir = "", markup.type = "plain",
     or the size of n-grams to be produced. If this argument is missing, 
     the default value of 1 is used. See \code{txt.to.features} for further 
     details.}
+<<<<<<< HEAD
   \item{preserve.case}{Whether ot not to lowercase all characters in the corpus (default = F).}
+=======
+>>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
 }
 \value{
 The result of this function is a variable (list) containing 
