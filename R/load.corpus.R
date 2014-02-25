@@ -34,12 +34,8 @@ function(files, corpus.dir = "") {
   for (file in files) {
     cat(paste("Loading ", file, "\t", "...", "\n", sep=""))
     # loading the next file from the list "corpus.filenames"
-<<<<<<< HEAD
     current.file = scan(file,what="char",sep="\n", quiet=T)
     #current.file = tolower(scan(file,what="char",sep="\n", quiet=T))
-=======
-    current.file = tolower(scan(file,what="char",sep="\n", quiet=T))
->>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
     loaded.corpus[[file]] = current.file
   }
   setwd(original.path)

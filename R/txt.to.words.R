@@ -10,17 +10,11 @@
 # #################################################
 
 txt.to.words <-
-<<<<<<< HEAD
 function(input.text, splitting.rule = NULL, preserve.case=FALSE) {
   # converting characters to lowercase if necessary
   if (!(preserve.case)){
       input.text = tolower(input.text)
   }
-=======
-function(input.text, splitting.rule = NULL) {
-  # converting all the letters to lowercase
-  input.text = tolower(input.text)
->>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
      # if no custom splitting rule was detected...
     if(length(splitting.rule) == 0 ) {
       # splitting into units specified by regular expression; here, 

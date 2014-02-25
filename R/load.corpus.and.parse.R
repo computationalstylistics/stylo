@@ -9,11 +9,7 @@
 # delete.markup(input.text,markup.type="plain")
 # txt.to.words.ext(input.text,language="English")
 # make.samples(tokenized.input.data,sample.size=10000,sampling="no.sampling",
-<<<<<<< HEAD
 #   sampling.with.replacement=FALSE)
-=======
-#   sampling.with.replacement=FALSE
->>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
 # txt.to.features(tokenized.text,features="w",ngram.size=1)
 #
 #################################################################
@@ -28,13 +24,9 @@ function(files,
          sampling = "no.sampling",
          sampling.with.replacement = FALSE,
          features = "w",
-<<<<<<< HEAD
          ngram.size = 1,
          preserve.case = FALSE) {
-=======
-         ngram.size = 1) {
 
->>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
   loaded.corpus = load.corpus(files=files,corpus.dir=corpus.dir)
   # dropping file extensions from sample names
   names(loaded.corpus) = gsub("(\\.txt$)||(\\.xml$)||(\\.html$)||(\\.htm$)","",
@@ -46,12 +38,8 @@ function(files,
   cat("slicing input text into single words...\n")
   loaded.corpus = lapply(loaded.corpus, txt.to.words.ext,
                                         language = language,
-<<<<<<< HEAD
                                         splitting.rule = splitting.rule,
                                         preserve.case = preserve.case)
-=======
-                                        splitting.rule = splitting.rule)
->>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
   # normal sampling (if applicable); random sampling will be run later
   if(sampling == "normal.sampling") {
     loaded.corpus = make.samples(loaded.corpus,

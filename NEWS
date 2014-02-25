@@ -2,6 +2,12 @@
 ===========================
 
 
+
+
+== version 0.5.4, 2014/02/25
+ * tSNE implemented
+ * more flexible function for splitting input text
+
 == version 0.5.3, 2014/01/2
  * custom regular expressions to tokenize input texts
  * support for external corpora or frequencies

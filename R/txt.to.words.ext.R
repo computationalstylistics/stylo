@@ -15,43 +15,26 @@
 txt.to.words.ext <-
 function(input.text, 
          language="English", 
-<<<<<<< HEAD
          splitting.rule = NULL,
          preserve.case = FALSE) {
   # if a custom splitting rule was detected...
   if(length(splitting.rule) > 0) {
-=======
-         splitting.rule = NULL) {
-  # if a custom splitting rule was detected...
-  if(length(splitting.rule) > 0 ) {
->>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
       # sanity check
       if(length(splitting.rule) == 1) {
         # just in case, convert to characters
         splitting.rule = as.character(splitting.rule)
         # splitting into units specified by custom regular expression
-<<<<<<< HEAD
         tokenized.text = txt.to.words(input.text, splitting.rule, preserve.case=preserve.case)
       } else {
         stop("Wrong splitting regexp")
       }
   
-=======
-        tokenized.text = txt.to.words(input.text, splitting.rule)
-      } else {
-        stop("Wrong splitting regexp")
-      }
->>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
   # if no custom splitting rule was detected...
   } else {
     # Loading the file; optionally, fiddling with apostrophes and contractions:    #
     # This is the standard procedure of splitting input texts
     if(language != "English.contr" & language != "English.all") {
-<<<<<<< HEAD
       tokenized.text = txt.to.words(input.text, preserve.case=preserve.case)
-=======
-      tokenized.text = txt.to.words(input.text)
->>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
     }
     # if the Latin option with adjusting the v/u letters is on,
     # this smashes the distinction and converts both types to the letter u

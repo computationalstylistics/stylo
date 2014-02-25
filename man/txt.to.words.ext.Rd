@@ -7,11 +7,7 @@ removing punctuation etc., and preserving some language-dependent
 idiosyncracies, such as common contractions in English.
 }
 \usage{
-<<<<<<< HEAD
 txt.to.words.ext(input.text, language = "English", splitting.rule = NULL, preserve.case = FALSE)
-=======
-txt.to.words.ext(input.text, language = "English", splitting.rule = NULL)
->>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
 }
 \arguments{
   \item{input.text}{a string of characters, usually a text.}
@@ -25,10 +21,7 @@ txt.to.words.ext(input.text, language = "English", splitting.rule = NULL)
     you can indicate your custom splitting regular expression here. This
     option will overwrite the above language settings. For further details,
     refer to \code{help(txt.to.words)}.}
-<<<<<<< HEAD
   \item{preserve.case}{Whether or not to lowercase all character in the corpus (default = F).}
-=======
->>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
 }
 \details{
 Function for splitting a given input text into single words (chains 
@@ -41,13 +34,9 @@ i.e. strings such as "don't", "you've" etc. will not be split into two strings;
 \code{English.all} keeps the contractions (as above), and also prevents
 the function from splitting compound words (mother-in-law, double-decker, etc.);
 \code{Latin.corr} since some editions do not distinguish the letters v/u,
-<<<<<<< HEAD
 this setting provides a consistent conversion to "u" in the whole string. The
 option \code{preserve.case} lets you specify whether you wish to lowercase all
 characters in the corpus.
-=======
-this setting provides a consistent conversion to "u" in the whole string.
->>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
 }
 \author{
 Maciej Eder, Jan Rybicki, Mike Kestemont

@@ -6,12 +6,8 @@ import(
   pamr, 
   e1071, 
   class, 
-<<<<<<< HEAD
-  lattice
-=======
   lattice,
   tsne
->>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
 )
 
 export(

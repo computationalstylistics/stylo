@@ -6,11 +6,7 @@ Generic tokenization function for splitting a given input text into single words
 (chains of characters delimited by spaces or punctuation marks).
 }
 \usage{
-<<<<<<< HEAD
 txt.to.words(input.text, splitting.rule = NULL, preserve.case = FALSE)
-=======
-txt.to.words(input.text, splitting.rule = NULL)
->>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
 }
 \arguments{
   \item{input.text}{a string of characters, usually a text.}
@@ -24,10 +20,7 @@ txt.to.words(input.text, splitting.rule = NULL)
   scripts try \code{"[^\u0400-\u0482\u048A\u04FF]+"}. Remember, however, 
   that your texts need to be properly loaded into R (which is quite tricky 
   on Windows; see below).}
-<<<<<<< HEAD
   \item{preserve.case}{Whether or not to lowercase all characters in the corpus.}
-=======
->>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
 }
 \details{
 The generic tokenization function for splitting a given input text into 
@@ -44,12 +37,8 @@ solution for Windows users is to convert your texts into Unicode (a variety
 of freeware converters are available on the internet), and to set
 an appropriate global option in R: whenever you start a fresh R session, type
 \code{options(encoding="UTF-8")} in addition to your \code{library(stylo)}
-<<<<<<< HEAD
 command. The option \code{preserve.case} lets you specify whether you wish 
 to lowercase all characters in the corpus (default = F).
-=======
-command.
->>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
 }
 \author{
 Maciej Eder, Jan Rybicki, Mike Kestemont

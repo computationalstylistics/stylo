@@ -105,10 +105,7 @@ mfw.list.cutoff = variables$mfw.list.cutoff
 mfw.max = variables$mfw.max
 mfw.min = variables$mfw.min
 ngram.size = variables$ngram.size
-<<<<<<< HEAD
 preserve.case = variables$preserve.case
-=======
->>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
 number.of.candidates = variables$number.of.candidates
 outputfile = variables$outputfile
 passed.arguments = variables$passed.arguments
@@ -604,12 +601,8 @@ if(corpus.exists == FALSE) {
                          sampling = sampling,
                          sampling.with.replacement = sampling.with.replacement,
                          features = analyzed.features,
-<<<<<<< HEAD
                          ngram.size = ngram.size,
                          preserve.case = preserve.case)
-=======
-                         ngram.size = ngram.size)
->>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
 }
 ###############################################################################
 
@@ -741,10 +734,7 @@ var.name(corpus.format)
 var.name(corpus.lang)
 var.name(analyzed.features)
 var.name(ngram.size)
-<<<<<<< HEAD
 var.name(preserve.case)
-=======
->>>>>>> a6019d86a5c6b3fe19e7a5cf723fec427e1ff5f6
 var.name(mfw.min)
 var.name(mfw.max)
 var.name(mfw.incr)
