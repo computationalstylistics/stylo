@@ -1,0 +1,38 @@
+
+import(
+  tcltk, 
+  tcltk2, 
+  ape, 
+  pamr, 
+  e1071, 
+  class, 
+  lattice
+)
+
+export(
+  assign.plot.colors,
+  classify,
+  define.plot.area,
+  delete.markup,
+  gui.classify,
+  gui.stylo,
+  load.corpus.and.parse,
+  load.corpus,
+  make.ngrams,
+  make.samples,
+  make.table.of.frequencies,
+  oppose,
+  rolling.delta,
+  stylo.default.settings,
+  stylo.pronouns,
+  stylo,
+  txt.to.features,
+  txt.to.words.ext,
+  txt.to.words
+)
+
+S3method(print, stylo.results)
+S3method(print, stylo.corpus)
+S3method(print, stylo.data)
+S3method(summary, stylo.results)
+S3method(summary, stylo.corpus)
