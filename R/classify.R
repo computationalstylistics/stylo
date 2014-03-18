@@ -1237,12 +1237,15 @@ perform.nsc = function(training.set, test.set) {
   classes = c(classes.training, classes.test)
   input.data = as.data.frame(rbind(training.set,test.set))
   training.classes = c(1:length(training.set[,1]))
-  mydata=list(x=t(input.data),y=as.factor(classes),geneid=as.character(1:length(colnames(training.set))), genenames=colnames(training.set))
+  mydata=list(x = t(input.data),
+              y = as.factor(classes),
+              geneid = as.character(1:length(colnames(training.set))), 
+              genenames = colnames(training.set)
+              )
   # training a model
   model = pamr.train(mydata,sample.subset=c(1:length(classes.training)))
-
-#  nsc.distinctive.features = pamr.listgenes(model,mydata,threshold=5,genenames=TRUE)[,2]
-
+# getting the most discriminative features
+#  the.features = pamr.listgenes(model,mydata,threshold=5,genenames=TRUE)[,2]
   # testing the model on "new" data (i.e. the test.set)
   classification.results = pamr.predict(model,mydata$x,threshold=1)
   classification.results = as.character(classification.results)
@@ -1363,7 +1366,7 @@ if(cv == "thorough") {
   
   
 
-  # the beginning of k-fold cross-validation turns
+  # the beginning of k-fold cross-validation k number of iterations
   for(iterations in 1 : cv.folds) {
 
       # this shuffles the names of samples
@@ -1432,8 +1435,10 @@ if(cv == "thorough") {
                no.of.correct.attrib," of ", perfect.guessing,"\t(",
                round(no.of.correct.attrib / perfect.guessing * 100, 1),"%)",
                "\n",file=outputfile,append=T,sep="")
-      #
-      cross.validation.results = c(cross.validation.results, no.of.correct.attrib)
+      # percentage of correct attributions
+      success.rate.cv = no.of.correct.attrib / perfect.guessing * 100
+      # combining results for k folds
+      cross.validation.results = c(cross.validation.results, success.rate.cv)
     }
 
   }
@@ -1543,6 +1548,10 @@ features = mfw.list.of.all
 if(exists("misclassified.samples")) {
   attr(misclassified.samples, "description") = "............"
 #  class(misclassified.samples) = "stylo.data"
+}
+if(exists("cross.validation.summary")) {
+  attr(cross.validation.summary, "description") = "correctly guessed samples (cross-validation folds)"
+  class(cross.validation.summary) = "stylo.data"
 }
 if(exists("success.rate")) {
   attr(success.rate, "description") = "percentage of correctly guessed samples"
