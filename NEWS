@@ -3,9 +3,13 @@
 
 
 
+== version 0.5.5, 2014/04/03
+ * cross-validation in classify()
+ * lots of bugs fixed
 
 == version 0.5.4, 2014/02/25
  * tSNE implemented
+ * preserve.case option
  * more flexible function for splitting input text
 
 == version 0.5.3, 2014/01/2

@@ -24,7 +24,7 @@ function(input.text,
         # just in case, convert to characters
         splitting.rule = as.character(splitting.rule)
         # splitting into units specified by custom regular expression
-        tokenized.text = txt.to.words(input.text, splitting.rule, preserve.case=preserve.case)
+        tokenized.text = txt.to.words(input.text, splitting.rule, preserve.case)
       } else {
         stop("Wrong splitting regexp")
       }
@@ -34,7 +34,7 @@ function(input.text,
     # Loading the file; optionally, fiddling with apostrophes and contractions:    #
     # This is the standard procedure of splitting input texts
     if(language != "English.contr" & language != "English.all") {
-      tokenized.text = txt.to.words(input.text, preserve.case=preserve.case)
+      tokenized.text = txt.to.words(input.text, preserve.case)
     }
     # if the Latin option with adjusting the v/u letters is on,
     # this smashes the distinction and converts both types to the letter u
@@ -43,6 +43,10 @@ function(input.text,
     }
     # this code is used for English corpora only
     if(language == "English.contr" | language == "English.all") {
+      # turning into lowercase, if applicable
+        if(preserve.case == FALSE) {
+          input.text = tolower(input.text)
+        }
       # replacing non-ASCII apostrophes with simple ' (standard ASCII char)
       tokenized.text = gsub(iconv("\u2019",from="UTF-8"),"'",input.text)
       # getting rid of contractions ('t, 's, 've, 'd, 'll, 'em, 'im) by 

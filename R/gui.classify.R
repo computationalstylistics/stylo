@@ -10,7 +10,6 @@
 
 
 
-
 # #################################################
 # Function for displaying simple yet effective graphical interface (GUI).
 # If you execute this option, the values stored in the function 
@@ -110,6 +109,7 @@ mfw.list.cutoff = variables$mfw.list.cutoff
 mfw.max = variables$mfw.max
 mfw.min = variables$mfw.min
 ngram.size = variables$ngram.size
+preserve.case = variables$preserve.case
 number.of.candidates = variables$number.of.candidates
 outputfile = variables$outputfile
 passed.arguments = variables$passed.arguments
@@ -168,6 +168,7 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   culling.max <- tclVar(culling.max)
   culling.incr <- tclVar(culling.incr)
   ngram.size <- tclVar(ngram.size)
+  preserve.case <- tclVar(preserve.case)
   analyzed.features <- tclVar(analyzed.features)
   use.existing.freq.tables <- tclVar(use.existing.freq.tables)
   use.existing.wordlist <- tclVar(use.existing.wordlist)
@@ -200,7 +201,6 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   length.of.random.sample <- tclVar(length.of.random.sample)
   consensus.strength <- tclVar(consensus.strength)
   dump.samples <- tclVar(dump.samples)
-  
   f1 <- tkframe(tt)
   f2 <- tkframe(tt)
   f3 <- tkframe(tt)
@@ -403,21 +403,26 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   entry_L <- tkradiobutton(f2)
   cb_NGRAMS <- tkcheckbutton(f2)
   entry_NGRAMSIZE <- tkentry(f2,textvariable=ngram.size,width="8")
+  cb_PRESERVECASE <- tkcheckbutton(f2)
+
   #
   tkconfigure(entry_W,variable=analyzed.features,value="w")
   tkconfigure(entry_L,variable=analyzed.features,value="c")
+  tkconfigure(cb_PRESERVECASE,variable=preserve.case)
   #
   entrylabel_W <- tklabel(f2,text="words")
   entrylabel_L <- tklabel(f2,text="chars")
   entrylabel_NGRAMSIZE <- tklabel(f2,text="ngram size")
+  entrylabel_PRESERVECASE <- tklabel(f2,text="preserve case")
   #
-  tkgrid(tklabel(f2,text="        FEATURES:"),entrylabel_W,entrylabel_L,entrylabel_NGRAMSIZE)
-  tkgrid(tklabel(f2,text="                 "),entry_W,entry_L,entry_NGRAMSIZE)
+  tkgrid(tklabel(f2,text="        FEATURES:"),entrylabel_W,entrylabel_L,entrylabel_NGRAMSIZE, entrylabel_PRESERVECASE)
+  tkgrid(tklabel(f2,text="                 "),entry_W,entry_L,entry_NGRAMSIZE, cb_PRESERVECASE)
   
   # Tooltips for the above
   tk2tip(entrylabel_W, "Select this to work on words")
   tk2tip(entrylabel_L, "Select this to work on characters \n(does not make much sense unless you use ngrams)")
   tk2tip(entrylabel_NGRAMSIZE, "State your n for n-grams \nto work on word/char clusters of n")
+  tk2tip(entrylabel_PRESERVECASE, "Whether or not to lowercase all characters")
   tkgrid(tklabel(f2,text="    ")) # blank line for aesthetic purposes
   
   # next row: MFW SETTINGS
@@ -730,6 +735,7 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   variables$analyzed.features = as.character(tclvalue(analyzed.features))
   variables$ngram.size = as.numeric(tclvalue(ngram.size))
   variables$corpus.format = as.character(tclvalue(corpus.format))
+  variables$preserve.case = as.logical(as.numeric(tclvalue(preserve.case)))
   variables$mfw.min = as.numeric(tclvalue(mfw.min))
   variables$mfw.max = as.numeric(tclvalue(mfw.max))
   variables$mfw.incr = as.numeric(tclvalue(mfw.incr))

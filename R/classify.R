@@ -143,6 +143,7 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
 # newly-added options
 relative.frequencies = variables$relative.frequencies
 splitting.rule = variables$splitting.rule
+preserve.case = variables$preserve.case
 
 cv = variables$cv
 cv.folds = variables$cv.folds
@@ -594,6 +595,7 @@ if(corpus.exists == FALSE) {
                          markup.type = corpus.format,
                          language = corpus.lang,
                          splitting.rule = splitting.rule,
+                         preserve.case = preserve.case,
                          sample.size = sample.size,
                          sampling = sampling,
                          sampling.with.replacement = sampling.with.replacement,
@@ -606,6 +608,7 @@ if(corpus.exists == FALSE) {
                          markup.type = corpus.format,
                          language = corpus.lang,
                          splitting.rule = splitting.rule,
+                         preserve.case = preserve.case,
                          sample.size = sample.size,
                          sampling = sampling,
                          sampling.with.replacement = sampling.with.replacement,
@@ -768,6 +771,7 @@ var.name <- function(x) {
  var.name(culling.incr)
  var.name(mfw.list.cutoff)
  var.name(delete.pronouns)
+ var.name(preserve.case)
  var.name(use.existing.freq.tables)
  var.name(use.existing.wordlist)
  var.name(classification.method)
@@ -1082,7 +1086,7 @@ distance.name.on.graph = "standard classification"
 
 # Delta in its various flavours
 
-perform.delta = function(zscores.table.both.sets) {
+perform.delta = function(zscores.table.both.sets, distance.measure = "CD") {
 # calculating classic Delta distances
 if(distance.measure == "CD") {
   distance.name.on.graph = "Classic Delta distance"
@@ -1212,7 +1216,10 @@ perform.svm = function(training.set, test.set) {
   training.classes = c(1:length(training.set[,1]))
   #
   # training a model
-  model = svm(classes ~ ., data = input.data, subset = training.classes)
+#  model = svm(classes ~ ., data = input.data, subset = training.classes)
+  model = svm(classes ~ ., data = input.data, subset = training.classes, 
+                 kernel = svm.kernel, degree = svm.degree, coef0 = svm.coef0, 
+                 cost = svm.cost)
   #
   # testing the model on "new" data (i.e. the test.set)
   classification.results = predict(model, input.data[,-1])
@@ -1260,7 +1267,7 @@ return(classification.results)
 
 
 if(tolower(classification.method) == "delta") {
-  selected.dist = perform.delta(zscores.table.both.sets)
+  selected.dist = perform.delta(zscores.table.both.sets, distance.measure)
 }
 
 
@@ -1342,7 +1349,6 @@ if(how.many.correct.attributions == TRUE) {
 
 
 
-
 if(cv == "thorough") {
 
   cat("\n")
@@ -1369,28 +1375,37 @@ if(cv == "thorough") {
   # the beginning of k-fold cross-validation k number of iterations
   for(iterations in 1 : cv.folds) {
 
-      # this shuffles the names of samples
-      names.of.the.texts = sample(rownames(freq.table.both.sets.binded))
-      freq.table.both.sets.binded = freq.table.both.sets.binded[names.of.the.texts,]
-
-      # variable's initialization: first sample goes to I set
-      names.of.I.set = names.of.the.texts[1]
+    names.of.training.set.orig = rownames(primary.set)
+    names.of.training.set.new = c()
+    classes.training.set = gsub("_.*","",names.of.training.set.orig,perl=T)
+    classes.test.set = gsub("_.*","",rownames(secondary.set),perl=T)
 
       # this looks for classes that were not represented so far in I set
-      for(w in 2:length(names.of.the.texts)) {
-          if(gsub("_.*","",names.of.the.texts,perl=T)[w] 
-              %in% 
-              gsub("_.*","",names.of.I.set,perl=T) == FALSE) {
-              names.of.I.set = c(names.of.I.set,names.of.the.texts[w])
-          }
+      for(i in classes.training.set) {
+        # shuffle the order of samples (both sets combined)
+        names.of.the.texts = sample(rownames(freq.table.both.sets.binded))
+        # exclude samples that have been already chosen to the training set
+        names.of.the.texts = setdiff(names.of.the.texts, names.of.training.set.new)
+        # extract the classes, or strings before the first underscore
+        classes.both.sets = gsub("_.*","",names.of.the.texts,perl=T)
+        # find the first matching sample
+        randomly.picked.sample = grep(i,classes.both.sets)[1]
+        # retrieve its full name
+        training.set.next.member = names.of.the.texts[randomly.picked.sample]
+        # build the vector of randomly chosen members of the training set
+        names.of.training.set.new = c(names.of.training.set.new, training.set.next.member)
       }
 
+   # getting back the original samples' names
+   names.of.the.texts = rownames(freq.table.both.sets.binded)
+
+
   # establishing the I set:
-  training.set = freq.table.both.sets.binded[names.of.I.set,]
+  training.set = freq.table.both.sets.binded[names.of.training.set.new,]
 
   # establishing the II set
   test.set = 
-        freq.table.both.sets.binded[!(names.of.the.texts %in% names.of.I.set),]
+        freq.table.both.sets.binded[!(names.of.the.texts %in% names.of.training.set.new),]
 
   # both sets binded again, after rearrangements 
   freq.table.both.sets.binded = rbind(training.set,test.set)
@@ -1398,7 +1413,7 @@ if(cv == "thorough") {
 
   if(tolower(classification.method) == "delta") {
     current.zscores = scale(freq.table.both.sets.binded)
-    selected.dist1 = perform.delta(current.zscores)
+    selected.dist1 = perform.delta(current.zscores, distance.measure)
   }
   if(tolower(classification.method) == "knn") {
     classification.results = perform.knn(training.set,test.set)
@@ -1407,7 +1422,7 @@ if(cv == "thorough") {
     classification.results = perform.svm(training.set,test.set)
   }
   if(tolower(classification.method) == "nsc") {
-    # not available yet
+    classification.results = perform.nsc(training.set,test.set)
   }
 
 
@@ -1426,17 +1441,19 @@ if(cv == "thorough") {
                                      classification.results))
         }
       # 
+      perfect.guessing.cv = 
+        length(classes.training.set[classes.test.set %in% classes.training.set])
       total.no.of.correct.attrib.cv = 
                          c(total.no.of.correct.attrib.cv, no.of.correct.attrib)
       total.no.of.possible.attrib.cv = 
-                         c(total.no.of.possible.attrib.cv, perfect.guessing)
+                         c(total.no.of.possible.attrib.cv, perfect.guessing.cv)
       cat("\n",file=outputfile,append=T)
       cat(mfw, " MFW , culled @ ",current.culling,"%,  ",
-               no.of.correct.attrib," of ", perfect.guessing,"\t(",
-               round(no.of.correct.attrib / perfect.guessing * 100, 1),"%)",
+               no.of.correct.attrib," of ", perfect.guessing.cv,"\t(",
+               round(no.of.correct.attrib / perfect.guessing.cv * 100, 1),"%)",
                "\n",file=outputfile,append=T,sep="")
       # percentage of correct attributions
-      success.rate.cv = no.of.correct.attrib / perfect.guessing * 100
+      success.rate.cv = no.of.correct.attrib / perfect.guessing.cv * 100
       # combining results for k folds
       cross.validation.results = c(cross.validation.results, success.rate.cv)
     }
@@ -1549,7 +1566,7 @@ if(exists("misclassified.samples")) {
   attr(misclassified.samples, "description") = "............"
 #  class(misclassified.samples) = "stylo.data"
 }
-if(exists("cross.validation.summary")) {
+if(exists("cross.validation.summary") & length(cross.validation.summary) >0 ) {
   attr(cross.validation.summary, "description") = "correctly guessed samples (cross-validation folds)"
   class(cross.validation.summary) = "stylo.data"
 }
