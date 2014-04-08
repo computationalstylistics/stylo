@@ -34,7 +34,7 @@ function(input.text,
     # Loading the file; optionally, fiddling with apostrophes and contractions:    #
     # This is the standard procedure of splitting input texts
     if(language != "English.contr" & language != "English.all") {
-      tokenized.text = txt.to.words(input.text, preserve.case)
+      tokenized.text = txt.to.words(input.text, preserve.case=preserve.case)
     }
     # if the Latin option with adjusting the v/u letters is on,
     # this smashes the distinction and converts both types to the letter u

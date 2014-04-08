@@ -118,6 +118,8 @@ function(language="English") {
       pronouns = hun.pronouns
   if(language == "Dutch")
       pronouns = dut.pronouns
+  if(language == "Spanish")
+      pronouns = sp.pronouns
 
   # Windows users are a bit allergic to Unicode; let's make them happy
   # by converting the chosen set of pronouns to local encoding
