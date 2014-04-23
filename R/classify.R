@@ -1568,7 +1568,7 @@ if(exists("misclassified.samples")) {
 }
 if(exists("cross.validation.summary") & length(cross.validation.summary) >0 ) {
   attr(cross.validation.summary, "description") = "correctly guessed samples (cross-validation folds)"
-  class(cross.validation.summary) = "stylo.data"
+  class(cross.validation.summary) = c("stylo.data", "matrix")
 }
 if(exists("success.rate")) {
   attr(success.rate, "description") = "percentage of correctly guessed samples"
