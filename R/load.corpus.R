@@ -11,7 +11,7 @@
 # btw: implementation will be very easy using %in%
 
 load.corpus <-
-function(files, corpus.dir = "") {
+function(files, corpus.dir = "", encoding = "native.enc") {
   # first of all, retrieve the current path name
   original.path = getwd()
   # checking if the specified directory exists
@@ -34,8 +34,7 @@ function(files, corpus.dir = "") {
   for (file in files) {
     cat(paste("Loading ", file, "\t", "...", "\n", sep=""))
     # loading the next file from the list "corpus.filenames"
-    current.file = scan(file,what="char",sep="\n", quiet=T)
-    #current.file = tolower(scan(file,what="char",sep="\n", quiet=T))
+    current.file = scan(file,what="char",sep="\n", encoding=encoding, quiet=T)
     loaded.corpus[[file]] = current.file
   }
   setwd(original.path)

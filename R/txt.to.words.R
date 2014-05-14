@@ -10,7 +10,7 @@
 # #################################################
 
 txt.to.words <-
-function(input.text, splitting.rule = NULL, preserve.case=FALSE) {
+function(input.text, splitting.rule = NULL, preserve.case = FALSE) {
   # converting characters to lowercase if necessary
   if (!(preserve.case)){
       input.text = tolower(input.text)

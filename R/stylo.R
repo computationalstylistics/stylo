@@ -158,7 +158,7 @@ edge.weights = variables$edge.weights
 relative.frequencies = variables$relative.frequencies
 splitting.rule = variables$splitting.rule
 preserve.case = variables$preserve.case
-
+encoding = variables$encoding
 
 
 
@@ -596,6 +596,7 @@ if(corpus.exists == FALSE) {
   # loading text files, splitting, parsing, n-gramming, samping, and so forth
   loaded.corpus = load.corpus.and.parse(files = corpus.filenames,
                          corpus.dir = corpus.dir,
+                         encoding = encoding,
                          markup.type = corpus.format,
                          language = corpus.lang,
                          splitting.rule = splitting.rule,

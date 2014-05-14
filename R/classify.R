@@ -144,6 +144,7 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
 relative.frequencies = variables$relative.frequencies
 splitting.rule = variables$splitting.rule
 preserve.case = variables$preserve.case
+encoding = variables$encoding
 
 cv = variables$cv
 cv.folds = variables$cv.folds
@@ -592,6 +593,7 @@ if(corpus.exists == FALSE) {
   # loading text files, splitting, parsing, n-gramming, samping, and so forth
   corpus.of.primary.set = load.corpus.and.parse(files = filenames.primary.set,
                          corpus.dir = training.corpus.dir,
+                         encoding = encoding,
                          markup.type = corpus.format,
                          language = corpus.lang,
                          splitting.rule = splitting.rule,
@@ -605,6 +607,7 @@ if(corpus.exists == FALSE) {
   # loading text files: test set
   corpus.of.secondary.set = load.corpus.and.parse(files=filenames.secondary.set,
                          corpus.dir = test.corpus.dir,
+                         encoding = encoding,
                          markup.type = corpus.format,
                          language = corpus.lang,
                          splitting.rule = splitting.rule,

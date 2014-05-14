@@ -25,15 +25,18 @@ function(files,
          sampling.with.replacement = FALSE,
          features = "w",
          ngram.size = 1,
+         encoding = "native.enc",
          preserve.case = FALSE) {
 
-  loaded.corpus = load.corpus(files=files,corpus.dir=corpus.dir)
+  loaded.corpus = load.corpus(files = files,
+                              corpus.dir = corpus.dir,
+                              encoding = encoding)
   # dropping file extensions from sample names
   names(loaded.corpus) = gsub("(\\.txt$)||(\\.xml$)||(\\.html$)||(\\.htm$)","",
                          names(loaded.corpus) )
 
   # deleting xml/html markup by applying the function "delete.markup"
-  loaded.corpus = lapply(loaded.corpus,delete.markup,markup.type=markup.type)
+  loaded.corpus = lapply(loaded.corpus, delete.markup, markup.type=markup.type)
   # deleting punctuation, splitting into words
   cat("slicing input text into single words...\n")
   loaded.corpus = lapply(loaded.corpus, txt.to.words.ext,

@@ -75,6 +75,7 @@ corpus.lang = "English.all"
 analyzed.features = "w"
 ngram.size = 1
 preserve.case = FALSE
+encoding = "native.enc"
 
 
 #######  MATHEMATICAL SETTINGS (DISTANCE MEASURE)  #################
