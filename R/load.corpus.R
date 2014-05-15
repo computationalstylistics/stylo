@@ -6,9 +6,6 @@
 # Optional argument: a directory containing the corpus
 # #################################################
 
-# ATTENTION: this function is not resistant to possible mismatch
-# between the vector of filenames and actual existing files;
-# btw: implementation will be very easy using %in%
 
 load.corpus <-
 function(files, corpus.dir = "") {

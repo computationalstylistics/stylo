@@ -56,8 +56,9 @@ load.corpus.and.parse(files, corpus.dir = "", markup.type = "plain",
   \item{preserve.case}{Whether ot not to lowercase all characters in the corpus (default = F).}
 }
 \value{
-The result of this function is a variable (list) containing 
-as elements the samples (entire texts or sampled subsets) split into 
+\value{
+The function returns an object of the class \code{stylo.corpus}. It is a list
+containing as elements the samples (entire texts or sampled subsets) split into 
 words/characters and combined into n-grams (if applicable).
 }
 \author{Maciej Eder}

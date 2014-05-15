@@ -13,7 +13,8 @@ load.corpus(files, corpus.dir = "")
     not specified, the current working directory will be used.}
 }
 \value{
-The function returns a variable (list), containing as elements the texts loaded.
+The function returns an object of the class \code{stylo.corpus}. It is a list
+containing as elements the texts loaded.
 }
 
 \author{Maciej Eder}

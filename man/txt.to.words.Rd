@@ -40,6 +40,9 @@ an appropriate global option in R: whenever you start a fresh R session, type
 command. The option \code{preserve.case} lets you specify whether you wish 
 to lowercase all characters in the corpus (default = F).
 }
+\value{
+The function returns a vector of tokenized words (or other units) as elements.
+}
 \author{
 Maciej Eder, Jan Rybicki, Mike Kestemont
 }
