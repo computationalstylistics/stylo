@@ -335,7 +335,7 @@ features.exist = FALSE
         # file with a vector of features will be loaded
         cat("\n", "reading a custom set of features from a file...", "\n",sep="")
         # reading a file: newlines are supposed to be delimiters
-        features = scan(features,what="char",sep="\n")
+        features = scan(features,what="char",sep="\n",encoding=encoding)
         # getting rid of the lines beginning with the "#" char
         features = c(grep("^[^#]",features,value=TRUE))
       } else {
@@ -406,7 +406,7 @@ for(iteration in 1:2) {
       if(file.exists(frequencies) == TRUE) {
         # file with frequencies will be loaded
         cat("\n", "reading a file containing frequencies...", "\n",sep="")
-        frequencies = t(read.table(frequencies))
+        frequencies = t(read.table(frequencies, encoding=encoding))
       } else {
         # if there's no such a file, then don't try to use it
         cat("\n", "file \"",frequencies, "\" could not be found\n",sep="")
@@ -706,7 +706,11 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
       "# -----------------------------------------------------------------------",
       "", file="wordlist.txt", sep="\n")
     # the current wordlist into a file
-    cat(mfw.list.of.all, file="wordlist.txt", sep="\n",append=F)
+      if(encoding == "native.enc") {
+        cat(mfw.list.of.all, file="wordlist.txt", sep="\n",append=T)
+      } else {
+        cat(iconv(mfw.list.of.all, to=encoding), file="wordlist.txt", sep="\n",append=T)
+      }
     
   }   # <----- conditional expr. if(features.exist == TRUE) terminates here
 

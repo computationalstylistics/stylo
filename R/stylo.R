@@ -243,14 +243,6 @@ if(txm.compatibility.mode == TRUE) {
     use.existing.wordlist = FALSE
   }
 ###############################################################################
-# sanity check: if an appropriate argument has been used, pipe it to "frequencies"
-#  if( length(frequencies) == 0 & length(training.frequencies) > 0 ) {
-#    frequencies = training.frequencies
-#  }
-#  if( length(frequencies) == 0 & length(test.frequencies) > 0 ) {
-#    frequencies = test.frequencies
-#  }
-###############################################################################
 
 
 
@@ -308,20 +300,6 @@ if(write.jpg.file == TRUE || write.png.file == TRUE){
  
 
 
-# #################################################
-# the module for loading a corpus from the text files;
-# it can be omitted if the frequency table already exists
-# (then "use.existing.freq.tables" should be set 
-# to TRUE in the preamble of the script/GUI)
-# #################################################
-#
-# Checking: (1) whether to produce a new frequency table or to use 
-# the existing one; (2) whether the tables are stored in memory or 
-# written into files.
-# If you have chosen using the existing table and it does not exist,
-# then your choice will be ignored and the table will be 
-# created from scratch.
-
 
 
 ###############################################################################
@@ -359,7 +337,7 @@ features.exist = FALSE
         # file with a vector of features will be loaded
         cat("\n", "reading a custom set of features from a file...", "\n",sep="")
         # reading a file: newlines are supposed to be delimiters
-        features = scan(features,what="char",sep="\n")
+        features = scan(features,what="char",sep="\n",encoding=encoding)
         # getting rid of the lines beginning with the "#" char
         features = c(grep("^[^#]",features,value=TRUE))
       } else {
@@ -415,7 +393,7 @@ corpus.exists = FALSE
       if(file.exists(frequencies) == TRUE) {
         # file with frequencies will be loaded
         cat("\n", "reading a file containing frequencies...", "\n",sep="")
-        frequencies = t(read.table(frequencies))
+        frequencies = t(read.table(frequencies, encoding=encoding))
       } else {
         # if there's no such a file, then don't try to use it
         cat("\n", "file \"",frequencies, "\" could not be found\n",sep="")
@@ -534,7 +512,11 @@ if(corpus.exists == FALSE) {
         cat("\n")
         cat("external list of files will be used for uploading the corpus\n\n")
         # retrieving the filenames from a file
-        corpus.filenames = scan("files_to_analyze.txt",what="char",sep="\n",quiet=T)
+        corpus.filenames = scan("files_to_analyze.txt",
+                                what="char",
+                                sep="\n",
+                                encoding=encoding,
+                                quiet=T)
         # getting rid of spaces and/or tabs
         corpus.filenames = unlist(strsplit(corpus.filenames,"[ \t]+"))
           # checking whether all the files indicated on the list really exist
@@ -675,7 +657,11 @@ if(exists("frequencies.0.culling") == FALSE) {
       "# -----------------------------------------------------------------------",
       "", file="wordlist.txt", sep="\n")
     # the current wordlist into a file
-    cat(mfw.list.of.all, file="wordlist.txt", sep="\n",append=T)
+      if(encoding == "native.enc") {
+        cat(mfw.list.of.all, file="wordlist.txt", sep="\n",append=T)
+      } else {
+        cat(iconv(mfw.list.of.all, to=encoding), file="wordlist.txt", sep="\n",append=T)
+      }
 
   }   # <----- conditional expr. if(features.exist == TRUE) terminates here
 
