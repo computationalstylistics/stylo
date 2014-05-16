@@ -706,11 +706,15 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
       "# -----------------------------------------------------------------------",
       "", file="wordlist.txt", sep="\n")
     # the current wordlist into a file
+      # checking if encoding conversion is needed
       if(encoding == "native.enc") {
-        cat(mfw.list.of.all, file="wordlist.txt", sep="\n",append=T)
+        data.to.be.saved = mfw.list.of.all
       } else {
-        cat(iconv(mfw.list.of.all, to=encoding), file="wordlist.txt", sep="\n",append=T)
+        data.to.be.saved = iconv(mfw.list.of.all, to=encoding)
       }
+  # writing the stuff
+  cat(data.to.be.saved,file="wordlist.txt", sep="\n",append=T)
+      
     
   }   # <----- conditional expr. if(features.exist == TRUE) terminates here
 
@@ -732,16 +736,30 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
                             relative = relative.frequencies)
 
   # writing the frequency tables to text files (they can be re-used!)
-  write.table(t(freq.I.set.0.culling), 
-              file="freq_table_primary_set.txt", 
-              sep="\t",
-              row.names=TRUE,
-              col.names=TRUE)
-  write.table(t(freq.II.set.0.culling), 
-              file="freq_table_secondary_set.txt", 
-              sep="\t",
-              row.names=TRUE,
-              col.names=TRUE)
+  # first, the training set
+      # checking if any re-encoding is needed 
+      if(encoding == "native.enc") {
+        data.to.be.saved = t(freq.I.set.0.culling)
+      } else {
+        data.to.be.saved = t(freq.I.set.0.culling)
+        rownames(data.to.be.saved) = iconv(rownames(data.to.be.saved), to=encoding)
+        colnames(data.to.be.saved) = iconv(colnames(data.to.be.saved), to=encoding)
+      }
+  # writing the stuff
+  write.table(data.to.be.saved, file = "freq_table_primary_set.txt")
+
+  # now, the test set
+      # checking if any re-encoding is needed 
+      if(encoding == "native.enc") {
+        data.to.be.saved = t(freq.II.set.0.culling)
+      } else {
+        data.to.be.saved = t(freq.II.set.0.culling)
+        rownames(data.to.be.saved) = iconv(rownames(data.to.be.saved), to=encoding)
+        colnames(data.to.be.saved) = iconv(colnames(data.to.be.saved), to=encoding)
+      }
+  # writing the stuff
+  write.table(data.to.be.saved, file = "freq_table_secondary_set.txt")
+
   
 }
 ###############################################################################
@@ -1484,6 +1502,56 @@ if(exists("cross.validation.results.all")) {
 
 
 
+
+
+# saving a requested stuff into external files
+
+# writing distance table(s) to a file (if an appropriate option has been chosen)
+if(save.distance.tables == TRUE && exists("distance.table") == TRUE) {
+  distance.table.filename = paste("distance_table_",mfw,"mfw_",current.culling,"c.txt",sep="")
+    # checking if encoding conversion is needed
+    if(encoding == "native.enc") {
+      data.to.be.saved = distance.table
+    } else {
+      data.to.be.saved = distance.table
+      rownames(data.to.be.saved) = iconv(rownames(data.to.be.saved), to=encoding)
+      colnames(data.to.be.saved) = iconv(colnames(data.to.be.saved), to=encoding)
+    }
+  # writing the stuff
+  write.table(file=distance.table.filename, data.to.be.saved)
+}
+
+# writing the words (or features) actually used in the analysis
+##features.actually.used = colnames(table.with.all.freqs[,1:mfw])
+features.actually.used = list.of.words.after.culling[start.at : mfw.max]
+#
+if(save.analyzed.features == TRUE) {
+    # checking if encoding conversion is needed
+    if(encoding == "native.enc") {
+      data.to.be.saved = features.actually.used
+    } else {
+      data.to.be.saved = iconv(features.actually.used, to=encoding)
+    }
+  # writing the stuff
+  cat(data.to.be.saved,
+     file=paste("features_analyzed_",mfw,"mfw_",current.culling,"c.txt",sep=""),
+     sep="\n")
+}
+
+# writing the frequency table that was actually used in the analysis
+if(save.analyzed.freqs == TRUE) {
+    # checking if encoding conversion is needed
+    if(encoding == "native.enc") {
+      data.to.be.saved = t(freq.table.both.sets[,1:mfw])
+    } else {
+      data.to.be.saved = t(freq.table.both.sets[,1:mfw])
+      rownames(data.to.be.saved) = iconv(rownames(data.to.be.saved), to=encoding)
+      colnames(data.to.be.saved) = iconv(colnames(data.to.be.saved), to=encoding)
+    }
+  # writting the stuff -- the file name will be changed accordingly
+  write.table(data.to.be.saved,
+     file=paste("frequencies_analyzed_",mfw,"mfw_",current.culling,"c.txt",sep=""))
+}
 
 
 
