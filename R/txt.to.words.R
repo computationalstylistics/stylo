@@ -19,13 +19,35 @@ function(input.text, splitting.rule = NULL, preserve.case = FALSE) {
     if(length(splitting.rule) == 0 ) {
       # splitting into units specified by regular expression; here, 
       # all sequences between non-letter characters are assumed to be words:
-      if(Sys.info()[["sysname"]] == "Windows") { 
-        ### Windows
-        tokenized.text = c(unlist(strsplit(input.text, "\\W+|_+",perl=T)))
-      } else {
-        ### Linux, Mac
-        tokenized.text = c(unlist(strsplit(input.text, "[^[:alpha:]]+")))
-      }
+      splitting.rule = paste("[^A-Za-z",
+          # Latin1 Supplement (Western)
+          "\U00C0-\U00FF",
+          # Latin supplement (Eastern)
+          "\U0100-\U01BF",
+          # Latin extended (phonetic)
+          "\U01C4-\U02AF",
+          # modern Greek
+          "\U0386\U0388-\U03FF",
+          # Cyrillic
+          "\U0400-\U0481\U048A-\U0527",
+          # Hebrew
+          "\U05C6\U05D0-\U05EA\U05F0-\U05F2",
+          # extended Latin
+          "\U1E00-\U1EFF",
+          # ancient Greek
+          "\U1F00-\U1FBC\U1FC2-\U1FCC\U1FD0-\U1FDB\U1FE0-\U1FEC\U1FF2-\U1FFC",
+          "]+",
+          sep="")
+      tokenized.text = c(unlist(strsplit(input.text, splitting.rule)))
+# system-dependent splitting not valid any more
+#      if(Sys.info()[["sysname"]] == "Windows") { 
+#        ### Windows
+#        tokenized.text = c(unlist(strsplit(input.text, "\\W+|_+",perl=T)))
+#      } else {
+#        ### Linux, Mac
+#        tokenized.text = c(unlist(strsplit(input.text, "[^[:alpha:]]+")))
+#      }
+#
     # if custom splitting rule was indicated:
     } else {
       # sanity check
