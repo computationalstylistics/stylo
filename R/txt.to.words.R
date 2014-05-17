@@ -20,7 +20,7 @@ function(input.text, splitting.rule = NULL, preserve.case = FALSE) {
       # splitting into units specified by regular expression; here, 
       # all sequences between non-letter characters are assumed to be words:
       splitting.rule = paste("[^A-Za-z",
-          # Latin1 Supplement (Western)
+          # Latin supplement (Western)
           "\U00C0-\U00FF",
           # Latin supplement (Eastern)
           "\U0100-\U01BF",

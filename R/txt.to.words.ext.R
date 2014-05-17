@@ -70,8 +70,6 @@ function(input.text,
     }
     # trying to avoid empty strings:
     tokenized.text = tokenized.text[nchar(tokenized.text)>0]
-    # trying to get rid of non-letter characters:
-    tokenized.text = tokenized.text[grep("[^[:digit:]]",tokenized.text)]
     #
   }
 return(tokenized.text)
