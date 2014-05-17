@@ -314,7 +314,7 @@ features.exist = FALSE
       if(is.vector(features) == TRUE) {
         # if yes, then convert the above object into characters, just in case
         features = as.character(features)
-        # link the table into the variable used for calculations
+        # link this vector into the variable used for calculations
         mfw.list.of.all = features
       } else {
         cat("\n")
@@ -322,7 +322,7 @@ features.exist = FALSE
         cat("Unfortunately, something is wrong: check if your variable\n")
         cat("has a form of vector\n")
         cat("\n")
-        stop("Wrong format: a vector of features was expected")
+        stop("Wrong format: a vector of features (e.g. words) was expected")
       }
     # selecting the above vector as a valid set of features
     features.exist = TRUE

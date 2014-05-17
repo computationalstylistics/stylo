@@ -60,10 +60,12 @@ function(input.text,
       # depending on which option was swithed on, either the contractions are
       # kept, or all the peculiarities, i.e. both contractions and hyphens
         if(language == "English.contr") {
-          tokenized.text=c(unlist(strsplit(tokenized.text,"[^[:alpha:]^]+")))
+          tokenized.text=c(unlist(strsplit(tokenized.text,
+                    "[^A-Za-z\U00C0-\U00FF\U0100-\U01BF\U01C4-\U02AF^]+")))
         }
         if(language == "English.all") {
-          tokenized.text=c(unlist(strsplit(tokenized.text,"[^[:alpha:]^-]+")))
+          tokenized.text=c(unlist(strsplit(tokenized.text,
+                    "[^A-Za-z\U00C0-\U00FF\U0100-\U01BF\U01C4-\U02AF^-]+")))
           # trying to clean the remaining dashes:
           tokenized.text = gsub("^[-]+$","",tokenized.text)
         }

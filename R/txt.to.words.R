@@ -20,21 +20,21 @@ function(input.text, splitting.rule = NULL, preserve.case = FALSE) {
       # splitting into units specified by regular expression; here, 
       # all sequences between non-letter characters are assumed to be words:
       splitting.rule = paste("[^A-Za-z",
-          # Latin supplement (Western)
+          # Latin supplement (Western):
           "\U00C0-\U00FF",
-          # Latin supplement (Eastern)
+          # Latin supplement (Eastern):
           "\U0100-\U01BF",
-          # Latin extended (phonetic)
+          # Latin extended (phonetic):
           "\U01C4-\U02AF",
-          # modern Greek
+          # modern Greek:
           "\U0386\U0388-\U03FF",
-          # Cyrillic
+          # Cyrillic:
           "\U0400-\U0481\U048A-\U0527",
-          # Hebrew
+          # Hebrew:
           "\U05C6\U05D0-\U05EA\U05F0-\U05F2",
-          # extended Latin
+          # extended Latin:
           "\U1E00-\U1EFF",
-          # ancient Greek
+          # ancient Greek:
           "\U1F00-\U1FBC\U1FC2-\U1FCC\U1FD0-\U1FDB\U1FE0-\U1FEC\U1FF2-\U1FFC",
           "]+",
           sep="")

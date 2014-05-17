@@ -3,6 +3,10 @@
 
 
 
+== version 0.5.6, 2014/04/17
+ * support for Unicode on Windows
+ * loading corpus files improved
+
 == version 0.5.5, 2014/04/03
  * cross-validation in classify()
  * lots of bugs fixed

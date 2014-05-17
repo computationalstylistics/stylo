@@ -25,8 +25,8 @@ function(files,
          sampling.with.replacement = FALSE,
          features = "w",
          ngram.size = 1,
-         encoding = "native.enc",
-         preserve.case = FALSE) {
+         preserve.case = FALSE,
+         encoding = "native.enc") {
 
   loaded.corpus = load.corpus(files = files,
                               corpus.dir = corpus.dir,

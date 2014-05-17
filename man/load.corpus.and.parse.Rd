@@ -13,7 +13,8 @@ load.corpus.and.parse(files, corpus.dir = "", markup.type = "plain",
                       language = "English", splitting.rule = NULL,
                       sample.size = 10000, sampling = "no.sampling",
                       sampling.with.replacement = FALSE, features = "w", 
-                      ngram.size = 1, preserve.case = FALSE)
+                      ngram.size = 1, preserve.case = FALSE,
+                      encoding = "native.enc")
 }
 \arguments{
   \item{files}{a vector of file names.}
@@ -53,19 +54,25 @@ load.corpus.and.parse(files, corpus.dir = "", markup.type = "plain",
     or the size of n-grams to be produced. If this argument is missing, 
     the default value of 1 is used. See \code{txt.to.features} for further 
     details.}
-  \item{preserve.case}{Whether ot not to lowercase all characters in the corpus (default = F).}
+  \item{preserve.case}{whether ot not to lowercase all characters in the corpus 
+  (default = F).}
+  \item{encoding}{useful if you use Windows and non-ASCII alphabets: French,
+    Polish, Hebrew, etc. In such a situation, it is quite convenient to 
+    convert your text files into Unicode and to set this option to
+    \code{encoding = "UTF-8"}. In Linux and Mac, you are always expected
+    to use Unicode, thus you don't need to set anything.}
 }
 \value{
-The result of this function is a variable (list) containing 
-as elements the samples (entire texts or sampled subsets) split into 
+The function returns an object of the class \code{stylo.corpus}. It is a list
+containing as elements the samples (entire texts or sampled subsets) split into 
 words/characters and combined into n-grams (if applicable).
 }
 \author{Maciej Eder}
 
 \seealso{
 \code{\link{load.corpus}}, \code{\link{delete.markup}}, 
-\code{\link{txt.to.words.ext}}, \code{\link{txt.to.features}},
-\code{\link{make.samples}}
+\code{\link{txt.to.words}}, \code{\link{txt.to.words.ext}}, 
+\code{\link{txt.to.features}}, \code{\link{make.samples}}
 }
 
 \examples{

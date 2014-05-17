@@ -5,22 +5,28 @@
 Function for loading text files from a specified directory.
 }
 \usage{
-load.corpus(files, corpus.dir = "")
+load.corpus(files, corpus.dir = "", encoding = "native.enc")
 }
 \arguments{
   \item{files}{a vector of file names.}
   \item{corpus.dir}{a directory containing the text files to be loaded; if
     not specified, the current working directory will be used.}
+  \item{encoding}{useful if you use Windows and non-ASCII alphabets: French,
+    Polish, Hebrew, etc. In such a situation, it is quite convenient to 
+    convert your text files into Unicode and to set this option to
+    \code{encoding = "UTF-8"}. In Linux and Mac, you are always expected
+    to use Unicode, thus you don't need to set anything.}
 }
 \value{
-The function returns a variable (list), containing as elements the texts loaded.
+The function returns an object of the class \code{stylo.corpus}. It is a list
+containing as elements the texts loaded.
 }
 
 \author{Maciej Eder}
 
 \seealso{
 \code{\link{stylo}}, \code{\link{classify}}, \code{\link{rolling.delta}}, 
-\code{\link{oppose}} 
+\code{\link{oppose}}, \code{\link{txt.to.words}}
 }
 \examples{
 \dontrun{

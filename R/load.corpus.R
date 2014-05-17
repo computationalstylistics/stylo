@@ -6,9 +6,6 @@
 # Optional argument: a directory containing the corpus
 # #################################################
 
-# ATTENTION: this function is not resistant to possible mismatch
-# between the vector of filenames and actual existing files;
-# btw: implementation will be very easy using %in%
 
 load.corpus <-
 function(files, corpus.dir = "", encoding = "native.enc") {
@@ -32,18 +29,37 @@ function(files, corpus.dir = "", encoding = "native.enc") {
   loaded.corpus = list()
   # uploading all files listed in the vector "files"
   for (file in files) {
-    cat(paste("Loading ", file, "\t", "...", "\n", sep=""))
-    # loading the next file from the list "corpus.filenames"
-    current.file = scan(file,what="char",sep="\n", encoding=encoding, quiet=T)
-    loaded.corpus[[file]] = current.file
+    if(file.exists(file) == FALSE) {
+      cat("!\n")
+      cat("\"", file, "\"? no such a file -- check your directory!\n",sep="")
+    } else {
+      cat(paste("loading ", file, "\t", "...", "\n", sep=""))
+      # loading the next file from the list "corpus.filenames";
+      # if an error occurred, ignore it and send a message on the screen
+      current.file = tryCatch(scan(file,what="char", encoding=encoding,
+                                   sep="\n", quiet=T),
+                              error = function(e) NULL)
+      # if successful, append the scanned file into the corpus,
+      # otherwise send a message
+        if(length(current.file) > 0) {
+          loaded.corpus[[file]] = current.file
+        } else {
+          cat("!\n")
+          cat("the file", file, "could not be loaded for an unknown reason\n")
+        }
+    }
   }
   setwd(original.path)
   
-  # assigning a class
-  class(loaded.corpus) = "stylo.corpus"
-  # adding some information about the current function call
-  # to the final list of results
-  attr(loaded.corpus, "call") = match.call()
+  # assigning a class, if at least one text was successfully loaded
+  if( length(loaded.corpus) > 0) {
+    class(loaded.corpus) = "stylo.corpus"
+    # adding some information about the current function call
+    # to the final list of results
+    attr(loaded.corpus, "call") = match.call()
+  } else {
+    loaded.corpus = NULL
+  }
 
 # returning the value
 return(loaded.corpus)

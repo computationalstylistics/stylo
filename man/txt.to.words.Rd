@@ -35,39 +35,25 @@ regular expressions are not entirely platform-independent; type
 in the version 0.5.6 a lengthy list of dozens of letters in a few  alphabets 
 (Latin, Cyrillic, Greek, Hebrew so far) has been indicated explicitly:
 
-\code{paste("[^A-Za-z", 
-          "\U00C0-\U00FF",
-          "\U0100-\U01BF",
-          "\U01C4-\U02AF",
-          "\U0386\U0388-\U03FF",
-          "\U0400-\U0481\U048A-\U0527",
-          "\U05C6\U05D0-\U05EA\U05F0-\U05F2",
-          "\U1E00-\U1EFF",
-          "\U1F00-\U1FBC\U1FC2-\U1FCC\U1FD0-\U1FDB\U1FE0-\U1FEC\U1FF2-\U1FFC",
-          "]+",
-          sep="")}
-
-The meaning of the subsequent char codes, apart from the most obvious ones
-(A-Za-z) is as follows:
-
-\verb{
-          \U00C0-\U00FF   # Latin supplement (Western)
-          
-          \U0100-\U01BF   # Latin supplement (Eastern)
-
-          \U01C4-\U02AF   # Latin extended (phonetic)
-
-          \U0386\U0388-\U03FF   # modern Greek
-
-          \U0400-\U0481\U048A-\U0527   # Cyrillic
-          
-          \U05C6\U05D0-\U05EA\U05F0-\U05F2   # Hebrew
-
-          \U1E00-\U1EFF   # extended Latin
-
-          \U1F00-\U1FBC\U1FC2-\U1FCC\U1FD0-\U1FDB\U1FE0-\U1FEC\U1FF2-\U1FFC
-          # ancient Greek
-}
+\preformatted{paste("[^A-Za-z",
+    # Latin supplement (Western):
+    "\U00C0-\U00FF",
+    # Latin supplement (Eastern):
+    "\U0100-\U01BF",
+    # Latin extended (phonetic):
+    "\U01C4-\U02AF",
+    # modern Greek:
+    "\U0386\U0388-\U03FF",
+    # Cyrillic:
+    "\U0400-\U0481\U048A-\U0527",
+    # Hebrew:
+    "\U05C6\U05D0-\U05EA\U05F0-\U05F2",
+    # extended Latin:
+    "\U1E00-\U1EFF",
+    # ancient Greek:
+    "\U1F00-\U1FBC\U1FC2-\U1FCC\U1FD0-\U1FDB\U1FE0-\U1FEC\U1FF2-\U1FFC",
+    "]+",
+    sep="")}
 
 Alternatively, different tokenization rules can be applied through
 the option \code{splitting.rule} (see above). ATTENTION: this is the only 
@@ -77,12 +63,15 @@ on Windows you never know if your text will be loaded proprely. A considerable
 solution for Windows users is to convert your texts into Unicode (a variety 
 of freeware converters are available on the internet), and to use an
 appropriate encoding option when loading the files:
-\code{read.table("file.txt", encoding = "UFTF-8"} or
-\code{scan("file.txt", what = "char", encoding = "UFTF-8"}. If you use 
+\code{read.table("file.txt", encoding = "UTF-8"} or
+\code{scan("file.txt", what = "char", encoding = "UTF-8"}. If you use 
 the functions provided by the library \code{stylo}, you should pass this 
-option as an argument to an appropriate function: 
+option as an argument to your chosen function: 
 \code{stylo(encoding = "UTF-8")},
 \code{classify(encoding = "UTF-8")}.
+}
+\value{
+The function returns a vector of tokenized words (or other units) as elements.
 }
 \author{
 Maciej Eder, Jan Rybicki, Mike Kestemont
