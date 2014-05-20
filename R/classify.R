@@ -797,6 +797,7 @@ var.name <- function(x) {
  var.name(mfw.list.cutoff)
  var.name(delete.pronouns)
  var.name(preserve.case)
+ var.name(encoding)
  var.name(use.existing.freq.tables)
  var.name(use.existing.wordlist)
  var.name(classification.method)

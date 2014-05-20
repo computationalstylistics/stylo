@@ -106,9 +106,9 @@ distance.measure = "CD"
 
 
 # Method of building a dendrogram; choose one of the following linkage methods:
-# "nj", "ward", "single", "complete", "average", "mcquitty", "median", 
-# "centroid"
-linkage = "ward"
+# "nj", "ward.D", "ward.D2", "single", "complete", "average", "mcquitty", 
+# "median", "centroid"
+linkage = "ward.D"
 
 
 
@@ -447,6 +447,26 @@ if(distance.measure %in% c("CD","AL","ED","ES","MH","CB","EU") == FALSE) {
 }
 
 
+
+# in version R 3.0.4 the method "ward" has been replaced 
+# by "ward.D" and "ward.D2"; this sanity check takes care 
+# of passing the right argument
+if(R.Version()$major <= 3 & R.Version()$minor <= 0.3) {
+  if(linkage == "ward.D") {
+    linkage = "ward"
+  }
+  if(linkage == "ward.D2") {
+    linkage = "ward"
+  }
+} else {
+  if(linkage == "ward") {
+    linkage = "ward.D"
+  }
+}
+
+
+
+
 # the final stage involves creating a list and putting all the variables on it;
 # certainly, the list should not contain itself (!), it also should not 
 # contain the index "i" used to generate the list
@@ -454,7 +474,6 @@ default.variables = list()
 for(i in ls()[!ls() %in% c("i","default.variables")]) {
   default.variables[[i]] = get(i)
 }
-
 
 
 

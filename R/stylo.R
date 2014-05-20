@@ -730,6 +730,7 @@ var.name(corpus.lang)
 var.name(analyzed.features)
 var.name(ngram.size)
 var.name(preserve.case)
+var.name(encoding)
 var.name(mfw.min)
 var.name(mfw.max)
 var.name(mfw.incr)
@@ -1705,19 +1706,19 @@ if(exists("nodes") == TRUE ) {
 
 if(exists("distance.table")) {
   attr(distance.table, "description") = "final distances between each pair of samples"
-  class(distance.table) = "stylo.data"
+  class(distance.table) = c("stylo.data", "matrix")
 }
 if(exists("frequencies.0.culling")) {
   attr(frequencies.0.culling, "description") = "frequencies of words/features accross the corpus"
-  class(frequencies.0.culling) = "stylo.data"
+  class(frequencies.0.culling) = c("stylo.data", "matrix")
 }
 if(exists("table.with.all.freqs")) {
   attr(table.with.all.freqs, "description") = "frequencies of words/features accross the corpus"
-  class(table.with.all.freqs) = "stylo.data"
+  class(table.with.all.freqs) = c("stylo.data", "matrix")
 }
 if(exists("table.with.all.zscores")) {
   attr(table.with.all.zscores, "description") = "z-scored frequencies accross the corpus"
-  class(table.with.all.zscores) = "stylo.data"
+  class(table.with.all.zscores) = c("stylo.data", "matrix")
 }
 if(exists("features")) {
   attr(features, "description") = "features (e.g. words, n-grams, ...) applied to data"
@@ -1744,8 +1745,7 @@ if(exists("list.of.nodes")) {
 }
 if(exists("pca.coordinates")) {
   attr(pca.coordinates, "description") = "PCA coordinates (PC1, PC2 and PC3)"
-# this does not work:
-#  class(pca.coordinates) = "stylo.data"
+  class(pca.coordinates) = c("stylo.data", "matrix")
 }
 
 

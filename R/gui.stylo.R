@@ -83,6 +83,7 @@ dendrogram.layout.horizontal = variables$dendrogram.layout.horizontal
 display.on.screen = variables$display.on.screen
 distance.measure = variables$distance.measure
 dump.samples = variables$dump.samples
+encoding = variables$encoding
 final.ranking.of.candidates = variables$final.ranking.of.candidates
 how.many.correct.attributions = variables$how.many.correct.attributions
 interactive.files = variables$interactive.files
@@ -132,6 +133,16 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
 # #############################################################################
 
 
+
+
+
+# a not very elegant way of switching from strings into logical values
+encoding.orig = variables$encoding
+  if(variables$encoding == "UTF-8") {
+    encoding = TRUE
+  } else {
+    encoding = FALSE
+  }
 
 
 
@@ -192,6 +203,7 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   add.to.margins <- tclVar(add.to.margins)
   label.offset <- tclVar(label.offset)
   dump.samples <- tclVar(dump.samples)
+  encoding <- tclVar(encoding)
 
   
   
@@ -344,7 +356,10 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   entry_ITA <- tkradiobutton(f1)
   entry_DUT <- tkradiobutton(f1)
   entry_SPA <- tkradiobutton(f1)
+  entry_CJK <- tkradiobutton(f1)
   entry_OTH <- tkradiobutton(f1)
+  cb_UTF <- tkcheckbutton(f1)
+
   #
   tkconfigure(entry_ENG,variable=corpus.lang,value="English")
   tkconfigure(entry_EN2,variable=corpus.lang,value="English.contr")
@@ -358,7 +373,10 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   tkconfigure(entry_ITA,variable=corpus.lang,value="Italian")
   tkconfigure(entry_DUT,variable=corpus.lang,value="Dutch")
   tkconfigure(entry_SPA,variable=corpus.lang,value="Spanish")
+  tkconfigure(entry_CJK,variable=corpus.lang,value="CJK")
   tkconfigure(entry_OTH,variable=corpus.lang,value="Other")
+  tkconfigure(cb_UTF,variable=encoding)
+
   #
   entrylabel_ENG <- tklabel(f1,text="    English     ")
   entrylabel_POL <- tklabel(f1,text="    Polish      ")
@@ -372,16 +390,19 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   entrylabel_LA2 <- tklabel(f1,text="Latin (u/v > u) ")
   entrylabel_DUT <- tklabel(f1,text="     Dutch      ")
   entrylabel_SPA <- tklabel(f1,text="    Spanish     ")
+  entrylabel_CJK <- tklabel(f1,text="      CJK       ")
   entrylabel_OTH <- tklabel(f1,text="     Other      ")
+  entrylabel_UTF <- tklabel(f1,text="     UTF-8      ")
+
   #
   tkgrid(tklabel(f1,text="LANGUAGE: "),entrylabel_ENG,entrylabel_EN2,entrylabel_EN3,entrylabel_LAT,entrylabel_LA2)
   tkgrid(tklabel(f1,text="          "),entry_ENG,entry_EN2,entry_EN3,entry_LAT,entry_LA2)
   tkgrid(tklabel(f1,text="          "),entrylabel_POL,entrylabel_HUN,entrylabel_FRA,entrylabel_ITA,entrylabel_SPA)
   tkgrid(tklabel(f1,text="          "),entry_POL,entry_HUN,entry_FRA,entry_ITA,entry_SPA)
-  tkgrid(tklabel(f1,text="          "),entrylabel_DUT,entrylabel_GER, entrylabel_OTH)
-  tkgrid(tklabel(f1,text="          "),entry_DUT,entry_GER, entry_OTH)
-  tkgrid(tklabel(f1,text="          "),entrylabel_DUT,entrylabel_GER)
-  tkgrid(tklabel(f1,text="          "),entry_DUT,entry_GER)
+  tkgrid(tklabel(f1,text="          "),entrylabel_DUT,entrylabel_GER, entrylabel_CJK, entrylabel_OTH,tklabel(f1,text=""),entrylabel_UTF)
+  tkgrid(tklabel(f1,text="          "),entry_DUT,entry_GER, entry_CJK, entry_OTH,tklabel(f1,text=""),cb_UTF)
+  tkgrid(tklabel(f1,text="          "))
+  tkgrid(tklabel(f1,text="          "))
   tkgrid(tklabel(f1,text="    ")) # blank line for aesthetic purposes
   
   # Tooltips for the above
@@ -397,7 +418,11 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   tk2tip(entrylabel_LA2, "Modified Latin: U and V \nboth treated as U")
   tk2tip(entrylabel_DUT, "Plain Dutch: contractions and \ncompound words are split")
   tk2tip(entrylabel_SPA, "Plain Castilian: contractions and \ncompound words are split")
+  tk2tip(entrylabel_CJK, "Chinese, Japanese and Korean \n(experimental)")
   tk2tip(entrylabel_OTH, "Other language than the ones listed above.")
+  tk2tip(entrylabel_UTF, "Check this box if your texts are in Unicode \nand your system is Windows;\nno need to bother if you use Linux of Mac")
+
+  
   
   # next row: TEXT FEATURES
   entry_W <- tkradiobutton(f2)
@@ -524,7 +549,7 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   entrylabel_MDS <- tklabel(f3,text="MDS")
   entrylabel_PCA1 <- tklabel(f3,text="PCA (cov.)")
   entrylabel_PCA2 <- tklabel(f3,text="PCA (corr.)")
-  entrylabel_tSNE <- tklabel(f3,text="tSNE")
+  entrylabel_tSNE <- tklabel(f3,text="     tSNE ")
   entrylabel_CONS_TREE <- tklabel(f3,text="Consensus Tree")
   entrylabel_CONSS <- tklabel(f3,text="Consensus strength")
   #
@@ -807,8 +832,23 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
   variables$text.id.on.graphs = as.character(tclvalue(text.id.on.graphs))
   variables$add.to.margins = as.numeric(tclvalue(add.to.margins))
   variables$label.offset = as.numeric(tclvalue(label.offset))
-  
+  variables$encoding = as.logical(as.numeric(tclvalue(encoding)))
+
+
+
   .Tcl("font delete myDefaultFont")
+
+
+
+
+  # switching back from logical values into strings
+  if(variables$encoding == TRUE) {
+    variables$encoding = "UTF-8"
+  } else {
+    variables$encoding = "native.enc"
+  }
+
+
   
   return(variables)
 }

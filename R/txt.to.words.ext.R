@@ -33,7 +33,12 @@ function(input.text,
   } else {
     # Loading the file; optionally, fiddling with apostrophes and contractions:    #
     # This is the standard procedure of splitting input texts
-    if(language != "English.contr" & language != "English.all") {
+    if(language == "CJK") {
+      tokenized.text = txt.to.words(input.text, 
+                                    splitting.rule="[^\U4E00-\U9FFF]+",
+                                    preserve.case=TRUE)
+      }
+    if(language != "English.contr" & language != "English.all" & language != "CJK") {
       tokenized.text = txt.to.words(input.text, preserve.case=preserve.case)
     }
     # if the Latin option with adjusting the v/u letters is on,
