@@ -13,7 +13,12 @@ txt.to.words <-
 function(input.text, splitting.rule = NULL, preserve.case = FALSE) {
   # converting characters to lowercase if necessary
   if (!(preserve.case)){
-      input.text = tolower(input.text)
+      input.text = tryCatch(tolower(input.text), 
+                            error=function(e) NULL)
+      if(is.null(input.text) == TRUE) {
+        input.text = "empty"
+        cat("turning into lowercase failed!\n")
+      }
   }
      # if no custom splitting rule was detected...
     if(length(splitting.rule) == 0 ) {

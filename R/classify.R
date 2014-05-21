@@ -719,6 +719,50 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
   }   # <----- conditional expr. if(features.exist == TRUE) terminates here
 
 
+
+
+
+
+
+  # empty the dump-dir if it already existed and create it if it did not previously exist
+  if(dump.samples == TRUE){
+	  if (file.exists("sample_dump_primary_set")){
+		# a dump-dir seems to have been created during a previous run
+		# tmp delete the dump-dir to remove all of its previous contents
+		unlink("sample_dump_primary_set", recursive = TRUE) 
+	  }
+	# (re)create the dump-dir
+	dir.create("sample_dump_primary_set")
+    # writing the stuff into files
+    setwd("sample_dump_primary_set")
+      for(i in names(corpus.of.primary.set)) {
+        cat(corpus.of.primary.set[[i]],file=paste(names(corpus.of.primary.set[i]),".txt",sep=""))
+      }
+    setwd("..")
+  }
+  # empty the dump-dir if it already existed and create it if it did not previously exist
+  if(dump.samples == TRUE){
+	  if (file.exists("sample_dump_secondary_set")){
+		# a dump-dir seems to have been created during a previous run
+		# tmp delete the dump-dir to remove all of its previous contents
+		unlink("sample_dump_secondary_set", recursive = TRUE) 
+	  }
+	# (re)create the dump-dir
+	dir.create("sample_dump_secondary_set")
+    # writing the stuff into files
+    setwd("sample_dump_secondary_set")
+      for(i in names(corpus.of.secondary.set)) {
+        cat(corpus.of.secondary.set[[i]],file=paste(names(corpus.of.secondary.set[i]),".txt",sep=""))
+      }
+    setwd("..")
+  }
+
+
+
+
+
+
+
   # blank line on the screen
   cat("\n")
 

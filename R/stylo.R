@@ -681,6 +681,12 @@ if(exists("frequencies.0.culling") == FALSE) {
 	  }
 	# (re)create the dump-dir
 	dir.create("sample_dump")
+    # writing the stuff into files
+    setwd("sample_dump")
+      for(i in names(loaded.corpus)) {
+        cat(loaded.corpus[[i]],file=paste(names(loaded.corpus[i]),".txt",sep=""))
+      }
+    setwd("..")
   }
 
 
