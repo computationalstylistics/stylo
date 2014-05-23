@@ -429,6 +429,49 @@ cv.folds = 10
 
 
 
+# #################################################
+# OPPOSE settings -- to be integrated with stylo and classify!
+# #################################################
+
+text.slice.length = 2000
+text.slice.overlap = 0
+
+# if you want to ignore words that occurred only once or twice, set
+# the threshold to 2; if you want to analyze all the words, set 0
+rare.occurrences.threshold = 2
+
+# choose one: "craig.zeta" | "eder.zeta" | "chisquare.zeta" | "mann.whitney" | "box.plot"
+oppose.method = "craig.zeta"
+
+### the meaning of the threshold parameter varies with the method chosen: #####
+# "craig.zeta" method chosen, you might probably want to filter out some words
+# of weak discrimination strength. Provided that 2 means the strongest 
+# positive difference and O the strongest negative difference (Hoover 2009), 
+# the values either just above or just below 1 are not significant and
+# thus can be (or rather should be) omitted. If chisquare method was chosen,
+# all the differences of p-value below 0.05 were filtered out, in pure Zeta,
+# there is no a priori solution. Threshold 0.1 would filter out a vast majority
+# of words, threshold set to 1 would filter all the words in a corpus.
+zeta.filter.threshold = 0.1
+
+# initialize the token to be plotted if the box.plot method is chosen
+# [what about NULL?]
+plot.token = ""
+
+# these options can be deried from stylo.default.settings()
+use.color.graphs = TRUE
+polygons.on.graph = TRUE
+identify.points = FALSE
+classification = FALSE
+naive.bayes = FALSE
+svm.classification = TRUE
+decision.tree.classification = FALSE
+visualization = "words"
+
+#################################################
+
+
+
 
 
 

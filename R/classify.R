@@ -67,6 +67,7 @@ variables = stylo.default.settings(...)
 # (it absorbes the arguments passed from command-line)
 if (gui == TRUE) {
       # first, checking if the GUI can be displayed
+      # (the conditional expression is stolen form the generic function "menu")
       if (.Platform$OS.type == "windows" || .Platform$GUI == 
             "AQUA" || (capabilities("tcltk") && capabilities("X11") && 
             suppressWarnings(tcltk:::.TkUp))) {
@@ -214,7 +215,7 @@ if(number.of.candidates < 1) {
     use.existing.freq.tables = FALSE
   }
 # Backward compatibility: if "use.existing.wordlist" is switched on, then
-# the file "wordlist.txt" be used, provided that it does exist
+# the file "wordlist.txt" will be used, provided that it does exist
   if(use.existing.wordlist == TRUE & file.exists("wordlist.txt") == TRUE ) { 
     features = "wordlist.txt"
   } else {

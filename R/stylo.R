@@ -63,6 +63,7 @@ variables = stylo.default.settings(...)
 # (it absorbes the arguments passed from command-line)
 if (gui == TRUE) {
       # first, checking if the GUI can be displayed
+      # (the conditional expression is stolen form the generic function "menu")
       if (.Platform$OS.type == "windows" || .Platform$GUI == 
             "AQUA" || (capabilities("tcltk") && capabilities("X11") && 
             suppressWarnings(tcltk:::.TkUp))) {

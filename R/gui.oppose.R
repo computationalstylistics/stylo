@@ -147,12 +147,7 @@ oppose.method = variables$oppose.method
 zeta.filter.threshold = variables$zeta.filter.threshold
 
 
-graphic.output = variables$graphic.output
-display.on.screen = variables$display.on.screen
-write.pdf.file = variables$write.pdf.file
-write.png.file = variables$write.png.file
 use.color.graphs = variables$use.color.graphs
-titles.on.graph = variables$titles.on.graph
 polygons.on.graph = variables$polygons.on.graph
 identify.points = variables$identify.points
 classification = variables$classification
@@ -200,7 +195,7 @@ display.on.screen <- tclVar(display.on.screen)
 write.pdf.file <- tclVar(write.pdf.file)
 write.png.file <- tclVar(write.png.file)
 use.color.graphs <- tclVar(use.color.graphs)
-titles.on.graph <- tclVar(titles.on.graph)
+titles.on.graphs <- tclVar(titles.on.graphs)
 identify.points <- tclVar(identify.points)
 classification <-tclVar(classification)
 	
@@ -246,7 +241,7 @@ tkconfigure(cb_display.on.screen,variable=display.on.screen)
 tkconfigure(cb_write.pdf.file,variable=write.pdf.file)
 tkconfigure(cb_write.png.file,variable=write.png.file)
 tkconfigure(cb_use.color.graphs,variable=use.color.graphs)
-tkconfigure(cb_titles.on.graph,variable=titles.on.graph)
+tkconfigure(cb_titles.on.graph,variable=titles.on.graphs)
 tkconfigure(cb_identify.points,variable=identify.points)
 tkconfigure(cb_classification,variable=classification)
 	
@@ -328,7 +323,7 @@ tkgrid(tklabel(tt,text="    ")) # blank line
     variables$write.pdf.file <- as.logical(as.numeric(tclvalue(write.pdf.file)))
     variables$write.png.file <- as.logical(as.numeric(tclvalue(write.png.file)))
     variables$use.color.graphs <- as.logical(as.numeric(tclvalue(use.color.graphs)))
-    variables$titles.on.graph <- as.logical(as.numeric(tclvalue(titles.on.graph)))
+    variables$titles.on.graphs <- as.logical(as.numeric(tclvalue(titles.on.graphs)))
     variables$identify.points <- as.logical(as.numeric(tclvalue(identify.points)))
     variables$visualization <- as.character(tclvalue(visualization))
     variables$classification <- as.logical(as.numeric(tclvalue(classification)))
