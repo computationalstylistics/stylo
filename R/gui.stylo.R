@@ -152,7 +152,7 @@ encoding.orig = variables$encoding
   .Tcl("option add *font myDefaultFont")  
   
     tt <- tktoplevel()
-    tktitle(tt) <- "Stylometry with R: enter analysis parameters"
+    tktitle(tt) <- "Stylometry with R | stylo | set parameters"
     
     push_OK <- function(){
         tkdestroy(tt)
@@ -777,11 +777,8 @@ encoding.orig = variables$encoding
   tk2tip(cblabel_FREQSAVE, "Save frequency table(s) in separate text file(s).")
   tk2tip(cblabel_DUMPSAMPLES, "Save a dump of all samples in the directory 'Dumps' for post-analysis inspection.")
   
-  # next row: the OK button
-  #
-  # button_1 <- tkbutton(tt,text="     OK     ",command=push_OK,relief="groove")
-  # tkbind(button_1,"<Return>",push_OK) 
-  # tkgrid(button_1,columnspan="10")
+
+
   tkgrid(tklabel(tt,text="    ")) # blank line (i.e., bottom margin)
   
   # wait until we have input

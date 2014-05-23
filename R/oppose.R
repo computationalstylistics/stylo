@@ -7,10 +7,11 @@
 
 
 oppose <-
-function(gui=TRUE,path="",
-         primary.corpus.dir="primary_set",
-         secondary.corpus.dir="secondary_set",
-         test.corpus.dir="test_set") {
+function(gui = TRUE,
+         path = NULL,
+         primary.corpus.dir = "primary_set",
+         secondary.corpus.dir = "secondary_set",
+         test.corpus.dir = "test_set", ... ) {
 
 
 
@@ -19,20 +20,40 @@ function(gui=TRUE,path="",
 # first of all, retrieve the current path name
 original.path = getwd()
 # then check if anywone wants to change the working dir
-if(is.character(path) == TRUE & nchar(path) > 0) {
+if(is.character(path) == TRUE & length(path) > 0) {
   # checking if the desired file exists and if it is a directory
   if(file.exists(path) == TRUE & file.info(path)[2] == TRUE) {
-  # if yes, then set the new working directory
-  setwd(path)
+    # if yes, then set the new working directory
+    setwd(path)
   } else {
-  # otherwise, stop the script
-  stop("there is no directory ", getwd(), "/", path)
+    # otherwise, stop the script
+    stop("there is no directory ", getwd(), "/", path)
   }
 } else {
-# if the argument was empty, then relax
-cat("using current directory...\n")
+  # if the argument was empty, then relax
+  cat("using current directory...\n")
 }
 
+
+
+
+
+if(is.character(primary.corpus.dir)==FALSE | nchar(primary.corpus.dir)==0) {
+  primary.corpus.dir = "primary_set"
+}
+if(is.character(secondary.corpus.dir)==FALSE | nchar(secondary.corpus.dir)==0) {
+  secondary.corpus.dir = "secondary_set"
+}
+if(is.character(test.corpus.dir) == FALSE | nchar(test.corpus.dir) == 0) {
+  test.corpus.dir = "test_set"
+}
+
+
+
+
+# loading the default settings as defined in the following function
+# (it absorbes the arguments passed from command-line)
+variables = stylo.default.settings(...)
 
 
 
@@ -51,7 +72,7 @@ rare.occurrences.threshold = 2
 
 
 # choose one: "craig.zeta" | "eder.zeta" | "chisquare.zeta" | "mann.whitney" | "box.plot"
-method = "craig.zeta"
+oppose.method = "craig.zeta"
 
 ### the meaning of the threshold parameter varies with the method chosen: #####
 # "craig.zeta" method chosen, you might probably want to filter out some words
@@ -60,21 +81,19 @@ method = "craig.zeta"
 # the values either just above or just below 1 are not significant and
 # thus can be (or rather should be) omitted. If chisquare method was chosen,
 # all the differences of p-value below 0.05 were filtered out, in pure Zeta,
-# there is no a priori solution. Threshold 0.2 would filter out a vast majority
+# there is no a priori solution. Threshold 0.1 would filter out a vast majority
 # of words, threshold set to 1 would filter all the words in a corpus.
-threshold = 0.2
-
-# initialize the token to be plotted if the box.plot method is chosen
-plot.token = ""
+zeta.filter.threshold = 0.1
 
 
+# these options can be deried from stylo.default()
 graphic.output = TRUE
 display.on.screen = TRUE
 write.pdf.file = FALSE
 write.png.file = FALSE
 use.color.graphs = TRUE
 titles.on.graph = TRUE
-polygons.on.graph = FALSE
+polygons.on.graph = TRUE
 identify.points = FALSE
 classification = FALSE
 naive.bayes = FALSE
@@ -82,182 +101,38 @@ svm.classification = TRUE
 decision.tree.classification = FALSE
 visualization = "words"
 
-# #################################################
-#
-# the GUI module 
-#
-# #################################################
 
-# At the beginning of the script, you could decide whether use tp the GUI module 
-# or not; if the appropriate option was switched on, the GUI will start now
+# initialize the token to be plotted if the box.plot method is chosen
+plot.token = ""
 
+
+
+
+
+# loading the default settings as defined in the following function
+# (it absorbes the arguments passed from command-line)
+variables = stylo.default.settings(...)
+
+
+
+# optionally, displaying a GUI box
+# (it absorbes the arguments passed from command-line)
 if (gui == TRUE) {
-  #library(tcltk2)
-
-if(file.exists("oppose_config.txt") == TRUE) {
-	source("oppose_config.txt") }
-
-  cancel_pause <- FALSE
-  tt <- tktoplevel()
-  tktitle(tt) <- "oppose script | set parameters"
-
-  push_OK <- function(){
-      cancel_pause <<- TRUE
-      tkdestroy(tt)
+      # first, checking if the GUI can be displayed
+      if (.Platform$OS.type == "windows" || .Platform$GUI == 
+            "AQUA" || (capabilities("tcltk") && capabilities("X11") && 
+            suppressWarnings(tcltk:::.TkUp))) {
+        variables = gui.oppose(...)
+      } else {
+        cat("\n")
+        cat("GUI could not be launched -- default settings will be used;\n")
+        cat("otherwise please pass your variables as command-line agruments\n")
       }
-
-text.slice.length <- tclVar(text.slice.length)
-text.slice.overlap <- tclVar(text.slice.overlap)
-rare.occurrences.threshold <- tclVar(rare.occurrences.threshold)
-threshold <- tclVar(threshold)
-plot.token <- tclVar(plot.token)
-method <- tclVar(method)
-display.on.screen <- tclVar(display.on.screen)
-write.pdf.file <- tclVar(write.pdf.file)
-write.png.file <- tclVar(write.png.file)
-use.color.graphs <- tclVar(use.color.graphs)
-titles.on.graph <- tclVar(titles.on.graph)
-identify.points <- tclVar(identify.points)
-classification <-tclVar(classification)
-	
-
-visualization <- tclVar(visualization)
-
-entry_none <- tkradiobutton(tt)
-entry_words <- tkradiobutton(tt)
-entry_markers <- tkradiobutton(tt)
-
-tkconfigure(entry_none,variable=visualization,value="none")
-tkconfigure(entry_words,variable=visualization,value="words")
-tkconfigure(entry_markers,variable=visualization,value="markers")
-
-entrylabel_none <- tklabel(tt,text="None",anchor="w")
-entrylabel_words <- tklabel(tt,text="Words",anchor="w")
-entrylabel_markers <- tklabel(tt,text="Markers",anchor="w")
-
-cb_display.on.screen <- tkcheckbutton(tt)
-cb_write.pdf.file <- tkcheckbutton(tt)
-cb_write.png.file <- tkcheckbutton(tt)
-cb_use.color.graphs <- tkcheckbutton(tt)
-cb_titles.on.graph <- tkcheckbutton(tt)
-cb_identify.points <- tkcheckbutton(tt)
-cb_classification <- tkcheckbutton(tt)
-
-rb_craig.zeta <- tkradiobutton(tt)
-rb_eder.zeta <- tkradiobutton(tt)
-rb_chisquare.zeta <- tkradiobutton(tt)
-rb_mann.whitney <- tkradiobutton(tt)
-rb_box.plot <- tkradiobutton(tt)
-
-tt_text.slice.length <- tkentry(tt,textvariable=text.slice.length,width="8")
-tt_text.slice.overlap <- tkentry(tt,textvariable=text.slice.overlap,width="8")
-tt_rare.occurences.threshold <- tkentry(tt,textvariable=rare.occurrences.threshold,width="8")
-tt_threshold <- tkentry(tt,textvariable=threshold,width="8")
-tt_plot.token <-tkentry(tt,textvariable=plot.token,width="16")
-
-button_1 <- tkbutton(tt,text="     OK     ",command=push_OK,relief="groove")
-tkbind(button_1,"<Return>",push_OK) 
-
-tkconfigure(cb_display.on.screen,variable=display.on.screen)
-tkconfigure(cb_write.pdf.file,variable=write.pdf.file)
-tkconfigure(cb_write.png.file,variable=write.png.file)
-tkconfigure(cb_use.color.graphs,variable=use.color.graphs)
-tkconfigure(cb_titles.on.graph,variable=titles.on.graph)
-tkconfigure(cb_identify.points,variable=identify.points)
-tkconfigure(cb_classification,variable=classification)
-	
-
-
-tkconfigure(rb_craig.zeta,variable=method,value="craig.zeta")
-tkconfigure(rb_eder.zeta,variable=method,value="eder.zeta")
-tkconfigure(rb_chisquare.zeta,variable=method,value="chisquare.zeta")
-tkconfigure(rb_mann.whitney,variable=method,value="mann.whitney")
-tkconfigure(rb_box.plot,variable=method,value="box.plot")
-
-
-rblab_craig.zeta <- tklabel(tt,text="Craig's Zeta   ",anchor="w")
-rblab_eder.zeta <- tklabel(tt,text="Eder's Zeta    ",anchor="w")
-rblab_chisquare.zeta <- tklabel(tt,text="Chi-square Zeta          ",anchor="w")
-rblab_mann.whitney <- tklabel(tt,text="Mann-Whitney          ",anchor="w")
-rblab_box.plot <- tklabel(tt,text="Boxplot          ",anchor="w")
-
-ttlab_text.slice.length <- tklabel(tt,text="Slice Length     ")
-ttlab_text.slice.overlap <- tklabel(tt,text="Slice Overlap     ")
-ttlab_rare.occurences.threshold <- tklabel(tt,text="Occurrence Threshold    ")
-ttlab_threshold <- tklabel(tt,text="Filter Threshold    ")
-ttlab_plot.token <- tklabel(tt,text="Plot token    ")
-
-tkgrid(tklabel(tt,text="    ")) # blank line
-	
-
-tkgrid(tklabel(tt,text="            INPUT:               "), ttlab_text.slice.length,ttlab_text.slice.overlap, sticky="w")
-tkgrid(tklabel(tt,text="                                 "), tt_text.slice.length, tt_text.slice.overlap, sticky="w")
-tkgrid(tklabel(tt,text="    ")) # blank line
-tkgrid(tklabel(tt,text="                                 "), ttlab_rare.occurences.threshold, ttlab_threshold, sticky="w")
-tkgrid(tklabel(tt,text="                                 "), tt_rare.occurences.threshold, tt_threshold, sticky="w")
-
-
-tkgrid(tklabel(tt,text="    ")) # blank line
-
-tkgrid(tklabel(tt,text="            METHOD:     "), rblab_craig.zeta, rblab_eder.zeta, rblab_chisquare.zeta, sticky="w")
-tkgrid(tklabel(tt,text="                   "), rb_craig.zeta, rb_eder.zeta, rb_chisquare.zeta, sticky="w")
-tkgrid(tklabel(tt,text="                   "), rblab_mann.whitney, rblab_box.plot, sticky="w")
-tkgrid(tklabel(tt,text="                   "), rb_mann.whitney, rb_box.plot, sticky="w")	
-
-
-tkgrid(tklabel(tt,text="    ")) # blank line
-
-cblab_display.on.screen <- tklabel(tt,text="Onscreen")
-cblab_write.pdf.file <- tklabel(tt,text="PDF")
-cblab_write.png.file <- tklabel(tt,text="PNG")
-cblab_use.color.graph <- tklabel(tt,text="Colors")
-cblab_titles.on.graph <- tklabel(tt,text="Titles")
-cblab_identify.points <- tklabel(tt,text="Identify Points")
-cblab_classification <- tklabel(tt, text="Classification")
-	
-
-tkgrid(tklabel(tt,text="  VISUALIZATION:           "),entrylabel_none,entrylabel_words,entrylabel_markers,sticky="w")
-tkgrid(tklabel(tt,text="                   "),entry_none,entry_words,entry_markers,sticky="w")
-
-tkgrid(tklabel(tt,text="  MISCELLANEOUS:           "), cblab_display.on.screen, cblab_write.pdf.file, cblab_write.png.file, sticky="w")
-tkgrid(tklabel(tt,text="                   "), cb_display.on.screen, cb_write.pdf.file, cb_write.png.file, sticky="w")
-tkgrid(tklabel(tt,text="                   "), cblab_use.color.graph, cblab_titles.on.graph ,cblab_identify.points, sticky="w")
-tkgrid(tklabel(tt,text="                   "), cb_use.color.graphs, cb_titles.on.graph ,cb_identify.points, sticky="w")
-tkgrid(tklabel(tt,text="                   "), cblab_classification, ttlab_plot.token, sticky="w")
-tkgrid(tklabel(tt,text="                   "), cb_classification, tt_plot.token, sticky="w")
-
-tkgrid(tklabel(tt,text="    ")) # blank line
-
-tkgrid(button_1,columnspan="10")
-
-tkgrid(tklabel(tt,text="    ")) # blank line
-
-repeat{
-  if(cancel_pause){
-    text.slice.length <- as.numeric(tclvalue(text.slice.length))
-    text.slice.overlap <- as.numeric(tclvalue(text.slice.overlap))
-    rare.occurrences.threshold <- as.numeric(tclvalue(rare.occurrences.threshold))
-    threshold <- as.numeric(tclvalue(threshold))
-    display.on.screen <- as.logical(as.numeric(tclvalue(display.on.screen)))
-    write.pdf.file <- as.logical(as.numeric(tclvalue(write.pdf.file)))
-    write.png.file <- as.logical(as.numeric(tclvalue(write.png.file)))
-    use.color.graphs <- as.logical(as.numeric(tclvalue(use.color.graphs)))
-    titles.on.graph <- as.logical(as.numeric(tclvalue(titles.on.graph)))
-    identify.points <- as.logical(as.numeric(tclvalue(identify.points)))
-	visualization <- as.character(tclvalue(visualization))
-	classification <- as.logical(as.numeric(tclvalue(classification)))
-    method <- as.character(tclvalue(method))
-	plot.token <- as.character(tclvalue(plot.token))
-    break
-  }
 }
 
-} # <-- here the option "interactive.mode.with.GUI == TRUE" is completed
 
-      
-# #################################################
-# GUI module explicit feliciter (Phew!)
-# #################################################
+
+
 
 
 # FUNCTIONS:
@@ -286,139 +161,6 @@ split.sample = function(input.text) {
 
 
 
-###############################################################
-# Function for drawing polygons around clouds of points of I and II set: 
-# a module as rough as can be (this is a pre-alpha version!)
-# Argument: a data frame containing 3 columns: x, y, class
-###############################################################
-draw.polygons = function(summary.zeta.scores) {
-  for(current.subset in c("primary","secondary")) {
-    # extracting the points from the I/II set
-    current.cloud = (summary.zeta.scores[grep(current.subset,summary.zeta.scores[,3]),1:2])
-    current.cloud = as.numeric(as.matrix(current.cloud))
-    current.cloud = matrix(current.cloud,ncol=2)
-    current.cloud = as.data.frame(current.cloud)
-    colnames(current.cloud) = c("x","y")
-    # extreme right point
-    a1 = current.cloud[current.cloud[,1] == max(current.cloud[,1]),]
-    # if there are more points of the same $x, then select max(a2$y)
-    a1 = a1[a1$y == max(a1$y),]
-    # just in case (theoretically, there still might be more that one point)
-    a1 = a1[1,]
-    # extreme left point
-    a2 = current.cloud[current.cloud[,1] == min(current.cloud[,1]),]
-    # if there are more points of the same $x, then select min(a2$y)
-    a2 = a2[a2$y == min(a2$y),]
-    # just in case (theoretically, there still might be more that one point)
-    a2 = a2[1,]
-    #
-    #
-    a.i = a1
-    a.j = a2
-    #
-    # variable initialization
-    vertexes.of.polygon = a1
-    #
-    #
-    for(o in 1: length(current.cloud[,1]) ) {
-      for(m in 1: length(current.cloud[,1]) ) {
-        does.the.point.fit = a.j
-        # equation for a line through (any) two given points
-        # just in case: for drawing vertical lines
-        if(a.i$x == a.j$x) {a.i$x = a.i$x + a.i$x *0.01}
-        # steepnes with a safety parameter (to avoid dividing by 0) 
-        steepness = (a.i$y-a.j$y)/((a.i$x-a.j$x) + 0.000001)
-        offset = a.j$y - (steepness * a.j$x)
-        current.line = steepness + offset
-        #
-        # fitting any better line
-        for(n in 1: length(current.cloud[,1]) ) {
-          current.point = current.cloud[n,]
-          if(current.point$x * steepness + offset > 
-                            current.point$y + current.point$y * .01) { 
-            a.j = current.point
-            break
-            }
-        } # <-- loop n
-        #
-        if(a.j$y == does.the.point.fit$y && a.j$x == does.the.point.fit$x) { 
-          break
-          }
-      } # <-- loop m
-      #
-      vertexes.of.polygon = rbind(vertexes.of.polygon, a.j)
-      #
-      if(a.j$y == a2$y && a.j$x == a2$x) { 
-        break
-        }
-      #
-      # current a.i (that turned to be the optimal point) becomes a new vertex
-      a.i = a.j
-      # consequently, the end point should be reset
-      a.j = a2
-    } # <-- loop o
-    #
-    #### the same procedure applied to the II set
-    #
-    a.i = a2
-    a.j = a1
-    #
-    for(o in 1: length(current.cloud[,1]) ) {
-      for(m in 1: length(current.cloud[,1]) ) {
-        does.the.point.fit = a.j
-        # equation for a line through (any) two given points
-        # just in case: for drawing vertical lines
-        if(a.i$x == a.j$x) {a.i$x = a.i$x - a.i$x *0.01}
-        # steepnes with a safety parameter (to avoid dividing by 0)
-        steepness = (a.i$y-a.j$y)/((a.i$x-a.j$x) + 0.000001)
-        offset = a.j$y - (steepness * a.j$x)
-        current.line = steepness + offset
-        #
-        # fitting any better line
-        for(n in 1: length(current.cloud[,1]) ) {
-          current.point = current.cloud[n,]
-          if(current.point$x * steepness + offset < 
-                            current.point$y - current.point$y * .01) { 
-            a.j = current.point
-            break
-            }
-        } # <-- loop n
-        #
-        if(a.j$y == does.the.point.fit$y && a.j$x == does.the.point.fit$x) { 
-          break
-          }
-      } # <-- loop m
-      #
-      vertexes.of.polygon = rbind(vertexes.of.polygon, a.j)
-      #
-      if(a.j$y == a1$y && a.j$x == a1$x) { 
-        break
-        }
-      #
-      # current a.i (that turned to be the optimal point) becomes a new vertex
-      a.i = a.j
-      # consequently, the end point should be reset
-      a.j = a1
-    } # <-- loop o
-  #
-  #
-  # final variables’ assignments
-  if(current.subset == "primary") {
-    polygon.primary = vertexes.of.polygon
-    } else {
-    polygon.secondary = vertexes.of.polygon
-    }
-  } # <-- loop current.subset
-  #
-  # drawing two polygons
-  polygon(polygon.primary,col=rgb(0,0,0,0.1),border=2)
-  polygon(polygon.secondary,col=rgb(0,0,0,0.1),border=3)
-}
-
-
-
-############################################################################
-############################################################################
 
 
 
@@ -593,8 +335,8 @@ if(i == 1) {
 	var.name(text.slice.length)
 	var.name(text.slice.overlap)
 	var.name(rare.occurrences.threshold)
-	var.name(threshold)
-	var.name(method)
+	var.name(zeta.filter.threshold)
+	var.name(oppose.method)
 	var.name(display.on.screen)
 	var.name(write.pdf.file)
 	var.name(write.png.file)
@@ -621,7 +363,7 @@ comparison = cbind(comparison.primary,comparison.secondary)
 # boxplot
 present_in_primary = 0
 present_in_secondary = 0
-if (method == "box.plot"){
+if (oppose.method == "box.plot"){
 	counts = c()
 	categories = c()
 	# make the boxplot
@@ -687,7 +429,7 @@ if (method == "box.plot"){
 }
 	
 # mann.whitney / wilcoxon (see A. Kilgariff, Comparing Corpora. "International Journal of Corpus Linguistics" 6(1):1-37)
-if (method == "mann.whitney"){
+if (oppose.method == "mann.whitney"){
 	long.method.name="Wilcoxon | Mann-Whitney"
 	short.method.name="Wilcox"
 	statistics = c()
@@ -713,7 +455,7 @@ if (method == "mann.whitney"){
 	statistics=sort(statistics)
 	max_stat = max(statistics)
 	# get tail percentage
-	tail = round(length(statistics)/100*threshold)
+	tail = round(length(statistics)/100*zeta.filter.threshold)
 	top_words = statistics[0:tail]
 	print(top_words)
 	tail_words = rev(statistics[(length(statistics)-tail):length(statistics)])
@@ -776,7 +518,7 @@ words.avoided.by.primary.author = names(tail_words)
 # Craig's zeta
 #####################################################################
 
-if(method == "craig.zeta") {
+if(oppose.method == "craig.zeta") {
 long.method.name="Craig's Zeta"
 short.method.name="Craig"
 # two ways of expressing the same thing:
@@ -784,9 +526,9 @@ differences = ( comparison.primary - comparison.secondary ) / 100 + 1 # note: ad
 #differences = (comparison.primary + (100 - comparison.secondary )) / 100
 
 # plotting functionality:
-if (visualization == "words" && method != "box.plot"){
-words.preferred.by.primary.author = sort(differences[differences > 1 + threshold],decreasing=TRUE)
-words.avoided.by.primary.author = sort(differences[differences < 1 - threshold])
+if (visualization == "words" && oppose.method != "box.plot"){
+words.preferred.by.primary.author = sort(differences[differences > 1 + zeta.filter.threshold],decreasing=TRUE)
+words.avoided.by.primary.author = sort(differences[differences < 1 - zeta.filter.threshold])
 
 preferred.words.for.plotting = c()
 preferred.indices.for.plotting = c()
@@ -837,16 +579,16 @@ if(write.pdf.file == TRUE) {
 # end of plotting functionality
 	
 words.preferred.by.primary.author = names(sort(differences[differences > 1 
-												   + threshold],decreasing=TRUE))
+												   + zeta.filter.threshold],decreasing=TRUE))
 words.avoided.by.primary.author = names(sort(differences[differences < 1 
-												 - threshold]))
+												 - zeta.filter.threshold]))
 }
 
 
 # Eder's zeta (inspired by Canberra distance measure)
 #####################################################################
 
-if(method == "eder.zeta") {
+if(oppose.method == "eder.zeta") {
 long.method.name="Eder's Zeta"
 short.method.name="Eder"
 # computation of the differences between occurences of words
@@ -855,14 +597,14 @@ differences = differences[differences > -1]
 differences = differences[differences < 1]
 
 # extracting the distinctive words
-words.preferred.by.primary.author = names(sort(differences[differences > 0 + threshold], decreasing=TRUE))
-words.avoided.by.primary.author = names(sort(differences[differences < 0 - threshold]))
+words.preferred.by.primary.author = names(sort(differences[differences > 0 + zeta.filter.threshold], decreasing=TRUE))
+words.avoided.by.primary.author = names(sort(differences[differences < 0 - zeta.filter.threshold]))
 
 # plotting functionality:
 	if (visualization == "words"){
 		
-		words.preferred.by.primary.author = sort(differences[differences > 0 + threshold],decreasing=TRUE)
-		words.avoided.by.primary.author = sort(differences[differences < 0 - threshold])
+		words.preferred.by.primary.author = sort(differences[differences > 0 + zeta.filter.threshold],decreasing=TRUE)
+		words.avoided.by.primary.author = sort(differences[differences < 0 - zeta.filter.threshold])
 		
 		preferred.words.for.plotting = c()
 		preferred.indices.for.plotting = c()
@@ -911,14 +653,14 @@ words.avoided.by.primary.author = names(sort(differences[differences < 0 - thres
 			dev.off()}
 	}
 # end of plotting functionality
-words.preferred.by.primary.author = names(sort(differences[differences > 1 + threshold],decreasing=TRUE))
-words.avoided.by.primary.author = names(sort(differences[differences < 1 - threshold]))
+words.preferred.by.primary.author = names(sort(differences[differences > 1 + zeta.filter.threshold],decreasing=TRUE))
+words.avoided.by.primary.author = names(sort(differences[differences < 1 - zeta.filter.threshold]))
 }
 
 # Zeta based on chi-square test
 #####################################################################
 
-if(method == "chisquare.zeta") {
+if(oppose.method == "chisquare.zeta") {
 long.method.name="Chi-square Zeta"
 short.method.name="Chi-sq"
 differences = comparison[,1] - comparison[,2]
@@ -972,8 +714,8 @@ words.avoided.stats = sort(words.avoided.stats, decreasing=T)
 
 # plotting functionality:
 	if (visualization == "words"){
-		words.preferred.by.primary.author = words.preferred.stats[words.preferred.stats>threshold]
-		words.avoided.by.primary.author = -(words.avoided.stats[words.avoided.stats>threshold])
+		words.preferred.by.primary.author = words.preferred.stats[words.preferred.stats>zeta.filter.threshold]
+		words.avoided.by.primary.author = -(words.avoided.stats[words.avoided.stats>zeta.filter.threshold])
 		
 		preferred.words.for.plotting = c()
 		preferred.indices.for.plotting = c()
@@ -1030,7 +772,7 @@ words.avoided.stats = sort(words.avoided.stats, decreasing=T)
 ########################################################################
 # extracted words will be written to output files
 
-if (method != "box.plot"){
+if (oppose.method != "box.plot"){
 # some comments into the file containing wordlist
 cat("# The file contains words that were extracted in the oppose script:",
   "# this subset lists words significantly PREFERRED by primary author(s).",
@@ -1072,7 +814,7 @@ cat(words.avoided.by.primary.author,
 
 
 ### II stage ######################################################
-if (stage.II.similarity.test == TRUE && method != "box.plot") {
+if (stage.II.similarity.test == TRUE && oppose.method != "box.plot") {
 # Note: it is impossible to perform stage II when the box.plot method is used
 
 # checking if the test set exists and if it contains file(s)
@@ -1207,7 +949,7 @@ colnames(summary.zeta.scores) = c("preferred","avoided","class")
 
 
 ### III stage ######################################################
-if ((visualization == "markers") && (method != "box.plot")){
+if ((visualization == "markers") && (oppose.method != "box.plot")){
   # a tiny module for graph auto-coloring (copied from "Delta test 0.4.1")
   # NOTE: in ver. 0.4.8, this module has been turned to R function, and improved
   # 
@@ -1284,7 +1026,7 @@ if ((visualization == "markers") && (method != "box.plot")){
 
 ### classification ######################################################
 
-if (classification == TRUE && method != "box.plot") {
+if (classification == TRUE && oppose.method != "box.plot") {
   training.subset = length(grep("(primary)|(secondary)",summary.zeta.scores[,3]))
   test.subset = length(summary.zeta.scores[,3])
   my.data = as.data.frame(summary.zeta.scores)

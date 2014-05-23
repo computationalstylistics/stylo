@@ -16,6 +16,7 @@ export(
   define.plot.area,
   delete.markup,
   gui.classify,
+  gui.oppose,
   gui.stylo,
   load.corpus.and.parse,
   load.corpus,

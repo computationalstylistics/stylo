@@ -62,8 +62,17 @@ variables = stylo.default.settings(...)
 # optionally, displaying a GUI box
 # (it absorbes the arguments passed from command-line)
 if (gui == TRUE) {
-  variables = gui.stylo(...)
-} 
+      # first, checking if the GUI can be displayed
+      if (.Platform$OS.type == "windows" || .Platform$GUI == 
+            "AQUA" || (capabilities("tcltk") && capabilities("X11") && 
+            suppressWarnings(tcltk:::.TkUp))) {
+        variables = gui.stylo(...)
+      } else {
+        cat("\n")
+        cat("GUI could not be launched -- default settings will be used;\n")
+        cat("otherwise please pass your variables as command-line agruments\n")
+      }
+}
 
 
 
