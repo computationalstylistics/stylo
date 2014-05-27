@@ -1393,6 +1393,8 @@ if(analysis.type != "BCT") {
     svg(filename = paste(graph.filename,"%03d",".svg",sep=""),
             width=plot.custom.width,height=plot.custom.height,
             pointsize=plot.font.size)
+    plot.current.task()
+    dev.off()
     }
   if(write.png.file == TRUE) {
     png(filename = paste(graph.filename,"%03d",".png",sep=""), 
