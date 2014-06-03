@@ -1313,7 +1313,7 @@ if(analysis.type == "PCV" || analysis.type == "PCR") {
 # prepares a list of dendrogram-like structures for a bootstrap consensus tree
 # (the final tree will be generated later, outside the main loop of the script)
 if (analysis.type == "BCT") {
-  mfw.info = paste(mfw.min,"-",mfw.max.original, sep="")
+  mfw.info = paste(mfw.min,"-",mfw.info, sep="")
   name.of.the.method = "Bootstrap Consensus Tree"
   short.name.of.the.method = "Consensus" 
   # calculates the dendrogram for current settings
