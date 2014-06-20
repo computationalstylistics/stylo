@@ -13,7 +13,7 @@ gui.oppose <-
 function(...) {
   
   # loading required library  #### it will not be needed
-#  library(tcltk2)
+  #  library(tcltk2)
 
 
 
@@ -142,11 +142,8 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
 text.slice.length = variables$text.slice.length
 text.slice.overlap = variables$text.slice.overlap
 rare.occurrences.threshold = variables$rare.occurrences.threshold
-
 oppose.method = variables$oppose.method
 zeta.filter.threshold = variables$zeta.filter.threshold
-
-
 use.color.graphs = variables$use.color.graphs
 polygons.on.graph = variables$polygons.on.graph
 identify.points = variables$identify.points
@@ -155,7 +152,7 @@ naive.bayes = variables$naive.bayes
 svm.classification = variables$svm.classification
 decision.tree.classification = variables$decision.tree.classification
 visualization = variables$visualization
-
+plot.token = variables$plot.token
 
 
 
