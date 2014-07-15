@@ -1408,6 +1408,8 @@ if(cv == "thorough") {
 
       # this looks for classes that were not represented so far in I set
       for(i in classes.training.set) {
+        #
+        class.name = paste("\\b",i,"\\b",sep="")
         # shuffle the order of samples (both sets combined)
         names.of.the.texts = sample(rownames(freq.table.both.sets.binded))
         # exclude samples that have been already chosen to the training set
@@ -1415,7 +1417,7 @@ if(cv == "thorough") {
         # extract the classes, or strings before the first underscore
         classes.both.sets = gsub("_.*","",names.of.the.texts,perl=T)
         # find the first matching sample
-        randomly.picked.sample = grep(i,classes.both.sets)[1]
+        randomly.picked.sample = grep(class.name,classes.both.sets)[1]
         # retrieve its full name
         training.set.next.member = names.of.the.texts[randomly.picked.sample]
         # build the vector of randomly chosen members of the training set
