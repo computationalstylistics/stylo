@@ -15,6 +15,7 @@ export(
   classify,
   define.plot.area,
   delete.markup,
+  delete.stop.words,
   gui.classify,
   gui.stylo,
   load.corpus.and.parse,
