@@ -871,7 +871,8 @@ for(j in (culling.min/culling.incr):(culling.max/culling.incr)) {
 
 
 cat("\n\n")
-cat("culling @ ", current.culling,"\t","available words ",mfw.max,"\n")
+cat("culling @ ", current.culling,"\t","available words ",
+                  length(table.with.all.freqs[1,]),"\n")
 
 
 # #################################################
