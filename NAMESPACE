@@ -13,6 +13,7 @@ import(
 export(
   assign.plot.colors,
   classify,
+  culling,
   define.plot.area,
   delete.markup,
   delete.stop.words,
