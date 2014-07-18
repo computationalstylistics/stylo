@@ -10,6 +10,8 @@ make.samples <-
 function(tokenized.text,
             sample.size=10000,
             sampling="no.sampling",
+            sample.overlap = 0,
+            number.of.samples = 1,
             sampling.with.replacement=FALSE){
   # checking the format of input data (vector? list?); converting to a list
   if(is.list(tokenized.text) == FALSE) {
@@ -35,18 +37,26 @@ function(tokenized.text,
           "\n\n")
       stop("Corpus error...")
     }
+    #
+    if(sample.size < sample.overlap) {
+            cat("------------------------------------------------\n")
+            cat("Sample overlap bigger that sample size?! NO WAY!\n")
+            cat("performing no sample overlap...\n")
+            cat("------------------------------------------------\n")
+            sample.overlap = 0
+    }
     # at this point, each text in the corpus has been tokenized
     # into an array of tokens which we can divide into samples
     samples.from.text = list()
     if (sampling == "normal.sampling"){
       # initialize variables to sample the text
       text.length = length(current.text)
-      number.of.samples = floor(text.length/(sample.size))
+      number.of.samples = floor(text.length/(sample.size-sample.overlap))
       cat(names(tokenized.text)[i],"\n")
       cat(paste("\t", "- text length (in words): ", text.length, "\n", sep=""))
       cat(paste("\t", "- nr. of samples: ", number.of.samples, "\n", sep=""))
       cat(paste("\t", "- nr. of words dropped at the end of the text: ", 
-                text.length-(number.of.samples*sample.size), "\n", sep=""))
+                text.length-(number.of.samples*(sample.size-sample.overlap)), "\n", sep=""))
       # iterate over the samples:
       current.start.index = 1
       for(sample.index in 1:number.of.samples) {
@@ -57,16 +67,29 @@ function(tokenized.text,
         id = paste(names(tokenized.text)[i],"_",sample.index,sep="")
         names(samples.from.text)[sample.index] = id
         # increment index for next iteration
-        current.start.index = current.start.index + sample.size
+        current.start.index = current.start.index + sample.size - sample.overlap
         current.sample = c()
       }
     } else if(sampling == "random.sampling"){
       # if random sampling was chosen, the text will be randomized and a sample 
-      # of a given length will be excerpted
-      current.sample = head(sample(current.text, replace = sampling.with.replacement), sample.size)
-      samples.from.text[[1]] = current.sample 
-      # inheriting the sample's name
-      names(samples.from.text) = names(tokenized.text)[i]
+      # of a given length will be excerpted;
+      # initialize variables to sample the text
+      text.length = length(current.text)
+      cat(names(tokenized.text)[i],"\n")
+      cat(paste("\t", "- text length (in words): ", text.length, "\n", sep=""))
+      cat(paste("\t", "- nr. of random samples: ", number.of.samples, "\n", sep=""))
+      cat(paste("\t", "- sample length: ", sample.size, "\n", sep=""))
+      # iterate over the samples:
+      for(sample.index in 1:number.of.samples) {
+        current.sample = head(sample(current.text, replace = sampling.with.replacement), sample.size)
+        # flush current sample:
+        samples.from.text[[sample.index]] = current.sample
+        # assign a new id to current sample
+        id = paste(names(tokenized.text)[i],"_",sample.index,sep="")
+        names(samples.from.text)[sample.index] = id
+        # increment index for next iteration
+        current.sample = c()
+      }
     } else if (sampling == "no.sampling"){
       # entire texts will be used as a sample (regardless of its length)
       current.sample = tokenized.text

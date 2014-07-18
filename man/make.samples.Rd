@@ -8,7 +8,8 @@ original text.
 }
 \usage{
 make.samples(tokenized.text, sample.size = 10000, 
-             sampling = "no.sampling", sampling.with.replacement = FALSE)
+             sampling = "no.sampling", sample.overlap = 0,
+             number.of.samples = 1, sampling.with.replacement = FALSE)
 }
 \arguments{
   \item{tokenized.text}{a vector of words.}
@@ -16,8 +17,17 @@ make.samples(tokenized.text, sample.size = 10000,
     default value is 10,000.}
   \item{sampling}{one of three values: \code{no.sampling} (default), 
      \code{normal.sampling}, \code{random.sampling}.}
-  \item{sampling.with.replacement}{optional argument which will be used only
-    if \code{random.sampling} was chosen; it specifies the method to randomly harvest words from texts.}
+  \item{sample.overlap}{if this opion is used, a reference text is segmented 
+     into consecutive, equal-sized samples that are allowed to partially 
+     overlap. If one specifies the \code{sample.size} parameter of 5,000 and 
+     the \code{sample.overlap} of 100, for example, the first sample of a text 
+     contains words 1-5,000, the second 101-5,100, the third sample 201-5,200, 
+     and so forth.}
+  \item{number.of.samples}{optional argument which will be used only if 
+     \code{random.sampling} was chosen; it is self-evident.}
+  \item{sampling.with.replacement}{optional argument which will be used only 
+     if \code{random.sampling} was chosen; it specifies the method to randomly 
+     harvest words from texts.}
 }
 \details{
 Normal sampling is probably a good choice when the input texts are 
@@ -57,9 +67,15 @@ my.text = "Arma virumque cano, Troiae qui primus ab oris
            insignem pietate virum, tot adire labores
            impulerit. tantaene animis caelestibus irae?"
 my.words = txt.to.words(my.text)
+
 # split the above text into samples of 20 words:
 make.samples(my.words, sampling = "normal.sampling", sample.size = 20)
+
 # excerpt randomly 50 words from the above text:
 make.samples(my.words, sampling = "random.sampling", sample.size = 50)
+
+# excerpt 5 random samples from the above text:
+make.samples(my.words, sampling = "random.sampling", sample.size = 50,
+             number.of.samples = 5)
 }
 %\keyword{text processing}
