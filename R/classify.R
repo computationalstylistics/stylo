@@ -877,6 +877,9 @@ perfect.guessing = length(authors.II.set[authors.II.set %in% authors.I.set])
   if(culling.max > 100) {
   culling.max = 100
   }
+  if(culling.min > 100) {
+  culling.min = 100
+  }
 # if too small, it is set to 0 (i.e. minimal value)
   if(culling.min < 0) {
   culling.min = 0

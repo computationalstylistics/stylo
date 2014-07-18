@@ -806,11 +806,14 @@ if (analysis.type == "BCT") {
 
 # testing if desired culling settings are acceptable;
 # if too large, it is set to maximum possible
-  if(culling.max > 100) {
+  if(culling.max >= 100) {
   culling.max = 100
   }
+  if(culling.min >= 100) {
+  culling.min = 100
+  }
 # if too small, it is set to 0 (i.e. minimal value)
-  if(culling.min < 0) {
+  if(culling.min <= 0) {
   culling.min = 0
   }
 # if max value is LOWER than min value, make them equal
@@ -827,56 +830,25 @@ if (analysis.type == "BCT") {
 
 
 for(j in (culling.min/culling.incr):(culling.max/culling.incr)) {
-current.culling = j * culling.incr
 
-# the beginning of the culling procedure 
-raw.list.after.culling = c()
+        current.culling = j * culling.incr
 
-# extracting non-zero values the frequency table.
-nonzero.values = frequencies.0.culling > 0
+        # applying culling
+        table.with.all.freqs = culling(frequencies.0.culling, current.culling)
 
 
-# counting non-zero values
-for (y in 1: length(nonzero.values[1,])) {
-  raw.list.after.culling = c(raw.list.after.culling, 
-              (length(grep("TRUE",nonzero.values[,y])) / 
-                     length(nonzero.values[,y])) 
-                           >= current.culling/100 
-                           )
-}
-# a raw culling list has no word-identification; let's change it:
-names(raw.list.after.culling) = colnames(frequencies.0.culling)
-# a simple sequence of words which have not been culled
+        # additionally, deleting pronouns (if applicable)
+        if(delete.pronouns == TRUE) {
+                table.with.all.freqs = 
+                delete.stop.words(table.with.all.freqs, pronouns)
+        }
+        
 
-list.of.words.after.culling = c(names(raw.list.after.culling[grep("TRUE",raw.list.after.culling)]))
-
-# procedure for deleting pronouns
-if (delete.pronouns == TRUE) {
-    list.of.words.after.culling = 
-      list.of.words.after.culling[!(list.of.words.after.culling %in% pronouns)]
-}
-
-
-# just in case: get rid of empty "words" (strings containing no characters)
-list.of.words.after.culling = 
-           list.of.words.after.culling[nchar(list.of.words.after.culling) >0]
-
-
-# the above list-of-not-culled to be applied to the wordlist:
-table.with.all.freqs = frequencies.0.culling[,c(list.of.words.after.culling)]
-
-# the names of the samples are passed to the frequency table
-#if(use.existing.freq.tables == FALSE) {
-#  rownames(table.with.all.freqs) = names(loaded.corpus)
-#}
-
-  
-# #################################################
-# culling is done, but we are still inside the main loop
-
-# starting the frequency list at frequency rank set in option start.at above
-table.with.all.freqs = table.with.all.freqs[,start.at:length(table.with.all.freqs[1,])]
-
+        # optionally, deleting stop words
+      #  table.with.all.freqs = delete.stop.words(table.with.all.freqs, stop.words)
+        
+        
+        
 
 # Testing if the desired MFW number is acceptable,
 # if MFW too large, it is set to maximum possible.
@@ -961,8 +933,8 @@ mfw = i
 
 
 # for safety reasons, if MFWs > words in samples
-if(mfw > length(list.of.words.after.culling) ) {
-  mfw = length(list.of.words.after.culling)
+if(mfw > length(colnames(table.with.all.freqs)) ) {
+  mfw = length(colnames(table.with.all.freqs))
 }
 
 # the general counter for various purposes
