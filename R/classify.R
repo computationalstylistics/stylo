@@ -933,6 +933,9 @@ perfect.guessing = length(authors.II.set[authors.II.set %in% authors.I.set])
   if(culling.max > 100) {
   culling.max = 100
   }
+  if(culling.min > 100) {
+  culling.min = 100
+  }
 # if too small, it is set to 0 (i.e. minimal value)
   if(culling.min < 0) {
   culling.min = 0
@@ -951,54 +954,45 @@ perfect.guessing = length(authors.II.set[authors.II.set %in% authors.I.set])
 
 
 for(j in (culling.min/culling.incr):(culling.max/culling.incr)) {
-current.culling = j * culling.incr
-
-# the beginning of the culling procedure (this is to be done 
-# on the primary set only; the secondary set is using the same list!)
-#
-raw.list.after.culling = c()
-
-# extracting non-zero values from primary set frequency table,
-# or from both frequency tables (if specified)
-  if(culling.of.all.samples == FALSE) {
-    nonzero.values = freq.I.set.0.culling > 0
-  } else {
-    nonzero.values = rbind(freq.I.set.0.culling,freq.II.set.0.culling) > 0
-  }
-
-# counting of how many non-zero values there are
-for (y in 1: length(nonzero.values[1,])) {
-  raw.list.after.culling = c(raw.list.after.culling, 
-              (length(grep("TRUE",nonzero.values[,y])) / 
-                     length(nonzero.values[,y])) 
-                           >= current.culling/100 
-                           )
-  }
-# a raw culling list has no word-identification; let's change it:
-names(raw.list.after.culling) = colnames(freq.I.set.0.culling)
-
-# a simple sequence of words which were not culled
-list.of.words.after.culling = 
-          c(names(raw.list.after.culling[grep("TRUE",raw.list.after.culling)]))
 
 
-# procedure for deleting pronouns
-if (delete.pronouns == TRUE) {
-    list.of.words.after.culling = 
-      list.of.words.after.culling[!(list.of.words.after.culling %in% pronouns)]
-    }
+        current.culling = j * culling.incr
 
+        
+        # applying culling
+        # an additional table composed of relative word frequencies 
+        # of joint primary and secondary sets
+        if(culling.of.all.samples == FALSE) {
+                # applying the function culling to the I set
+                primary.set = culling(freq.I.set.0.culling, current.culling)
+                # selecting the same variables from the II set
+                secondary.set = freq.II.set.0.culling[,colnames(primary.set)]
+        } else {
+                # combining the two sets
+                freq.table.both.sets = rbind(freq.I.set.0.culling, 
+                                             freq.II.set.0.culling)
+                # applying the culling function to the combined table
+                freq.table.both.sets = culling(freq.table.both.sets, 
+                                               current.culling)
+                # split the combined table into two sets again
+                primary.set = freq.table.both.sets[rownames(freq.I.set.0.culling),]
+                secondary.set = freq.table.both.sets[rownames(freq.II.set.0.culling),]
+        }
 
-# just in case: get rid of empty "words" (strings containing no characters)
-list.of.words.after.culling = 
-           list.of.words.after.culling[nchar(list.of.words.after.culling) >0]
+        
 
+        # additionally, deleting pronouns (if applicable)
+        if(delete.pronouns == TRUE) {
+                primary.set = delete.stop.words(primary.set, pronouns)
+                secondary.set = delete.stop.words(secondary.set, pronouns)
+        }
+        
 
-# the above list-of-not-culled to be applied to both sets:
-primary.set = freq.I.set.0.culling[,c(list.of.words.after.culling)]
-##    rownames(primary.set) = filenames.primary.set
-secondary.set = freq.II.set.0.culling[,c(list.of.words.after.culling)]
-##    rownames(secondary.set) = filenames.secondary.set
+        # optionally, deleting stop words
+#        primary.set = delete.stop.words(primary.set, pronouns)        
+#        secondary.set = delete.stop.words(secondary.set, pronouns)
+        
+
 
 # #################################################
 # culling is done, but we are still inside the main loop
@@ -1042,7 +1036,8 @@ secondary.set = secondary.set[,start.at:length(secondary.set[1,])]
 
 
 cat("\n")
-cat("culling @ ", current.culling,"\t","available words ",mfw.max,"\n")
+cat("culling @ ", current.culling,"\t","available words ",
+                  length(primary.set[1,]),"\n")
 
 
 
@@ -1139,11 +1134,10 @@ mfw = i
 
 
 # for safety reasons, if MFWs > words in samples
-if(mfw > length(list.of.words.after.culling) ) {
-  mfw = length(list.of.words.after.culling)
+if(mfw > length(colnames(freq.table.both.sets)) ) {
+  mfw = length(colnames(freq.table.both.sets))
   }
 
-  
 
 
 # the current task (number of MFW currently analyzed) echoed on the screen
@@ -1464,6 +1458,8 @@ if(cv == "thorough") {
 
       # this looks for classes that were not represented so far in I set
       for(i in classes.training.set) {
+        #
+        class.name = paste("\\b",i,"\\b",sep="")
         # shuffle the order of samples (both sets combined)
         names.of.the.texts = sample(rownames(freq.table.both.sets.binded))
         # exclude samples that have been already chosen to the training set
@@ -1471,7 +1467,7 @@ if(cv == "thorough") {
         # extract the classes, or strings before the first underscore
         classes.both.sets = gsub("_.*","",names.of.the.texts,perl=T)
         # find the first matching sample
-        randomly.picked.sample = grep(i,classes.both.sets)[1]
+        randomly.picked.sample = grep(class.name,classes.both.sets)[1]
         # retrieve its full name
         training.set.next.member = names.of.the.texts[randomly.picked.sample]
         # build the vector of randomly chosen members of the training set
@@ -1579,8 +1575,7 @@ if(save.distance.tables == TRUE && exists("distance.table") == TRUE) {
 }
 
 # writing the words (or features) actually used in the analysis
-##features.actually.used = colnames(table.with.all.freqs[,1:mfw])
-features.actually.used = list.of.words.after.culling[start.at : mfw.max]
+features.actually.used = colnames(freq.table.both.sets[,1:mfw])
 #
 if(save.analyzed.features == TRUE) {
     # checking if encoding conversion is needed
@@ -1676,7 +1671,7 @@ frequencies.training.set = freq.I.set.0.culling
 frequencies.test.set = freq.II.set.0.culling
 frequencies.both.sets = freq.table.both.sets
 zscores.both.sets = zscores.table.both.sets
-features.actually.used = list.of.words.after.culling[start.at : mfw.max]
+features.actually.used = colnames(freq.table.both.sets[,1:mfw])
 features = mfw.list.of.all
 
 # what about removing some of the variables? (suppose there are thousands

@@ -104,21 +104,21 @@ function(language="English") {
   pronouns = eng.pronouns
 
   # if other language has been chosen, the pronouns will be overwritten
-  if(language == "Polish") 
+  if(tolower(language) == "polish") 
       pronouns = pol.pronouns 
-  if(language == "Latin" || language == "Latin.corr")
+  if(tolower(language) == "latin" || tolower(language) == "latin.corr")
       pronouns = lat.pronouns
-  if(language == "French")
+  if(tolower(language) == "french")
       pronouns = fra.pronouns
-  if(language == "German" )
+  if(tolower(language) == "german" )
       pronouns = ger.pronouns
-  if(language == "Italian")
+  if(tolower(language) == "italian")
       pronouns = ita.pronouns
-  if(language == "Hungarian")
+  if(tolower(language) == "hungarian")
       pronouns = hun.pronouns
-  if(language == "Dutch")
+  if(tolower(language) == "dutch")
       pronouns = dut.pronouns
-  if(language == "Spanish")
+  if(tolower(language) == "spanish")
       pronouns = sp.pronouns
 
   # Windows users are a bit allergic to Unicode; let's make them happy

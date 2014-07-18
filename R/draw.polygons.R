@@ -3,6 +3,9 @@
 # a module as rough as can be (this is a pre-alpha version!)
 # Argument: a data frame containing 3 columns: x, y, class
 ###############################################################
+
+# this function is not exported, thus it is not visible for the user
+
 draw.polygons = function(summary.zeta.scores) {
   for(current.subset in c("primary","secondary")) {
     # extracting the points from the I/II set
@@ -126,9 +129,4 @@ draw.polygons = function(summary.zeta.scores) {
   polygon(polygon.primary,col=rgb(0,0,0,0.1),border=2)
   polygon(polygon.secondary,col=rgb(0,0,0,0.1),border=3)
 }
-
-
-
-############################################################################
-############################################################################
 
