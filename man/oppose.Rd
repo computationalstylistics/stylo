@@ -8,8 +8,10 @@ a tested author (or, a collection of authors), and another list containing
 the words significantly avoided by the former when compared to another set of texts. Some visualizations are available.
 }
 \usage{
-oppose(gui = TRUE, path = "", primary.corpus.dir = "primary_set",
-       secondary.corpus.dir = "secondary_set", test.corpus.dir = "test_set")
+oppose(gui = TRUE, path = NULL, 
+       primary.corpus.dir = "primary_set",
+       secondary.corpus.dir = "secondary_set", 
+       test.corpus.dir = "test_set", ...)
 }
 \arguments{
   \item{gui}{an optional argument; if switched on, a simple yet effective 
@@ -33,6 +35,9 @@ oppose(gui = TRUE, path = "", primary.corpus.dir = "primary_set",
     and male authors in the case of a gender-oriented study). If not specified, the default subdirectory \code{test_set} 
     will be used. If the default subdirectory does not exist or does not contain
     any texts, the validation test will not be performed.}
+  
+  \item{...}{any variable produced by \code{stylo.default.settings} can be set
+    here, in order to overwrite the default values.}
 }
 \details{
 This function performs a contrastive analysis between two given sets of texts, 
