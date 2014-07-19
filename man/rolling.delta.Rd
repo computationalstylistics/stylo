@@ -6,8 +6,8 @@ Function that analyses collaborative works and tries to determine
 the authorship of their fragments.
 }
 \usage{
-rolling.delta(gui = TRUE, path = "", primary.corpus.dir = "primary_set",
-secondary.corpus.dir = "secondary_set")
+rolling.delta(gui = TRUE, path = NULL, primary.corpus.dir = "primary_set",
+              secondary.corpus.dir = "secondary_set")
 }
 \arguments{
   \item{gui}{an optional argument; if switched on, a simple yet effective 

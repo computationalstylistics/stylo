@@ -7,7 +7,7 @@
 # #################################################
 
 delete.markup <-
-function(input.text,markup.type="plain") {
+function(input.text, markup.type = "plain") {
   if(markup.type == "xml" || markup.type == "xml.drama" 
                           || markup.type == "xml.notitles") {
     # getting rid of the TEI header (if it exists)

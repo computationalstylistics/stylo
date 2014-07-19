@@ -6,7 +6,8 @@
 # (ii) a percentage of texts that need to have a given word to save it
 # #################################################
 
-culling = function(input.table, culling.level = 0) {
+culling <- 
+function(input.table, culling.level = 0) {
         # checking if any variable names exist
         if(length(colnames(input.table)) < 1) {
                 cat("culling could not be performed: no variables' names\n")

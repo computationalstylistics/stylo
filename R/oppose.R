@@ -1,16 +1,29 @@
 
 
-##############################################################################
-# this is simply the Oppose script put into function(){ }
-
-# it needs to be thoroughly re-written
-
 
 oppose <-
-function(gui=TRUE,path="",
-         primary.corpus.dir="primary_set",
-         secondary.corpus.dir="secondary_set",
-         test.corpus.dir="test_set") {
+function(gui = TRUE, 
+         path = NULL,
+         primary.corpus.dir = "primary_set",
+         secondary.corpus.dir = "secondary_set",
+         test.corpus.dir = "test_set", ...) {
+
+                 
+                 
+                 
+
+polygons.on.graph = F
+naive.bayes = F
+svm.classification = F
+
+
+
+
+                 
+# if any command-line arguments have been passed by a user, they will
+# be stored on the following list and used to overwrite the defaults
+passed.arguments = list(...)
+
 
 
 
@@ -19,18 +32,18 @@ function(gui=TRUE,path="",
 # first of all, retrieve the current path name
 original.path = getwd()
 # then check if anywone wants to change the working dir
-if(is.character(path) == TRUE & nchar(path) > 0) {
+if(is.character(path) == TRUE & length(path) > 0) {
   # checking if the desired file exists and if it is a directory
   if(file.exists(path) == TRUE & file.info(path)[2] == TRUE) {
-  # if yes, then set the new working directory
-  setwd(path)
+    # if yes, then set the new working directory
+    setwd(path)
   } else {
-  # otherwise, stop the script
-  stop("there is no directory ", getwd(), "/", path)
+    # otherwise, stop the script
+    stop("there is no directory ", getwd(), "/", path)
   }
 } else {
-# if the argument was empty, then relax
-cat("using current directory...\n")
+  # if the argument was empty, then relax
+  cat("using current directory...\n")
 }
 
 
@@ -38,226 +51,76 @@ cat("using current directory...\n")
 
 
 
+# loading the default settings as defined in the following function
+# (it absorbes the arguments passed from command-line)
+variables = stylo.default.settings(...)
+
+
+
+# this needs to be deleted sooner or later
 
 stage.I.word.selection = TRUE
 stage.II.similarity.test = TRUE
 
-text.slice.length = 2000
-text.slice.overlap = 0
-
-# if you want to ignore words that occurred only once or twice, set
-# the threshold to 2; if you want to analyze all the words, set 0
-rare.occurrences.threshold = 2
 
 
-# choose one: "craig.zeta" | "eder.zeta" | "chisquare.zeta" | "mann.whitney" | "box.plot"
-method = "craig.zeta"
 
-### the meaning of the threshold parameter varies with the method chosen: #####
-# "craig.zeta" method chosen, you might probably want to filter out some words
-# of weak discrimination strength. Provided that 2 means the strongest 
-# positive difference and O the strongest negative difference (Hoover 2009), 
-# the values either just above or just below 1 are not significant and
-# thus can be (or rather should be) omitted. If chisquare method was chosen,
-# all the differences of p-value below 0.05 were filtered out, in pure Zeta,
-# there is no a priori solution. Threshold 0.2 would filter out a vast majority
-# of words, threshold set to 1 would filter all the words in a corpus.
-threshold = 0.2
-
-# initialize the token to be plotted if the box.plot method is chosen
-plot.token = ""
-
-
-graphic.output = TRUE
-display.on.screen = TRUE
-write.pdf.file = FALSE
-write.png.file = FALSE
-use.color.graphs = TRUE
-titles.on.graph = TRUE
-polygons.on.graph = FALSE
-identify.points = FALSE
-classification = FALSE
-naive.bayes = FALSE
-svm.classification = TRUE
-decision.tree.classification = FALSE
-visualization = "words"
-
-# #################################################
-#
-# the GUI module 
-#
-# #################################################
-
-# At the beginning of the script, you could decide whether use tp the GUI module 
-# or not; if the appropriate option was switched on, the GUI will start now
-
+# optionally, displaying a GUI box
+# (it absorbes the arguments passed from command-line)
 if (gui == TRUE) {
-  #library(tcltk2)
-
-if(file.exists("oppose_config.txt") == TRUE) {
-	source("oppose_config.txt") }
-
-  cancel_pause <- FALSE
-  tt <- tktoplevel()
-  tktitle(tt) <- "oppose script | set parameters"
-
-  push_OK <- function(){
-      cancel_pause <<- TRUE
-      tkdestroy(tt)
+      # first, checking if the GUI can be displayed
+      # (the conditional expression is stolen form the generic function "menu")
+      if (.Platform$OS.type == "windows" || .Platform$GUI == 
+            "AQUA" || (capabilities("tcltk") && capabilities("X11") && 
+            suppressWarnings(tcltk:::.TkUp))) {
+        variables = gui.oppose(...)
+      } else {
+        cat("\n")
+        cat("GUI could not be launched -- default settings will be used;\n")
+        cat("otherwise please pass your variables as command-line agruments\n")
       }
-
-text.slice.length <- tclVar(text.slice.length)
-text.slice.overlap <- tclVar(text.slice.overlap)
-rare.occurrences.threshold <- tclVar(rare.occurrences.threshold)
-threshold <- tclVar(threshold)
-plot.token <- tclVar(plot.token)
-method <- tclVar(method)
-display.on.screen <- tclVar(display.on.screen)
-write.pdf.file <- tclVar(write.pdf.file)
-write.png.file <- tclVar(write.png.file)
-use.color.graphs <- tclVar(use.color.graphs)
-titles.on.graph <- tclVar(titles.on.graph)
-identify.points <- tclVar(identify.points)
-classification <-tclVar(classification)
-	
-
-visualization <- tclVar(visualization)
-
-entry_none <- tkradiobutton(tt)
-entry_words <- tkradiobutton(tt)
-entry_markers <- tkradiobutton(tt)
-
-tkconfigure(entry_none,variable=visualization,value="none")
-tkconfigure(entry_words,variable=visualization,value="words")
-tkconfigure(entry_markers,variable=visualization,value="markers")
-
-entrylabel_none <- tklabel(tt,text="None",anchor="w")
-entrylabel_words <- tklabel(tt,text="Words",anchor="w")
-entrylabel_markers <- tklabel(tt,text="Markers",anchor="w")
-
-cb_display.on.screen <- tkcheckbutton(tt)
-cb_write.pdf.file <- tkcheckbutton(tt)
-cb_write.png.file <- tkcheckbutton(tt)
-cb_use.color.graphs <- tkcheckbutton(tt)
-cb_titles.on.graph <- tkcheckbutton(tt)
-cb_identify.points <- tkcheckbutton(tt)
-cb_classification <- tkcheckbutton(tt)
-
-rb_craig.zeta <- tkradiobutton(tt)
-rb_eder.zeta <- tkradiobutton(tt)
-rb_chisquare.zeta <- tkradiobutton(tt)
-rb_mann.whitney <- tkradiobutton(tt)
-rb_box.plot <- tkradiobutton(tt)
-
-tt_text.slice.length <- tkentry(tt,textvariable=text.slice.length,width="8")
-tt_text.slice.overlap <- tkentry(tt,textvariable=text.slice.overlap,width="8")
-tt_rare.occurences.threshold <- tkentry(tt,textvariable=rare.occurrences.threshold,width="8")
-tt_threshold <- tkentry(tt,textvariable=threshold,width="8")
-tt_plot.token <-tkentry(tt,textvariable=plot.token,width="16")
-
-button_1 <- tkbutton(tt,text="     OK     ",command=push_OK,relief="groove")
-tkbind(button_1,"<Return>",push_OK) 
-
-tkconfigure(cb_display.on.screen,variable=display.on.screen)
-tkconfigure(cb_write.pdf.file,variable=write.pdf.file)
-tkconfigure(cb_write.png.file,variable=write.png.file)
-tkconfigure(cb_use.color.graphs,variable=use.color.graphs)
-tkconfigure(cb_titles.on.graph,variable=titles.on.graph)
-tkconfigure(cb_identify.points,variable=identify.points)
-tkconfigure(cb_classification,variable=classification)
-	
-
-
-tkconfigure(rb_craig.zeta,variable=method,value="craig.zeta")
-tkconfigure(rb_eder.zeta,variable=method,value="eder.zeta")
-tkconfigure(rb_chisquare.zeta,variable=method,value="chisquare.zeta")
-tkconfigure(rb_mann.whitney,variable=method,value="mann.whitney")
-tkconfigure(rb_box.plot,variable=method,value="box.plot")
-
-
-rblab_craig.zeta <- tklabel(tt,text="Craig's Zeta   ",anchor="w")
-rblab_eder.zeta <- tklabel(tt,text="Eder's Zeta    ",anchor="w")
-rblab_chisquare.zeta <- tklabel(tt,text="Chi-square Zeta          ",anchor="w")
-rblab_mann.whitney <- tklabel(tt,text="Mann-Whitney          ",anchor="w")
-rblab_box.plot <- tklabel(tt,text="Boxplot          ",anchor="w")
-
-ttlab_text.slice.length <- tklabel(tt,text="Slice Length     ")
-ttlab_text.slice.overlap <- tklabel(tt,text="Slice Overlap     ")
-ttlab_rare.occurences.threshold <- tklabel(tt,text="Occurrence Threshold    ")
-ttlab_threshold <- tklabel(tt,text="Filter Threshold    ")
-ttlab_plot.token <- tklabel(tt,text="Plot token    ")
-
-tkgrid(tklabel(tt,text="    ")) # blank line
-	
-
-tkgrid(tklabel(tt,text="            INPUT:               "), ttlab_text.slice.length,ttlab_text.slice.overlap, sticky="w")
-tkgrid(tklabel(tt,text="                                 "), tt_text.slice.length, tt_text.slice.overlap, sticky="w")
-tkgrid(tklabel(tt,text="    ")) # blank line
-tkgrid(tklabel(tt,text="                                 "), ttlab_rare.occurences.threshold, ttlab_threshold, sticky="w")
-tkgrid(tklabel(tt,text="                                 "), tt_rare.occurences.threshold, tt_threshold, sticky="w")
-
-
-tkgrid(tklabel(tt,text="    ")) # blank line
-
-tkgrid(tklabel(tt,text="            METHOD:     "), rblab_craig.zeta, rblab_eder.zeta, rblab_chisquare.zeta, sticky="w")
-tkgrid(tklabel(tt,text="                   "), rb_craig.zeta, rb_eder.zeta, rb_chisquare.zeta, sticky="w")
-tkgrid(tklabel(tt,text="                   "), rblab_mann.whitney, rblab_box.plot, sticky="w")
-tkgrid(tklabel(tt,text="                   "), rb_mann.whitney, rb_box.plot, sticky="w")	
-
-
-tkgrid(tklabel(tt,text="    ")) # blank line
-
-cblab_display.on.screen <- tklabel(tt,text="Onscreen")
-cblab_write.pdf.file <- tklabel(tt,text="PDF")
-cblab_write.png.file <- tklabel(tt,text="PNG")
-cblab_use.color.graph <- tklabel(tt,text="Colors")
-cblab_titles.on.graph <- tklabel(tt,text="Titles")
-cblab_identify.points <- tklabel(tt,text="Identify Points")
-cblab_classification <- tklabel(tt, text="Classification")
-	
-
-tkgrid(tklabel(tt,text="  VISUALIZATION:           "),entrylabel_none,entrylabel_words,entrylabel_markers,sticky="w")
-tkgrid(tklabel(tt,text="                   "),entry_none,entry_words,entry_markers,sticky="w")
-
-tkgrid(tklabel(tt,text="  MISCELLANEOUS:           "), cblab_display.on.screen, cblab_write.pdf.file, cblab_write.png.file, sticky="w")
-tkgrid(tklabel(tt,text="                   "), cb_display.on.screen, cb_write.pdf.file, cb_write.png.file, sticky="w")
-tkgrid(tklabel(tt,text="                   "), cblab_use.color.graph, cblab_titles.on.graph ,cblab_identify.points, sticky="w")
-tkgrid(tklabel(tt,text="                   "), cb_use.color.graphs, cb_titles.on.graph ,cb_identify.points, sticky="w")
-tkgrid(tklabel(tt,text="                   "), cblab_classification, ttlab_plot.token, sticky="w")
-tkgrid(tklabel(tt,text="                   "), cb_classification, tt_plot.token, sticky="w")
-
-tkgrid(tklabel(tt,text="    ")) # blank line
-
-tkgrid(button_1,columnspan="10")
-
-tkgrid(tklabel(tt,text="    ")) # blank line
-
-repeat{
-  if(cancel_pause){
-    text.slice.length <- as.numeric(tclvalue(text.slice.length))
-    text.slice.overlap <- as.numeric(tclvalue(text.slice.overlap))
-    rare.occurrences.threshold <- as.numeric(tclvalue(rare.occurrences.threshold))
-    threshold <- as.numeric(tclvalue(threshold))
-    display.on.screen <- as.logical(as.numeric(tclvalue(display.on.screen)))
-    write.pdf.file <- as.logical(as.numeric(tclvalue(write.pdf.file)))
-    write.png.file <- as.logical(as.numeric(tclvalue(write.png.file)))
-    use.color.graphs <- as.logical(as.numeric(tclvalue(use.color.graphs)))
-    titles.on.graph <- as.logical(as.numeric(tclvalue(titles.on.graph)))
-    identify.points <- as.logical(as.numeric(tclvalue(identify.points)))
-	visualization <- as.character(tclvalue(visualization))
-	classification <- as.logical(as.numeric(tclvalue(classification)))
-    method <- as.character(tclvalue(method))
-	plot.token <- as.character(tclvalue(plot.token))
-    break
-  }
 }
 
-} # <-- here the option "interactive.mode.with.GUI == TRUE" is completed
 
-      
-# #################################################
-# GUI module explicit feliciter (Phew!)
-# #################################################
+
+
+
+# #############################################################################
+# Explicit assignment of all the variables, in order to avoid attach()
+# #############################################################################
+
+text.slice.length = variables$text.slice.length
+text.slice.overlap = variables$text.slice.overlap
+rare.occurrences.threshold = variables$rare.occurrences.threshold
+zeta.filter.threshold = variables$zeta.filter.threshold
+plot.token = variables$plot.token
+oppose.method = variables$oppose.method
+display.on.screen = variables$display.on.screen
+write.pdf.file = variables$write.pdf.file
+write.png.file = variables$write.png.file
+use.color.graphs = variables$use.color.graphs
+titles.on.graph = variables$titles.on.graph
+identify.points = variables$identify.points
+classification = variables$classification
+visualization = variables$visualization
+
+corpus.format = variables$corpus.format
+corpus.lang = variables$corpus.lang
+splitting.rule = variables$splitting.rule
+preserve.case = variables$preserve.case
+sample.size = variables$sample.size
+sampling = variables$sampling
+sampling.with.replacement = variables$sampling.with.replacement
+analyzed.features = variables$analyzed.features
+ngram.size = variables$ngram.size
+
+splitting.rule = variables$splitting.rule
+preserve.case = variables$preserve.case
+encoding = variables$encoding
+
+
+
+
 
 
 # FUNCTIONS:
@@ -294,159 +157,147 @@ split.sample = function(input.text) {
 
 
 
+  # Retrieving the names of samples
+  #
+  filenames.primary.set = list.files(primary.corpus.dir)
+  filenames.secondary.set = list.files(secondary.corpus.dir)
 
-
-
-
-############################################################################
-#
-# retrieving the names of samples
-filenames.primary.set = list.files(primary.corpus.dir)
-filenames.secondary.set = list.files(secondary.corpus.dir)
-#
-#
-# loading the primary set from text files
-corpus.of.primary.set = list()
-setwd(primary.corpus.dir)
-  for (file in filenames.primary.set) {
-  # loading the next file from the list filenames.primary.set,
-  current.file = tolower(scan(file,what="char",sep="\n",quiet=T))
-  # deleting punctuation, splitting into words:
-  split.file = split.sample(current.file)
-  # appending the current text to the virtual corpus
-  corpus.of.primary.set[[file]] = split.file
-    cat(file,"\t", "loaded successfully (",length(split.file)," words)\n",sep="")
-    if(length(split.file) < text.slice.length) {
-    error.message = TRUE; setwd("..")
-    cat("the above file is too short for being split into", 
-         text.slice.length,"words\n")
-    stop("change your settings!")
-    }
+  # Checking whether required files and subdirectories exist
+  if(file.exists(primary.corpus.dir) == FALSE | file.exists(secondary.corpus.dir) == FALSE) {
+    cat("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
+        "Working directory should contain two subdirectories: 
+        \"",primary.corpus.dir,"\" and \"",secondary.corpus.dir,"\"\n",
+        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
+    # back to the original working directory
+    setwd(original.path)
+    # error message
+    stop("corpus prepared incorrectly")
   }
-setwd("..")
-
-# loading the secondary set from text files
-corpus.of.secondary.set = list()
-setwd(secondary.corpus.dir)
-  for (file in filenames.secondary.set) {
-  # loading the next file from the list filenames.secondary.set,
-  current.file = tolower(scan(file,what="char",sep="\n",quiet=T))
-  # deleting punctuation, splitting into words:
-  split.file = split.sample(current.file)
-  # appending the current text to the virtual corpus
-  corpus.of.secondary.set[[file]] = split.file
-  cat(file,"\t", "loaded successfully (",length(split.file)," words)\n",sep="")
-    if(length(split.file) < text.slice.length) {
-    error.message = TRUE; setwd("..")
-    cat("the above file is too short for being split into", 
-         text.slice.length,"words\n")
-    stop("change your settings!")
-    }
+  # Checking if the subdirectories contain any stuff
+  if(length(filenames.primary.set) <2 | length(filenames.secondary.set) <2) {
+    cat("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
+        "Both subdirectories \"",primary.corpus.dir,"\" and \"",
+        secondary.corpus.dir,"\" should contain at least two text samples!\n",
+        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
+    # back to the original working directory
+    setwd(original.path)
+    # error message
+    stop("corpus prepared incorrectly")
   }
-setwd("..")
+
+  # loading text files, splitting, parsing, n-gramming, samping, and so forth
+  corpus.of.primary.set = load.corpus.and.parse(files = filenames.primary.set,
+                         corpus.dir = primary.corpus.dir,
+                         encoding = encoding,
+                         markup.type = corpus.format,
+                         language = corpus.lang,
+                         splitting.rule = splitting.rule,
+                         preserve.case = preserve.case,
+                         sample.size = sample.size,
+                         sampling = sampling,
+                         sampling.with.replacement = sampling.with.replacement,
+                         features = analyzed.features,
+                         ngram.size = ngram.size)
+
+  # loading text files: test set
+  corpus.of.secondary.set = load.corpus.and.parse(files=filenames.secondary.set,
+                         corpus.dir = secondary.corpus.dir,
+                         encoding = encoding,
+                         markup.type = corpus.format,
+                         language = corpus.lang,
+                         splitting.rule = splitting.rule,
+                         preserve.case = preserve.case,
+                         sample.size = sample.size,
+                         sampling = sampling,
+                         sampling.with.replacement = sampling.with.replacement,
+                         features = analyzed.features,
+                         ngram.size = ngram.size)
+
+
+
+
+  # We need a list of the most frequent words used in the current corpus, 
+  # in descendent order, without frequencies (just a list of words).
+  wordlist.raw = sort(table( c(unlist(corpus.of.primary.set),
+                          unlist(corpus.of.secondary.set))), decreasing=TRUE)
+
+
+  # we want to filter out rare words (e.g. hapax legomena and/or dislegomena)
+  wordlist.raw = wordlist.raw[wordlist.raw > rare.occurrences.threshold]
+
+  # the only thing we need are words ordered by frequency (no frequencies)
+  wordlist = names(wordlist.raw)
+
+  
+  
+  
+
 # blank line on the screen
 cat("\n")
 
 
-### I stage ######################################################
+cat("\n")
+cat("Slicing the texts into samples...\n\n")
 
-# the first stage of zeta test (might be skipped if you already have 
-# a list of distinctive words)
-if(stage.I.word.selection == TRUE) {
+primary.slices = make.samples(corpus.of.primary.set, 
+                              sample.size = text.slice.length,
+                              sample.overlap = text.slice.overlap, 
+                              sampling = "normal.sampling")
+                              
+secondary.slices = make.samples(corpus.of.secondary.set, 
+                              sample.size = text.slice.length,
+                              sample.overlap = text.slice.overlap, 
+                              sampling = "normal.sampling")
 
-# We need a list of the most frequent words used in the current corpus, 
-# in descendent order, without frequencies (just a list of words). 
-wordlist.of.primary.set = c()
-	for (file in 1 : length(corpus.of.primary.set)) {
-		# loading the next sample from the list filenames.primary.set
-		current.text = corpus.of.primary.set[[file]]
-		# putting samples together:
-		wordlist.of.primary.set = c(wordlist.of.primary.set, current.text)
-		cat(names(corpus.of.primary.set[file]),"\t","tokenized successfully", "\n")
-	}
-wordlist.of.secondary.set = c()
-	for (file in 1 : length(corpus.of.secondary.set)) {
-		# loading the next sample from the list filenames.secondary.set
-		current.text = corpus.of.secondary.set[[file]]
-		# putting samples together:
-		wordlist.of.primary.set = c(wordlist.of.secondary.set, current.text)
-		cat(names(corpus.of.secondary.set[file]),"\t","tokenized successfully","\n")
-		#wordlist.of.secondary.set = c()
-	}
 
-cat("\n\nThinking...\n\n")
-
-# preparing a sorted frequency list of the whole corpus
-mfw.list.of.all = sort(table(c(wordlist.of.primary.set,wordlist.of.secondary.set)), decreasing=T)
-# we want to filter out rare words (e.g. hapax legomena and/or dislegomena)
-mfw.list.of.all = mfw.list.of.all[mfw.list.of.all > rare.occurrences.threshold]
-
-# the only thing we need are words ordered by frequency (no frequencies)
-wordlist = names(mfw.list.of.all)
 
 # ###############################################################
 
-cat("\nExtracting distinctive words... (this might take a while)\n\n")
+cat("\n")
+cat("Extracting distinctive words... (this might take a while)\n\n")
 
-primary.slices = c()
-secondary.slices = c()	
+# ###############################################################
 
-# loop for (1) primary set and (2) secondary set
-for(i in 1:2) {
-	if(i == 1) {
-		current.corpus = corpus.of.primary.set 
-		filenames = filenames.primary.set
-	} else {
-		current.corpus = corpus.of.secondary.set 
-		filenames = filenames.secondary.set
-	}
-	# variable initiation
-	counted.occurrences = c()
+cat("\n")
+cat("Extracting distinctive words... (this might take a while)\n\n")
 
-  # loop for uploading each file
-  for (file in filenames) {
-  cat(file,"\n")
-    # loading the next sample from the list filenames.primary.set
-    # deleting punctuation, splitting into words:
-    current.sample = current.corpus[[file]]
-    # the sample will be chopped into slices (variable preparation)
-    text.length = length(current.sample)
-    number.of.slices = floor(text.length/(text.slice.length-text.slice.overlap))
-    number.of.slices = floor(text.length/text.slice.length)
-    # variable initiation
-    table.of.occurrences = NULL
 
-	# the current text is split into slices, the slices analyzed one by one
-	for(new.slice in 1:number.of.slices) {
-		start.point = new.slice * (text.slice.length-text.slice.overlap) -
-                              (text.slice.length-text.slice.overlap) +1
-		current.slice = current.sample[start.point:(start.point+text.slice.length-1)]
-		# check the wordlist against the current slice
-		word.occurrence.count = as.numeric(wordlist %in% current.slice)
-		table.of.occurrences = rbind(table.of.occurrences,word.occurrence.count)
-		# save slice for future use:
-		if(i == 1){
-			primary.slices[[paste("prim", length(primary.slices), sep="")]] = current.slice
-		} else {
-			secondary.slices[[paste("sec", length(secondary.slices), sep="")]] = current.slice
-		}
-	}
-	# adding the slices, extracting the list of words analyzed
-	no.of.successful.slices = colSums(table.of.occurrences)/number.of.slices*100
-	names(no.of.successful.slices) = wordlist
-	counted.occurrences = cbind(counted.occurrences, no.of.successful.slices)
-}   # <--- loop for uploading next tests in a given corpus
 
-# if more texts were analyzed, calculate the arithmetic mean
-counted.occurrences = colMeans(as.data.frame(t(counted.occurrences)))
 
-if(i == 1) {
-	comparison.primary = counted.occurrences
-  } else {
-	comparison.secondary = counted.occurrences
-  }
+cat("\n")
+cat("Primary set...\n")
 
-}  # <-- loop uploading the current corpus returns here
+# iterating over the samples and slices, checking them agains the wordlist
+table.primary.set = sapply(primary.slices, function(x) as.numeric(wordlist %in% x))
+table.primary.set = t(table.primary.set)
+colnames(table.primary.set) = wordlist
+
+# adding the counts for particular slices, computing percentage of slices 
+# that contain words from the wordlist
+comparison.primary = colSums(table.primary.set)/length(primary.slices)*100
+names(comparison.primary) = wordlist
+
+
+
+
+cat("\n")
+cat("Secondary set...\n")
+
+# iterating over the samples and slices, checking them agains the wordlist
+table.secondary.set = sapply(secondary.slices, function(x) as.numeric(wordlist %in% x))
+table.secondary.set = t(table.secondary.set)
+colnames(table.secondary.set) = wordlist
+
+# adding the counts for particular slices, computing percentage of slices 
+# that contain words from the wordlist
+comparison.secondary = colSums(table.secondary.set)/length(secondary.slices)*100
+names(comparison.secondary) = wordlist
+
+
+
+
+
+cat("comparison done!\n\n")
 
 
 
@@ -465,8 +316,8 @@ if(i == 1) {
 	var.name(text.slice.length)
 	var.name(text.slice.overlap)
 	var.name(rare.occurrences.threshold)
-	var.name(threshold)
-	var.name(method)
+	var.name(zeta.filter.threshold)
+	var.name(oppose.method)
 	var.name(display.on.screen)
 	var.name(write.pdf.file)
 	var.name(write.png.file)
@@ -483,7 +334,6 @@ if(i == 1) {
 
 
 
-
 #########################################################################
 
 comparison = cbind(comparison.primary,comparison.secondary)
@@ -493,7 +343,7 @@ comparison = cbind(comparison.primary,comparison.secondary)
 # boxplot
 present_in_primary = 0
 present_in_secondary = 0
-if (method == "box.plot"){
+if (oppose.method == "box.plot"){
 	counts = c()
 	categories = c()
 	# make the boxplot
@@ -559,7 +409,7 @@ if (method == "box.plot"){
 }
 	
 # mann.whitney / wilcoxon (see A. Kilgariff, Comparing Corpora. "International Journal of Corpus Linguistics" 6(1):1-37)
-if (method == "mann.whitney"){
+if (oppose.method == "mann.whitney"){
 	long.method.name="Wilcoxon | Mann-Whitney"
 	short.method.name="Wilcox"
 	statistics = c()
@@ -585,7 +435,7 @@ if (method == "mann.whitney"){
 	statistics=sort(statistics)
 	max_stat = max(statistics)
 	# get tail percentage
-	tail = round(length(statistics)/100*threshold)
+	tail = round(length(statistics)/100*zeta.filter.threshold)
 	top_words = statistics[0:tail]
 	print(top_words)
 	tail_words = rev(statistics[(length(statistics)-tail):length(statistics)])
@@ -648,7 +498,7 @@ words.avoided.by.primary.author = names(tail_words)
 # Craig's zeta
 #####################################################################
 
-if(method == "craig.zeta") {
+if(oppose.method == "craig.zeta") {
 long.method.name="Craig's Zeta"
 short.method.name="Craig"
 # two ways of expressing the same thing:
@@ -656,9 +506,9 @@ differences = ( comparison.primary - comparison.secondary ) / 100 + 1 # note: ad
 #differences = (comparison.primary + (100 - comparison.secondary )) / 100
 
 # plotting functionality:
-if (visualization == "words" && method != "box.plot"){
-words.preferred.by.primary.author = sort(differences[differences > 1 + threshold],decreasing=TRUE)
-words.avoided.by.primary.author = sort(differences[differences < 1 - threshold])
+if (visualization == "words" && oppose.method != "box.plot"){
+words.preferred.by.primary.author = sort(differences[differences > 1 + zeta.filter.threshold],decreasing=TRUE)
+words.avoided.by.primary.author = sort(differences[differences < 1 - zeta.filter.threshold])
 
 preferred.words.for.plotting = c()
 preferred.indices.for.plotting = c()
@@ -709,16 +559,16 @@ if(write.pdf.file == TRUE) {
 # end of plotting functionality
 	
 words.preferred.by.primary.author = names(sort(differences[differences > 1 
-												   + threshold],decreasing=TRUE))
+                                    + zeta.filter.threshold],decreasing=TRUE))
 words.avoided.by.primary.author = names(sort(differences[differences < 1 
-												 - threshold]))
+                                    - zeta.filter.threshold]))
 }
 
 
 # Eder's zeta (inspired by Canberra distance measure)
 #####################################################################
 
-if(method == "eder.zeta") {
+if(oppose.method == "eder.zeta") {
 long.method.name="Eder's Zeta"
 short.method.name="Eder"
 # computation of the differences between occurences of words
@@ -727,14 +577,14 @@ differences = differences[differences > -1]
 differences = differences[differences < 1]
 
 # extracting the distinctive words
-words.preferred.by.primary.author = names(sort(differences[differences > 0 + threshold], decreasing=TRUE))
-words.avoided.by.primary.author = names(sort(differences[differences < 0 - threshold]))
+words.preferred.by.primary.author = names(sort(differences[differences > 0 + zeta.filter.threshold], decreasing=TRUE))
+words.avoided.by.primary.author = names(sort(differences[differences < 0 - zeta.filter.threshold]))
 
 # plotting functionality:
 	if (visualization == "words"){
 		
-		words.preferred.by.primary.author = sort(differences[differences > 0 + threshold],decreasing=TRUE)
-		words.avoided.by.primary.author = sort(differences[differences < 0 - threshold])
+		words.preferred.by.primary.author = sort(differences[differences > 0 + zeta.filter.threshold],decreasing=TRUE)
+		words.avoided.by.primary.author = sort(differences[differences < 0 - zeta.filter.threshold])
 		
 		preferred.words.for.plotting = c()
 		preferred.indices.for.plotting = c()
@@ -783,14 +633,14 @@ words.avoided.by.primary.author = names(sort(differences[differences < 0 - thres
 			dev.off()}
 	}
 # end of plotting functionality
-words.preferred.by.primary.author = names(sort(differences[differences > 1 + threshold],decreasing=TRUE))
-words.avoided.by.primary.author = names(sort(differences[differences < 1 - threshold]))
+words.preferred.by.primary.author = names(sort(differences[differences > 1 + zeta.filter.threshold],decreasing=TRUE))
+words.avoided.by.primary.author = names(sort(differences[differences < 1 - zeta.filter.threshold]))
 }
 
 # Zeta based on chi-square test
 #####################################################################
 
-if(method == "chisquare.zeta") {
+if(oppose.method == "chisquare.zeta") {
 long.method.name="Chi-square Zeta"
 short.method.name="Chi-sq"
 differences = comparison[,1] - comparison[,2]
@@ -844,8 +694,8 @@ words.avoided.stats = sort(words.avoided.stats, decreasing=T)
 
 # plotting functionality:
 	if (visualization == "words"){
-		words.preferred.by.primary.author = words.preferred.stats[words.preferred.stats>threshold]
-		words.avoided.by.primary.author = -(words.avoided.stats[words.avoided.stats>threshold])
+		words.preferred.by.primary.author = words.preferred.stats[words.preferred.stats>zeta.filter.threshold]
+		words.avoided.by.primary.author = -(words.avoided.stats[words.avoided.stats>zeta.filter.threshold])
 		
 		preferred.words.for.plotting = c()
 		preferred.indices.for.plotting = c()
@@ -902,7 +752,7 @@ words.avoided.stats = sort(words.avoided.stats, decreasing=T)
 ########################################################################
 # extracted words will be written to output files
 
-if (method != "box.plot"){
+if (oppose.method != "box.plot"){
 # some comments into the file containing wordlist
 cat("# The file contains words that were extracted in the oppose script:",
   "# this subset lists words significantly PREFERRED by primary author(s).",
@@ -936,7 +786,7 @@ cat(words.avoided.by.primary.author,
 #
 # 
 }
-} # <---- the first stage of the analysis is completed
+#} # <---- the first stage of the analysis is completed
 
 
 
@@ -944,7 +794,7 @@ cat(words.avoided.by.primary.author,
 
 
 ### II stage ######################################################
-if (stage.II.similarity.test == TRUE && method != "box.plot") {
+if (stage.II.similarity.test == TRUE && oppose.method != "box.plot") {
 # Note: it is impossible to perform stage II when the box.plot method is used
 
 # checking if the test set exists and if it contains file(s)
@@ -1079,7 +929,7 @@ colnames(summary.zeta.scores) = c("preferred","avoided","class")
 
 
 ### III stage ######################################################
-if ((visualization == "markers") && (method != "box.plot")){
+if ((visualization == "markers") && (oppose.method != "box.plot")){
   # a tiny module for graph auto-coloring (copied from "Delta test 0.4.1")
   # NOTE: in ver. 0.4.8, this module has been turned to R function, and improved
   # 
@@ -1156,7 +1006,7 @@ if ((visualization == "markers") && (method != "box.plot")){
 
 ### classification ######################################################
 
-if (classification == TRUE && method != "box.plot") {
+if (classification == TRUE && oppose.method != "box.plot") {
   training.subset = length(grep("(primary)|(secondary)",summary.zeta.scores[,3]))
   test.subset = length(summary.zeta.scores[,3])
   my.data = as.data.frame(summary.zeta.scores)

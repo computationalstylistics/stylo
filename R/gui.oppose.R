@@ -228,7 +228,7 @@ rb_box.plot <- tkradiobutton(tt)
 tt_text.slice.length <- tkentry(tt,textvariable=text.slice.length,width="8")
 tt_text.slice.overlap <- tkentry(tt,textvariable=text.slice.overlap,width="8")
 tt_rare.occurences.threshold <- tkentry(tt,textvariable=rare.occurrences.threshold,width="8")
-tt_threshold <- tkentry(tt,textvariable=zeta.filter.threshold,width="8")
+tt_zeta.filter.threshold <- tkentry(tt,textvariable=zeta.filter.threshold,width="8")
 tt_plot.token <-tkentry(tt,textvariable=plot.token,width="16")
 
 button_1 <- tkbutton(tt,text="     OK     ",command=push_OK,relief="groove")
@@ -260,7 +260,7 @@ rblab_box.plot <- tklabel(tt,text="Boxplot          ",anchor="w")
 ttlab_text.slice.length <- tklabel(tt,text="Slice Length     ")
 ttlab_text.slice.overlap <- tklabel(tt,text="Slice Overlap     ")
 ttlab_rare.occurences.threshold <- tklabel(tt,text="Occurrence Threshold    ")
-ttlab_threshold <- tklabel(tt,text="Filter Threshold    ")
+ttlab_zeta.filter.threshold <- tklabel(tt,text="Filter Threshold    ")
 ttlab_plot.token <- tklabel(tt,text="Plot token    ")
 
 tkgrid(tklabel(tt,text="    ")) # blank line
@@ -269,8 +269,8 @@ tkgrid(tklabel(tt,text="    ")) # blank line
 tkgrid(tklabel(tt,text="            INPUT:               "), ttlab_text.slice.length,ttlab_text.slice.overlap, sticky="w")
 tkgrid(tklabel(tt,text="                                 "), tt_text.slice.length, tt_text.slice.overlap, sticky="w")
 tkgrid(tklabel(tt,text="    ")) # blank line
-tkgrid(tklabel(tt,text="                                 "), ttlab_rare.occurences.threshold, ttlab_threshold, sticky="w")
-tkgrid(tklabel(tt,text="                                 "), tt_rare.occurences.threshold, tt_threshold, sticky="w")
+tkgrid(tklabel(tt,text="                                 "), ttlab_rare.occurences.threshold, ttlab_zeta.filter.threshold, sticky="w")
+tkgrid(tklabel(tt,text="                                 "), tt_rare.occurences.threshold, tt_zeta.filter.threshold, sticky="w")
 
 
 tkgrid(tklabel(tt,text="    ")) # blank line

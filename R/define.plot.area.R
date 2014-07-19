@@ -11,7 +11,7 @@
 # #################################################
 
 define.plot.area <-
-function(x.coord,y.coord,xymargins=2,v.offset=0) {
+function(x.coord, y.coord, xymargins = 2, v.offset = 0) {
   # get horizontal plotting area (reasonable margins added on both sides):
   # (1) how long are the extreme samples' names
   left.label.length = nchar(names(x.coord)[(order(x.coord)[1])])

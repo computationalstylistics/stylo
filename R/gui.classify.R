@@ -1,13 +1,4 @@
 
-# TODO: manual files selection should be done within this function
-# (the same applies to gui.stylo)
-# ATTENTION: here we have TWO sets
-
-# TODO: apart from pronoun deletion, there should be also stoplist deletion
-# (in two flavors: a. a predefined list of stop words; b. a custom list)
-
-# TODO: delta on centroids
-
 
 
 # #################################################

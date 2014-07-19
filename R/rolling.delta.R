@@ -6,9 +6,9 @@
 
 
 rolling.delta <-
-function(gui=TRUE,path="",
-         primary.corpus.dir="primary_set",
-         secondary.corpus.dir="secondary_set") {
+function(gui = TRUE,path = NULL,
+         primary.corpus.dir = "primary_set",
+         secondary.corpus.dir = "secondary_set") {
 
 
 

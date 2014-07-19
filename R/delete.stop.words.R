@@ -9,8 +9,8 @@
 # (ii) a vector of words to be excluded
 # #################################################
 
-delete.stop.words = function(input.table, 
-                               stop.words = NULL) {
+delete.stop.words <- 
+function(input.table, stop.words = NULL) {
         # checking if any variables' names exist
         if(length(colnames(input.table)) < 1) {
                 cat("stop word deletion could not be performed\n")

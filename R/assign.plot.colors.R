@@ -10,7 +10,7 @@
 # #################################################
 
 assign.plot.colors <-
-function(labels,col="colors") {
+function(labels, col = "colors") {
   if(col == "black") {
     colors.of.pca.graph = "black"
   } else {
