@@ -302,10 +302,17 @@ comparison.secondary = colSums(table.secondary.set)/length(secondary.slices)*100
 names(comparison.secondary) = wordlist
 
 
+#########################################################################
 
+
+
+
+comparison = cbind(comparison.primary,comparison.secondary)
 
 
 cat("comparison done!\n\n")
+
+
 
 
 
@@ -342,9 +349,6 @@ cat("comparison done!\n\n")
 
 
 
-#########################################################################
-
-comparison = cbind(comparison.primary,comparison.secondary)
 
 ##########################################################################
 
