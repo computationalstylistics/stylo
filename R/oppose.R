@@ -138,12 +138,12 @@ split.sample = function(input.text) {
   # loading the file, splitting into pieces specified by regular expression;
   # here, all sequences between non-letter characters are assumed to be words:
     if(Sys.info()[["sysname"]] == "Windows") { 
-	### Windows
-	tokenized.text = c(unlist(strsplit(input.text, "\\W+|_+",perl=T)))
-	} else {
-	### Linux, Mac
-	tokenized.text = c(unlist(strsplit(input.text, "[^[:alpha:]]+")))
-	}
+        ### Windows
+        tokenized.text = c(unlist(strsplit(input.text, "\\W+|_+",perl=T)))
+        } else {
+        ### Linux, Mac
+        tokenized.text = c(unlist(strsplit(input.text, "[^[:alpha:]]+")))
+        }
   tokenized.text = tokenized.text[grep("[^[:digit:]]",tokenized.text)]
 }
 
@@ -228,7 +228,6 @@ split.sample = function(input.text) {
   # the only thing we need are words ordered by frequency (no frequencies)
   wordlist = names(wordlist.raw)
 
-  cat(length(wordlist),"\n\n\n\n")
 
   
   
@@ -282,7 +281,6 @@ names(comparison.primary) = wordlist
 
 
 
-
 cat("\n")
 cat("Secondary set...\n")
 
@@ -307,8 +305,12 @@ names(comparison.secondary) = wordlist
 
 
 
-comparison = cbind(comparison.primary,comparison.secondary)
 
+# combining two vectors of counts: for I and II sets
+comparison = cbind(comparison.primary,comparison.secondary)
+# accidentally, some 0 might be found in both sets at a time;
+# this should not happen, but sometimes it does -- getting rid of it
+comparison = comparison[rowSums(comparison) != 0,]
 
 cat("comparison done!\n\n")
 
@@ -321,27 +323,27 @@ cat("comparison done!\n\n")
 #########################################################################
 # Finally, we want to save some of the variable values for later use;
 # they are automatically loaded into the GUI at the next run of the script.
-	cat("",file="oppose_config.txt",append=F)
-	var.name<-function(x) { 
-		if(is.character(x)==TRUE) {
-			cat(paste(deparse(substitute(x)),"=\"",x,"\"", sep=""),file="oppose_config.txt",sep="\n",append=T)
+        cat("",file="oppose_config.txt",append=F)
+        var.name<-function(x) { 
+                if(is.character(x)==TRUE) {
+                        cat(paste(deparse(substitute(x)),"=\"",x,"\"", sep=""),file="oppose_config.txt",sep="\n",append=T)
         } else {
-			cat(paste(deparse(substitute(x)),x, sep="="),file="oppose_config.txt",sep="\n",append=T) }
-	} 
-	var.name(text.slice.length)
-	var.name(text.slice.overlap)
-	var.name(rare.occurrences.threshold)
-	var.name(zeta.filter.threshold)
-	var.name(oppose.method)
-	var.name(display.on.screen)
-	var.name(write.pdf.file)
-	var.name(write.png.file)
-	var.name(use.color.graphs)
-	var.name(titles.on.graph)
-	var.name(identify.points)
-	var.name(visualization)
-	var.name(classification)
-	var.name(plot.token)
+                        cat(paste(deparse(substitute(x)),x, sep="="),file="oppose_config.txt",sep="\n",append=T) }
+        } 
+        var.name(text.slice.length)
+        var.name(text.slice.overlap)
+        var.name(rare.occurrences.threshold)
+        var.name(zeta.filter.threshold)
+        var.name(oppose.method)
+        var.name(display.on.screen)
+        var.name(write.pdf.file)
+        var.name(write.png.file)
+        var.name(use.color.graphs)
+        var.name(titles.on.graph)
+        var.name(identify.points)
+        var.name(visualization)
+        var.name(classification)
+        var.name(plot.token)
 #########################################################################
 
 
@@ -356,156 +358,110 @@ cat("comparison done!\n\n")
 present_in_primary = 0
 present_in_secondary = 0
 if (oppose.method == "box.plot"){
-	counts = c()
-	categories = c()
-	# make the boxplot
-	# primary slices
-	for (slice in primary.slices){
-		token_hit_counter = 0
-		for (t in slice){
-			if (t == plot.token){
-				token_hit_counter = token_hit_counter+1 
-			}
-		}
-		if (token_hit_counter > 0){
-			present_in_primary = present_in_primary+1
-		}
-		counts = c(counts, token_hit_counter)
-		categories = c(categories, "Primary")
-	}
-	# secondary slices
-	for (slice in secondary.slices){
-		token_hit_counter = 0
-		for (t in slice){
-			if (t == plot.token){
-				token_hit_counter = token_hit_counter+1 
-			}
-		}
-		if (token_hit_counter > 0){
-			present_in_secondary = present_in_secondary+1
-		}
-		counts = c(counts, token_hit_counter)
-		categories = c(categories, "Secondary")
-	}
-	
-	graph.title = paste('Boxplot for \"', plot.token, '\"', sep="")
-	
-	plot.current.task = function(){
-		boxplot.matrix = data.frame(COUNT=counts, CATEGORY=categories)
-		name_prim = paste("Primary (", present_in_primary, "/", length(primary.slices), ")", sep="")
-		name_sec = paste("Secondary (", present_in_secondary, "/", length(secondary.slices), ")", sep="")
-		boxplot(COUNT~CATEGORY, data=boxplot.matrix, ylab=paste("Absolute frequency per slice (", text.slice.length, " words)", sep=""), names=c(name_prim, name_sec))
-		prim.vals = boxplot.matrix[boxplot.matrix$CATEGORY=="Primary",1]
-		sec.vals = boxplot.matrix[boxplot.matrix$CATEGORY=="Secondary",1]
-		wilcox.result <- wilcox.test(x=prim.vals, y=sec.vals)
-		print(wilcox.result)
-		if (as.numeric(wilcox.result$p.value) < 0.05){
-			title(main=graph.title, sub="(Wilcoxon rank sum: p < 0.05)\n")
-		} else {
-			title(main=graph.title, sub="(Wilcoxon rank sum: p > 0.05)\n")
-		}
-	}
-	if(display.on.screen == TRUE) {
-		plot.current.task()
-	}
-	if(write.pdf.file == TRUE) {
-		pdf(file = paste("boxplot_", plot.token, "%03d",".pdf",sep=""),pointsize=10)
-		plot.current.task()
-		dev.off()
-	}
-	if(write.png.file == TRUE) {
-		png(filename = paste("boxplot_", plot.token,"%03d",".png",sep=""),width=7,height=7,units="in",res=300,pointsize=10)
-		plot.current.task()
-		dev.off()
-	}
+        counts = c()
+        categories = c()
+        # make the boxplot
+        # primary slices
+        for (slice in primary.slices){
+                token_hit_counter = 0
+                for (t in slice){
+                        if (t == plot.token){
+                                token_hit_counter = token_hit_counter+1 
+                        }
+                }
+                if (token_hit_counter > 0){
+                        present_in_primary = present_in_primary+1
+                }
+                counts = c(counts, token_hit_counter)
+                categories = c(categories, "Primary")
+        }
+        # secondary slices
+        for (slice in secondary.slices){
+                token_hit_counter = 0
+                for (t in slice){
+                        if (t == plot.token){
+                                token_hit_counter = token_hit_counter+1 
+                        }
+                }
+                if (token_hit_counter > 0){
+                        present_in_secondary = present_in_secondary+1
+                }
+                counts = c(counts, token_hit_counter)
+                categories = c(categories, "Secondary")
+        }
+        
+        graph.title = paste('Boxplot for \"', plot.token, '\"', sep="")
+        
+        plot.current.task = function(){
+                boxplot.matrix = data.frame(COUNT=counts, CATEGORY=categories)
+                name_prim = paste("Primary (", present_in_primary, "/", length(primary.slices), ")", sep="")
+                name_sec = paste("Secondary (", present_in_secondary, "/", length(secondary.slices), ")", sep="")
+                boxplot(COUNT~CATEGORY, data=boxplot.matrix, ylab=paste("Absolute frequency per slice (", text.slice.length, " words)", sep=""), names=c(name_prim, name_sec))
+                prim.vals = boxplot.matrix[boxplot.matrix$CATEGORY=="Primary",1]
+                sec.vals = boxplot.matrix[boxplot.matrix$CATEGORY=="Secondary",1]
+                wilcox.result <- wilcox.test(x=prim.vals, y=sec.vals)
+                print(wilcox.result)
+                if (as.numeric(wilcox.result$p.value) < 0.05){
+                        title(main=graph.title, sub="(Wilcoxon rank sum: p < 0.05)\n")
+                } else {
+                        title(main=graph.title, sub="(Wilcoxon rank sum: p > 0.05)\n")
+                }
+        }
+        if(display.on.screen == TRUE) {
+                plot.current.task()
+        }
+        if(write.pdf.file == TRUE) {
+                pdf(file = paste("boxplot_", plot.token, "%03d",".pdf",sep=""),pointsize=10)
+                plot.current.task()
+                dev.off()
+        }
+        if(write.png.file == TRUE) {
+                png(filename = paste("boxplot_", plot.token,"%03d",".png",sep=""),width=7,height=7,units="in",res=300,pointsize=10)
+                plot.current.task()
+                dev.off()
+        }
 }
-	
+
 # mann.whitney / wilcoxon (see A. Kilgariff, Comparing Corpora. "International Journal of Corpus Linguistics" 6(1):1-37)
 if (oppose.method == "mann.whitney"){
-	long.method.name="Wilcoxon | Mann-Whitney"
-	short.method.name="Wilcox"
-	statistics = c()
-	all_tokens = c()
-	for (slice in primary.slices){all_tokens = union(all_tokens, slice)}
-	all_tokens = unique(all_tokens)
-	# primary slices
-	statistics = c()
-	# loop through tokens
-	for (token in all_tokens){
-		# collect freqs in primary slices
-		primary_counts = c()
-		for (slice in primary.slices){primary_counts = c(primary_counts, sum(slice==token))}
-		# collect freqs in secondary slices
-		secondary_counts = c()
-		for (slice in secondary.slices){secondary_counts = c(secondary_counts, sum(slice==token))}
-		# get statistic if relevant:
-		if ( sum(primary_counts)+sum(secondary_counts) >= rare.occurrences.threshold){
-			wilcox.stat = wilcox.test(primary_counts, secondary_counts, exact=F, )$statistic
-			statistics[token] = wilcox.stat
-		}
-	}
-	statistics=sort(statistics)
-	max_stat = max(statistics)
-	# get tail percentage
-	tail = round(length(statistics)/100*zeta.filter.threshold)
-	top_words = statistics[0:tail]
-	print(top_words)
-	tail_words = rev(statistics[(length(statistics)-tail):length(statistics)])
-	print(tail_words)
-	
-	if (visualization == "words"){
-		# plotting functionality
-		preferred.words.for.plotting = c()
-		preferred.indices.for.plotting = c()
-		preferred.scores.for.plotting = c()
-		for (i in 1:length(names(top_words))){
-			preferred.words.for.plotting = c(preferred.words.for.plotting, names(top_words)[i])
-			preferred.indices.for.plotting = c(preferred.indices.for.plotting, i)
-			preferred.scores.for.plotting = c(preferred.scores.for.plotting, top_words[[i]]/max_stat)	
-		}
-
-		avoided.words.for.plotting = c()
-		avoided.indices.for.plotting = c()
-		avoided.scores.for.plotting = c()
-		for (i in 1:length(names(tail_words))){
-			avoided.words.for.plotting = c(avoided.words.for.plotting, names(tail_words)[i])
-			avoided.indices.for.plotting = c(avoided.indices.for.plotting, i)
-			avoided.scores.for.plotting = c(avoided.scores.for.plotting, tail_words[[i]]/max_stat)	
-		}
-
-		plot.current.task = function(){
-			plot(preferred.indices.for.plotting, preferred.scores.for.plotting, ylim=c(0,1), type="n", xlab="Rank of the item", ylab="Score")
-			text(preferred.indices.for.plotting, preferred.scores.for.plotting, as.character(preferred.words.for.plotting), cex=0.7)
-			text(avoided.indices.for.plotting, avoided.scores.for.plotting, as.character(avoided.words.for.plotting), cex=0.7)
-			abline(h=0.5, lty=2)	
-			mtext("Preferred", side=4, at=0.75, las=3)
-			mtext("Avoided", side=4, at=0.25)
-			title(main=graph.title)
-		}
-
-		if(titles.on.graph == TRUE) {
-			graph.title = paste(basename(getwd()),"\n",long.method.name)
-		} else {
-			graph.title = ""}	 
-		if(display.on.screen == TRUE){
-			plot.current.task()
-		}
-		graph.filename <- paste(basename(getwd()),short.method.name, sep=" ")
-		if(write.png.file == TRUE) {
-			png(filename = paste(graph.filename,"%03d.png",sep=" "), 
-				width=7,height=7,res=300, units="in")
-			plot.current.task()
-			dev.off()}
-		if(write.pdf.file == TRUE) {
-			pdf(file = paste(graph.filename,"%03d.pdf",sep=" "))
-			plot.current.task()
-			dev.off()}
-	}
-# end of plotting functionality
+        long.method.name="Wilcoxon | Mann-Whitney"
+        short.method.name="Wilcox"
+        statistics = c()
+        all_tokens = c()
+        for (slice in primary.slices){all_tokens = union(all_tokens, slice)}
+        all_tokens = unique(all_tokens)
+        # primary slices
+        statistics = c()
+        # loop through tokens
+        for (token in all_tokens){
+                # collect freqs in primary slices
+                primary_counts = c()
+                for (slice in primary.slices){primary_counts = c(primary_counts, sum(slice==token))}
+                # collect freqs in secondary slices
+                secondary_counts = c()
+                for (slice in secondary.slices){secondary_counts = c(secondary_counts, sum(slice==token))}
+                # get statistic if relevant:
+                if ( sum(primary_counts)+sum(secondary_counts) >= rare.occurrences.threshold){
+                        wilcox.stat = wilcox.test(primary_counts, secondary_counts, exact=F, )$statistic
+                        statistics[token] = wilcox.stat
+                }
+        }
+        statistics=sort(statistics)
+        max_stat = max(statistics)
+        # get tail percentage
+        tail = round(length(statistics)/100*zeta.filter.threshold)
+        top_words = statistics[0:tail]
+        print(top_words)
+        tail_words = rev(statistics[(length(statistics)-tail):length(statistics)])
+        print(tail_words)
+        
 words.preferred.by.primary.author = names(top_words)
 words.avoided.by.primary.author = names(tail_words)
 
 }
+
+
+
 
 # Craig's zeta
 #####################################################################
@@ -513,63 +469,13 @@ words.avoided.by.primary.author = names(tail_words)
 if(oppose.method == "craig.zeta") {
 long.method.name="Craig's Zeta"
 short.method.name="Craig"
+comparison.primary = comparison[,1]
+comparison.secondary = comparison[,2]
 # two ways of expressing the same thing:
 differences = ( comparison.primary - comparison.secondary ) / 100 + 1 # note: add-one smoothing
 #differences = (comparison.primary + (100 - comparison.secondary )) / 100
 
-# plotting functionality:
-if (visualization == "words" && oppose.method != "box.plot"){
-words.preferred.by.primary.author = sort(differences[differences > 1 + zeta.filter.threshold],decreasing=TRUE)
-words.avoided.by.primary.author = sort(differences[differences < 1 - zeta.filter.threshold])
-
-preferred.words.for.plotting = c()
-preferred.indices.for.plotting = c()
-preferred.scores.for.plotting = c()
-for (i in 1:length(names(words.preferred.by.primary.author))){
-	preferred.words.for.plotting = c(preferred.words.for.plotting, names(words.preferred.by.primary.author)[i])
-	preferred.indices.for.plotting = c(preferred.indices.for.plotting, i)
-	preferred.scores.for.plotting = c(preferred.scores.for.plotting, words.preferred.by.primary.author[[i]])	
-}
-	
-avoided.words.for.plotting = c()
-avoided.indices.for.plotting = c()
-avoided.scores.for.plotting = c()
-for (i in 1:length(names(words.avoided.by.primary.author))){
-	avoided.words.for.plotting = c(avoided.words.for.plotting, names(words.avoided.by.primary.author)[i])
-	avoided.indices.for.plotting = c(avoided.indices.for.plotting, i)
-	avoided.scores.for.plotting = c(avoided.scores.for.plotting, words.avoided.by.primary.author[[i]])	
-}
-
-plot.current.task = function(){
-	plot(preferred.indices.for.plotting, preferred.scores.for.plotting, ylim=c(0,2), type="n", xlab="Rank of the item", ylab="Score")
-	text(preferred.indices.for.plotting, preferred.scores.for.plotting, as.character(preferred.words.for.plotting), cex=0.7)
-	text(avoided.indices.for.plotting, avoided.scores.for.plotting, as.character(avoided.words.for.plotting), cex=0.7)
-	abline(h=1, lty=2)	
-	mtext("Preferred", side=4, at=1.5, las=3)
-	mtext("Avoided", side=4, at=0.5)
-	title(main=graph.title)
-	}
-
-if(titles.on.graph == TRUE) {
-	graph.title = paste(basename(getwd()),"\n",long.method.name)
-} else {
-	graph.title = ""}	 
-if(display.on.screen == TRUE){
-	plot.current.task()
-}
-graph.filename <- paste(basename(getwd()),short.method.name, sep=" ")
-if(write.png.file == TRUE) {
-	png(filename = paste(graph.filename,"%03d.png",sep=" "), 
-	width=7,height=7,res=300, units="in")
-	plot.current.task()
-	dev.off()}
-if(write.pdf.file == TRUE) {
-	pdf(file = paste(graph.filename,"%03d.pdf",sep=" "))
-	plot.current.task()
-	dev.off()}
-}
-# end of plotting functionality
-	
+# extracting the distinctive words
 words.preferred.by.primary.author = names(sort(differences[differences > 1 
                                     + zeta.filter.threshold],decreasing=TRUE))
 words.avoided.by.primary.author = names(sort(differences[differences < 1 
@@ -583,70 +489,19 @@ words.avoided.by.primary.author = names(sort(differences[differences < 1
 if(oppose.method == "eder.zeta") {
 long.method.name="Eder's Zeta"
 short.method.name="Eder"
+comparison.primary = comparison[,1]
+comparison.secondary = comparison[,2]
 # computation of the differences between occurences of words
 differences = ( comparison.primary - comparison.secondary ) / ( comparison.primary + comparison.secondary )
 differences = differences[differences > -1]
 differences = differences[differences < 1]
 
 # extracting the distinctive words
-words.preferred.by.primary.author = names(sort(differences[differences > 0 + zeta.filter.threshold], decreasing=TRUE))
-words.avoided.by.primary.author = names(sort(differences[differences < 0 - zeta.filter.threshold]))
+words.preferred.by.primary.author = names(sort(differences[differences > 0 
+                                    + zeta.filter.threshold],decreasing=TRUE))
+words.avoided.by.primary.author = names(sort(differences[differences < 0 
+                                    - zeta.filter.threshold]))
 
-# plotting functionality:
-	if (visualization == "words"){
-		
-		words.preferred.by.primary.author = sort(differences[differences > 0 + zeta.filter.threshold],decreasing=TRUE)
-		words.avoided.by.primary.author = sort(differences[differences < 0 - zeta.filter.threshold])
-		
-		preferred.words.for.plotting = c()
-		preferred.indices.for.plotting = c()
-		preferred.scores.for.plotting = c()
-		for (i in 1:length(names(words.preferred.by.primary.author))){
-			preferred.words.for.plotting = c(preferred.words.for.plotting, names(words.preferred.by.primary.author)[i])
-			preferred.indices.for.plotting = c(preferred.indices.for.plotting, i)
-			preferred.scores.for.plotting = c(preferred.scores.for.plotting, words.preferred.by.primary.author[[i]])	
-		}
-		
-		avoided.words.for.plotting = c()
-		avoided.indices.for.plotting = c()
-		avoided.scores.for.plotting = c()
-		for (i in 1:length(names(words.avoided.by.primary.author))){
-			avoided.words.for.plotting = c(avoided.words.for.plotting, names(words.avoided.by.primary.author)[i])
-			avoided.indices.for.plotting = c(avoided.indices.for.plotting, i)
-			avoided.scores.for.plotting = c(avoided.scores.for.plotting, words.avoided.by.primary.author[[i]])	
-		}
-		
-		plot.current.task = function(){
-			plot(preferred.indices.for.plotting, preferred.scores.for.plotting, ylim=c(-1,1), type="n", xlab="Rank of the item", ylab="Score")
-			text(preferred.indices.for.plotting, preferred.scores.for.plotting, as.character(preferred.words.for.plotting), cex=0.7)
-			text(avoided.indices.for.plotting, avoided.scores.for.plotting, as.character(avoided.words.for.plotting), cex=0.7)
-			abline(h=0, lty=2)	
-			mtext("Preferred", side=4, at=0.5, las=3)
-			mtext("Avoided", side=4, at=-0.5)
-			title(main=graph.title)
-		}
-		
-		if(titles.on.graph == TRUE) {
-			graph.title = paste(basename(getwd()),"\n",long.method.name)
-		} else {
-			graph.title = ""}	 
-		if(display.on.screen == TRUE){
-			plot.current.task()
-		}
-		graph.filename <- paste(basename(getwd()),short.method.name, sep=" ")
-		if(write.png.file == TRUE) {
-			png(filename = paste(graph.filename,"%03d.png",sep=" "), 
-				width=7,height=7,res=300, units="in")
-			plot.current.task()
-			dev.off()}
-		if(write.pdf.file == TRUE) {
-			pdf(file = paste(graph.filename,"%03d.pdf",sep=" "))
-			plot.current.task()
-			dev.off()}
-	}
-# end of plotting functionality
-words.preferred.by.primary.author = names(sort(differences[differences > 1 + zeta.filter.threshold],decreasing=TRUE))
-words.avoided.by.primary.author = names(sort(differences[differences < 1 - zeta.filter.threshold]))
 }
 
 # Zeta based on chi-square test
@@ -667,8 +522,8 @@ negative.differences = comparison[names(negative.values),]
 # preferred words
 b = NULL
 for(i in 1: length(positive.differences[,1])) {
-	a = chisq.test(c(positive.differences[i,1],positive.differences[i,2]))$p.value
-	b = c(b, a)
+        a = chisq.test(c(positive.differences[i,1],positive.differences[i,2]))$p.value
+        b = c(b, a)
 }
 names(b) = names(positive.values)
 
@@ -690,74 +545,22 @@ words.avoided = b[b<0.05]
 
 words.preferred.stats = NULL
 for (name in names(words.preferred)){
-	stat = chisq.test(c(positive.differences[name,1],positive.differences[name,2]))$statistic
-	words.preferred.stats = c(words.preferred.stats, stat)
+        stat = chisq.test(c(positive.differences[name,1],positive.differences[name,2]))$statistic
+        words.preferred.stats = c(words.preferred.stats, stat)
 }
 names(words.preferred.stats) = names(words.preferred)
 words.preferred.stats = sort(words.preferred.stats, decreasing=T)
-	
+        
 words.avoided.stats = NULL
 for (name in names(words.avoided)){
-	stat = chisq.test(c(negative.differences[name,1],negative.differences[name,2]))$statistic
-	words.avoided.stats = c(words.avoided.stats, stat)
+        stat = chisq.test(c(negative.differences[name,1],negative.differences[name,2]))$statistic
+        words.avoided.stats = c(words.avoided.stats, stat)
 }
 names(words.avoided.stats) = names(words.avoided)
 words.avoided.stats = sort(words.avoided.stats, decreasing=T)
 
-# plotting functionality:
-	if (visualization == "words"){
-		words.preferred.by.primary.author = words.preferred.stats[words.preferred.stats>zeta.filter.threshold]
-		words.avoided.by.primary.author = -(words.avoided.stats[words.avoided.stats>zeta.filter.threshold])
-		
-		preferred.words.for.plotting = c()
-		preferred.indices.for.plotting = c()
-		preferred.scores.for.plotting = c()
-		for (i in 1:length(names(words.preferred.by.primary.author))){
-			preferred.words.for.plotting = c(preferred.words.for.plotting, names(words.preferred.by.primary.author)[i])
-			preferred.indices.for.plotting = c(preferred.indices.for.plotting, i)
-			preferred.scores.for.plotting = c(preferred.scores.for.plotting, words.preferred.by.primary.author[[i]])	
-		}
-		
-		avoided.words.for.plotting = c()
-		avoided.indices.for.plotting = c()
-		avoided.scores.for.plotting = c()
-		for (i in 1:length(names(words.avoided.by.primary.author))){
-			avoided.words.for.plotting = c(avoided.words.for.plotting, names(words.avoided.by.primary.author)[i])
-			avoided.indices.for.plotting = c(avoided.indices.for.plotting, i)
-			avoided.scores.for.plotting = c(avoided.scores.for.plotting, words.avoided.by.primary.author[[i]])	
-		}
-		
-		plot.current.task = function(){
-			plot(preferred.indices.for.plotting, preferred.scores.for.plotting, ylim=c(-100,100), type="n", xlab="Rank of the item", ylab="Score")
-			text(preferred.indices.for.plotting, preferred.scores.for.plotting, as.character(preferred.words.for.plotting), cex=0.7)
-			text(avoided.indices.for.plotting, avoided.scores.for.plotting, as.character(avoided.words.for.plotting), cex=0.7)
-			abline(h=0, lty=2)	
-			mtext("Preferred", side=4, at=50, las=3)
-			mtext("Avoided", side=4, at=-50)
-			title(main=graph.title)
-		}
-		
-		if(titles.on.graph == TRUE) {
-			graph.title = paste(basename(getwd()),"\n",long.method.name)
-		} else {
-			graph.title = ""}	 
-		if(display.on.screen == TRUE){
-			plot.current.task()
-		}
-		graph.filename <- paste(basename(getwd()),short.method.name, sep=" ")
-		if(write.png.file == TRUE) {
-			png(filename = paste(graph.filename,"%03d.png",sep=" "), 
-				width=7,height=7,res=300, units="in")
-			plot.current.task()
-			dev.off()}
-		if(write.pdf.file == TRUE) {
-			pdf(file = paste(graph.filename,"%03d.pdf",sep=" "))
-			plot.current.task()
-			dev.off()}
-	}
-# end of plotting functionality
-	
-	
+        
+        
 }
 
 
@@ -805,13 +608,79 @@ cat(words.avoided.by.primary.author,
 
 
 
+
+
+
+
+# plotting functionality:
+if (visualization == "words" && oppose.method != "box.plot"){
+        
+        words.preferred.by.primary.author = sort(differences[differences > 0 + zeta.filter.threshold],decreasing=TRUE)
+        words.avoided.by.primary.author = sort(differences[differences < 0 - zeta.filter.threshold])
+        
+        preferred.words.for.plotting = c()
+        preferred.indices.for.plotting = c()
+        preferred.scores.for.plotting = c()
+        for (i in 1:length(names(words.preferred.by.primary.author))){
+                preferred.words.for.plotting = c(preferred.words.for.plotting, names(words.preferred.by.primary.author)[i])
+                preferred.indices.for.plotting = c(preferred.indices.for.plotting, i)
+                preferred.scores.for.plotting = c(preferred.scores.for.plotting, words.preferred.by.primary.author[[i]])        
+        }
+        
+        avoided.words.for.plotting = c()
+        avoided.indices.for.plotting = c()
+        avoided.scores.for.plotting = c()
+        for (i in 1:length(names(words.avoided.by.primary.author))){
+                avoided.words.for.plotting = c(avoided.words.for.plotting, names(words.avoided.by.primary.author)[i])
+                avoided.indices.for.plotting = c(avoided.indices.for.plotting, i)
+                avoided.scores.for.plotting = c(avoided.scores.for.plotting, words.avoided.by.primary.author[[i]])      
+        }
+        
+        plot.current.task = function(){
+                plot(preferred.indices.for.plotting, preferred.scores.for.plotting, ylim=c(-1,1), type="n", xlab="Rank of the item", ylab="Score")
+                text(preferred.indices.for.plotting, preferred.scores.for.plotting, as.character(preferred.words.for.plotting), cex=0.7)
+                text(avoided.indices.for.plotting, avoided.scores.for.plotting, as.character(avoided.words.for.plotting), cex=0.7)
+                abline(h=0, lty=2)      
+                mtext("Preferred", side=4, at=0.5, las=3)
+                mtext("Avoided", side=4, at=-0.5)
+                title(main=graph.title)
+        }
+        
+        if(titles.on.graph == TRUE) {
+                graph.title = paste(basename(getwd()),"\n",long.method.name)
+        } else {
+        graph.title = ""}        
+        if(display.on.screen == TRUE){
+                plot.current.task()
+        }
+        graph.filename <- paste(basename(getwd()),short.method.name, sep=" ")
+        if(write.png.file == TRUE) {
+                png(filename = paste(graph.filename,"%03d.png",sep=" "), 
+                width=7,height=7,res=300, units="in")
+                plot.current.task()
+        dev.off()}
+        if(write.pdf.file == TRUE) {
+                pdf(file = paste(graph.filename,"%03d.pdf",sep=" "))
+                plot.current.task()
+        dev.off()}
+}
+# end of plotting functionality
+
+
+
+
+
+
+
+
+
 ### II stage ######################################################
 if (stage.II.similarity.test == TRUE && oppose.method != "box.plot") {
 # Note: it is impossible to perform stage II when the box.plot method is used
 
 # checking if the test set exists and if it contains file(s)
-	if(file.exists("test_set") == TRUE) {
-		if (length(dir("test_set")) > 0) {
+        if(file.exists("test_set") == TRUE) {
+                if (length(dir("test_set")) > 0) {
 
 # retrieving the remaining names of samples
 filenames.test.set = list.files("test_set")
@@ -834,7 +703,7 @@ setwd("..")
 # blank line on the screen
 cat("\n")
 #
-}			
+}                       
 } else {
 cat("No test set samples found\n",
     "Performing a simple comparison of the training samples...\n")
@@ -867,7 +736,7 @@ summary.zeta.scores = c()
 # checking if the test set exists and if it contains file(s)
 # depending on the ansewer, initializing 2 or 3 turns of the loop
 if(file.exists("test_set") == TRUE) {
-	if (length(dir("test_set")) > 0) {
+        if (length(dir("test_set")) > 0) {
 loop.size = 3
 }
 } else {
@@ -997,7 +866,7 @@ if ((visualization == "markers") && (oppose.method != "box.plot")){
   if(titles.on.graph == TRUE) {
     graph.title = paste(basename(getwd()),"\n",long.method.name)
     } else {
-    graph.title = ""}	 
+    graph.title = ""}    
 
     
 
@@ -1113,6 +982,7 @@ results.oppose = list()
 # elements that we want to add on this list
 variables.to.save = c("words.preferred",
                       "words.avoided",
+                      "comparison","xxx","yyy","wordlist","primary.slices","secondary.slices",
                       "classification.results")
 # checking if they really exist; getting rid of non-existing ones:
 filtered.variables = ls()[ls() %in% variables.to.save]
