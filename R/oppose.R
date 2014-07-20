@@ -228,7 +228,8 @@ split.sample = function(input.text) {
   # the only thing we need are words ordered by frequency (no frequencies)
   wordlist = names(wordlist.raw)
 
-  
+  cat(length(wordlist),"\n\n\n\n")
+
   
   
 
@@ -268,8 +269,10 @@ cat("\n")
 cat("Primary set...\n")
 
 # iterating over the samples and slices, checking them agains the wordlist
-table.primary.set = sapply(primary.slices, function(x) as.numeric(wordlist %in% x))
-table.primary.set = t(table.primary.set)
+# do.call() is a game-changer here, in terms of the computation time (5x or so)
+table.primary.set = do.call(rbind, 
+             lapply(primary.slices, function(x) as.numeric(wordlist %in% x)))
+#table.primary.set = t(table.primary.set)
 colnames(table.primary.set) = wordlist
 
 # adding the counts for particular slices, computing percentage of slices 
@@ -284,8 +287,13 @@ cat("\n")
 cat("Secondary set...\n")
 
 # iterating over the samples and slices, checking them agains the wordlist
-table.secondary.set = sapply(secondary.slices, function(x) as.numeric(wordlist %in% x))
-table.secondary.set = t(table.secondary.set)
+# do.call() is a game-changer here, in terms of the computation time (5x or so)
+table.secondary.set = do.call(rbind, 
+             lapply(secondary.slices, function(x) as.numeric(wordlist %in% x)))
+#table.secondary.set = t(table.secondary.set)
+colnames(table.secondary.set) = wordlist
+
+#table.secondary.set = t(table.secondary.set)
 colnames(table.secondary.set) = wordlist
 
 # adding the counts for particular slices, computing percentage of slices 

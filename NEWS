@@ -3,6 +3,21 @@
 
 
 
+
+== version 0.5.7, ????/??/??
+ * culling implemented as a separate function
+ * custom stop words deletion
+ * a thoroughly re-written oppose() to use
+   the same tokenizing, corpus loading, 
+   sampling etc. functions as stylo() and classify()   
+ * gui.oppose() derrived as a separate function
+ * draw.polygons derrived as a separate function
+   (hidden to the end user, though)
+ * a very unpleasant bug in oppose() fixed: 
+   the preferred and avoided words were calculated
+   using the I set only
+
+
 == version 0.5.6, 2014/04/20
  * support for Unicode on Windows
  * support for a few non Latin scripts
@@ -120,6 +135,7 @@
 
 == version 0.4.5-1, 2012/08/22
  * support for Dutch added
+ * {Mike Kestemont joins!}
 
 == version 0.4.5, 2012/07/07
  * option for choosing corpus files
@@ -217,6 +233,7 @@
 
 == version 0.2.6, 2009/11/18
  * dialog box (GUI)
+ * {Jan Rybicki joins!}
 
 == version 0.2.5, 2009/11/16
  * module for different distance measures
@@ -232,11 +249,16 @@
 
 == version 0.2.0, 2009/08/23
  * module for uploading plain text files
-
-== version 0.1.9, 2009/07/31
- * numerous improvements
+   
+== version 0.1.9, 2009/08/1 
+ * innumerable improvements
  * the code simplified
-
+ * {this version was completed on a train 
+   from Leipzig to Krakow (a looong trip...),
+   after a very successful R course 
+   taught by Stefen Gries at ESU "C&T",
+   Leipzig, Germany (26-31/08/2009)}
+ 
 == 0.1.4, 2009/07/19
  * loop for different MFW settings
 
