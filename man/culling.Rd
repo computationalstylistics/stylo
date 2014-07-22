@@ -9,7 +9,7 @@ culling(input.table, culling.level = 0)
 
 \arguments{
   \item{input.table}{a matrix or data frame containing frequencies of words or any other countable features; the table should be oriented to contain samples in rows, variables in columns, and variables' names should be accessible via \code{colnames(input.table)}.}
-  \item{culling.level}{a vector of words to be excluded.}
+  \item{culling.level}{percentage of samples that need to have a given word in order to prevent this word from being culled (see the description above).}
 }
 \references{   
 Hoover, D. (2004a). Testing Burrows's Delta. "Literary and Linguistic 
