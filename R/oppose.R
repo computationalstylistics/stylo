@@ -249,17 +249,16 @@ secondary.slices = make.samples(corpus.of.secondary.set,
                               sample.overlap = text.slice.overlap, 
                               sampling = "normal.sampling")
 
+# ###############################################################
+
+
+
 
 
 # ###############################################################
 
 cat("\n")
-cat("Extracting distinctive words... (this might take a while)\n\n")
-
-# ###############################################################
-
-cat("\n")
-cat("Extracting distinctive words... (this might take a while)\n\n")
+cat("Extracting distinctive words... (this might take a while)")
 
 
 
@@ -281,8 +280,7 @@ names(comparison.primary) = wordlist
 
 
 
-cat("\n")
-cat("Secondary set...\n")
+cat("Secondary set...\n\n\n")
 
 # iterating over the samples and slices, checking them agains the wordlist
 # do.call() is a game-changer here, in terms of the computation time (5x or so)
@@ -465,103 +463,50 @@ words.avoided.by.primary.author = names(tail_words)
 
 # Craig's zeta
 #####################################################################
-
 if(oppose.method == "craig.zeta") {
-long.method.name="Craig's Zeta"
-short.method.name="Craig"
-comparison.primary = comparison[,1]
-comparison.secondary = comparison[,2]
-# two ways of expressing the same thing:
-differences = ( comparison.primary - comparison.secondary ) / 100 + 1 # note: add-one smoothing
-#differences = (comparison.primary + (100 - comparison.secondary )) / 100
-
-# extracting the distinctive words
-words.preferred.by.primary.author = names(sort(differences[differences > 1 
-                                    + zeta.filter.threshold],decreasing=TRUE))
-words.avoided.by.primary.author = names(sort(differences[differences < 1 
-                                    - zeta.filter.threshold]))
+        long.method.name="Craig's Zeta"
+        short.method.name="Craig"
+        # applying an appropriate function
+        zeta.results = zeta.craig(comparison, zeta.filter.threshold)
+        # extracting two elements from the obtained list
+        words.preferred = zeta.results$words_preferred
+        words.avoided = zeta.results$words_avoided       
 }
 
 
 # Eder's zeta (inspired by Canberra distance measure)
 #####################################################################
-
 if(oppose.method == "eder.zeta") {
-long.method.name="Eder's Zeta"
-short.method.name="Eder"
-comparison.primary = comparison[,1]
-comparison.secondary = comparison[,2]
-# computation of the differences between occurences of words
-differences = ( comparison.primary - comparison.secondary ) / ( comparison.primary + comparison.secondary )
-differences = differences[differences > -1]
-differences = differences[differences < 1]
-
-# extracting the distinctive words
-words.preferred.by.primary.author = names(sort(differences[differences > 0 
-                                    + zeta.filter.threshold],decreasing=TRUE))
-words.avoided.by.primary.author = names(sort(differences[differences < 0 
-                                    - zeta.filter.threshold]))
-
+        long.method.name="Eder's Zeta"
+        short.method.name="Eder"
+        # applying an appropriate function
+        zeta.results = zeta.eder(comparison, zeta.filter.threshold)
+        # extracting two elements from the obtained list
+        words.preferred = zeta.results$words_preferred
+        words.avoided = zeta.results$words_avoided       
 }
+
 
 # Zeta based on chi-square test
 #####################################################################
-
 if(oppose.method == "chisquare.zeta") {
-long.method.name="Chi-square Zeta"
-short.method.name="Chi-sq"
-differences = comparison[,1] - comparison[,2]
-positive.values = differences[differences > 0]
-negative.values = differences[differences < 0]
-
-# selecting positive differences (=words preferred by primary author)
-positive.differences = comparison[names(positive.values),]
-# selecting negative differences (=words avoided by primary author)
-negative.differences = comparison[names(negative.values),]
-
-# preferred words
-b = NULL
-for(i in 1: length(positive.differences[,1])) {
-        a = chisq.test(c(positive.differences[i,1],positive.differences[i,2]))$p.value
-        b = c(b, a)
+        long.method.name="Chi-square Zeta"
+        short.method.name="Chi-sq"
+        # applying an appropriate function
+        zeta.results = zeta.chisquare(comparison)
+        # extracting two elements from the obtained list
+        words.preferred = zeta.results$words_preferred
+        words.avoided = zeta.results$words_avoided
 }
-names(b) = names(positive.values)
 
-# displays a sorted list of discriminative words (p<.05)
-words.preferred.by.primary.author = names(sort(b[b<0.05]))
-words.preferred = b[b<0.05]
 
-# avoided words
-b = NULL
-for(i in 1: length(negative.differences[,1])) {
-  a = chisq.test(c(negative.differences[i,1],negative.differences[i,2]))$p.value
-  b = c(b, a)
-}
-names(b) = names(negative.values)
 
-# displays sorted list of discriminative words (p<.05)
-words.avoided.by.primary.author = names(sort(b[b<0.05]))
-words.avoided = b[b<0.05]
 
-words.preferred.stats = NULL
-for (name in names(words.preferred)){
-        stat = chisq.test(c(positive.differences[name,1],positive.differences[name,2]))$statistic
-        words.preferred.stats = c(words.preferred.stats, stat)
-}
-names(words.preferred.stats) = names(words.preferred)
-words.preferred.stats = sort(words.preferred.stats, decreasing=T)
-        
-words.avoided.stats = NULL
-for (name in names(words.avoided)){
-        stat = chisq.test(c(negative.differences[name,1],negative.differences[name,2]))$statistic
-        words.avoided.stats = c(words.avoided.stats, stat)
-}
-names(words.avoided.stats) = names(words.avoided)
-words.avoided.stats = sort(words.avoided.stats, decreasing=T)
 
-        
-        
-}
+words.preferred.by.primary.author = names(words.preferred)
+words.avoided.by.primary.author = names(words.avoided)
+
+
 
 
 ########################################################################
@@ -608,33 +553,24 @@ cat(words.avoided.by.primary.author,
 
 
 
-
-
-
+if(1==2) { # a trick for rem
+preferred.words.for.plotting = names(zeta.results$words_preferred)[1:20]
+preferred.indices.for.plotting = 1:20
+preferred.scores.for.plotting = zeta.results$words_preferred[1:20]
+         }
+         
+         
 
 # plotting functionality:
 if (visualization == "words" && oppose.method != "box.plot"){
         
-        words.preferred.by.primary.author = sort(differences[differences > 0 + zeta.filter.threshold],decreasing=TRUE)
-        words.avoided.by.primary.author = sort(differences[differences < 0 - zeta.filter.threshold])
-        
-        preferred.words.for.plotting = c()
-        preferred.indices.for.plotting = c()
-        preferred.scores.for.plotting = c()
-        for (i in 1:length(names(words.preferred.by.primary.author))){
-                preferred.words.for.plotting = c(preferred.words.for.plotting, names(words.preferred.by.primary.author)[i])
-                preferred.indices.for.plotting = c(preferred.indices.for.plotting, i)
-                preferred.scores.for.plotting = c(preferred.scores.for.plotting, words.preferred.by.primary.author[[i]])        
-        }
-        
-        avoided.words.for.plotting = c()
-        avoided.indices.for.plotting = c()
-        avoided.scores.for.plotting = c()
-        for (i in 1:length(names(words.avoided.by.primary.author))){
-                avoided.words.for.plotting = c(avoided.words.for.plotting, names(words.avoided.by.primary.author)[i])
-                avoided.indices.for.plotting = c(avoided.indices.for.plotting, i)
-                avoided.scores.for.plotting = c(avoided.scores.for.plotting, words.avoided.by.primary.author[[i]])      
-        }
+        # only a portion of discinctive words (e.g. 20) will be plotted
+        preferred.words.for.plotting = names(zeta.results$words_preferred)[1:20]
+        preferred.indices.for.plotting = 1:20
+        preferred.scores.for.plotting = zeta.results$words_preferred[1:20]
+        avoided.words.for.plotting = names(zeta.results$words_avoided)[1:20]
+        avoided.indices.for.plotting = 1:20
+        avoided.scores.for.plotting = zeta.results$words_avoided[1:20]
         
         plot.current.task = function(){
                 plot(preferred.indices.for.plotting, preferred.scores.for.plotting, ylim=c(-1,1), type="n", xlab="Rank of the item", ylab="Score")
@@ -679,26 +615,33 @@ if (stage.II.similarity.test == TRUE && oppose.method != "box.plot") {
 # Note: it is impossible to perform stage II when the box.plot method is used
 
 # checking if the test set exists and if it contains file(s)
-        if(file.exists("test_set") == TRUE) {
-                if (length(dir("test_set")) > 0) {
+        if(file.exists(test.corpus.dir) == TRUE) {
+                if (length(dir(test.corpus.dir)) > 0) {
 
 # retrieving the remaining names of samples
-filenames.test.set = list.files("test_set")
+filenames.test.set = list.files(test.corpus.dir)
 #
-#
-# loading the test set from text files
-corpus.of.test.set = list()
-setwd("test_set")
-  for (file in filenames.test.set) {
-  # loading the next file from the list filenames.test.set,
-  current.file = tolower(scan(file,what="char",sep="\n",quiet=T))
-  # deleting punctuation, splitting into words:
-  split.file = split.sample(current.file)  
-  # appending the current text to the virtual corpus
-  corpus.of.test.set[[file]] = split.file
-  cat(file,"\t", "loaded successfully (",length(split.file)," words)\n",sep="")
-  }
-setwd("..")
+
+
+  corpus.of.test.set = load.corpus.and.parse(files=filenames.test.set,
+                         corpus.dir = test.corpus.dir,
+                         encoding = encoding,
+                         markup.type = corpus.format,
+                         language = corpus.lang,
+                         splitting.rule = splitting.rule,
+                         preserve.case = preserve.case,
+                         sample.size = sample.size,
+                         sampling = sampling,
+                         sampling.with.replacement = sampling.with.replacement,
+                         features = analyzed.features,
+                         ngram.size = ngram.size)
+
+                         
+  test.slices = make.samples(corpus.of.test.set, 
+                              sample.size = text.slice.length,
+                              sample.overlap = text.slice.overlap, 
+                              sampling = "normal.sampling")
+
 #
 # blank line on the screen
 cat("\n")
@@ -712,21 +655,9 @@ cat("No test set samples found\n",
 #
 #
 
-############################################################################
-#############################################################################
-#
-# TODO: module for uploading existing lists of words preferred/avoided
-# (similar thing is implemented in the STYLO script; it needs to be copied here)
-#
-##############################################################################
-#############################################################################
-#
-#words.preferred.by.primary.author
-#words.avoided.by.primary.author
-###########################################X#################################
 
 
-cat("\n\n\n\n")
+cat("\n\n\n")
 
 
 # variable initiation
@@ -735,75 +666,49 @@ summary.zeta.scores = c()
 
 # checking if the test set exists and if it contains file(s)
 # depending on the ansewer, initializing 2 or 3 turns of the loop
-if(file.exists("test_set") == TRUE) {
-        if (length(dir("test_set")) > 0) {
-loop.size = 3
-}
+if(file.exists(test.corpus.dir) == TRUE) {
+    if(length(dir(test.corpus.dir)) > 0) {
+    loop.size = 3 }
 } else {
-loop.size = 2
+    loop.size = 2
 }
 
 # loop for (1) primary set and (2) secondary set
 for(i in 1 : loop.size) {
 
-  if(i == 1) {
-  current.corpus = corpus.of.primary.set 
-  filenames = filenames.primary.set  } 
-  if(i == 2) {
-  current.corpus = corpus.of.secondary.set 
-  filenames = filenames.secondary.set }
-  if(i == 3) {
-  current.corpus = corpus.of.test.set 
-  filenames = filenames.test.set }
+        labels = c("primary","secondary","unknown")
+        
 
+        if(i == 1) {
+                current.corpus = primary.slices 
+        } 
+        if(i == 2) {
+                current.corpus = secondary.slices
+        }
+        if(i == 3) {
+                current.corpus = test.slices
+        }
+        
+        
+        
+        preferred = lapply(current.corpus, function(x) as.numeric(words.preferred.by.primary.author %in% x))        
+        avoided = lapply(current.corpus, function(x) as.numeric(words.avoided.by.primary.author %in% x))        
+        y.coord = unlist(lapply(preferred, function(x) {sum(x)/length(x)*100}))
+        x.coord = unlist(lapply(avoided, function(x) {sum(x)/length(x)*100}))        
+        current.corpus.scores = cbind(x.coord, y.coord, labels[i])
 
-# variable initiation
-counted.occurrences = c()
-current.corpus.scores = c()
+        summary.zeta.scores = rbind(summary.zeta.scores,current.corpus.scores)
 
-
-# searching for words in texts slices
-#
-# loop for uploading each files
-  for (file in filenames) {
-  cat(file,"\n")
-  file.basename = gsub("\\.txt$","",file)
-    # loading the next sample from the list filenames.test.set,
-    # deleting punctuation, splitting into words:
-    current.sample = current.corpus[[file]]
-    # the sample will be chopped into slices (variable preparation)
-    text.length = length(current.sample)
-    number.of.slices = floor(text.length/(text.slice.length-text.slice.overlap))
-    # variable initiation
-    table.of.occurrences = NULL
-
-    # the current text is split into slices, the slices analyzed one by one
-    for(new.slice in 1:number.of.slices) {
-      start.point = new.slice * (text.slice.length-text.slice.overlap) -
-                                   (text.slice.length-text.slice.overlap) +1
-      current.slice = current.sample[start.point:(start.point+text.slice.length-1)]
-      # check the wordlist against the current slice
-      yyy = as.numeric(words.preferred.by.primary.author %in% current.slice)
-      xxx = as.numeric(words.avoided.by.primary.author %in% current.slice)
-      word.occurrence.count = c(sum(xxx)/length(xxx)*100,
-                               (sum(yyy)/length(yyy)*100) )
-      table.of.occurrences = rbind(table.of.occurrences,word.occurrence.count)
-      }
-
-rownames(table.of.occurrences) = paste(file.basename,1:new.slice,sep="_")
-current.corpus.scores = rbind(current.corpus.scores,table.of.occurrences)
-
-}   # <--- loop for uploading texts in a given corpus
-
-
-# building a table of final results, with an appropriate class name assigned
-current.corpus.scores = cbind(current.corpus.scores,
-                        rep(c("primary","secondary","unknown")[i],
-                        length(current.corpus.scores[,1])))
-summary.zeta.scores = rbind(summary.zeta.scores,current.corpus.scores)
-#summary.zeta.scores = as.data.frame(summary.zeta.scores)
-colnames(summary.zeta.scores) = c("preferred","avoided","class")
 }
+
+
+# making the matrix appropriately shaped, namely:
+# converting the matrix into a table, making the numbers numeric again
+colnames(summary.zeta.scores) = c("preferred","avoided","class")
+summary.zeta.scores = as.data.frame(summary.zeta.scores, stringsAsFactors=FALSE)
+summary.zeta.scores[,1] = as.numeric(summary.zeta.scores[,1])
+summary.zeta.scores[,2] = as.numeric(summary.zeta.scores[,2])
+summary.zeta.scores[,3] = as.factor(summary.zeta.scores[,3])
 
 
 } # <---- the second stage of the analysis is completed
@@ -982,7 +887,7 @@ results.oppose = list()
 # elements that we want to add on this list
 variables.to.save = c("words.preferred",
                       "words.avoided",
-                      "comparison","xxx","yyy","wordlist","primary.slices","secondary.slices",
+                      "comparison","zeta.results","wordlist","primary.slices","secondary.slices","test.slices","summary.zeta.scores",
                       "classification.results")
 # checking if they really exist; getting rid of non-existing ones:
 filtered.variables = ls()[ls() %in% variables.to.save]
