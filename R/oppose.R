@@ -122,36 +122,6 @@ encoding = variables$encoding
 
 
 
-
-# FUNCTIONS:
-
-
-# #################################################
-# Function for splitting a given input text into
-# single words (chains of characters delimited with
-# spaces or punctuation marks). Alternatively, 
-# you can write here another rule for splitting.
-# Required argument: name of the text to be split
-# #################################################
-
-split.sample = function(input.text) {
-  # loading the file, splitting into pieces specified by regular expression;
-  # here, all sequences between non-letter characters are assumed to be words:
-    if(Sys.info()[["sysname"]] == "Windows") { 
-        ### Windows
-        tokenized.text = c(unlist(strsplit(input.text, "\\W+|_+",perl=T)))
-        } else {
-        ### Linux, Mac
-        tokenized.text = c(unlist(strsplit(input.text, "[^[:alpha:]]+")))
-        }
-  tokenized.text = tokenized.text[grep("[^[:digit:]]",tokenized.text)]
-}
-
-
-
-
-
-
 ############################################################################
 ############################################################################
 
@@ -422,6 +392,7 @@ if (oppose.method == "box.plot"){
 
 # mann.whitney / wilcoxon (see A. Kilgariff, Comparing Corpora. "International Journal of Corpus Linguistics" 6(1):1-37)
 if (oppose.method == "mann.whitney"){
+        cat("performing Wilcoxon/Mann-Whitney test: try to be patient...\n\n")
         long.method.name="Wilcoxon | Mann-Whitney"
         short.method.name="Wilcox"
         statistics = c()
@@ -502,10 +473,10 @@ if(oppose.method == "chisquare.zeta") {
 
 
 
-
-words.preferred.by.primary.author = names(words.preferred)
-words.avoided.by.primary.author = names(words.avoided)
-
+if (oppose.method != "box.plot"){
+        words.preferred.by.primary.author = names(words.preferred)
+        words.avoided.by.primary.author = names(words.avoided)
+}
 
 
 
