@@ -47,7 +47,7 @@ in the version 0.5.6 a lengthy list of dozens of letters in a few  alphabets
     # Cyrillic:
     "\U0400-\U0481\U048A-\U0527",
     # Hebrew:
-    "\U05C6\U05D0-\U05EA\U05F0-\U05F2",
+    "\U05D0-\U05EA\U05F0-\U05F4",
     # extended Latin:
     "\U1E00-\U1EFF",
     # ancient Greek:
