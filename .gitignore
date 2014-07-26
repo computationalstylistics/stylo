@@ -4,8 +4,6 @@
 # Example code in package build process
 *-Ex.R
 
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
+# Mac system files
 .DS_Store
+
