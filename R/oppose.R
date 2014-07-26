@@ -441,7 +441,7 @@ if(oppose.method == "craig.zeta") {
         zeta.results = zeta.craig(comparison, zeta.filter.threshold)
         # extracting two elements from the obtained list
         words.preferred = zeta.results$words_preferred
-        words.avoided = zeta.results$words_avoided       
+        words.avoided = zeta.results$words_avoided
 }
 
 
@@ -454,7 +454,7 @@ if(oppose.method == "eder.zeta") {
         zeta.results = zeta.eder(comparison, zeta.filter.threshold)
         # extracting two elements from the obtained list
         words.preferred = zeta.results$words_preferred
-        words.avoided = zeta.results$words_avoided       
+        words.avoided = zeta.results$words_avoided
 }
 
 
