@@ -4,12 +4,14 @@
 
 
 
-== version 0.5.7, ????/??/??
+== version 0.5.7, 2014/07/27
  * culling implemented as a separate function
- * custom stop words deletion
+ * custom stop words deletion: delete.stop.words()
  * a thoroughly re-written oppose() to use
    the same tokenizing, corpus loading, 
-   sampling etc. functions as stylo() and classify()   
+   sampling etc. functions as stylo() and classify()
+ * zeta.chisquare(), zeta.craig(), and zeta.eder()
+   derrived as separate functions
  * gui.oppose() derrived as a separate function
  * draw.polygons derrived as a separate function
    (hidden to the end user, though)
@@ -84,14 +86,14 @@
 == version 0.5.0-43, 2013/04/31
  * thousands of changes and improvements
  * documentation improved and augmented
- * stylo R package officially released
+ * stylo R package (un)officially released
 
 == version 0.5.0-30, 2013/04/26
  * changes in names of some functions
  * code cleaning, improvements, improvements, ...
 
 == version 0.5.0-23, 2013/05/24
- * first prototype of working R package
+ * first prototype of a working R package
 
 == version 0.5.0-1, 2013/04/03
  * first attempt to port the stylo script into R package
@@ -166,7 +168,7 @@
  * new options for culling and ranking of candidates
 
 == version 0.4.0, 2011/06/20
- * the official world-premiere (Stanford, CA)
+ * the official world-premiere, at DH2011 (Stanford, CA)
 
 == version 0.3.9b, 2011/06/1
  * the code simplified; minor cleaning

@@ -423,8 +423,9 @@ relative.frequencies = TRUE
 
 # Cross validation options: classify() only
 # choose one: "none", "standard", "thorough"
+# ['cv' is temporarily switched off, it always performs 'cv ="thorough"']
 cv = "none"
-cv.folds = 10
+cv.folds = 0
 # no.of.samples.per.class
 
 

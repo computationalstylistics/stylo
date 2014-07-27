@@ -1425,7 +1425,7 @@ if(how.many.correct.attributions == TRUE) {
 
 
 
-if(cv == "thorough") {
+if(cv.folds > 0) {
 
   cat("\n")
   cat("cross-validation...\n")
