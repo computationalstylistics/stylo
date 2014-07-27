@@ -15,6 +15,7 @@
  * gui.oppose() derrived as a separate function
  * draw.polygons derrived as a separate function
    (hidden to the end user, though)
+ * cross-validation in classify() improved
  * a very unpleasant bug in oppose() fixed: 
    the preferred and avoided words were calculated
    using the I set only

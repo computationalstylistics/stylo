@@ -14,6 +14,8 @@ function(x, ...) {
   if(is.matrix(x) == TRUE | is.data.frame(x) == TRUE ) {
     no.of.variables = length( x[1,] )
     no.of.samples = length( x[,1] )
+    # this trick turned out to prevent the damn function to crash
+    x = x[,]
     # let's limit the number of digits to be shown
     x = round(x,7)
       if(no.of.variables >11 ) {
