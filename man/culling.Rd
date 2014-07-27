@@ -1,7 +1,7 @@
 \name{culling}
 \alias{culling}
 \title{Exclude variables (e.g. words, n-grams) from a frequency table that are too characteristic for some samples}
-\description{Culling refers to the automatic manipulation of the wordlist (proposed by Hoover 2004a, 2004b). The culling values specify the degree to which words that do not appear in all the texts of your corpus will be removed. Thus, a culling value of 20 indicates that words that appear in at least 20\% of the texts in the corpus will be considered in the analysis. A culling setting of 0 means that no words will be removed; a culling setting of 100 means that only those words will be used in the analysis that appear in all texts of your corpus at least once.}
+\description{Culling refers to the automatic manipulation of the wordlist (proposed by Hoover 2004a, 2004b). The culling values specify the degree to which words that do not appear in all the texts of a corpus will be removed. A culling value of 20 indicates that words that appear in at least 20\% of the texts in the corpus will be considered in the analysis. A culling setting of 0 means that no words will be removed; a culling setting of 100 means that only those words will be used in the analysis that appear in all texts of the corpus at least once.}
 
 \usage{
 culling(input.table, culling.level = 0)
@@ -25,24 +25,24 @@ Maciej Eder
   \code{\link{delete.stop.words}}, \code{\link{stylo.pronouns}}
 }
 \examples{
-        # assume there is a matrix containing some frequencies
-        # (be aware that these counts are entirely fictional):
-        text1 = c(2, 1, 0, 2, 9, 1, 0, 0, 2, 0)
-        text2 = c(1, 0, 4, 2, 1, 0, 3, 0, 1, 3)
-        text3 = c(5, 2, 2, 0, 6, 0, 1, 0, 0, 0)
-        text4 = c(1, 4, 1, 0, 0, 0, 0, 3, 0, 1)
-        my.data.table = rbind(text1, text2, text3, text4)
+# assume there is a matrix containing some frequencies
+# (be aware that these counts are entirely fictional):
+t1 = c(2, 1, 0, 2, 9, 1, 0, 0, 2, 0)
+t2 = c(1, 0, 4, 2, 1, 0, 3, 0, 1, 3)
+t3 = c(5, 2, 2, 0, 6, 0, 1, 0, 0, 0)
+t4 = c(1, 4, 1, 0, 0, 0, 0, 3, 0, 1)
+my.data.table = rbind(t1, t2, t3, t4)
 
-        # names of the samples:
-        rownames(my.data.table) = c("t1", "t2", "t3", "t4")
-        # names of the variables (e.g. words):
-        colnames(my.data.table) = c("the", "of", "in", "she", "me", "you",
+# names of the samples:
+rownames(my.data.table) = c("text1", "text2", "text3", "text4")
+# names of the variables (e.g. words):
+colnames(my.data.table) = c("the", "of", "in", "she", "me", "you",
                                     "them", "if", "they", "he")
-        # the table looks as follows
-        my.data.table
-        
-        # selecting the words that appeared in at laest 50% of samples:
-        culling(my.data.table,50)        
+# the table looks as follows
+print(my.data.table)
+
+# selecting the words that appeared in at laest 50% of samples:
+culling(my.data.table, 50)        
 
 }
 %\keyword{text processing}

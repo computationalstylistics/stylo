@@ -11,10 +11,10 @@ make.ngrams(input.text, ngram.size = 1)
 }
 \arguments{
   \item{input.text}{a vector containing words or characters to be parsed
-  into n-grams.}
-  \item{ngram.size}{an optional argument (integer) indicating the value of \emph{n}, 
-  or the size of n-grams to be produced. If this argument is missing, default
-  value of 1 is used.}
+    into n-grams.}
+  \item{ngram.size}{an optional argument (integer) indicating the value 
+    of \emph{n}, or the size of n-grams to be produced. If this argument 
+    is missing, default value of 1 is used.}
 }
 \details{
 Function for combining series of items (e.g. words or characters) into n-grams, 
@@ -22,7 +22,12 @@ or strings of \emph{n} elements. E.g. character 2-grams of the sentence "This is
 a sentence" are as follows: "th", "hi", "is", "s ", " i", "is", "s ", 
 " a", "a ", " s", "se", "en", "nt", "te", "en", "nc", "ce". Character
 4-grams would be, of course: "this", "his ", "is a", "s a ", " a s", etc.
-Word 2-grams: "this is", "is a", "a sentence". The issue whether using n-grams of items increases the accuracy of stylometric procedures has been heavily debated in the secondary literature (see the reference section for further reading). Eder (2013) e.g. shows that character n-grams are impressively robust for dealing with noisy corpora (in terms of a high number of misspelled characters).
+Word 2-grams: "this is", "is a", "a sentence". The issue whether using 
+n-grams of items increases the accuracy of stylometric procedures has been 
+heavily debated in the secondary literature (see the reference section 
+for further reading). Eder (2013) e.g. shows that character n-grams 
+are suprisingly robust for dealing with noisy corpora (in terms of a high 
+number of misspelled characters).
 }
 \references{
 Alexis, A., Craig, H., and Elliot, J. (2014). Language chunking, 
@@ -32,7 +37,7 @@ Alexis, A., Craig, H., and Elliot, J. (2014). Language chunking,
 
 Eder, M. (2011). Style-markers in authorship attribution: a cross-language 
     study of the authorial fingerprint. "Studies in Polish Linguistics", 
-    6: 99-114. \url{http://www.wuj.pl/UserFiles/File/SPL\%206/6-SPL-Vol-6.pdf}.
+    6: 99-114. \url{http://www.wuj.pl/page,art,artid,1923.html}.
 
 Eder, M. (2013). Mind your corpus: systematic errors in authorship
     attribution. "Literary and Linguistic Computing", 28(4): 603-14.

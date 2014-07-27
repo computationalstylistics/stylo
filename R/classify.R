@@ -781,13 +781,13 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
 
   # preparing a huge table of all the frequencies for the training set
   freq.I.set.0.culling = make.table.of.frequencies(corpus = corpus.of.primary.set,
-                            words = mfw.list.of.all,
+                            features = mfw.list.of.all,
                             absent.sensitive = FALSE,
                             relative = relative.frequencies)
 
   # preparing a huge table of all the frequencies for the test set
   freq.II.set.0.culling = make.table.of.frequencies(corpus = corpus.of.secondary.set,
-                            words = mfw.list.of.all,
+                            features = mfw.list.of.all,
                             absent.sensitive = FALSE,
                             relative = relative.frequencies)
 

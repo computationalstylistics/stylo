@@ -16,7 +16,7 @@
  * a very unpleasant bug in oppose() fixed: 
    the preferred and avoided words were calculated
    using the I set only
-
+ * help files significatnly improved
 
 == version 0.5.6, 2014/04/20
  * support for Unicode on Windows

@@ -27,7 +27,7 @@ Hoover, D. (2004b). Delta prime?. "Literary and Linguistic Computing",
     19(4): 477-95.
 }
 
-\author{Jan Rybicki, Mike Kestemont, Maciej Eder}
+\author{Jan Rybicki, Maciej Eder, Mike Kestemont}
 
 \seealso{
 \code{\link{stylo}}

@@ -27,7 +27,8 @@ classify(gui = TRUE, training.frequencies = NULL, test.frequencies = NULL,
     an external file, the variables should go vertically (i.e. in rows):
     this is because files containing vertically-oriented tables are far 
     more flexible and easily editable using, say, Excel or any text editor. 
-    To flip your table horizontally/vertically use the generic function t().}
+    To flip your table horizontally/vertically use the generic function 
+  \code{t()}.}
 
   \item{test.frequencies}{using this optional argument, one can 
     load a custom table containing frequencies/counts for the 
@@ -37,7 +38,7 @@ classify(gui = TRUE, training.frequencies = NULL, test.frequencies = NULL,
     as an argument (here: the training set). It is assumed that this object 
     is a list, each element of which is a vector containing one tokenized 
     sample. The example shown below will give you some hints how to prepare 
-    such a corpus.}
+    such a corpus. Also, refer to \code{help(load.corpus.and.parse)}}
 
   \item{test.corpus}{if \code{training.corpus} is used, then you should also 
     prepare a similar R object containing the test set.}
@@ -67,17 +68,21 @@ classify(gui = TRUE, training.frequencies = NULL, test.frequencies = NULL,
     whether a classification procedure attribute the tets texts to their correct author. This set contains `new' or `unseen' 
     data (e.g. anonymous samples or samples of disputed authorship in the case of authorship studies). If not specified, the default subdirectory \code{secondary_set} will be used.}
 
-  \item{...}{any variable as produced by \code{stylo.default.settings}
+  \item{...}{any variable as produced by \code{stylo.default.settings()}
     can be set here to overwrite the default values.}
 }
 
 \details{There are numerous additional options that are passed to 
-this function; so far, they are all loaded when stylo.default.settings 
+this function; so far, they are all loaded when \code{stylo.default.settings()} 
 is executed (it will be invoked automatically from inside this function);
 the user can set/change them in the GUI.}
 
 \value{
-The function returns a list of variables, including tables of word frequencies, vector of features used, a distance table and some more stuff. Additionally, depending on which options have been chosen, the function produces a number of files containing results, features used, tables of distances, etc.
+The function returns an object of the class \code{stylo.results}:
+a list of variables, including tables of word frequencies, vector of features 
+used, a distance table and some more stuff. Additionally, depending on which 
+options have been chosen, the function produces a number of files used to save 
+the results, features assessed, generated tables of distances, etc.
 }
 
 \references{
@@ -109,10 +114,12 @@ Argamon, S. (2008). Interpreting Burrows's Delta: geometric and
 # standard usage (it builds a corpus from a collection of text files):
 classify()
 
+
 # loading word frequencies from two tab-delimited files:
 classify(training.frequencies = "table_with_training_frequencies.txt",
          test.frequencies = "table_with_test_frequencies.txt")
 
+         
 # using two existing sub-corpora (a list containing tokenized texts):
 txt1 = c("now", "i", "am", "alone", "o", "what", "a", "slave", "am", "i")
 txt2 = c("what", "do", "you", "read", "my", "lord")
@@ -131,13 +138,16 @@ my.selection.of.function.words = c("the", "and", "of", "in", "if", "into",
                                    "within", "on", "upon", "since")
 classify(features = my.selection.of.function.words)
 
+
 # loading a custom set of features (words, n-grams) from a file:
 classify(features = "wordlist.txt")
+
 
 # batch mode, custom name of corpus directories:
 my.test = classify(gui = FALSE, training.corpus.dir = "TrainingSet",
        test.corpus.dir = "TestSet")
 summary(my.test)
+
 
 # batch mode, character 3-grams requested:
 classify(gui = FALSE, analyzed.features = "c", ngram.size = 3)

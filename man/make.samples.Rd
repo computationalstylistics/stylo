@@ -1,10 +1,10 @@
 \name{make.samples}
 \alias{make.samples}
 \title{Split text to samples}
-\description{Function that either splits an input text (a vector of linguistic items, such as words,
-word n-grams, character n-grams, etc.) into equal-sized samples of a desired 
-length (expressed in words), or excerpts randomly a number of words from the
-original text.
+\description{Function that either splits an input text (a vector of linguistic 
+        items, such as words, word n-grams, character n-grams, etc.) into 
+        equal-sized samples of a desired length (expressed in words), 
+        or excerpts randomly a number of words from the original text.
 }
 \usage{
 make.samples(tokenized.text, sample.size = 10000, 
@@ -12,9 +12,12 @@ make.samples(tokenized.text, sample.size = 10000,
              number.of.samples = 1, sampling.with.replacement = FALSE)
 }
 \arguments{
-  \item{tokenized.text}{a vector of words.}
+  \item{tokenized.text}{input textual data stored either in a form of vector
+          (single text), or as a list of vectors (whole corpus); 
+          particular vectors should contain tokenized data, i.e. words, 
+          word n-grams, or other features, as elements.}
   \item{sample.size}{desired size of sample expressed in number of words;
-    default value is 10,000.}
+     default value is 10,000.}
   \item{sampling}{one of three values: \code{no.sampling} (default), 
      \code{normal.sampling}, \code{random.sampling}.}
   \item{sample.overlap}{if this opion is used, a reference text is segmented 

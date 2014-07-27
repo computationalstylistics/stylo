@@ -1,6 +1,6 @@
 \name{txt.to.features}
 \alias{txt.to.features}
-\title{Split string of words}
+\title{Split string of words or other countable features}
 \description{
 Function that converts a vector of words into either words, or characters, 
 and optionally parses them into n-grams.

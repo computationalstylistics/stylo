@@ -702,7 +702,7 @@ if(exists("frequencies.0.culling") == FALSE) {
 
   # preparing a huge table of all the frequencies for the whole corpus
   frequencies.0.culling = make.table.of.frequencies(corpus = loaded.corpus,
-                                               words = mfw.list.of.all, 
+                                               features = mfw.list.of.all, 
                                                relative = relative.frequencies)
 
 
@@ -887,7 +887,7 @@ for(j in (culling.min/culling.incr):(culling.max/culling.incr)) {
 
 
 cat("\n\n")
-cat("culling @ ", current.culling,"\t","available words ",
+cat("culling @ ", current.culling,"\t","available features (words) ",
                   length(table.with.all.freqs[1,]),"\n")
 
 
@@ -949,7 +949,7 @@ for(i in seq(mfw.min,mfw.max,round(mfw.incr)) ) {
 mfw = i
 
 
-# for safety reasons, if MFWs > words in samples
+# for safety reasons, if MFWs > variables in samples
 if(mfw > length(colnames(table.with.all.freqs)) ) {
   mfw = length(colnames(table.with.all.freqs))
 }

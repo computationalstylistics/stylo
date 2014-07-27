@@ -1,9 +1,11 @@
 \name{stylo.default.settings}
 \alias{stylo.default.settings}
-\title{Setting variables}
+\title{Setting variables for the package stylo}
 \description{
-Function that sets a series of global variables to be used by \code{stylo} 
-and which can be modified by users via \code{gui.stylo}.
+Function that sets a series of global variables to be used by the package
+\code{stylo} and which can be modified by users via arguments passed to 
+the function and/or via \code{gui.stylo}, \code{gui.classify}, or 
+\code{gui.oppose}.
 }
 \usage{
 stylo.default.settings(...)
@@ -13,10 +15,12 @@ stylo.default.settings(...)
     can be set here to overwrite the default values.}
 }
 \details{
-This function is typically called from inside \code{stylo} and \code{gui.gui}.
+        This function is typically called from inside \code{stylo}, 
+        \code{classify}, \code{oppose}, \code{gui.stylo}, \code{gui.classify}
+        and \code{gui.oppose}.
 }
 \value{
-The function returns a list of ca. 50 variables. 
+The function returns a list of ca. 80 variables. 
 }
 \author{
 Maciej Eder, Jan Rybicki, Mike Kestemont

@@ -1,27 +1,33 @@
 \name{make.table.of.frequencies}
 \alias{make.table.of.frequencies}
-\title{Prepare a table of relative word frequencies}
-\description{Function that collects a collection of frequency lists and combines them in a single frequency table. To this end a number of rearrangements inside particular lists are carried out. The table is produced using a reference list of words (passed as an argument).
+\title{Prepare a table of (relative) word frequencies}
+\description{Function that collects several frequency lists and combines them 
+        into a single frequency table. To this end a number of rearrangements 
+        inside particular lists are carried out. The table is produced using 
+        a reference list of words/features (passed as an argument).
 }
 \usage{
-make.table.of.frequencies(corpus, words, absent.sensitive = TRUE, 
-  relative = TRUE)
+make.table.of.frequencies(corpus, features, absent.sensitive = TRUE, 
+                          relative = TRUE)
 }
 \arguments{
 \item{corpus}{textual data: either a corpus (represented as a list), or 
 a single text (represented as a vector); the data have to be split into words
 (or other features, such as character n-grams or word pairs).}
-\item{words}{a vector containing a reference word list that will be used
+\item{features}{a vector containing a reference feature list that will be used
 to build the table of frequencies (it is assumed that the reference list 
-contains the same type of features as the \code{corpus} list, e.g. words, character
-n-grams, word pairs, etc.; otherwise, an empty table would be build).}
+contains the same type of features as the \code{corpus} list, e.g. words, 
+character n-grams, word pairs, etc.; otherwise, an empty table will be build).}
 \item{absent.sensitive}{this optional argument is used to prevent building 
-tables of words that never occur in the corpus. When switched on (default), variables 
-containing 0 values across all samples, will be excluded. However, 
-in some cases this is important to keep all the variables regardless 
-of their values. This is e.g. the case when comparing two corpora: even if a given 
-word did not occur in corpus A, it might be present in corpus B. In short: whenever you perform any analysis involving two or multiple sets of texts, switch this option to \code{FALSE}.}
-\item{relative}{when this argument is switched to \code{TRUE} (default), relative frequencies are computed instead of raw frequencies.}
+tables of words/features that never occur in the corpus. When switched on 
+(default), variables containing 0 values across all samples, will be excluded. 
+However, in some cases this is important to keep all the variables regardless 
+of their values. This is e.g. the case when comparing two corpora: even if 
+a given word did not occur in corpus A, it might be present in corpus B. 
+In short: whenever you perform any analysis involving two or multiple sets 
+of texts, switch this option to \code{FALSE}.}
+\item{relative}{when this argument is switched to \code{TRUE} (default), 
+relative frequencies are computed instead of raw frequencies.}
 }
 \author{Maciej Eder}
 
@@ -30,12 +36,16 @@ word did not occur in corpus A, it might be present in corpus B. In short: whene
 }
 
 \examples{
-# to get frequencies of the words "a", the" and "of" from a single text:
+# to get frequencies of the words "a", "the" and "of" from a text:
+
 sample.txt = txt.to.words("My father had a small estate 
              in Nottinghamshire: I was the third of five sons.")
 make.table.of.frequencies(sample.txt, c("a", "the", "of"))
 
-# to get the table of frequencies across a number of texts:
+
+
+# to get a table of frequencies across several texts:
+
 txt.1 = "Gallia est omnis divisa in partes tres, quarum unam incolunt 
     Belgae, aliam Aquitani, tertiam qui ipsorum lingua Celtae, nostra 
     Galli appellantur."
@@ -54,16 +64,19 @@ my.corpus.clean = lapply(my.corpus.raw, txt.to.words)
 my.favorite.words = c("et", "in", "se", "rara", "avis")
 make.table.of.frequencies(my.corpus.clean, my.favorite.words)
 
+
 # to include all words in the reference list, no matter if they 
 # occurred in the corpus:
 make.table.of.frequencies(my.corpus.clean, my.favorite.words,
     absent.sensitive=FALSE)
+
 
 # to prepare a table of frequencies of all the words represented in 
 # a corpus, in descendent occurence order:
 complete.word.list = names(sort(table(unlist(my.corpus.clean)), 
     decreasing = TRUE))
 make.table.of.frequencies(my.corpus.clean, complete.word.list)
+
 
 # to create a table of frequencies of word pairs (word 2-grams):
 my.word.pairs = lapply(my.corpus.clean, txt.to.features, ngram.size=2)

@@ -1,6 +1,6 @@
 \name{txt.to.words.ext}
 \alias{txt.to.words.ext}
-\title{Split text into words}
+\title{Split text into words: extended version}
 \description{
 Function for splitting a string of characters into single words,
 removing punctuation etc., and preserving some language-dependent
@@ -22,7 +22,8 @@ txt.to.words.ext(input.text, language = "English", splitting.rule = NULL,
     you can indicate your custom splitting regular expression here. This
     option will overwrite the above language settings. For further details,
     refer to \code{help(txt.to.words)}.}
-  \item{preserve.case}{Whether or not to lowercase all character in the corpus (default = F).}
+  \item{preserve.case}{Whether or not to lowercase all character in the corpus 
+    (default = F).}
 }
 \details{
 Function for splitting a given input text into single words (chains 
@@ -33,8 +34,8 @@ languages, this is irrelevant. However, it might be important when with English
 or Latin texts: \code{English.contr} treats contractions as single, atomary words, 
 i.e. strings such as "don't", "you've" etc. will not be split into two strings;
 \code{English.all} keeps the contractions (as above), and also prevents
-the function from splitting compound words (mother-in-law, double-decker, etc.);
-\code{Latin.corr} since some editions do not distinguish the letters v/u,
+the function from splitting compound words (mother-in-law, double-decker, etc.).
+\code{Latin.corr}: since some editions do not distinguish the letters v/u,
 this setting provides a consistent conversion to "u" in the whole string. The
 option \code{preserve.case} lets you specify whether you wish to lowercase all
 characters in the corpus.
@@ -52,10 +53,9 @@ txt.to.words.ext("Nel mezzo del cammin di nostra vita / mi ritrovai per
 
 # to see the difference between particular options for English,
 # consider the following sentence from Joseph Conrad's "Nostromo":
-txt.to.words.ext("That's how your money-making is justified here.")
-txt.to.words.ext("That's how your money-making is justified here.",
-      language = "English.contr")
-txt.to.words.ext("That's how your money-making is justified here.", 
-      language = "English.all")
+sample.text = "That's how your money-making is justified here."
+txt.to.words.ext(sample.text, language = "English")
+txt.to.words.ext(sample.text, language = "English.contr")
+txt.to.words.ext(sample.text, language = "English.all")
 }
 %\keyword{text processing}

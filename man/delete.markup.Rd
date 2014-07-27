@@ -27,7 +27,7 @@ delete.markup(input.text, markup.type = "plain")
   disclaimers, etc. will not be removed.
 }
 \author{
-Maciej Eder, Jan Rybicki, Mike Kestemont
+Maciej Eder, Mike Kestemont
 }
 \seealso{
   \code{\link{load.corpus}}, \code{\link{txt.to.words}}, 

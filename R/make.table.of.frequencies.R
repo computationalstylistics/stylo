@@ -19,7 +19,7 @@
 # #################################################
 
 make.table.of.frequencies <- 
-function(corpus, words, absent.sensitive = TRUE, relative = TRUE) {
+function(corpus, features, absent.sensitive = TRUE, relative = TRUE) {
   # variable initialization
   frequency.table = c()
   # checking the format of input data (vector? list?); converting to a list
@@ -43,10 +43,10 @@ function(corpus, words, absent.sensitive = TRUE, relative = TRUE) {
       # ...or raw frequencies
       raw.freqs = table(current.sample)
     }
-    # adjusting the frequencies to the list of words passed as an argument
-    current.vector.of.freqs = raw.freqs[words]
+    # adjusting the frequencies to the list of features passed as an argument
+    current.vector.of.freqs = raw.freqs[features]
     # taking the names (sc. words) from the reference list of words
-    names(current.vector.of.freqs) = words
+    names(current.vector.of.freqs) = features
     # sticking the current sample into the frequency table
     frequency.table = rbind(frequency.table, current.vector.of.freqs)
     # a short message on the screen (not applicable if there is only one text):
@@ -67,10 +67,10 @@ function(corpus, words, absent.sensitive = TRUE, relative = TRUE) {
   # and they will be filled with 0
   if(absent.sensitive == TRUE) {
     # if any of the requested words was not found in the corpus, ...
-    if( length(words[colSums(frequency.table) == 0]) > 0 ) {
+    if( length(features[colSums(frequency.table) == 0]) > 0 ) {
       # the word in question will be listed
       cat("The following words/features could not be found in the corpus:\n")
-      cat(words[colSums(frequency.table) == 0], "\n")
+      cat(features[colSums(frequency.table) == 0], "\n")
     }
     # filtering out the variables (words) that have not occurred
     frequency.table = frequency.table[,(colSums(frequency.table) > 0)]

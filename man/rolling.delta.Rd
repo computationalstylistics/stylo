@@ -32,6 +32,10 @@ in which each reference text is segmented into consecutive, equal-sized
 samples or windows. After "rolling" through the test text, we can plot 
 the resulting series of Delta scores for each reference text in a graph.
 }
+\value{
+The function returns an object of the class \code{stylo.results}, and 
+produces a final plot.
+}
 \references{
 Eder, M. Kestemont, M. and Rybicki, J. (2013). Stylometry with R:
     a suite of tools. In: "Digital Humanities 2013: Conference Abstracts". 
@@ -52,7 +56,7 @@ Rybicki, J., Kestemont, M. and Hoover D. (2013). Collaborative authorship:
 
 }
 
-\author{Mike Kestemont, Jan Rybicki, Maciej Eder}
+\author{Mike Kestemont, Maciej Eder, Jan Rybicki}
 
 \seealso{
 \code{\link{stylo}}, \code{\link{classify}}, \code{\link{oppose}}

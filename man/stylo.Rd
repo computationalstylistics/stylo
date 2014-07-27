@@ -61,11 +61,11 @@ executed (which is typically called automatically from inside the \code{stylo}
 function).
 }
 \value{
-The function returns a list of variables, including a table of word 
-frequencies, vector of features used, a distance table and some more stuff. 
-Additionally, depending on which options have been chosen, the function 
-produces a number of files containing results, plots, tables of distances, 
-etc.
+The function returns an object of the class \code{stylo.results}:
+a list of variables, including a table of word frequencies, vector of features 
+used, a distance table and some more stuff. Additionally, depending on which 
+options have been chosen, the function produces a number of files containing 
+results, plots, tables of distances, etc.
 }
 \references{
 Eder, M. Kestemont, M. and Rybicki, J. (2013). Stylometry with R:

@@ -9,20 +9,22 @@ Generic tokenization function for splitting a given input text into single words
 txt.to.words(input.text, splitting.rule = NULL, preserve.case = FALSE)
 }
 \arguments{
-  \item{input.text}{a string of characters, usually a text.}
-  \item{splitting.rule}{an optional argument indicating an alternative 
-  splitting regexp. E.g., if your corpus contains no punctuation, you can 
-  use a very simple splitting sequence: \code{"[ \\t\\n]+"} or 
-  \code{"[[:space:]]+"} (in this case, any whitespace is assumed to be 
-  a word delimiter). If you deal with non-latin scripts, especially with 
-  those that are not supported by the \code{stylo} package yet (e.g. Chinese,
-  Japanese, Vietnamese, Georgian), you can indicate your letter characters 
-  explicitly: for most Cyrillic scripts try the following code
-  \code{"[^\u0400-\u0482\u048A\u04FF]+"}. Remember, however, 
-  that your texts need to be properly loaded into R (which is quite tricky 
-  on Windows; see below).}
-  \item{preserve.case}{Whether or not to lowercase all characters 
-  in the corpus (default = F).}
+\item{input.text}{a string of characters, usually a text.}
+
+\item{splitting.rule}{an optional argument indicating an alternative 
+splitting regexp. E.g., if your corpus contains no punctuation, you can 
+use a very simple splitting sequence: \code{"[ \\t\\n]+"} or 
+\code{"[[:space:]]+"} (in this case, any whitespace is assumed to be 
+a word delimiter). If you deal with non-latin scripts, especially with 
+those that are not supported by the \code{stylo} package yet (e.g. Chinese,
+Japanese, Vietnamese, Georgian), you can indicate your letter characters 
+explicitly: for most Cyrillic scripts try the following code
+\code{"[^\u0400-\u0482\u048A\u04FF]+"}. Remember, however, 
+that your texts need to be properly loaded into R (which is quite tricky 
+on Windows; see below).}
+
+\item{preserve.case}{Whether or not to lowercase all characters 
+in the corpus (default is \code{FALSE}).}
 }
 \details{
 The generic tokenization function for splitting a given input text into 
@@ -68,7 +70,7 @@ appropriate encoding option when loading the files:
 the functions provided by the library \code{stylo}, you should pass this 
 option as an argument to your chosen function: 
 \code{stylo(encoding = "UTF-8")},
-\code{classify(encoding = "UTF-8")}.
+\code{classify(encoding = "UTF-8")}, \code{oppose(encoding = "UTF-8")}.
 }
 \value{
 The function returns a vector of tokenized words (or other units) as elements.

@@ -1,9 +1,9 @@
 \name{gui.classify}
 \alias{gui.classify}
-\title{GUI for classify}
+\title{GUI for the function classify}
 \description{
 Graphical user interface for \code{classify}. Via the GUI, this function can set
-the several variables needed for \code{classify}.
+most of the variables needed for \code{classify}.
 }
 \usage{
 gui.classify(...)
