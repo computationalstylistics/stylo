@@ -122,6 +122,86 @@ encoding = variables$encoding
 
 
 
+
+
+# grabbed from classify:
+
+# #############################################################################
+# Explicit assignment of all the variables, in order to avoid attach()
+# #############################################################################
+
+add.to.margins = variables$add.to.margins
+analysis.type = variables$analysis.type
+analyzed.features = variables$analyzed.features
+classification.method = variables$classification.method
+colors.on.graphs = variables$colors.on.graphs
+consensus.strength = variables$consensus.strength
+corpus.format = variables$corpus.format
+corpus.lang = variables$corpus.lang
+culling.incr = variables$culling.incr
+culling.max = variables$culling.max
+culling.min = variables$culling.min
+culling.of.all.samples = variables$culling.of.all.samples
+delete.pronouns = variables$delete.pronouns
+dendrogram.layout.horizontal = variables$dendrogram.layout.horizontal
+display.on.screen = variables$display.on.screen
+distance.measure = variables$distance.measure
+dump.samples = variables$dump.samples
+final.ranking.of.candidates = variables$final.ranking.of.candidates
+how.many.correct.attributions = variables$how.many.correct.attributions
+interactive.files = variables$interactive.files
+k.value = variables$k.value
+l.value = variables$l.value
+label.offset = variables$label.offset
+length.of.random.sample = variables$length.of.random.sample
+linkage = variables$linkage
+mfw.incr = variables$mfw.incr
+mfw.list.cutoff = variables$mfw.list.cutoff
+mfw.max = variables$mfw.max
+mfw.min = variables$mfw.min
+ngram.size = variables$ngram.size
+number.of.candidates = variables$number.of.candidates
+outputfile = variables$outputfile
+passed.arguments = variables$passed.arguments
+pca.visual.flavour = variables$pca.visual.flavour
+plot.custom.height = variables$plot.custom.height
+plot.custom.width = variables$plot.custom.width
+plot.font.size = variables$plot.font.size
+plot.line.thickness = variables$plot.line.thickness
+plot.options.reset = variables$plot.options.reset
+reference.wordlist.of.all.samples = variables$reference.wordlist.of.all.samples
+sample.size = variables$sample.size
+sampling = variables$sampling
+sampling.with.replacement = variables$sampling.with.replacement
+save.analyzed.features = variables$save.analyzed.features
+save.analyzed.freqs = variables$save.analyzed.freqs
+save.distance.tables = variables$save.distance.tables
+start.at = variables$start.at
+svm.coef0 = variables$svm.coef0
+svm.cost = variables$svm.cost
+svm.degree = variables$svm.degree
+svm.kernel = variables$svm.kernel
+text.id.on.graphs = variables$text.id.on.graphs
+titles.on.graphs = variables$titles.on.graphs
+txm.compatibility.mode = variables$txm.compatibility.mode
+use.custom.list.of.files = variables$use.custom.list.of.files
+use.existing.freq.tables = variables$use.existing.freq.tables
+use.existing.wordlist = variables$use.existing.wordlist
+write.jpg.file = variables$write.jpg.file
+write.pdf.file = variables$write.pdf.file
+write.png.file = variables$write.png.file
+write.svg.file = variables$write.svg.file
+z.scores.of.all.samples = variables$z.scores.of.all.samples
+# #############################################################################
+
+
+
+
+
+
+
+
+
 ############################################################################
 ############################################################################
 
@@ -398,11 +478,12 @@ if (oppose.method == "mann.whitney"){
         statistics = c()
         all_tokens = c()
         for (slice in primary.slices){all_tokens = union(all_tokens, slice)}
-        all_tokens = unique(all_tokens)
+        all_tokens = sort(all_tokens)
         # primary slices
         statistics = c()
         # loop through tokens
         for (token in all_tokens){
+                cat(token, "\n")
                 # collect freqs in primary slices
                 primary_counts = c()
                 for (slice in primary.slices){primary_counts = c(primary_counts, sum(slice==token))}
@@ -524,15 +605,38 @@ cat(words.avoided.by.primary.author,
 
 
 
-if(1==2) { # a trick for rem
+
+
+################## a cleaner solution #####################
+if(1==2) { # a trick to rem several lines
 preferred.words.for.plotting = names(zeta.results$words_preferred)[1:20]
 preferred.indices.for.plotting = 1:20
 preferred.scores.for.plotting = zeta.results$words_preferred[1:20]
          }
+################## a cleaner solution #####################
          
          
 
 # plotting functionality:
+
+# first, checking if anything can be plotted
+if (visualization == "words" | visualization == "markers"){
+        if(length(words.avoided.by.primary.author) +
+        length(words.preferred.by.primary.author) < 10) {
+                cat("there is not enough discriminative words to continue,\n",
+                "either the filter threshold is too strong, or the sample",
+                " size too small\n", "  number of preferred words:\t",
+                length(words.preferred.by.primary.author), "\n",
+                "  number of avoided words:\t",
+                length(words.avoided.by.primary.author), "\n", sep="")
+        visualization = "none"
+        stage.II.similarity.test = FALSE
+        }
+}
+
+
+
+
 if (visualization == "words" && oppose.method != "box.plot"){
         
         # only a portion of discinctive words (e.g. 20) will be plotted
@@ -648,8 +752,7 @@ if(file.exists(test.corpus.dir) == TRUE) {
 for(i in 1 : loop.size) {
 
         labels = c("primary","secondary","unknown")
-        
-
+       
         if(i == 1) {
                 current.corpus = primary.slices 
         } 
@@ -676,10 +779,10 @@ for(i in 1 : loop.size) {
 # making the matrix appropriately shaped, namely:
 # converting the matrix into a table, making the numbers numeric again
 colnames(summary.zeta.scores) = c("preferred","avoided","class")
-summary.zeta.scores = as.data.frame(summary.zeta.scores, stringsAsFactors=FALSE)
-summary.zeta.scores[,1] = as.numeric(summary.zeta.scores[,1])
-summary.zeta.scores[,2] = as.numeric(summary.zeta.scores[,2])
-summary.zeta.scores[,3] = as.factor(summary.zeta.scores[,3])
+#summary.zeta.scores = as.data.frame(summary.zeta.scores, stringsAsFactors=FALSE)
+#summary.zeta.scores[,1] = as.numeric(summary.zeta.scores[,1])
+#summary.zeta.scores[,2] = as.numeric(summary.zeta.scores[,2])
+#summary.zeta.scores[,3] = as.factor(summary.zeta.scores[,3])
 
 
 } # <---- the second stage of the analysis is completed
@@ -721,7 +824,6 @@ if ((visualization == "markers") && (oppose.method != "box.plot")){
   colors.of.pca.graph = "black"
   }
   # ########################################
-  plot.current.task = function() {NULL}
   plot.current.task = function(){
     par(mar=c(4, 4, 4, 7)+.1, xpd=TRUE)
     plot(summary.zeta.scores[,1:2], 
@@ -836,6 +938,10 @@ if(exists("words.avoided")) {
   attr(words.avoided, "description") = "features (words) avoided in the primary set"
   class(words.avoided) = "stylo.data"
 }
+if(exists("summary.zeta.scores")) {
+  attr(summary.zeta.scores, "description") = "zeta scores"
+  class(summary.zeta.scores) = "stylo.data"
+}
 if(exists("classification.results")) {
   attr(classification.results, "description") = "so far, there's nothing here"
 }
@@ -858,7 +964,8 @@ results.oppose = list()
 # elements that we want to add on this list
 variables.to.save = c("words.preferred",
                       "words.avoided",
-                      "comparison","zeta.results","wordlist","primary.slices","secondary.slices","test.slices","summary.zeta.scores",
+                      "summary.zeta.scores",
+                      "comparison","zeta.results","wordlist","primary.slices","secondary.slices","test.slices",
                       "classification.results")
 # checking if they really exist; getting rid of non-existing ones:
 filtered.variables = ls()[ls() %in% variables.to.save]

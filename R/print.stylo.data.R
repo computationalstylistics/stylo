@@ -11,13 +11,13 @@ function(x, ...) {
     cat("\n")
   }
 
-  if(is.matrix(x) == TRUE | is.data.frame(x) == TRUE ) {
+  if(is.matrix(x) == TRUE | is.data.frame(x) == TRUE) {
     no.of.variables = length( x[1,] )
     no.of.samples = length( x[,1] )
     # this trick turned out to prevent the damn function to crash
     x = x[,]
-    # let's limit the number of digits to be shown
-    x = round(x,7)
+    # let's limit the number of digits to be shown (if the data are numeric!)
+    if(is.numeric(x) == TRUE) { x = round(x,7) }
       if(no.of.variables >11 ) {
         x = x[,1:11]
         x = cbind(x,rep("..."))
