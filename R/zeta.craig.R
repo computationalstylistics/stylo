@@ -11,13 +11,13 @@ function(input.data, filter.threshold) {
         comparison.secondary = input.data[,2]
         
         # two ways of expressing the same thing:
-        differences = ( comparison.primary - comparison.secondary ) / 100 + 1 # note: add-one smoothing
+        differences = ( comparison.primary - comparison.secondary ) / 100 # note: add-one smoothing
         #differences = (comparison.primary + (100 - comparison.secondary )) / 100
         
         # extracting the distinctive words
-        words.preferred = sort(differences[differences > 1 + filter.threshold],
+        words.preferred = sort(differences[differences > 0 + filter.threshold],
                                decreasing=TRUE)
-        words.avoided = sort(differences[differences < 1 - filter.threshold])
+        words.avoided = sort(differences[differences < 0 - filter.threshold])
                 
         # putting the results on a list
         results = list(words.preferred,words.avoided)
