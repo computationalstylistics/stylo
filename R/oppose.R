@@ -4,19 +4,27 @@
 oppose <-
 function(gui = TRUE, 
          path = NULL,
+         primary.corpus = NULL,
+         secondary.corpus = NULL,
+         test.corpus = NULL,
          primary.corpus.dir = "primary_set",
          secondary.corpus.dir = "secondary_set",
          test.corpus.dir = "test_set", ...) {
+#
 
-                 
-                 
-                 
 
-polygons.on.graph = F
+
+
+
+
+polygons.on.graph = T
 naive.bayes = F
 svm.classification = F
 
 
+
+# a weird way of checking if a corpus has been loaded: variable initiation
+corpus.exists = F
 
 
                  
@@ -200,13 +208,83 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
 
 
 
+# If the tables with frequencies could not loaded so far (for any reason), 
+# try to load an external corpus (R object) passed as an argument 
+
+###############################################################################
+# Checking if the argument "training.corpus" and/or "test.corpus" has been used
+#
+# Iterating over two sets: primary set and secondary set
+for(iteration in 1:2) {
+    # first iteration: primary set
+    if(iteration == 1) {
+      parsed.corpus = primary.corpus
+    }
+    # second iteration: secondary set
+    if(iteration == 2) {
+      parsed.corpus = secondary.corpus
+    }
+
+
+  # checking if the variable "parsed.corpus" is empty
+  if(corpus.exists == FALSE & length(parsed.corpus) > 0) {
+      # if the variable was used, check its format
+      if(is.list(parsed.corpus) == TRUE & length(parsed.corpus) > 1) {
+          # checking if the samples have their names; otherwise, assign generic ones:
+          if( length(names(parsed.corpus)) != length(parsed.corpus) ) {
+            names(parsed.corpus) = paste("sample",1:length(parsed.corpus),sep="_")
+          }
+        # if everything is fine, use this variable as a valid corpus
+#        loaded.corpus = parsed.corpus
+      } else {
+        cat("\n")
+        cat("The object you've specified as your corpus cannot be used.\n")
+        cat("It should be a list containing particular text samples\n")
+        cat("(vectors containing sequencies of words/n-grams or other features).\n")
+        cat("The samples (elements of the list) should have their names.\n")
+        cat("Alternatively, try to build your corpus from text files (default).\n")
+        cat("\n")
+        stop("Wrong corpus format")
+      } 
+  }
+
+  # 1st iteration: setting the matrix containing the training set (if applicable)
+  if(iteration == 1) {
+    corpus.of.primary.set = parsed.corpus
+  }
+  # 2nd iteration: setting the matrix containing the test set (if applicable)
+  if(iteration == 2) {
+    corpus.of.secondary.set = parsed.corpus
+  }
+# attempts at loading the training set and the test set: the loop returns here
+} 
+
+# Two iterations completed, another sanity check should be applied
+if(corpus.exists == FALSE) {
+    if(length(corpus.of.primary.set) >1 & length(corpus.of.secondary.set) >1 ) {
+      cat("Two subcorpora loaded successfully.\n")  
+      corpus.exists = TRUE
+    } else {
+      cat("The subcorpora will be loaded from text files...\n")
+      corpus.exists = FALSE
+    }
+}
+###############################################################################
+
+
+
+
 
 
 ############################################################################
 ############################################################################
 
 
-
+# if pre-processed corpora from R objects could not be loaded, then use files
+if(corpus.exists == FALSE) {
+        
+        
+        
   # Retrieving the names of samples
   #
   filenames.primary.set = list.files(primary.corpus.dir)
@@ -262,6 +340,9 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
                          sampling.with.replacement = sampling.with.replacement,
                          features = analyzed.features,
                          ngram.size = ngram.size)
+
+}
+
 
 
 
