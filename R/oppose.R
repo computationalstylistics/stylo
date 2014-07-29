@@ -656,8 +656,14 @@ cat("# The file contains words that were extracted in the oppose script:",
   "",
       file="words_preferred.txt", sep="\n")
 # the current wordlist into a file
-cat(words.preferred.by.primary.author, 
-    file="words_preferred.txt", sep="\n",append=T)
+    # checking if encoding conversion is needed
+    if(encoding == "native.enc") {
+      data.to.be.saved = words.preferred.by.primary.author
+    } else {
+      data.to.be.saved = iconv(words.preferred.by.primary.author, to=encoding)
+    }
+# writing the stuff
+cat(data.to.be.saved,file="words_preferred.txt", sep="\n",append=T)
 #
 #
 # 
@@ -673,9 +679,14 @@ cat("# The file contains words that were extracted in Burrows’ Zeta test:",
   "",
       file="words_avoided.txt", sep="\n")
 # the current wordlist into a file
-cat(words.avoided.by.primary.author, 
-    file="words_avoided.txt", sep="\n",append=T)
-#
+    # checking if encoding conversion is needed
+    if(encoding == "native.enc") {
+      data.to.be.saved = words.avoided.by.primary.author
+    } else {
+      data.to.be.saved = iconv(words.avoided.by.primary.author, to=encoding)
+    }
+# writing the stuff
+cat(data.to.be.saved,file="words_avoided.txt", sep="\n",append=T)
 #
 # 
 }
@@ -712,21 +723,34 @@ if (visualization == "words" | visualization == "markers"){
 
 if (visualization == "words" && oppose.method != "box.plot"){
         
-        # only a portion of discinctive words (e.g. 25) will be plotted
-        preferred.words.for.plotting = names(words.preferred)[1:25]
-        preferred.indices.for.plotting = 1:25
-        preferred.scores.for.plotting = words.preferred[1:25]
-        avoided.words.for.plotting = names(words.avoided)[1:25]
-        avoided.indices.for.plotting = 1:25
-        avoided.scores.for.plotting = words.avoided[1:25]
+        # only a portion of discinctive words (e.g. 70) will be plotted
+        if(length(names(words.preferred)) > 70) {
+                preferred.words.for.plotting = names(words.preferred)[1:70]
+                preferred.indices.for.plotting = 1:70
+                preferred.scores.for.plotting = words.preferred[1:70]
+        } else {
+                preferred.words.for.plotting = names(words.preferred)
+                preferred.indices.for.plotting = 1:length(words.preferred)
+                preferred.scores.for.plotting = words.preferred
+        }
+        # the same procedure applied to the avoided words
+        if(length(names(words.avoided)) > 70) {
+                avoided.words.for.plotting = names(words.avoided)[1:70]
+                avoided.indices.for.plotting = 1:70
+                avoided.scores.for.plotting = words.avoided[1:70]
+        } else {
+                avoided.words.for.plotting = names(words.avoided)
+                avoided.indices.for.plotting = 1:length(words.avoided)
+                avoided.scores.for.plotting = words.avoided
+        }
 
-
+        
 
 
         plot.current.task = function(){
                 plot(preferred.indices.for.plotting, preferred.scores.for.plotting, ylim=c(-1,1), type="n", xlab="Rank of the item", ylab="Score")
-                text(preferred.indices.for.plotting, preferred.scores.for.plotting, as.character(preferred.words.for.plotting), cex=0.7, col=c("red","blue"))
-                text(avoided.indices.for.plotting, avoided.scores.for.plotting, as.character(avoided.words.for.plotting), cex=0.7, col=c("red","blue"))
+                text(preferred.indices.for.plotting, preferred.scores.for.plotting, as.character(preferred.words.for.plotting), cex=0.7, srt=90, adj=c(0,0))
+                text(avoided.indices.for.plotting, avoided.scores.for.plotting, as.character(avoided.words.for.plotting), cex=0.7, srt=90, adj=c(1,0))
                 abline(h=0, lty=2)      
                 mtext("Preferred", side=4, at=0.5, las=3)
                 mtext("Avoided", side=4, at=-0.5)

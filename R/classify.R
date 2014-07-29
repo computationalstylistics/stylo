@@ -1086,6 +1086,8 @@ if(z.scores.of.all.samples == FALSE) {
   # the z-scores can be calculated on both sets as alternatively  
   zscores.table.both.sets = scale(freq.table.both.sets)
   zscores.table.both.sets = zscores.table.both.sets[,]
+  zscores.primary.set = zscores.table.both.sets[1:length(primary.set[,1]),]
+  zscores.secondary.set = zscores.table.both.sets[1:length(secondary.set[,1]),]
   }
 
 
@@ -1162,7 +1164,13 @@ distance.name.on.graph = "standard classification"
 
 # Delta in its various flavours
 
-perform.delta = function(zscores.table.both.sets, distance.measure = "CD") {
+perform.delta = function(training.set, test.set, distance.measure = "CD") {
+
+  
+# first, combining the two sets into one matrix        
+zscores.table.both.sets = rbind(training.set, test.set)
+
+        
 # calculating classic Delta distances
 if(distance.measure == "CD") {
   distance.name.on.graph = "Classic Delta distance"
@@ -1222,8 +1230,8 @@ colnames(distance.table)=gsub("\\.txt$","",rownames(zscores.table.both.sets))
 # extracting candidates, drawing, printing, etc.
 
 # a selected area of the distance.table is needed, with colnames()
-no.of.possib = length(primary.set[,1])
-no.of.candid = length(secondary.set[,1])
+no.of.possib = length(training.set[,1])
+no.of.candid = length(test.set[,1])
 selected.dist = 
           as.matrix(distance.table[no.of.possib+1:no.of.candid,1:no.of.possib])
 
@@ -1343,7 +1351,8 @@ return(classification.results)
 
 
 if(tolower(classification.method) == "delta") {
-  selected.dist = perform.delta(zscores.table.both.sets, distance.measure)
+  selected.dist = perform.delta(zscores.primary.set, zscores.secondary.set, 
+                                distance.measure)
 }
 
 
@@ -1430,9 +1439,6 @@ if(cv.folds > 0) {
   cat("\n")
   cat("cross-validation...\n")
  
-  # an additional table combined of frequencies of set I and II
-  # just for feeding the bootstrap module 
-  freq.table.both.sets.binded = rbind(primary.set[,1:mfw],secondary.set[,1:mfw])
 
   #bootstrap.output = "bootstrap_output.txt"
   # cleaning the bootstrapfile
@@ -1442,56 +1448,73 @@ if(cv.folds > 0) {
   cross.validation.results = c()
   cross.validation.results.all = c()
 
-  # starting two emtpy vectors
-  total.no.of.correct.attrib.cv = c()
-  total.no.of.possible.attrib.cv = c()
-  
+
   
 
-  # the beginning of k-fold cross-validation k number of iterations
+  # beginning of k-fold cross-validation (k being the number of iterations)
   for(iterations in 1 : cv.folds) {
 
-    names.of.training.set.orig = rownames(primary.set)
-    names.of.training.set.new = c()
-    classes.training.set = gsub("_.*","",names.of.training.set.orig,perl=T)
-    classes.test.set = gsub("_.*","",rownames(secondary.set),perl=T)
+    # an additional table combined of frequencies of set I and II
+    # just for feeding the bootstrap module 
+    freq.table.both.sets.binded = rbind(primary.set[,1:mfw],secondary.set[,1:mfw])
 
+          
+    names.of.training.set.orig = rownames(primary.set)
+    classes.training.set = gsub("_.*", "", rownames(primary.set))
+    classes.test.set = gsub("_.*", "", rownames(secondary.set))
+    names.both.sets = rownames(freq.table.both.sets.binded)
+    classes.both.sets = c(classes.training.set, classes.test.set)
+    
+    training.samples = c()
+    test.samples = c()
+
+    
       # this looks for classes that were not represented so far in I set
-      for(i in classes.training.set) {
+      for(i in names(table(classes.training.set)) ) {
         #
+        # count the number of samples of class i included originally in I set
+        no.of.training.samples = sum(as.numeric(classes.training.set == i))
+        # determine the class' name, surround the name with word boundary char
         class.name = paste("\\b",i,"\\b",sep="")
-        # shuffle the order of samples (both sets combined)
-        names.of.the.texts = sample(rownames(freq.table.both.sets.binded))
-        # exclude samples that have been already chosen to the training set
-        names.of.the.texts = setdiff(names.of.the.texts, names.of.training.set.new)
-        # extract the classes, or strings before the first underscore
-        classes.both.sets = gsub("_.*","",names.of.the.texts,perl=T)
-        # find the first matching sample
-        randomly.picked.sample = grep(class.name,classes.both.sets)[1]
-        # retrieve its full name
-        training.set.next.member = names.of.the.texts[randomly.picked.sample]
-        # build the vector of randomly chosen members of the training set
-        names.of.training.set.new = c(names.of.training.set.new, training.set.next.member)
+        # in both sets, identify the positions of current class' samples 
+        pinpoint.samples = grep(class.name, classes.both.sets)
+        # sanity check, just in case
+        if(length(pinpoint.samples) > no.of.training.samples) {
+                # select randomly N items from the pinpoited positions
+                training = sample(pinpoint.samples, no.of.training.samples)
+                # identify the remaining ones: future test set samples
+                test = setdiff(pinpoint.samples, training)
+                # pick the names at the positions identified above
+                training.samples = c(training.samples, names.both.sets[training])
+                # the remaining ones go to the test set
+                test.samples = c(test.samples, names.both.sets[test])
+        } else {
+                test = pinpoint.samples
+                test.samples = c(test.samples, names.both.sets[test])
+        }
       }
 
-   # getting back the original samples' names
-   names.of.the.texts = rownames(freq.table.both.sets.binded)
+
+#### !!! Anon samples are excluded!!!
 
 
-  # establishing the I set:
-  training.set = freq.table.both.sets.binded[names.of.training.set.new,]
+  # establishing the training set:
+  training.set = freq.table.both.sets.binded[training.samples,]
 
-  # establishing the II set
-  test.set = 
-        freq.table.both.sets.binded[!(names.of.the.texts %in% names.of.training.set.new),]
+  # establishing the test set
+  test.set = freq.table.both.sets.binded[test.samples,]
 
-  # both sets binded again, after rearrangements 
-  freq.table.both.sets.binded = rbind(training.set,test.set)
-
+  
+  zscores.training.set = zscores.table.both.sets[training.samples,]
+  zscores.test.set = zscores.table.both.sets[test.samples,]
+    
 
   if(tolower(classification.method) == "delta") {
-    current.zscores = scale(freq.table.both.sets.binded)
-    selected.dist1 = perform.delta(current.zscores, distance.measure)
+    # zscores as a separate function should be applied here:
+#    current.zscores = scale(freq.table.both.sets.binded)
+    selected.dist1 = perform.delta(zscores.training.set,
+                                   zscores.test.set, 
+                                   distance.measure)
   }
   if(tolower(classification.method) == "knn") {
     classification.results = perform.knn(training.set,test.set)
@@ -1504,8 +1527,11 @@ if(cv.folds > 0) {
   }
 
 
+
+  # retrieving classes of the new training set
+  classes.training = gsub("_.*","",rownames(training.set))
   
-  # retrieving the names of classes
+  # retrieving classes of the new test set
   classes.test = gsub("_.*","",rownames(test.set))
 
 
@@ -1519,12 +1545,8 @@ if(cv.folds > 0) {
                                      classification.results))
         }
       # 
-      perfect.guessing.cv = 
-        length(classes.training.set[classes.test.set %in% classes.training.set])
-      total.no.of.correct.attrib.cv = 
-                         c(total.no.of.correct.attrib.cv, no.of.correct.attrib)
-      total.no.of.possible.attrib.cv = 
-                         c(total.no.of.possible.attrib.cv, perfect.guessing.cv)
+      # getting the max. number of samples that couold be guessed
+      perfect.guessing.cv = sum(as.numeric(classes.test %in% classes.training))
       cat("\n",file=outputfile,append=T)
       cat(mfw, " MFW , culled @ ",current.culling,"%,  ",
                no.of.correct.attrib," of ", perfect.guessing.cv,"\t(",

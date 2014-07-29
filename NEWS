@@ -13,6 +13,7 @@
  * zeta.chisquare(), zeta.craig(), and zeta.eder()
    derrived as separate functions
  * gui.oppose() derrived as a separate function
+ * distinctive words visualization in oppose() improved
  * draw.polygons derrived as a separate function
    (hidden to the end user, though)
  * cross-validation in classify() improved
