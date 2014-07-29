@@ -37,6 +37,8 @@ function(input.text, splitting.rule = NULL, preserve.case = FALSE) {
           "\U0400-\U0481\U048A-\U0527",
           # Hebrew:
           "\U05D0-\U05EA\U05F0-\U05F4",
+          # Arabic:
+          "\U0620-\U065F\U066E-\U06D3\U06D5\U06DC",
           # extended Latin:
           "\U1E00-\U1EFF",
           # ancient Greek:
@@ -44,15 +46,6 @@ function(input.text, splitting.rule = NULL, preserve.case = FALSE) {
           "]+",
           sep="")
       tokenized.text = c(unlist(strsplit(input.text, splitting.rule)))
-# system-dependent splitting not valid any more
-#      if(Sys.info()[["sysname"]] == "Windows") { 
-#        ### Windows
-#        tokenized.text = c(unlist(strsplit(input.text, "\\W+|_+",perl=T)))
-#      } else {
-#        ### Linux, Mac
-#        tokenized.text = c(unlist(strsplit(input.text, "[^[:alpha:]]+")))
-#      }
-#
     # if custom splitting rule was indicated:
     } else {
       # sanity check
