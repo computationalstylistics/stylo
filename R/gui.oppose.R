@@ -157,8 +157,6 @@ plot.token = variables$plot.token
 
 
 
-
-
 # a not very elegant way of switching from strings into logical values
 encoding.orig = variables$encoding
   if(variables$encoding == "UTF-8") {
@@ -329,6 +327,8 @@ tkgrid(tklabel(tt,text="    ")) # blank line
 
   .Tcl("font delete myDefaultFont")
 
+# when encoding goes into GUI, this statement will have to be deleted
+variables$encoding = encoding  
 
   # switching back from logical values into strings
   if(variables$encoding == TRUE) {
