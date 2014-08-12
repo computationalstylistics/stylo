@@ -10,7 +10,8 @@ stylistics. For a more detailed description, refer to HOWTO available at:
 }
 \usage{
 stylo(gui = TRUE, frequencies = NULL, parsed.corpus = NULL,
-      features = NULL, path = NULL, corpus.dir = "corpus", ...)
+      features = NULL, path = NULL, corpus.dir = "corpus", 
+      network = FALSE, ...)
 }
 \arguments{
   \item{gui}{an optional argument; if switched on, a simple yet effective 
@@ -48,6 +49,10 @@ stylo(gui = TRUE, frequencies = NULL, parsed.corpus = NULL,
     contains the corpus text files. If not specified, the default 
     subdirectory \code{corpus} will be used. This option is immaterial when
     an external corpus and/or external table with frequencies is loaded.}
+    
+  \item{network}{an optional argument for producing stylometric bootstrap
+    consensus networks (Eder, forthcoming); the function saves a csv file,
+    containing a list of nodes that can be loaded into, say, Gephi.}
 
   \item{...}{any variable produced by \code{stylo.default.settings}
     can be set here, in order to overwrite the default values.}
@@ -71,6 +76,9 @@ results, plots, tables of distances, etc.
 Eder, M. Kestemont, M. and Rybicki, J. (2013). Stylometry with R:
     a suite of tools. In: "Digital Humanities 2013: Conference Abstracts". 
     University of Nebraska-Lincoln, Lincoln, NE, pp. 487-89.
+    
+Eder, M. (forthcoming). Visualization in stylometry: some problems and 
+    solutions.
 }
 
 \author{Maciej Eder, Jan Rybicki, Mike Kestemont}

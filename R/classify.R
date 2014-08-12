@@ -158,9 +158,14 @@ splitting.rule = variables$splitting.rule
 preserve.case = variables$preserve.case
 encoding = variables$encoding
 cv.folds = variables$cv.folds
+stop.words = variables$stop.words
+sample.overlap = variables$sample.overlap
+number.of.samples = variables$number.of.samples
 
 
 
+# ['cv' is temporarily switched off, it always performs 'cv ="thorough"']
+# cv = variables$cv
 
 
 
@@ -611,6 +616,8 @@ if(corpus.exists == FALSE) {
                          sample.size = sample.size,
                          sampling = sampling,
                          sampling.with.replacement = sampling.with.replacement,
+                         sample.overlap = sample.overlap, 
+                         number.of.samples = number.of.samples,
                          features = analyzed.features,
                          ngram.size = ngram.size)
 
@@ -625,6 +632,8 @@ if(corpus.exists == FALSE) {
                          sample.size = sample.size,
                          sampling = sampling,
                          sampling.with.replacement = sampling.with.replacement,
+                         sample.overlap = sample.overlap, 
+                         number.of.samples = number.of.samples,
                          features = analyzed.features,
                          ngram.size = ngram.size)
 }
@@ -987,8 +996,11 @@ for(j in (culling.min/culling.incr):(culling.max/culling.incr)) {
         
 
         # optionally, deleting stop words
-#        primary.set = delete.stop.words(primary.set, pronouns)        
-#        secondary.set = delete.stop.words(secondary.set, pronouns)
+        if(is.vector(stop.words) == TRUE) {
+                primary.set = delete.stop.words(primary.set, stop.words)        
+                secondary.set = delete.stop.words(secondary.set, stop.words)
+        }
+
         
 
 
@@ -1391,13 +1403,14 @@ classes.test = gsub("_.*","",rownames(secondary.set))
 if(final.ranking.of.candidates == TRUE) {
     cat("\n\n\n",file=outputfile,append=T)
     if(tolower(classification.method) == "delta") {
-      misclassified.samples =
-                 make.ranking.of.candidates(selected.dist,number.of.candidates)
+      make.ranking.of.candidates(selected.dist,number.of.candidates)
     } else {
       misclassified.samples = 
                    paste(rownames(secondary.set), "\t-->\t",
                    classification.results)[classes.test!=classification.results]
-      cat(misclassified.samples, file=outputfile, append=T, sep="\n")    
+      cat(misclassified.samples, file=outputfile, append=T, sep="\n") 
+      # temporarily (the results should be maed available, eventually)
+      rm(misclassified.samples)
     }
 }
 

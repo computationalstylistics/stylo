@@ -20,7 +20,8 @@ stylo.default.settings(...)
         and \code{gui.oppose}.
 }
 \value{
-The function returns a list of ca. 80 variables. 
+The function returns a list of a few dozen variables, mostly options
+and parameters for different stylometric tests. 
 }
 \author{
 Maciej Eder, Jan Rybicki, Mike Kestemont

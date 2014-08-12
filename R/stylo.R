@@ -16,7 +16,8 @@ function(gui = TRUE,
          parsed.corpus = NULL,
          features = NULL,
          path = NULL, 
-         corpus.dir = "corpus", ...) {
+         corpus.dir = "corpus",
+         network = FALSE, ...) {
 
 
 
@@ -169,6 +170,10 @@ relative.frequencies = variables$relative.frequencies
 splitting.rule = variables$splitting.rule
 preserve.case = variables$preserve.case
 encoding = variables$encoding
+stop.words = variables$stop.words
+
+sample.overlap = variables$sample.overlap
+number.of.samples = variables$number.of.samples
 
 
 
@@ -595,6 +600,8 @@ if(corpus.exists == FALSE) {
                          sample.size = sample.size,
                          sampling = sampling,
                          sampling.with.replacement = sampling.with.replacement,
+                         sample.overlap = sample.overlap, 
+                         number.of.samples = number.of.samples,
                          features = analyzed.features,
                          ngram.size = ngram.size,
                          preserve.case = preserve.case)
@@ -861,7 +868,11 @@ for(j in (culling.min/culling.incr):(culling.max/culling.incr)) {
         
 
         # optionally, deleting stop words
-      #  table.with.all.freqs = delete.stop.words(table.with.all.freqs, stop.words)
+        if(is.vector(stop.words) == TRUE) {
+                table.with.all.freqs = delete.stop.words(table.with.all.freqs, 
+                                                         stop.words)
+        }
+        
         
         
         

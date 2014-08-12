@@ -57,6 +57,15 @@ culling.incr = 20
 delete.pronouns = FALSE
 corpus.lang = "English.all"
 
+# using this variable, one can specify a selection of words to be EXCLUDED
+# from the analysis: in computational linguistics, this is referred to 
+# as stop words. It is not very likely to be used in a classical approach
+# to stylometry, since the most frequent words the very features you 
+# don't want to exclude
+# usage: stop.words = c("the", "of", "in", "if")
+
+stop.words = NULL
+
 # Selection of features. In classical approaches, frequencies of the most
 # frequent words (MFW) are used as the basis for multidimensional analyses.
 # It has been argued, however, that other features are also worth considering,
@@ -280,6 +289,10 @@ sampling.with.replacement = FALSE # THIS IS NOT VISIBLE ON GUI
 # of their length and differences therein). For this, set the sampling variable 
 # to "no.sampling"
 
+sample.overlap = 0
+number.of.samples = 1
+
+
 
 #######  VARIOUS OPTIONS  ###############################################
 
@@ -434,7 +447,7 @@ cv.folds = 0
 # OPPOSE settings -- to be integrated with stylo and classify!
 # #################################################
 
-text.slice.length = 2000
+text.slice.length = 3000
 text.slice.overlap = 0
 
 # if you want to ignore words that occurred only once or twice, set

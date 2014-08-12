@@ -4,7 +4,7 @@
 
 
 
-== version 0.5.7, 2014/08/12
+== version 0.5.7, 2014/08/13
  * culling implemented as a separate function
  * custom stop words deletion: delete.stop.words()
  * a thoroughly re-written oppose() to use
