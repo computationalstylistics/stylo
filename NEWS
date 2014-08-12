@@ -4,7 +4,7 @@
 
 
 
-== version 0.5.7, 2014/07/28
+== version 0.5.7, 2014/08/12
  * culling implemented as a separate function
  * custom stop words deletion: delete.stop.words()
  * a thoroughly re-written oppose() to use
@@ -17,6 +17,7 @@
  * draw.polygons derrived as a separate function
    (hidden to the end user, though)
  * cross-validation in classify() improved
+ * fixed bug in cross-validation for naivebayes
  * a very unpleasant bug in oppose() fixed: 
    the preferred and avoided words were calculated
    using the I set only

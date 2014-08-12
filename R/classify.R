@@ -157,8 +157,6 @@ relative.frequencies = variables$relative.frequencies
 splitting.rule = variables$splitting.rule
 preserve.case = variables$preserve.case
 encoding = variables$encoding
-
-cv = variables$cv
 cv.folds = variables$cv.folds
 
 
@@ -1393,12 +1391,13 @@ classes.test = gsub("_.*","",rownames(secondary.set))
 if(final.ranking.of.candidates == TRUE) {
     cat("\n\n\n",file=outputfile,append=T)
     if(tolower(classification.method) == "delta") {
-      make.ranking.of.candidates(selected.dist,number.of.candidates)
+      misclassified.samples =
+                 make.ranking.of.candidates(selected.dist,number.of.candidates)
     } else {
       misclassified.samples = 
                    paste(rownames(secondary.set), "\t-->\t",
                    classification.results)[classes.test!=classification.results]
-      cat(misclassified.samples,file=outputfile,append=T,sep="\n")    
+      cat(misclassified.samples, file=outputfile, append=T, sep="\n")    
     }
 }
 
@@ -1517,7 +1516,7 @@ if(cv.folds > 0) {
                                    distance.measure)
   }
   if(tolower(classification.method) == "knn") {
-    classification.results = perform.knn(training.set,test.set)
+    classification.results = perform.knn(training.set,test.set, k.value)
   }
   if(tolower(classification.method) == "svm") {
     classification.results = perform.svm(training.set,test.set)
@@ -1525,9 +1524,11 @@ if(cv.folds > 0) {
   if(tolower(classification.method) == "nsc") {
     classification.results = perform.nsc(training.set,test.set)
   }
+  if(tolower(classification.method) == "naivebayes") {
+    classification.results = perform.naivebayes(training.set,test.set)
+  }
 
-
-
+  
   # retrieving classes of the new training set
   classes.training = gsub("_.*","",rownames(training.set))
   
@@ -1563,7 +1564,7 @@ if(cv.folds > 0) {
   
   cross.validation.results.all = cbind(cross.validation.results.all, cross.validation.results)
   colnames(cross.validation.results.all) = paste(mfw, "@", current.culling, sep="")
-}   # <-- if cv = "thorough"
+}   # <-- if(cv.folds > 0)
 
 
 
@@ -1798,7 +1799,7 @@ results.classify$name = call("classify")
 # rolling.delta() and oppose(). See the files "print.stylo.results.R"
 # and "summary.stylo.results.R" (no help files are provided, since
 # these two functions are not visible for the users).
-class(results.classify) <- "stylo.results"
+class(results.classify) = "stylo.results"
 
 
 
