@@ -40,3 +40,5 @@ S3method(print, stylo.corpus)
 S3method(print, stylo.data)
 S3method(summary, stylo.results)
 S3method(summary, stylo.corpus)
+
+
