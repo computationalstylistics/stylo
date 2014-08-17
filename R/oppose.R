@@ -80,7 +80,7 @@ if (gui == TRUE) {
       # (the conditional expression is stolen form the generic function "menu")
       if (.Platform$OS.type == "windows" || .Platform$GUI == 
             "AQUA" || (capabilities("tcltk") && capabilities("X11") && 
-            suppressWarnings(tcltk:::.TkUp))) {
+            suppressWarnings(tcltk::.TkUp))) {
         variables = gui.oppose(...)
       } else {
         cat("\n")
