@@ -85,7 +85,7 @@ if (gui == TRUE) {
       } else {
         cat("\n")
         cat("GUI could not be launched -- default settings will be used;\n")
-        cat("otherwise please pass your variables as command-line agruments\n")
+        cat("otherwise please pass your variables as command-line agruments\n\n")
       }
 }
 

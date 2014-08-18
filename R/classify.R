@@ -75,7 +75,7 @@ if (gui == TRUE) {
       } else {
         cat("\n")
         cat("GUI could not be launched -- default settings will be used;\n")
-        cat("otherwise please pass your variables as command-line agruments\n")
+        cat("otherwise please pass your variables as command-line agruments\n\n")
       }
 }
 
@@ -1057,9 +1057,6 @@ cat("culling @ ", current.culling,"\t","available words ",
 # #################################################
 
 
-# mean and standard dev. for each word (in primary set)
-primary.set.mean = c(sapply(as.data.frame(primary.set), mean))
-primary.set.sd = c(sapply(as.data.frame(primary.set), sd))
 
 # calculating z-scores for both I and II sets (a message on the screen)
 cat("Calculating z-scores... \n\n")
@@ -1080,24 +1077,29 @@ freq.table.both.sets = rbind(primary.set, secondary.set)
 #
 
 
-
-# calculating z-scores either of primary set, or of both sets
-if(z.scores.of.all.samples == FALSE) {
-  # function for z-scores scaling executed for primary.set
-  zscores.primary.set = scale(primary.set)
-  rownames(zscores.primary.set) = rownames(primary.set)
-  # function for z-scores scaling executed for secondary.set
-  zscores.secondary.set = 
-            scale(secondary.set, center=primary.set.mean, scale=primary.set.sd)
-  rownames(zscores.secondary.set) = rownames(secondary.set)
-  # the two tables with calculated z-scores should be put together
-  zscores.table.both.sets = rbind(zscores.primary.set, zscores.secondary.set)
-} else {
-  # the z-scores can be calculated on both sets as alternatively  
-  zscores.table.both.sets = scale(freq.table.both.sets)
-  zscores.table.both.sets = zscores.table.both.sets[,]
-  zscores.primary.set = zscores.table.both.sets[1:length(primary.set[,1]),]
-  zscores.secondary.set = zscores.table.both.sets[1:length(secondary.set[,1]),]  
+if(tolower(classification.method) == "delta") {
+        # a short message on the screen:
+        if(distance.measure == "CD") {
+                cat("Calculating classic Delta distances... \n")
+        }
+        if(distance.measure == "AL") {
+                cat("Calculating Argamon's Delta distances... \n")
+        }
+        if(distance.measure == "ED") {
+                cat("Calculating Eder's Delta distances... \n")
+        }
+        if(distance.measure == "ES") {
+                cat("Calculating Eder's Simple distances... \n")
+        }
+        if(distance.measure == "MH") {
+                cat("Calculating Mahattan distances... \n")
+        }
+        if(distance.measure == "CB") {
+                cat("Calculating Canberra distances... \n")
+        }
+        if(distance.measure == "EU") {
+                cat("Calculating Euclidean distances... \n")
+        }
 }
 
 
@@ -1136,120 +1138,12 @@ cat(mfw, " ")
 
 
 
-# FOR SOME REASON, IT IS NEEDED AT SOME POINT, even if this is obsolete
-distance.name.on.graph = "standard classification"
 
 
 
 
 
 
-
-
-
-# Delta in its various flavours
-
-perform.delta = function(training.set, 
-                         test.set, 
-                         distance.measure = "CD") {
-
-        
-        # a short message on the screen:
-        if(distance.measure == "CD") {
-                cat("Calculating classic Delta distances... \n")
-        }
-        if(distance.measure == "AL") {
-                cat("Calculating Argamon's Delta distances... \n")
-        }
-        if(distance.measure == "ED") {
-                cat("Calculating Eder's Delta distances... \n")
-        }
-        if(distance.measure == "ES") {
-                cat("Calculating Eder's Simple distances... \n")
-        }
-        if(distance.measure == "MH") {
-                cat("Calculating Mahattan distances... \n")
-        }
-        if(distance.measure == "CB") {
-                cat("Calculating Canberra distances... \n")
-        }
-        if(distance.measure == "EU") {
-                cat("Calculating Euclidean distances... \n")
-        }
-        
-        
-        
-        
-# first, combining the two sets into one matrix        
-zscores.table.both.sets = rbind(training.set, test.set)
-
-        
-# calculating classic Delta distances
-if(distance.measure == "CD") {
-  distance.name.on.graph = "Classic Delta distance"
-  distance.name.on.file = "Classic Delta"
-  distance.table = 
-            as.matrix(dist(zscores.table.both.sets[,1:mfw],
-            method="manhattan")) / mfw
-  }
-# calculating Argamon's "Linear Delta"
-if(distance.measure == "AL") {
-  distance.name.on.graph = "Argamon's Delta distance"
-  distance.name.on.file = "Argamon's Delta"
-  distance.table = 
-            as.matrix(dist(zscores.table.both.sets[,1:mfw],
-            method="euclidean")) / mfw
-  }
-# calculating Delta distances with Eder's modifications
-if(distance.measure == "ED") {
-  distance.name.on.graph = "Eder's Delta distance"
-  distance.name.on.file = "Eder's Delta"
-  zscores.plus.e.value = t(t(zscores.table.both.sets[,1:mfw])*((1+mfw:1)/mfw))
-  distance.table = as.matrix(dist(zscores.plus.e.value,method="manhattan"))
-  }
-# calculating Eder's Simple distance to a matrix distance.table
-if(distance.measure == "ES") {
-  distance.table = 
-         as.matrix(dist(sqrt(freq.table.both.sets[,1:mfw]),method="manhattan"))
-  distance.name.on.graph = "Eder's Simple distance"
-  distance.name.on.file = "Eder's Simple"
-  }
-# calculating Manhattan distance to a matrix distance.table
-if(distance.measure == "MH") {
-  distance.name.on.graph = "Manhattan distance"
-  distance.name.on.file = "Manhattan"
-  distance.table = 
-           as.matrix(dist(freq.table.both.sets[,1:mfw],method="manhattan"))
-  }
-# calculating Canberra distance to a matrix distance.table
-if(distance.measure == "CB") {
-  distance.name.on.graph = "Canberra distance"
-  distance.name.on.file = "Canberra"
-  distance.table = 
-           as.matrix(dist(freq.table.both.sets[,1:mfw],method="canberra"))
-  }
-# calculating Euclidean distance to a matrix distance.table
-if(distance.measure == "EU") {
-  distance.name.on.graph = "Euclidean distance"
-  distance.name.on.file = "Euclidean"
-  distance.table = 
-           as.matrix(dist(freq.table.both.sets[,1:mfw],method="euclid"))
-  }
-# replaces the names of the samples (the extension ".txt" is cut off)
-rownames(distance.table)=gsub("\\.txt$","",rownames(zscores.table.both.sets))
-colnames(distance.table)=gsub("\\.txt$","",rownames(zscores.table.both.sets))
-
-# #################################################
-# extracting candidates, drawing, printing, etc.
-
-# a selected area of the distance.table is needed, with colnames()
-no.of.possib = length(training.set[,1])
-no.of.candid = length(test.set[,1])
-selected.dist = 
-          as.matrix(distance.table[no.of.possib+1:no.of.candid,1:no.of.possib])
-
-return(selected.dist)
-}
 
 
 
@@ -1269,8 +1163,14 @@ return(selected.dist)
 
 
 if(tolower(classification.method) == "delta") {
-  selected.dist = perform.delta(zscores.primary.set, zscores.secondary.set, 
-                                distance.measure)
+  selected.dist = perform.delta(training.set = primary.set[,1:mfw], 
+                                test.set = secondary.set[,1:mfw],
+                                distance = distance.measure,
+								z.scores.both.sets = z.scores.of.all.samples)
+#
+# this should be provided by the function perform.delta (value: list of objects)
+distance.table = selected.dist
+#
 }
 
 
@@ -1425,16 +1325,17 @@ if(cv.folds > 0) {
   test.set = freq.table.both.sets.binded[test.samples,]
 
   
-  zscores.training.set = zscores.table.both.sets[training.samples,]
-  zscores.test.set = zscores.table.both.sets[test.samples,]
+ # zscores.training.set = zscores.table.both.sets[training.samples,]
+ # zscores.test.set = zscores.table.both.sets[test.samples,]
     
 
   if(tolower(classification.method) == "delta") {
     # zscores as a separate function should be applied here:
 #    current.zscores = scale(freq.table.both.sets.binded)
-    selected.dist1 = perform.delta(zscores.training.set,
-                                   zscores.test.set, 
-                                   distance.measure)
+    selected.dist1 = perform.delta(training.set,
+                                   test.set, 
+                                   distance = distance.measure,
+								   z.scores.both.sets = z.scores.of.all.samples)
   }
   if(tolower(classification.method) == "knn") {
     classification.results = perform.knn(training.set,test.set, k.value)
@@ -1578,8 +1479,8 @@ cat("\nGeneral attributive success:  ", total.no.of.correct.attrib, " of ",
 cat("\nMFWs from ",mfw.min," to ",mfw.max.original,
                   " @ increment ",mfw.incr,"\nCulling from ",culling.min,
                   " to ",culling.max," @ increment ",culling.incr,
-                  "\nPronouns deleted: ",delete.pronouns,"; ",
-                  distance.name.on.graph,"\n",file=outputfile,append=T,sep="")
+                  "\nPronouns deleted: ",delete.pronouns,"\n",
+				  file=outputfile,append=T,sep="")
 # additional empty line in outputfile (EOF)
 cat("\n",file=outputfile,append=T)
 
@@ -1592,8 +1493,7 @@ cat("\nGeneral attributive success:  ", total.no.of.correct.attrib, " of ",
 cat("\nMFWs from ",mfw.min," to ",mfw.max.original,
                   " @ increment ",mfw.incr,"\nCulling from ",culling.min,
                   " to ",culling.max," @ increment ",culling.incr,
-                  "\nPronouns deleted: ",delete.pronouns,"; ",
-                  distance.name.on.graph,"\n",sep="")
+                  "\nPronouns deleted: ",delete.pronouns,"\n",sep="")
 cat("\n")
 
 
@@ -1614,7 +1514,7 @@ success.rate = all.guesses
 frequencies.training.set = freq.I.set.0.culling
 frequencies.test.set = freq.II.set.0.culling
 frequencies.both.sets = freq.table.both.sets
-zscores.both.sets = zscores.table.both.sets
+#zscores.both.sets = zscores.table.both.sets
 features.actually.used = colnames(freq.table.both.sets[,1:mfw])
 features = mfw.list.of.all
 
@@ -1639,7 +1539,9 @@ if(exists("misclassified.samples")) {
 }
 if(exists("cross.validation.summary") & length(cross.validation.summary) >0 ) {
   attr(cross.validation.summary, "description") = "correctly guessed samples (cross-validation folds)"
-  class(cross.validation.summary) = c("stylo.data", "matrix")
+  if(dim(as.matrix(cross.validation.summary))[2] >1) {
+    class(cross.validation.summary) = c("stylo.data", "matrix")
+  }
 }
 if(exists("success.rate")) {
   attr(success.rate, "description") = "percentage of correctly guessed samples"

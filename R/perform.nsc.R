@@ -28,6 +28,9 @@ perform.nsc = function(training.set, test.set) {
   classification.results = pamr.predict(model,mydata$x,threshold=1)
   classification.results = as.character(classification.results)
   classification.results = classification.results[-c(1:length(classes.training))]
+  # let's see who gets linked to whom: adding names to the results
+  names(classification.results) = rownames(test.set)
+
 return(classification.results)
 }
 

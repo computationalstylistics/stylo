@@ -25,6 +25,9 @@ perform.knn = function(training.set, test.set, k.value=1) {
   #knn.cv(training.set[,-1],classes,k=k.value,prob=T)
   # get final results
   classification.results = as.character(classification.results)
+  # let's see who gets linked to whom: adding names to the results
+  names(classification.results) = rownames(test.set)
+
 return(classification.results)
 }
 

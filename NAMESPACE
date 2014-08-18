@@ -1,4 +1,5 @@
 
+
 import(
   tcltk, 
   tcltk2, 
@@ -26,6 +27,11 @@ export(
   make.samples,
   make.table.of.frequencies,
   oppose,
+  perform.delta,
+  perform.knn,
+  perform.naivebayes,
+  perform.nsc,
+  perform.svm,
   rolling.delta,
   stylo.default.settings,
   stylo.pronouns,

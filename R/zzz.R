@@ -1,4 +1,4 @@
 
 .onAttach <- function(lib, pkg) {
-    packageStartupMessage("stylo version: ", packageVersion("stylo"))
+    packageStartupMessage("stylo version: ", utils::packageVersion("stylo"))
 }
