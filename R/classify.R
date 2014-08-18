@@ -1074,9 +1074,9 @@ freq.table.both.sets = rbind(primary.set, secondary.set)
 # Entropy distance: experimental, but entirely available
 # (the results do not really differ than for typical word frequencies)
 #
-#A = t(t(freq.table.both.sets + 1) / colSums(freq.table.both.sets + 1))
-#B =t(t(log(freq.table.both.sets + 2)) / -(colSums(A * log(A))))
-#freq.table.both.sets = B
+# A = t(t(freq.table.both.sets + 1) / colSums(freq.table.both.sets + 1))
+# B = t(t(log(freq.table.both.sets + 2)) / -(colSums(A * log(A))))
+# freq.table.both.sets = B
 #
 
 
@@ -1097,8 +1097,8 @@ if(z.scores.of.all.samples == FALSE) {
   zscores.table.both.sets = scale(freq.table.both.sets)
   zscores.table.both.sets = zscores.table.both.sets[,]
   zscores.primary.set = zscores.table.both.sets[1:length(primary.set[,1]),]
-  zscores.secondary.set = zscores.table.both.sets[1:length(secondary.set[,1]),]
-  }
+  zscores.secondary.set = zscores.table.both.sets[1:length(secondary.set[,1]),]  
+}
 
 
 
@@ -1112,31 +1112,6 @@ if(z.scores.of.all.samples == FALSE) {
 # #################################################
 # the internal loop starts here (for i = mfw.min : mfw.max)
 # #################################################
-
-# a short message on the screen:
-if(distance.measure == "CD") {
-  cat("Calculating classic Delta distances... \n")
-  }
-if(distance.measure == "AL") {
-  cat("Calculating Argamon's Delta distances... \n")
-  }
-if(distance.measure == "ED") {
-  cat("Calculating Eder's Delta distances... \n")
-  }
-if(distance.measure == "ES") {
-  cat("Calculating Eder's Simple distances... \n")
-  }
-if(distance.measure == "MH") {
-  cat("Calculating Mahattan distances... \n")
-  }
-if(distance.measure == "CB") {
-  cat("Calculating Canberra distances... \n")
-  }
-if(distance.measure == "EU") {
-  cat("Calculating Euclidean distances... \n")
-  }
-
-
 
 
 
@@ -1174,9 +1149,37 @@ distance.name.on.graph = "standard classification"
 
 # Delta in its various flavours
 
-perform.delta = function(training.set, test.set, distance.measure = "CD") {
+perform.delta = function(training.set, 
+                         test.set, 
+                         distance.measure = "CD") {
 
-  
+        
+        # a short message on the screen:
+        if(distance.measure == "CD") {
+                cat("Calculating classic Delta distances... \n")
+        }
+        if(distance.measure == "AL") {
+                cat("Calculating Argamon's Delta distances... \n")
+        }
+        if(distance.measure == "ED") {
+                cat("Calculating Eder's Delta distances... \n")
+        }
+        if(distance.measure == "ES") {
+                cat("Calculating Eder's Simple distances... \n")
+        }
+        if(distance.measure == "MH") {
+                cat("Calculating Mahattan distances... \n")
+        }
+        if(distance.measure == "CB") {
+                cat("Calculating Canberra distances... \n")
+        }
+        if(distance.measure == "EU") {
+                cat("Calculating Euclidean distances... \n")
+        }
+        
+        
+        
+        
 # first, combining the two sets into one matrix        
 zscores.table.both.sets = rbind(training.set, test.set)
 
@@ -1251,108 +1254,13 @@ return(selected.dist)
 
 
 
-perform.knn = function(training.set, test.set, k.value=1) {
-  #kNN classification:
-  # library(class)
-  #
-  # training_set and test_set preparation; adding class labels to both sets
-  classes.training = gsub("_.*","",rownames(training.set))
-  classes.test = gsub("_.*","",rownames(test.set))
-  training.set = cbind(classes.training,training.set)
-  test.set = cbind(classes.test,test.set)
-  #
-  # classes that will be used for training the classifier (=classes of I set)
-  classes = factor(training.set[,1])
-  # training and classification
-  classification.results = knn(training.set[,-1],test.set[,-1],classes,k=k.value)
-  # cross-validation: 
-  #knn.cv(training.set[,-1],classes,k=k.value,prob=T)
-  # get final results
-  classification.results = as.character(classification.results)
-return(classification.results)
-}
-
-
-perform.naivebayes = function(training.set, test.set) {
-  # Naive Bayes classification:
-  #  library(e1071)
-  #
-  # training_set and test_set preparation; adding class labels to both sets
-  classes.training = gsub("_.*","",rownames(training.set))
-  classes.test = gsub("_.*","",rownames(test.set))
-  classes = c(classes.training, classes.test)
-  input.data = as.data.frame(rbind(training.set,test.set))
-  input.data = cbind(classes, input.data)
-  training.classes = c(1:length(training.set[,1]))
-  #
-  # training a model
-  model = naiveBayes(classes ~ ., data = input.data, subset = training.classes)
-  #
-  # testing the model on "new" data (i.e. the test.set)
-  classification.results = predict(model, input.data[,-1])
-  classification.results = as.character(classification.results)
-  classification.results = classification.results[-c(1:length(classes.training))]
-return(classification.results)
-}
-
-
-
-perform.svm = function(training.set, test.set) {
-  # Support Vector Machines classification:
-  # library(e1071)
-  #
-  # training_set and test_set preparation; adding class labels to both sets
-  classes.training = gsub("_.*","",rownames(training.set))
-  classes.test = gsub("_.*","",rownames(test.set))
-  classes = c(classes.training, classes.test)
-  input.data = as.data.frame(rbind(training.set,test.set))
-  input.data = cbind(classes, input.data)
-  training.classes = c(1:length(training.set[,1]))
-  #
-  # training a model
-#  model = svm(classes ~ ., data = input.data, subset = training.classes)
-  model = svm(classes ~ ., data = input.data, subset = training.classes, 
-                 kernel = svm.kernel, degree = svm.degree, coef0 = svm.coef0, 
-                 cost = svm.cost)
-  #
-  # testing the model on "new" data (i.e. the test.set)
-  classification.results = predict(model, input.data[,-1])
-  classification.results = as.character(classification.results)
-  classification.results = classification.results[-c(1:length(classes.training))]
-  #plot(cmdscale(dist(input.data[,-1])),col=as.integer(input.data[,1]),pch=c("o","+"))
-return(classification.results)
-}
 
 
 
 
 
 
-perform.nsc = function(training.set, test.set) {
-# Nearest Shrunken Centroid classification:
-  #  library(pamr)
-  #
-  # training_set and test_set preparation; adding class labels to both sets
-  classes.training = gsub("_.*","",rownames(training.set))
-  classes.test = gsub("_.*","",rownames(test.set))
-  classes = c(classes.training, classes.test)
-  input.data = as.data.frame(rbind(training.set,test.set))
-  training.classes = c(1:length(training.set[,1]))
-  mydata=list(x = t(input.data),
-              y = as.factor(classes),
-              geneid = as.character(1:length(colnames(training.set))), 
-              genenames = colnames(training.set)
-              )
-  # training a model
-  model = pamr.train(mydata,sample.subset=c(1:length(classes.training)))
-# getting the most discriminative features
-#  the.features = pamr.listgenes(model,mydata,threshold=5,genenames=TRUE)[,2]
-  # testing the model on "new" data (i.e. the test.set)
-  classification.results = pamr.predict(model,mydata$x,threshold=1)
-  classification.results = as.character(classification.results)
-  classification.results = classification.results[-c(1:length(classes.training))]
-return(classification.results)
-}
+
 
 
 

@@ -32,7 +32,10 @@ export(
   stylo,
   txt.to.features,
   txt.to.words.ext,
-  txt.to.words
+  txt.to.words,
+  zeta.chisquare,
+  zeta.craig,
+  zeta.eder
 )
 
 S3method(print, stylo.results)
