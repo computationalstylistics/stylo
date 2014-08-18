@@ -1052,14 +1052,7 @@ cat("culling @ ", current.culling,"\t","available words ",
 
 
 
-# #################################################
-# z-scores calcutations
-# #################################################
-
-
-
-# calculating z-scores for both I and II sets (a message on the screen)
-cat("Calculating z-scores... \n\n")
+                  
 
 
 # an additional table composed of relative word frequencies 
@@ -1163,13 +1156,13 @@ cat(mfw, " ")
 
 
 if(tolower(classification.method) == "delta") {
-  selected.dist = perform.delta(training.set = primary.set[,1:mfw], 
+  classification.results = perform.delta(training.set = primary.set[,1:mfw], 
                                 test.set = secondary.set[,1:mfw],
                                 distance = distance.measure,
-								z.scores.both.sets = z.scores.of.all.samples)
+                                z.scores.both.sets = z.scores.of.all.samples)
 #
 # this should be provided by the function perform.delta (value: list of objects)
-distance.table = selected.dist
+#distance.table = "sorry! temporarily out of order"
 #
 }
 
@@ -1210,16 +1203,16 @@ classes.test = gsub("_.*","",rownames(secondary.set))
 # returns the ranking of the most likely candidates as a list
 if(final.ranking.of.candidates == TRUE) {
     cat("\n\n\n",file=outputfile,append=T)
-    if(tolower(classification.method) == "delta") {
-      make.ranking.of.candidates(selected.dist,number.of.candidates)
-    } else {
+#    if(tolower(classification.method) == "delta") {
+#      make.ranking.of.candidates(selected.dist,number.of.candidates)
+#    } else {
       misclassified.samples = 
                    paste(rownames(secondary.set), "\t-->\t",
                    classification.results)[classes.test!=classification.results]
       cat(misclassified.samples, file=outputfile, append=T, sep="\n") 
-      # temporarily (the results should be maed available, eventually)
+      # temporarily (the results should be made available, eventually)
       rm(misclassified.samples)
-    }
+#    }
 }
 
 
@@ -1227,12 +1220,12 @@ if(final.ranking.of.candidates == TRUE) {
 
 # returns the number of correct attributions
 if(how.many.correct.attributions == TRUE) {
-    if(tolower(classification.method) == "delta") {
-      no.of.correct.attrib = make.number.of.correct.attributions(selected.dist)
-    } else {
+#    if(tolower(classification.method) == "delta") {
+#      no.of.correct.attrib = make.number.of.correct.attributions(selected.dist)
+#    } else {
       no.of.correct.attrib = sum(as.numeric(classes.test == 
                                  classification.results))
-    }
+#    }
     total.no.of.correct.attrib = 
          c(total.no.of.correct.attrib, no.of.correct.attrib)
     total.no.of.possible.attrib = 
@@ -1330,12 +1323,10 @@ if(cv.folds > 0) {
     
 
   if(tolower(classification.method) == "delta") {
-    # zscores as a separate function should be applied here:
-#    current.zscores = scale(freq.table.both.sets.binded)
-    selected.dist1 = perform.delta(training.set,
+    classification.results = perform.delta(training.set,
                                    test.set, 
                                    distance = distance.measure,
-								   z.scores.both.sets = z.scores.of.all.samples)
+                                   z.scores.both.sets = z.scores.of.all.samples)
   }
   if(tolower(classification.method) == "knn") {
     classification.results = perform.knn(training.set,test.set, k.value)
@@ -1361,12 +1352,12 @@ if(cv.folds > 0) {
   
     # returns the number of correct attributions
     if(how.many.correct.attributions == TRUE) {
-        if(tolower(classification.method) == "delta") {
-          no.of.correct.attrib = make.number.of.correct.attributions(selected.dist1)
-        } else {
+#        if(tolower(classification.method) == "delta") {
+#          no.of.correct.attrib = make.number.of.correct.attributions(selected.dist1)
+#        } else {
           no.of.correct.attrib = sum(as.numeric(classes.test == 
                                      classification.results))
-        }
+#        }
       # 
       # getting the max. number of samples that couold be guessed
       perfect.guessing.cv = sum(as.numeric(classes.test %in% classes.training))

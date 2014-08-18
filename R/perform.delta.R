@@ -1,29 +1,48 @@
 # Delta in its various flavours
 
 perform.delta = function(training.set, 
-                         test.set, 
+                         test.set,
+                         classes.training.set = NULL,
+                         classes.test.set = NULL,
                          distance = "CD",
-						 z.scores.both.sets = TRUE) {
+                         z.scores.both.sets = TRUE) {
+#
+
+# starting a variable
+classification.results = c()
+
+# getting the number of features (e.g. MFWs)
+no.of.cols = length(training.set[1,])
+
+# checking if the two sets are of the same size
+if(length(test.set[1,]) != no.of.cols) {
+        stop("training set and test set should the same number of variables!")
+}
+
+
+# assigning classes, if not specified
+if(length(classes.training.set) != length(rownames(training.set))) {
+        classes.training.set = c(gsub("_.*", "", rownames(training.set)))
+}
+
+if(length(classes.test.set) != length(rownames(test.set))) {
+        classes.test.set = c(gsub("_.*", "", rownames(test.set)))
+}
+
 #
 
 
-no.of.variables = length(training.set[1,])
-
-
-#if(length(training.set[1,]) != no.of.variables) {
-#stop("!!!")
-#}
 
 
 # calculating z-scores either of training set, or of both sets
 if(z.scores.both.sets == FALSE) {
-  # mean and standard dev. for each word (in training set)
+  # mean and standard dev. for each word (in the training set)
   training.set.mean = c(sapply(as.data.frame(training.set), mean))
   training.set.sd = c(sapply(as.data.frame(training.set), sd))
-  # function for z-scores scaling executed for training.set
+  # z-scores for training.set
   zscores.training.set = scale(training.set)
   rownames(zscores.training.set) = rownames(training.set)
-  # function for z-scores scaling executed for test.set
+  # z-scores for test.set, using means and st.devs of the training set
   zscores.test.set = 
             scale(test.set, center=training.set.mean, scale=training.set.sd)
   rownames(zscores.test.set) = rownames(test.set)
@@ -32,6 +51,7 @@ if(z.scores.both.sets == FALSE) {
 } else {
   # the z-scores can be calculated on both sets as alternatively  
   zscores.table.both.sets = scale(rbind(training.set, test.set))
+  # a dirty trick to get the values and nothing else
   zscores.table.both.sets = zscores.table.both.sets[,]
 }
 
@@ -41,21 +61,23 @@ freq.table.both.sets = rbind(training.set, test.set)
 
 
 
+
+
 # calculating classic Delta distances
 if(distance == "CD") {
   distance.table = 
             as.matrix(dist(zscores.table.both.sets,
-            method="manhattan")) / no.of.variables
+            method="manhattan")) / no.of.cols
   }
 # calculating Argamon's "Linear Delta"
 if(distance == "AL") {
   distance.table = 
             as.matrix(dist(zscores.table.both.sets,
-            method="euclidean")) / no.of.variables
+            method="euclidean")) / no.of.cols
   }
 # calculating Delta distances with Eder's modifications
 if(distance == "ED") {
-  zscores.plus.e.value = t( t(zscores.table.both.sets)*((1+(no.of.variables:1))/no.of.variables) )
+  zscores.plus.e.value = t( t(zscores.table.both.sets) * ((1+(no.of.cols:1)) / no.of.cols) )
   distance.table = as.matrix(dist(zscores.plus.e.value,method="manhattan"))
   }
 # calculating Eder's Simple distance to a matrix distance.table
@@ -78,19 +100,34 @@ if(distance == "EU") {
   distance.table = 
            as.matrix(dist(freq.table.both.sets,method="euclid"))
   }
-# replaces the names of the samples (the extension ".txt" is cut off)
-#rownames(distance.table)=gsub("\\.txt$","",rownames(zscores.table.both.sets))
-#colnames(distance.table)=gsub("\\.txt$","",rownames(zscores.table.both.sets))
+#
 
-# #################################################
-# extracting candidates, drawing, printing, etc.
 
-# a selected area of the distance.table is needed, with colnames()
-no.of.possib = length(training.set[,1])
-no.of.candid = length(test.set[,1])
+
+
+# selecting an area of the distance table containig test samples (rows),
+# contrasted against training samples (columns)
+no.of.candid = length(training.set[,1])
+no.of.possib = length(test.set[,1])
 selected.dist = 
-          as.matrix(distance.table[no.of.possib+1:no.of.candid,1:no.of.possib])
+          as.matrix(distance.table[no.of.candid+1:no.of.possib,1:no.of.candid])
+# assigning class ID to train samples
+colnames(selected.dist) = classes.training.set
+#
 
-return(selected.dist)
+
+
+for(h in 1:length(selected.dist[,1])) {
+        ranked.c = order(selected.dist[h,])[1]
+        current.sample = classes.training.set[ranked.c]
+        classification.results = c(classification.results, current.sample)
+}
+
+names(classification.results) = rownames(test.set)
+
+
+
+
+return(classification.results)
 }
 

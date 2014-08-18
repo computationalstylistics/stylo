@@ -171,7 +171,6 @@ splitting.rule = variables$splitting.rule
 preserve.case = variables$preserve.case
 encoding = variables$encoding
 stop.words = variables$stop.words
-
 sample.overlap = variables$sample.overlap
 number.of.samples = variables$number.of.samples
 
