@@ -4,6 +4,10 @@
 
 
 
+== version 0.5.8, ????/??/??
+ * bug in load.corpus.and.parse() fixed
+
+
 == version 0.5.7, 2014/08/13
  * culling implemented as a separate function
  * custom stop words deletion: delete.stop.words()
