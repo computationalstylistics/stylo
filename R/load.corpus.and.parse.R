@@ -49,6 +49,7 @@ function(files,
   if(sampling == "normal.sampling") {
     loaded.corpus = make.samples(loaded.corpus,
                                  sample.size,sampling,
+                                 sample.overlap,
                                  sampling.with.replacement)
   }
   # split into chars (if applicable), agglutinate into n-grams
