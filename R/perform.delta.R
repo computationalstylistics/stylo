@@ -5,11 +5,11 @@ perform.delta = function(training.set,
                          classes.training.set = NULL,
                          classes.test.set = NULL,
                          distance = "CD",
+                         no.of.candidates = 3,
                          z.scores.both.sets = TRUE) {
 #
 
-# starting a variable
-classification.results = c()
+
 
 # getting the number of features (e.g. MFWs)
 no.of.cols = length(training.set[1,])
@@ -117,16 +117,36 @@ colnames(selected.dist) = classes.training.set
 
 
 
+if(no.of.candidates > length(classes.training.set)) {
+        no.of.candidates = classes.training.set
+}
+
+
+# starting final variables
+classification.results = c()
+classification.scores = c()
+classification.rankings = c()
+
 for(h in 1:length(selected.dist[,1])) {
-        ranked.c = order(selected.dist[h,])[1]
-        current.sample = classes.training.set[ranked.c]
+        ranked.c = order(selected.dist[h,])[1:no.of.candidates]
+        current.sample = classes.training.set[ranked.c[1]]
         classification.results = c(classification.results, current.sample)
+        #
+        current.ranking = classes.training.set[ranked.c]
+        current.scores = selected.dist[h,ranked.c]
+        classification.scores = rbind(classification.scores, current.scores)
+        classification.rankings = rbind(classification.rankings, current.ranking)
 }
 
 names(classification.results) = rownames(test.set)
+rownames(classification.rankings) = rownames(test.set)
+rownames(classification.scores) = rownames(test.set)
+colnames(classification.rankings) = 1:no.of.candidates
+colnames(classification.scores) = 1:no.of.candidates
 
-
-
+attr(classification.results, "distance.table") = selected.dist
+attr(classification.results, "rankings") = classification.rankings
+attr(classification.results, "scores") = classification.scores
 
 return(classification.results)
 }

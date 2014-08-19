@@ -11,7 +11,7 @@
 
 perform.svm = function(training.set, 
                        test.set,
-					   class.probabilities = FALSE,
+                       class.probabilities = FALSE,
                        svm.kernel = "linear",
                        svm.degree = 3,
                        svm.coef0 = 0,
@@ -31,14 +31,14 @@ perform.svm = function(training.set,
   # training a model
   model = svm(classes ~ ., data = input.data, subset = training.classes, 
                  kernel = svm.kernel, degree = svm.degree, coef0 = svm.coef0, 
-                 cost = svm.cost, probability = class.probabilities)
+                 cost = svm.cost, probability = F)
   #
   # testing the model on "new" data (i.e. the test.set)
-  classification.results = predict(model, input.data[,-1], probability = class.probabilities)
-  classification.results = as.character(classification.results)
-  classification.results = classification.results[-c(1:length(classes.training))]
+  classification.results = predict(model, input.data[,-1], decision.values=T,probability = F)
+#  classification.results = as.character(classification.results)
+#  classification.results = classification.results[-c(1:length(classes.training))]
   # let's see who gets linked to whom: adding names to the results
-  names(classification.results) = rownames(test.set)
+#  names(classification.results) = rownames(test.set)
 return(classification.results)
 }
 
