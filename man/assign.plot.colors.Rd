@@ -5,7 +5,7 @@
 Function that assigns unique colors to each class represented in a corpus: used for graph auto-coloring.
 }
 \usage{
-assign.plot.colors(labels, col = "colors")
+assign.plot.colors(labels, col = "colors", opacity = 1)
 }
 \arguments{
 \item{labels}{a vector containing the names of the samples in a corpus; 
@@ -17,6 +17,7 @@ where the classes are M(ale) and F(emale) according to authors' gender. Note tha
 \item{col}{an optional argument specifying the color palette to be used: "colors" for 
 full-color output (default), "greyscale" for greyscale (useful 
 for preparing publishable pictures), and "black", if no colors should be used.}
+\item{opacity}{optional argument to set transparency/opacity of the colors. 0 means full transparency, 1 means full opacity (default).}
 }
 \details{
 Function for graph auto-coloring; depending on the user's choice 
