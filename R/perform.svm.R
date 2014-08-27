@@ -46,6 +46,11 @@ perform.svm = function(training.set,
   input.data = as.data.frame(rbind(training.set,test.set))
   input.data = cbind(classes, input.data)
   training.classes = c(1:length(training.set[,1]))
+  
+  # an error is produced when variable names contain three dots: "..."
+  # just in case, then:
+  colnames(input.data) = gsub("\\.\\.\\.","^^^",colnames(input.data))
+  colnames(training.set) = gsub("\\.\\.\\.","^^^",colnames(training.set))
   #
   # training a model
   # a. default/custom parameters (faster but less accurate)
