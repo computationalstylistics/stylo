@@ -1,16 +1,16 @@
 
 
 
-zeta.chisquare = function(comparison) {
+zeta.chisquare = function(input.data) {
         
-        differences = comparison[,1] - comparison[,2]
+        differences = input.data[,1] - input.data[,2]
         positive.values = differences[differences > 0]
         negative.values = differences[differences < 0]
         
         # selecting positive differences (=words preferred by primary author)
-        positive.differences = comparison[names(positive.values),]
+        positive.differences = input.data[names(positive.values),]
         # selecting negative differences (=words avoided by primary author)
-        negative.differences = comparison[names(negative.values),]
+        negative.differences = input.data[names(negative.values),]
         
         # preferred words
         b = NULL

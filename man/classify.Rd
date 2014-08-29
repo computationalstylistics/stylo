@@ -32,7 +32,7 @@ classify(gui = TRUE, training.frequencies = NULL, test.frequencies = NULL,
 
   \item{test.frequencies}{using this optional argument, one can 
     load a custom table containing frequencies/counts for the 
-    test set). Further details: immediately above.}
+    test set. Further details: immediately above.}
 
   \item{training.corpus}{another option is to pass a pre-processed corpus
     as an argument (here: the training set). It is assumed that this object 

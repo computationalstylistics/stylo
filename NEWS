@@ -6,6 +6,10 @@
 
 == version 0.5.8, ????/??/??
  * bug in load.corpus.and.parse() fixed
+ * classification procedures as separate functions:
+   perform.delta(), perform.svm(), perform.knn(),
+   perform.naivebayes(), perform.nsc()
+ * classification output enhanced
 
 
 == version 0.5.7, 2014/08/13
