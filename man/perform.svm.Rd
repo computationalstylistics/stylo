@@ -7,15 +7,15 @@ the Support Vector Machines procedure provided by the package \code{e1071}.
 }
 \usage{
 perform.svm(training.set, 
-              test.set, 
-              classes.training.set = NULL, 
-              classes.test.set = NULL, 
-              no.of.candidates = 3, 
-              tune.parameters = FALSE,
-              svm.kernel = "linear",
-              svm.degree = 3, 
-              svm.coef0 = 0, 
-              svm.cost = 1) }
+            test.set, 
+            classes.training.set = NULL, 
+            classes.test.set = NULL, 
+            no.of.candidates = 3, 
+            tune.parameters = FALSE,
+            svm.kernel = "linear",
+            svm.degree = 3, 
+            svm.coef0 = 0, 
+            svm.cost = 1) }
 \arguments{
 \item{training.set}{a table containing frequencies/counts for several
           variables -- e.g. most frequent words -- across a number of text
@@ -28,10 +28,10 @@ perform.svm(training.set,
           training set.}
 
 \item{classes.training.set}{a vector containing class identifiers for the
-          training set. When missing, the rownames of the training set
+          training set. When missing, the row names of the training set
           table will be used; the assumed classes are the strings of 
-          characters followed by the first underscore. 
-          Consider the following examples: c("Sterne_Tristram",
+          characters followed by the first underscore. Consider the following 
+          examples: c("Sterne_Tristram",
           "Sterne_Sentimental", "Fielding_Tom", ...), where the classes
           are the authors' names, and c("M_Joyce_Dubliners",
           "F_Woolf_Night_and_day", "M_Conrad_Lord_Jim", ...), where the
@@ -40,7 +40,7 @@ perform.svm(training.set,
           sample's name will be included in the class label.}
 
 \item{classes.test.set}{a vector containing class identifiers for the
-          test set. When missing, the rownames of the test set
+          test set. When missing, the row names of the test set
           table will be used (see above).}
 
 \item{no.of.candidates}{how many nearest neighbors will be computed for

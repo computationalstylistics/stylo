@@ -4,7 +4,7 @@
 \description{
 This is a function for comparing two sets of texts; unlike keywords analysis,
 it this method the goal is to split input texts into equal-sized slices, 
-and to check the appearence of particular words over the slices. Number 
+and to check the appearance of particular words over the slices. Number 
 of slices in which a given word appeared in the subcorpus A and B is then
 compared using Craig's formula, which is based on original Zeta as developed
 by Burrows (Craig and Kinney 2009, Burrows 2007).
@@ -18,16 +18,17 @@ zeta.craig(input.data, filter.threshold)
 \item{filter.threshold}{this parameter (default 0.1) gets rid of words of 
           weak discrimination strength; the higher the number, the
           less words appear in the final wordlists. It does not normally 
-          exceed 0.5. In original Craig's Zeta, no threshold is used; 
-          instead, 500 top avoided and 500 top preferred words are used.}
+          exceed 0.5. In original Craig's Zeta, no threshold is used: 
+          instead, the results contain the fixed number of 500 top avoided 
+          and 500 top preferred words.}
 
 }
 
 \value{
 The function returns a list of two elements: the first contains words (or 
 other units, like n-grams) statistically preferred by the authors
-of the primary subcorpus, while the second element contains words of avoided. 
-Since this measure is symmetrical, the preferred words are ipso facto 
+of the primary subcorpus, while the second element contains avoided words. 
+Since the applied measure is symmetrical, the preferred words are ipso facto 
 avoided by the secondary authors, and vice versa.
 }
 \author{

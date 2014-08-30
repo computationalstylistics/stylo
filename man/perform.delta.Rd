@@ -3,14 +3,15 @@
 \title{Distance-based classifier}
 \description{
 Delta: a simple yet effective machine-learning method of supervised classification,
-introduced by Burrows (2002). It computes a table of disances between samples, 
-and compares each sample from the test set with training samples, in order 
+introduced by Burrows (2002). It computes a table of distances between samples, 
+and compares each sample from the test set against training samples, in order 
 to find its nearest neighbor. Apart from classic Delta, a number of alternative 
-distance measures can be used.
+distance measures are supported by this function.
 }
 \usage{
 perform.delta(training.set, test.set, 
-              classes.training.set = NULL, classes.test.set = NULL, 
+              classes.training.set = NULL, 
+              classes.test.set = NULL, 
               distance = "CD", no.of.candidates = 3, 
               z.scores.both.sets = TRUE) }
 \arguments{
@@ -25,10 +26,10 @@ perform.delta(training.set, test.set,
           training set.}
 
 \item{classes.training.set}{a vector containing class identifiers for the
-          training set. When missing, the rownames of the training set
+          training set. When missing, the row names of the training set
           table will be used; the assumed classes are the strings of 
-          characters followed by the first underscore. 
-          Consider the following examples: c("Sterne_Tristram",
+          characters followed by the first underscore. Consider the following 
+          examples: c("Sterne_Tristram",
           "Sterne_Sentimental", "Fielding_Tom", ...), where the classes
           are the authors' names, and c("M_Joyce_Dubliners",
           "F_Woolf_Night_and_day", "M_Conrad_Lord_Jim", ...), where the
@@ -37,20 +38,21 @@ perform.delta(training.set, test.set,
           sample's name will be included in the class label.}
 
 \item{classes.test.set}{a vector containing class identifiers for the
-          test set. When missing, the rownames of the test set
+          test set. When missing, the row names of the test set
           table will be used (see above).}
 
-\item{distance}{a kernel used for computing the distances. Available
-          options so far: "CD" (Burrow's Delta, default), "AD" (Argamon's
-          Linear Delta), "ED" (Eder's Delta), "ES" (Eder's Simple distance),
-          "CB" (Canberra Distance), "MH" (Manhattan Distance), "EU"
-          (Euclidean Distance).}
+\item{distance}{a kernel (i.e. a distance measure) used for computing 
+          similarities between texts. Available options so far: "CD" 
+          (Burrow's Delta, default), "AD" (Argamon's Linear Delta), 
+          "ED" (Eder's Delta), "ES" (Eder's Simple distance), 
+          "CB" (Canberra Distance), "MH" (Manhattan 
+          Distance), "EU" (Euclidean Distance).}
 
 \item{no.of.candidates}{how many nearest neighbors will be computed for
           each test sample (default = 3).}
 
 \item{z.scores.both.sets}{many distance measures convert input variables into 
-          z-scores before computing any tables of distances. Such a variable
+          z-scores before computing any distances. Such a variable
           weighting is highly dependent on the number of input texts. One might
           choose either training set only to scale the variables, or the entire
           corpus (both sets). The latter is default.}

@@ -23,10 +23,10 @@ perform.nsc(training.set,
           training set.}
 
 \item{classes.training.set}{a vector containing class identifiers for the
-          training set. When missing, the rownames of the training set
+          training set. When missing, the row names of the training set
           table will be used; the assumed classes are the strings of 
-          characters followed by the first underscore. 
-          Consider the following examples: c("Sterne_Tristram",
+          characters followed by the first underscore. Consider the following 
+          examples: c("Sterne_Tristram",
           "Sterne_Sentimental", "Fielding_Tom", ...), where the classes
           are the authors' names, and c("M_Joyce_Dubliners",
           "F_Woolf_Night_and_day", "M_Conrad_Lord_Jim", ...), where the
@@ -35,7 +35,7 @@ perform.nsc(training.set,
           sample's name will be included in the class label.}
 
 \item{classes.test.set}{a vector containing class identifiers for the
-          test set. When missing, the rownames of the test set
+          test set. When missing, the row names of the test set
           table will be used (see above).}
 
 \item{no.of.candidates}{how many nearest neighbors will be computed for
