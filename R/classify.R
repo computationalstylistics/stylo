@@ -236,68 +236,6 @@ if(number.of.candidates < 1) {
 
 
 
-# #################################################
-# FUNCTIONS:
-
-
-
-
-
-
-
-# #################################################
-# Function for preparing and printing
-# the final ranking of the least unlikely authors
-# for each text in a given table of distances.
-# Arguments: 1. table with distances, 2. number of candidates to be displayed
-# #################################################
-
-# what about getting back to this old version in which ALL candidates
-# were listed, instead of listing only those misclassified?
-# it can be done as an option
-
-make.ranking.of.candidates = function(dist.matrix,candidates) {
-  for(h in 1:length(dist.matrix[,1])) {
-  ranked.candidates = order(dist.matrix[h,])
-  current.sample = c(gsub("_.*","",colnames(dist.matrix)))[ranked.candidates]
-    if((gsub("_.*","",rownames(dist.matrix)))[h] != current.sample[1]) {
-  	cat(c(c(rownames(dist.matrix))[h]," ", "-->", " ", 
-      current.sample[1:candidates], " (delta score:", 
-      round(dist.matrix[h,ranked.candidates[1:candidates]],4), ")",
-      "\n"),file=outputfile,append=T)
-    }
-  }
-}
-
-
-
-# #################################################
-# Function for preparing and printing
-# the number of correct attributions
-# this is a variant of the above function make.ranking.of.candidates
-# Argument: table of distances
-# #################################################
-
-make.number.of.correct.attributions = function(dist.matrix) {
-  corr.attrib = 0
-  for(h in 1:length(dist.matrix[,1])) {
-  ranked.c = order(dist.matrix[h,])
-  current.sample = c(gsub("_.*","",colnames(dist.matrix)))[ranked.c]
-    if((gsub("_.*","",rownames(dist.matrix)))[h] == current.sample[1]) {
-    corr.attrib = corr.attrib + 1
-    }
-  }
-# the result of the function:
-return(corr.attrib)
-}
-
-# #############################################################################
-
-
-
-
-
-
 
 
 
@@ -1203,9 +1141,6 @@ classes.test = gsub("_.*","",rownames(secondary.set))
 # returns the ranking of the most likely candidates as a list
 if(final.ranking.of.candidates == TRUE) {
     cat("\n\n\n",file=outputfile,append=T)
-#    if(tolower(classification.method) == "delta") {
-#      make.ranking.of.candidates(selected.dist,number.of.candidates)
-#    } else {
       misclassified.samples = 
                    paste(rownames(secondary.set), "\t-->\t",
                    classification.results)[classes.test!=classification.results]
@@ -1220,12 +1155,8 @@ if(final.ranking.of.candidates == TRUE) {
 
 # returns the number of correct attributions
 if(how.many.correct.attributions == TRUE) {
-#    if(tolower(classification.method) == "delta") {
-#      no.of.correct.attrib = make.number.of.correct.attributions(selected.dist)
-#    } else {
-      no.of.correct.attrib = sum(as.numeric(classes.test == 
+    no.of.correct.attrib = sum(as.numeric(classes.test == 
                                  classification.results))
-#    }
     total.no.of.correct.attrib = 
          c(total.no.of.correct.attrib, no.of.correct.attrib)
     total.no.of.possible.attrib = 
@@ -1352,13 +1283,8 @@ if(cv.folds > 0) {
   
     # returns the number of correct attributions
     if(how.many.correct.attributions == TRUE) {
-#        if(tolower(classification.method) == "delta") {
-#          no.of.correct.attrib = make.number.of.correct.attributions(selected.dist1)
-#        } else {
           no.of.correct.attrib = sum(as.numeric(classes.test == 
                                      classification.results))
-#        }
-      # 
       # getting the max. number of samples that couold be guessed
       perfect.guessing.cv = sum(as.numeric(classes.test %in% classes.training))
       cat("\n",file=outputfile,append=T)
