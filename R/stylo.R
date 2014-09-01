@@ -16,8 +16,7 @@ function(gui = TRUE,
          parsed.corpus = NULL,
          features = NULL,
          path = NULL, 
-         corpus.dir = "corpus",
-         network = FALSE, ...) {
+         corpus.dir = "corpus", ...) {
 
 
 
@@ -1488,7 +1487,6 @@ all.connections = all.connections + connections
 }
 ##############################################
 ##############################################
-
 
 
 

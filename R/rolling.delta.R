@@ -6,7 +6,7 @@
 
 
 rolling.delta <-
-function(gui = TRUE,path = NULL,
+function(gui = TRUE, path = NULL,
          primary.corpus.dir = "primary_set",
          secondary.corpus.dir = "secondary_set") {
 
@@ -17,7 +17,7 @@ function(gui = TRUE,path = NULL,
 # first of all, retrieve the current path name
 original.path = getwd()
 # then check if anywone wants to change the working dir
-if(is.character(path) == TRUE & nchar(path) > 0) {
+if(is.character(path) == TRUE & length(path) > 0) {
   # checking if the desired file exists and if it is a directory
   if(file.exists(path) == TRUE & file.info(path)[2] == TRUE) {
   # if yes, then set the new working directory

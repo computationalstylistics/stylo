@@ -6,10 +6,13 @@
 
 == version 0.5.8, ????/??/??
  * bug in load.corpus.and.parse() fixed
+ * bug in rolling.delta() fixed
+ * network related bug in stylo() neutralized
  * classification procedures as separate functions:
    perform.delta(), perform.svm(), perform.knn(),
    perform.naivebayes(), perform.nsc()
  * classification output enhanced
+ * doc files for new functions added
 
 
 == version 0.5.7, 2014/08/13
