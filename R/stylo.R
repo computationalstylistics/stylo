@@ -855,7 +855,8 @@ for(j in (culling.min/culling.incr):(culling.max/culling.incr)) {
         current.culling = j * culling.incr
 
         # applying culling
-        table.with.all.freqs = culling(frequencies.0.culling, current.culling)
+        table.with.all.freqs = perform.culling(frequencies.0.culling, 
+                                        current.culling)
 
 
         # additionally, deleting pronouns (if applicable)

@@ -522,7 +522,7 @@ if(corpus.exists == FALSE) {
 
   # Checking whether required files and subdirectories exist
   if(file.exists(training.corpus.dir) == FALSE | file.exists(test.corpus.dir) == FALSE) {
-    cat("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
+    cat("\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
         "Working directory should contain two subdirectories: 
         \"",training.corpus.dir,"\" and \"",test.corpus.dir,"\"\n",
         "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
@@ -533,7 +533,7 @@ if(corpus.exists == FALSE) {
   }
   # Checking if the subdirectories contain any stuff
   if(length(filenames.primary.set) <2 | length(filenames.secondary.set) <2) {
-    cat("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
+    cat("\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
         "Both subdirectories \"",training.corpus.dir,"\" and \"",
         test.corpus.dir,"\" should contain at least two text samples!\n",
         "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
@@ -909,7 +909,8 @@ for(j in (culling.min/culling.incr):(culling.max/culling.incr)) {
         # of joint primary and secondary sets
         if(culling.of.all.samples == FALSE) {
                 # applying the function culling to the I set
-                primary.set = culling(freq.I.set.0.culling, current.culling)
+                primary.set = perform.culling(freq.I.set.0.culling,  
+                                             current.culling)
                 # selecting the same variables from the II set
                 secondary.set = freq.II.set.0.culling[,colnames(primary.set)]
         } else {
@@ -917,8 +918,8 @@ for(j in (culling.min/culling.incr):(culling.max/culling.incr)) {
                 freq.table.both.sets = rbind(freq.I.set.0.culling, 
                                              freq.II.set.0.culling)
                 # applying the culling function to the combined table
-                freq.table.both.sets = culling(freq.table.both.sets, 
-                                               current.culling)
+                freq.table.both.sets = perform.culling(freq.table.both.sets, 
+                                             current.culling)
                 # split the combined table into two sets again
                 primary.set = freq.table.both.sets[rownames(freq.I.set.0.culling),]
                 secondary.set = freq.table.both.sets[rownames(freq.II.set.0.culling),]

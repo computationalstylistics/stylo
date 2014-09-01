@@ -24,7 +24,7 @@ delete.stop.words(input.data, stop.words = NULL)
 Maciej Eder
 }
 \seealso{
-  \code{\link{stylo.pronouns}}, \code{\link{culling}}
+  \code{\link{stylo.pronouns}}, \code{\link{perform.culling}}
 }
 \examples{
 # (i) excluding stop words from a vector
