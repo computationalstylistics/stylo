@@ -8,11 +8,13 @@
 
 make.samples <-
 function(tokenized.text,
-            sample.size=10000,
-            sampling="no.sampling",
+            sample.size = 10000,
+            sampling = "no.sampling",
             sample.overlap = 0,
             number.of.samples = 1,
             sampling.with.replacement=FALSE){
+
+
   # checking the format of input data (vector? list?); converting to a list
   if(is.list(tokenized.text) == FALSE) {
     tokenized.text = list(tokenized.text) 
@@ -51,7 +53,7 @@ function(tokenized.text,
     if (sampling == "normal.sampling"){
       # initialize variables to sample the text
       text.length = length(current.text)
-      number.of.samples = floor(text.length/(sample.size-sample.overlap))
+      number.of.samples = floor((text.length-sample.overlap)/(sample.size-sample.overlap))
       cat(names(tokenized.text)[i],"\n")
       cat(paste("\t", "- text length (in words): ", text.length, "\n", sep=""))
       cat(paste("\t", "- nr. of samples: ", number.of.samples, "\n", sep=""))

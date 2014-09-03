@@ -21,7 +21,7 @@ for a detailed explanation what the particular variables are for
 and how to use them.
 }
 \value{
-The function returns a list containing ca. 50 variables. 
+The function returns a list containing ca. 100 variables. 
 }
 \author{
 Jan Rybicki, Maciej Eder

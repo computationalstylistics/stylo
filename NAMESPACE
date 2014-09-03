@@ -32,6 +32,7 @@ export(
   perform.naivebayes,
   perform.nsc,
   perform.svm,
+  rolling.classify,
   rolling.delta,
   stylo.default.settings,
   stylo.pronouns,

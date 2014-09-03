@@ -23,8 +23,8 @@ make.samples(tokenized.text, sample.size = 10000,
   \item{sample.overlap}{if this opion is used, a reference text is segmented 
      into consecutive, equal-sized samples that are allowed to partially 
      overlap. If one specifies the \code{sample.size} parameter of 5,000 and 
-     the \code{sample.overlap} of 100, for example, the first sample of a text 
-     contains words 1-5,000, the second 101-5,100, the third sample 201-5,200, 
+     the \code{sample.overlap} of 1,000, for example, the first sample of a text 
+     contains words 1--5,000, the second 4001--9,000, the third sample 8001--13,000, 
      and so forth.}
   \item{number.of.samples}{optional argument which will be used only if 
      \code{random.sampling} was chosen; it is self-evident.}

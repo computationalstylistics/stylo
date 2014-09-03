@@ -21,7 +21,7 @@ stylo(gui = TRUE, frequencies = NULL, parsed.corpus = NULL,
     most frequent words, across a number of text samples. It can be either 
     an R object (matrix or data frame), or a filename containing 
     tab-delimited data. If you use an R object, make sure that the rows
-    contain samples, and the columns - variables (words). If you use
+    contain samples, and the columns -- variables (words). If you use
     an external file, the variables should go vertically (i.e. in rows):
     this is because files containing vertically-oriented tables are far 
     more flexible and easily editable using, say, Excel or any text editor.

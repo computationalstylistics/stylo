@@ -4,7 +4,9 @@
 
 
 
-== version 0.5.8, ????/??/??
+== version 0.5.8, 2014/09/3
+ * new sequential methods available: rolling SVM,
+   rolling NSC, and rolling Delta
  * bug in load.corpus.and.parse() fixed
  * bug in rolling.delta() fixed
  * network related bug in stylo() neutralized

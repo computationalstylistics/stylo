@@ -34,8 +34,8 @@ sequence of chars was \code{"[^[:alpha:]]+"} on Mac/Linux, and
 \code{"\\\\W+_"} on Windows. Two different splitting rules were used, because
 regular expressions are not entirely platform-independent; type 
 \code{help(regexp)} for more details. For the sake of compatibility, then, 
-in the version 0.5.6 a lengthy list of dozens of letters in a few  alphabets 
-(Latin, Cyrillic, Greek, Hebrew so far) has been indicated explicitly:
+in the version >=0.5.6 a lengthy list of dozens of letters in a few  alphabets 
+(Latin, Cyrillic, Greek, Hebrew, Arabic so far) has been indicated explicitly:
 
 \preformatted{paste("[^A-Za-z",
     # Latin supplement (Western):
@@ -50,6 +50,8 @@ in the version 0.5.6 a lengthy list of dozens of letters in a few  alphabets
     "\U0400-\U0481\U048A-\U0527",
     # Hebrew:
     "\U05D0-\U05EA\U05F0-\U05F4",
+    # Arabic:
+    "\U0620-\U065F\U066E-\U06D3\U06D5\U06DC",
     # extended Latin:
     "\U1E00-\U1EFF",
     # ancient Greek:

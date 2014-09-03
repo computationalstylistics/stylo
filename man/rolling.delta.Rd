@@ -49,10 +49,9 @@ Hoover, D. (2011). The Tutor's Story: a case study of mixed authorship.
     In: "Digital Humanities 2011: Conference Abstracts". Stanford University,
     Stanford, CA, pp. 149-51.
 
-Rybicki, J., Kestemont, M. and Hoover D. (2013). Collaborative authorship: 
-    Conrad, Ford and rolling delta. In: "Digital Humanities 2013: 
-    Conference Abstracts". University of Nebraska-Lincoln, Lincoln, NE, 
-    pp. 368-71.
+Rybicki, J., Kestemont, M. and Hoover D. (2014). Collaborative authorship: 
+    Conrad, Ford and rolling delta. "Literary and Linguistic Computing",
+    29(3): 422-31.
 
 }
 

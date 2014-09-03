@@ -31,6 +31,15 @@ of the primary subcorpus, while the second element contains avoided words.
 Since the applied measure is symmetrical, the preferred words are ipso facto 
 avoided by the secondary authors, and vice versa.
 }
+\references{
+Burrows, J. F. (2007). All the way through: testing for authorship 
+    in different frequency strata. "Literary and Linguistic Computing", 
+    22(1): 27-48.
+
+Craig, H. and Kinney, A. F., eds. (2009). Shakespeare, Computers, and the 
+    Mystery of Authorship. Cambridge: Cambridge University Press.
+
+}
 \author{
 Maciej Eder
 }

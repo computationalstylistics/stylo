@@ -117,9 +117,9 @@ colnames(selected.dist) = classes.training.set
 
 
 
-if(no.of.candidates > length(classes.training.set)) {
-        no.of.candidates = classes.training.set
-}
+  if(no.of.candidates > length(classes.training.set)) {
+          no.of.candidates = length(classes.training.set)
+  }
 
 
 # starting final variables
