@@ -353,6 +353,8 @@ features.exist = FALSE
         features = scan(features,what="char",sep="\n",encoding=encoding)
         # getting rid of the lines beginning with the "#" char
         features = c(grep("^[^#]",features,value=TRUE))
+        # link this vector into the variable used for calculations
+        mfw.list.of.all = features
       } else {
         # if there's no such a file, then don't try to use it
         cat("\n", "file \"",features, "\" could not be found\n",sep="")
@@ -873,8 +875,26 @@ for(j in (culling.min/culling.incr):(culling.max/culling.incr)) {
         }
         
         
-        
-        
+
+
+
+
+
+# starting the frequency list at frequency rank set in option start.at above
+
+# TO SAY THE TRUTH, IT CAN BE DONE MUCH EARLIER: at the moment when 
+# the frequency list for either I set or both sets is produced,
+# it can be cut and used for building freq. tables
+
+table.with.all.freqs = table.with.all.freqs[,start.at:length(table.with.all.freqs[1,])]
+
+
+
+
+
+
+
+
 
 # Testing if the desired MFW number is acceptable,
 # if MFW too large, it is set to maximum possible.

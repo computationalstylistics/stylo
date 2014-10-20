@@ -291,6 +291,8 @@ features.exist = FALSE
         features = scan(features,what="char",sep="\n",encoding=encoding)
         # getting rid of the lines beginning with the "#" char
         features = c(grep("^[^#]",features,value=TRUE))
+        # link this vector into the variable used for calculations
+        mfw.list.of.all = features
       } else {
         # if there's no such a file, then don't try to use it
         cat("\n", "file \"",features, "\" could not be found\n",sep="")
