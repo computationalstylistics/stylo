@@ -12,7 +12,7 @@
 assign.plot.colors <-
 function(labels, col = "colors", opacity = 1) {
   if(col == "black") {
-    vector.of.colors = "black"
+    vector.of.colors = rep("black", length(labels))
   } else {
     color.numeric.values = c(1)
     current.color = 1

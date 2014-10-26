@@ -3,6 +3,8 @@
 
 
 
+== version 0.5.8-3, 2014/10/26
+ * bug fixes: options for assign.plot.colors()
 
 == version 0.5.8-2, 2014/10/19
  * bug fixes: 'start.at' parameter in stylo()
