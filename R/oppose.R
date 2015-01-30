@@ -161,7 +161,6 @@ interactive.files = variables$interactive.files
 k.value = variables$k.value
 l.value = variables$l.value
 label.offset = variables$label.offset
-length.of.random.sample = variables$length.of.random.sample
 linkage = variables$linkage
 mfw.incr = variables$mfw.incr
 mfw.list.cutoff = variables$mfw.list.cutoff
@@ -670,7 +669,7 @@ cat(data.to.be.saved,file="words_preferred.txt", sep="\n",append=T)
 
 
 # some comments into the file containing worlist
-cat("# The file contains words that were extracted in Burrows’ Zeta test:",
+cat("# The file contains words that were extracted in Burrows' Zeta test:",
   "# this subset lists words significantly AVOIDED by primary author(s).",
   "# The list can be used as an input wordlist for other methods, and for this",
   "# purpose it can be manually revised, edited, deleted, culled, etc.", 

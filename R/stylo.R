@@ -109,7 +109,6 @@ interactive.files = variables$interactive.files
 k.value = variables$k.value
 l.value = variables$l.value
 label.offset = variables$label.offset
-length.of.random.sample = variables$length.of.random.sample
 mfw.incr = variables$mfw.incr
 mfw.list.cutoff = variables$mfw.list.cutoff
 mfw.max = variables$mfw.max
@@ -771,7 +770,7 @@ var.name(consensus.strength)
 var.name(distance.measure)
 var.name(sampling)
 var.name(sample.size)
-var.name(length.of.random.sample)
+var.name(number.of.samples)
 var.name(display.on.screen)
 var.name(write.pdf.file)
 var.name(write.jpg.file)

@@ -93,7 +93,6 @@ interactive.files = variables$interactive.files
 k.value = variables$k.value
 l.value = variables$l.value
 label.offset = variables$label.offset
-length.of.random.sample = variables$length.of.random.sample
 linkage = variables$linkage
 mfw.incr = variables$mfw.incr
 mfw.list.cutoff = variables$mfw.list.cutoff
@@ -136,7 +135,7 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
 # #############################################################################
 
 
-
+number.of.samples = variables$number.of.samples
 
 
 text.slice.length = variables$text.slice.length

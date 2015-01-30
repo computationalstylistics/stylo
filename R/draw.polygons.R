@@ -117,7 +117,7 @@ draw.polygons = function(summary.zeta.scores) {
     } # <-- loop o
   #
   #
-  # final variables’ assignments
+  # final variables' assignments
   if(current.subset == "primary") {
     polygon.primary = vertexes.of.polygon
     } else {

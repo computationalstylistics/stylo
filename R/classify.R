@@ -109,7 +109,6 @@ interactive.files = variables$interactive.files
 k.value = variables$k.value
 l.value = variables$l.value
 label.offset = variables$label.offset
-length.of.random.sample = variables$length.of.random.sample
 linkage = variables$linkage
 mfw.incr = variables$mfw.incr
 mfw.list.cutoff = variables$mfw.list.cutoff
@@ -816,7 +815,7 @@ var.name <- function(x) {
  var.name(l.value)
  var.name(sampling)
  var.name(sample.size)
- var.name(length.of.random.sample)
+ var.name(number.of.samples)
  var.name(final.ranking.of.candidates)
  var.name(how.many.correct.attributions)
  var.name(number.of.candidates)

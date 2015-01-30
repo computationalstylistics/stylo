@@ -3,6 +3,13 @@
 
 
 
+
+
+== version 0.5.9, 2015/01/30
+ * non-ASCII chars in the source code neutralized
+   (required by CRAN)
+ * random sampling substantially improved
+
 == version 0.5.8-3, 2014/10/26
  * bug fixes: options for assign.plot.colors()
 

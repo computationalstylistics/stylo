@@ -272,7 +272,8 @@ sample.size = 10000 # expressed in words, also if you're using char n-grams
 # when the analyzed texts are significantly unequal in length, it is not a bad
 # idea to prepare samples as randomly chosen "bags of words". For this, set the
 # sampling variable to "random.sampling". The desired size of the sample should
-# be indicated via the length.of.random.sample variable.
+# be indicated via the 'sample.size' variable, and the number of samples
+# via the 'number.of.samples' parameter.
 # Sampling with and without replacement is also available.
 # (Further reading: Eder, M. (2010). Does Size Matter? Authorship Attribution,
 # Short Samples, Big Problem. In "Digital Humanities 2010: Conference 
@@ -280,9 +281,6 @@ sample.size = 10000 # expressed in words, also if you're using char n-grams
 #
 # ATTENTION: this makes sense only if "use.existing.freq.tables" is set "FALSE"
 
-length.of.random.sample = 10000 # THIS IS IRRELEVANT! USE "SAMPLE.SIZE" INSTEAD
-                               # it should be deleted from stylo.R, classify.R, 
-                               # gui.stylo.R and gui.classify.R
 sampling.with.replacement = FALSE # THIS IS NOT VISIBLE ON GUI
 
 # It is also possible to use the entire corpus texts as samples (regardless 

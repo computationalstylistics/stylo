@@ -33,7 +33,7 @@ function(x.coord, y.coord, xymargins = 2, v.offset = 0) {
   # get vertical plotting area (plus optional top margin):
   # (1) size of the y axis
   y.axis.size = abs(max(y.coord) - min(y.coord))
-  # (2) top margin (added to fit the samples‘ labels)
+  # (2) top margin (added to fit the samples' labels)
   top.offset = 0.005 * y.axis.size
   # (3) finally, get both y coordinates
   min.y = min(y.coord) - 0.01 * xymargins * y.axis.size

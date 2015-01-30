@@ -90,7 +90,6 @@ interactive.files = variables$interactive.files
 k.value = variables$k.value
 l.value = variables$l.value
 label.offset = variables$label.offset
-length.of.random.sample = variables$length.of.random.sample
 linkage = variables$linkage
 mfw.incr = variables$mfw.incr
 mfw.list.cutoff = variables$mfw.list.cutoff
@@ -99,6 +98,7 @@ mfw.min = variables$mfw.min
 ngram.size = variables$ngram.size
 preserve.case = variables$preserve.case
 number.of.candidates = variables$number.of.candidates
+number.of.samples = variables$number.of.samples
 outputfile = variables$outputfile
 passed.arguments = variables$passed.arguments
 pca.visual.flavour = variables$pca.visual.flavour
@@ -192,7 +192,7 @@ encoding.orig = variables$encoding
   save.analyzed.freqs <- tclVar(save.analyzed.freqs)
   sampling <- tclVar(sampling)
   sample.size <- tclVar(sample.size)
-  length.of.random.sample <- tclVar(length.of.random.sample)
+  number.of.samples <- tclVar(number.of.samples)
   consensus.strength <- tclVar(consensus.strength)
   plot.options.reset <- tclVar(plot.options.reset)
   plot.custom.height <- tclVar(plot.custom.height)
@@ -619,28 +619,28 @@ encoding.orig = variables$encoding
   tkconfigure(entry_NOSAMP, variable=sampling, value="no.sampling")
     
   entry_SAMPLESIZE <- tkentry(f4,textvariable=sample.size,width="10")
-  entry_SIZE <- tkentry(f4,textvariable=length.of.random.sample,width="10")
+  entry_NO.OF.SAMPLES <- tkentry(f4,textvariable=number.of.samples,width="10")
   
   entrylabel_SAMP <- tklabel(f4,text="Normal sampling")
   entrylabel_RAND <- tklabel(f4,text="Random sampling")
   entrylabel_NOSAMP <- tklabel(f4,text="No sampling")
   
   entrylabel_SAMPLESIZE <- tklabel(f4, text="Sample size")
-  entrylabel_SIZE <- tklabel(f4,text="Random sample size")
+  entrylabel_NO.OF.SAMPLES <- tklabel(f4,text="Random samples")
   
   
   # Position and display sampling parameters on the grid:
   tkgrid(entrylabel_NOSAMP,entrylabel_SAMP, entrylabel_RAND)
   tkgrid(entry_NOSAMP, entry_SAMP, entry_RAND)
-  tkgrid(tklabel(f4,text="    "),entrylabel_SAMPLESIZE, entrylabel_SIZE)
-  tkgrid(tklabel(f4,text="    "),entry_SAMPLESIZE, entry_SIZE)
+  tkgrid(tklabel(f4,text="    "),entrylabel_SAMPLESIZE, entrylabel_NO.OF.SAMPLES)
+  tkgrid(tklabel(f4,text="    "),entry_SAMPLESIZE, entry_NO.OF.SAMPLES)
   tkgrid(tklabel(f4,text="    ")) # blank line for aesthetic purposes
   
   # Tooltips for the above
   tk2tip(entrylabel_SAMP, "Specify whether the texts in the corpus should be divided in equal-sized samples.")
   tk2tip(entrylabel_SAMPLESIZE, "Specify the size for the samples (expressed in words). \nOnly relevant when normal sampling is switched on.")
   tk2tip(entrylabel_RAND, "When the analyzed texts are significantly unequal in length, \nit is not a bad idea to prepare samples as randomly chosen *bags of words*. \nIf this option is switched on, the desired size of a sample should be indicated.")
-  tk2tip(entrylabel_SIZE, "Specify the random sample size. \nOnly relevant when random sampling is switched on.")
+  tk2tip(entrylabel_NO.OF.SAMPLES, "Specify the number of random samples per text. \nOnly relevant when random sampling is switched on.")
   tk2tip(entrylabel_NOSAMP, "No internal sampling will be performed: entire texts are considered as samples.")
   
   # next row: OUTPUT
@@ -816,7 +816,7 @@ encoding.orig = variables$encoding
   variables$save.analyzed.freqs = as.logical(as.numeric(tclvalue(save.analyzed.freqs)))
   variables$sampling = as.character(tclvalue(sampling))
   variables$sample.size = as.numeric(tclvalue(sample.size))
-  variables$length.of.random.sample = as.numeric(tclvalue(length.of.random.sample))
+  variables$number.of.samples = as.numeric(tclvalue(number.of.samples))
   variables$mfw.list.cutoff = as.numeric(tclvalue(mfw.list.cutoff))
   variables$distance.measure = as.character(tclvalue(distance.measure))
   variables$corpus.lang = as.character(tclvalue(corpus.lang))

@@ -12,7 +12,7 @@ function(tokenized.text,
             sampling = "no.sampling",
             sample.overlap = 0,
             number.of.samples = 1,
-            sampling.with.replacement=FALSE){
+            sampling.with.replacement = FALSE){
 
 
   # checking the format of input data (vector? list?); converting to a list

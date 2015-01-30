@@ -40,7 +40,7 @@ function(files,
   # deleting xml/html markup by applying the function "delete.markup"
   loaded.corpus = lapply(loaded.corpus, delete.markup, markup.type=markup.type)
   # deleting punctuation, splitting into words
-  cat("slicing input text into single words...\n")
+  cat("slicing input text into tokens...\n")
   loaded.corpus = lapply(loaded.corpus, txt.to.words.ext,
                                         language = language,
                                         splitting.rule = splitting.rule,
@@ -48,9 +48,9 @@ function(files,
   # normal sampling (if applicable); random sampling will be run later
   if(sampling == "normal.sampling") {
     loaded.corpus = make.samples(loaded.corpus,
-                                 sample.size,sampling,
-                                 sample.overlap,
-                                 sampling.with.replacement)
+                                 sample.size,
+                                 sampling,
+                                 sample.overlap)
   }
   # split into chars (if applicable), agglutinate into n-grams
   # [it takes a good while when char n-grams are chosen]
@@ -62,6 +62,8 @@ function(files,
     loaded.corpus = make.samples(loaded.corpus,
                                  sample.size,
                                  sampling,
+                                 sample.overlap = 0,
+                                 number.of.samples,
                                  sampling.with.replacement)
   }
 
