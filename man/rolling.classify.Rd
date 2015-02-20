@@ -15,7 +15,8 @@ rolling.classify(gui = FALSE, training.corpus.dir = "reference_set",
          test.corpus = NULL,  features = NULL, path = NULL, 
          slice.size = 5000, slice.overlap = 4500, 
          training.set.sampling = "no.sampling", mfw = 100, culling = 0, 
-         milestone.points = NULL, add.ticks = FALSE, ...)
+         milestone.points = NULL, plot.legend = TRUE, add.ticks = FALSE, 
+         ...)
 }
 \arguments{
   \item{gui}{an optional argument; if switched on, a simple yet effective 
@@ -101,7 +102,9 @@ rolling.classify(gui = FALSE, training.corpus.dir = "reference_set",
     or specify the break points using this parameter. E.g., to add
     two lines at 10,000 words and 15,000 words, use
     \code{milestone.points = c(10000, 15000)}.}
-  
+
+  \item{plot.legend}{self-evident. Default: \code{TRUE}.}
+
   \item{add.ticks}{a graphical parameter: consider adding tiny ticks 
     (short horizontal lines) to see the density of sampling. Default:
   \code{FALSE}.}

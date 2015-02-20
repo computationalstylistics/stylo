@@ -43,6 +43,8 @@ function(input.text, splitting.rule = NULL, preserve.case = FALSE) {
           "\U1E00-\U1EFF",
           # ancient Greek:
           "\U1F00-\U1FBC\U1FC2-\U1FCC\U1FD0-\U1FDB\U1FE0-\U1FEC\U1FF2-\U1FFC",
+          # Coptic:
+          "\U03E2-\U03EF\U2C80-\U2CF3",
           "]+",
           sep="")
       tokenized.text = c(unlist(strsplit(input.text, splitting.rule)))

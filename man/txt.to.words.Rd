@@ -56,6 +56,8 @@ in the version >=0.5.6 a lengthy list of dozens of letters in a few  alphabets
     "\U1E00-\U1EFF",
     # ancient Greek:
     "\U1F00-\U1FBC\U1FC2-\U1FCC\U1FD0-\U1FDB\U1FE0-\U1FEC\U1FF2-\U1FFC",
+    # Coptic:
+    "\U03E2-\U03EF\U2C80-\U2CF3",
     "]+",
     sep="")}
 

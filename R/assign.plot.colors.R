@@ -40,19 +40,19 @@ function(labels, col = "colors", opacity = 1) {
     }
   if(col == "colors" && opacity < 1) {
     available.colors = rep(c(
-      rgb(1,0,0,(opacity*0.8)), # red, opacity slightly tuned
-      rgb(0.2,0.8,0,opacity), # green
-      rgb(0,0,1,opacity), # blue
-      rgb(0,0,0,opacity), # black
-      rgb(1,0.7,0,opacity), # yellow/organge
-      rgb(1,0,0.8,opacity), # purple but slightly different
-      rgb(0.5,0.5,0.5,(opacity*0.8)) # dark grey
+      rgb(1,0,0, (opacity*0.8)), # red, opacity slightly tuned
+      rgb(0.2,0.8,0, opacity), # green
+      rgb(0,0,1, opacity), # blue
+      rgb(0,0,0, opacity), # black
+      rgb(1,0.7,0, opacity), # yellow/organge
+      rgb(1,0,0.8, opacity), # purple but slightly different
+      rgb(0.5,0.5,0.5, (opacity*0.8)) # dark grey
       ),40)
   }
   # define a vector of gray tones, instead of colors
   if(col == "greyscale") {
     number.of.colors.required = max(color.numeric.values)
-    available.colors = gray(seq(0,0.7,0.7/(number.of.colors.required-1)))
+    available.colors = gray(seq(0,0.7,0.7/(number.of.colors.required-1)), opacity)
   }
   # produce the final vector of colors (or gray tones)
   vector.of.colors = available.colors[c(color.numeric.values)]

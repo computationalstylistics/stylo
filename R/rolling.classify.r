@@ -16,6 +16,7 @@ function(gui = FALSE,
          mfw = 100,
          culling = 0,
          milestone.points = NULL,
+         plot.legend = TRUE,
          add.ticks = FALSE, ...) {
 
 
@@ -500,7 +501,7 @@ if(corpus.exists == FALSE) {
 
 
 # loading the sample to be rolled through, looking for milestone marks;
-# don't mint stupid names of variables (e.g. 'corpus.of.secondary.set')
+# don't mind stupid names of variables (e.g. 'corpus.of.secondary.set')
 corpus.of.secondary.set = load.corpus.and.parse(files=filenames.secondary.set,
                            corpus.dir = test.corpus.dir,
                            encoding = encoding,
@@ -508,14 +509,11 @@ corpus.of.secondary.set = load.corpus.and.parse(files=filenames.secondary.set,
                            language = corpus.lang,
                            splitting.rule = splitting.rule,
                            preserve.case = preserve.case,
-#                           sample.size = slice.size,
                            sampling = "no.sampling"
-#                           features = analyzed.features,
-#                           ngram.size = ngram.size
                            )
 
 milestone.points = grep("xmilestone", corpus.of.secondary.set[[1]])
-
+text.length = length(corpus.of.secondary.set[[1]])
 
 
 # once more: loading the sample to be rolled through
@@ -842,7 +840,8 @@ if(tolower(classification.method) == "naivebayes") {
 
 
 
-# positioning in plots: replacing dummy sample names with their positions
+# Positioning in plots: replacing dummy sample names with their positions;
+# the general rule is as follows:
 # 1th: (slice.size / 2)
 # 2nd: (slice.size / 2) + (slice.size - slice.overlap)
 # 3rd: (slice.size / 2) + (slice.size - slice.overlap) + (slice.size - slice.overlap)
@@ -866,11 +865,10 @@ names(classification.results) =  c(round(slice.size/2) +
 # plotting
 
 
-
 # it should be claases rather than mere rownames!!!!!!!!!!!!!!!!!!!!
-colors.first.choice = assign.plot.colors((unique(gsub("_.+","",rownames(training.set)))), opacity=0.99)
-colors.second.choice = assign.plot.colors((unique(gsub("_.+","",rownames(training.set)))), opacity=0.6)
-colors.third.choice = assign.plot.colors((unique(gsub("_.+","",rownames(training.set)))), opacity=0.5)
+colors.first.choice = assign.plot.colors((unique(gsub("_.+","",rownames(training.set)))), opacity=0.99, col = colors.on.graphs)
+colors.second.choice = assign.plot.colors((unique(gsub("_.+","",rownames(training.set)))), opacity=0.6, col = colors.on.graphs)
+colors.third.choice = assign.plot.colors((unique(gsub("_.+","",rownames(training.set)))), opacity=0.3, col = colors.on.graphs)
 
 
 
@@ -1037,8 +1035,28 @@ plot.current.task = function(){
         }
         
         
+        # adding two vertical lines at the beginning and at the end
         abline(v=0, lty=2)
         abline(v=entire.sample.length, lty=2)
+        
+        
+        # adding an optional legend on the right side of the plot
+        if(plot.legend == TRUE) {
+                legend(x = entire.sample.length, y = 0.95,
+                       legend = names(colors.first.choice), 
+                       col = colors.first.choice,
+                       bty = "n",
+                       cex=0.75,
+                       lwd = 5)
+        }
+        
+        
+        # adding optional ranking hints
+        if(classification.method == "delta" && plot.legend == TRUE) {
+                text(0, 0.225, expression(1^ st), adj = c(1.8,0.5))
+                text(0, 0.38, expression(2^ nd), adj = c(1.5,0.5))
+                text(0, 0.53, expression(3^ rd), adj = c(1.5,0.5))
+        }
 }
 
 
@@ -1158,6 +1176,8 @@ variables.to.save = c("classification.scores",
                       "classification.rankings",
                       "nearest.neighbors",
                       "features",
+                      "milestone.points",
+                      "text.length",
                       "features.actually.used",
                       "frequencies.training.set",
                       "frequencies.test.set")
