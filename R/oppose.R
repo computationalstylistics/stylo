@@ -200,6 +200,7 @@ write.png.file = variables$write.png.file
 write.svg.file = variables$write.svg.file
 z.scores.of.all.samples = variables$z.scores.of.all.samples
 # #############################################################################
+custom.graph.filename = variables$custom.graph.filename
 
 
 
@@ -763,14 +764,21 @@ if (visualization == "words" && oppose.method != "box.plot"){
         if(display.on.screen == TRUE){
                 plot.current.task()
         }
-        graph.filename <- paste(basename(getwd()),short.method.name, sep=" ")
+        # check if a custom filename has been set
+        if(is.character(custom.graph.filename) == TRUE & 
+               length(custom.graph.filename) > 0) {
+          # if a custom file name exists, then use it
+          graph.filename = custom.graph.filename
+        } else {
+          graph.filename <- paste(basename(getwd()),short.method.name, sep="_")
+        }
         if(write.png.file == TRUE) {
-                png(filename = paste(graph.filename,"%03d.png",sep=" "), 
+                png(filename = paste(graph.filename,"%03d.png",sep="_"), 
                 width=7,height=7,res=300, units="in")
                 plot.current.task()
         dev.off()}
         if(write.pdf.file == TRUE) {
-                pdf(file = paste(graph.filename,"%03d.pdf",sep=" "))
+                pdf(file = paste(graph.filename,"%03d.pdf",sep="_"))
                 plot.current.task()
         dev.off()}
 }
@@ -950,14 +958,26 @@ if ((visualization == "markers") && (oppose.method != "box.plot")){
   if(display.on.screen == TRUE){
   plot.current.task()
   }
-  graph.filename <- paste(basename(getwd()),short.method.name, sep=" ")
+
+
+  
+  # check if a custom filename has been set
+  if(is.character(custom.graph.filename) == TRUE & 
+           length(custom.graph.filename) > 0) {
+      # if a custom file name exists, then use it
+      graph.filename = custom.graph.filename
+  } else {
+    graph.filename = paste(basename(getwd()),short.method.name, sep="_")
+  }
+
+
   if(write.png.file == TRUE) {
-  png(filename = paste(graph.filename,"%03d.png",sep=" "), 
+  png(filename = paste(graph.filename,"%03d.png",sep="_"), 
            width=7,height=7,res=300, units="in")
   plot.current.task()
   dev.off()}
   if(write.pdf.file == TRUE) {
-  pdf(file = paste(graph.filename,"%03d.pdf",sep=" "))
+  pdf(file = paste(graph.filename,"%03d.pdf",sep="_"))
   plot.current.task()
   dev.off()}
 }

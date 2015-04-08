@@ -171,7 +171,7 @@ encoding = variables$encoding
 stop.words = variables$stop.words
 sample.overlap = variables$sample.overlap
 number.of.samples = variables$number.of.samples
-
+custom.graph.filename = variables$custom.graph.filename
 
 
 # #############################################################################
@@ -1212,11 +1212,12 @@ if(analysis.type == "tSNE") {
     short.name.of.the.method = "t-SNE"
     distance.name.on.file = "tSNE"
     distance.name.on.graph = "t-SNE"
-    graph.title = ""
     plot.current.task = function(){
         ecb = function(x,y){
             if(titles.on.graphs == TRUE) {
-                graph.title = paste(basename(getwd()),"\nt-SNE visualisation")
+                graph.title = paste(graph.title,"\nt-SNE visualisation")
+            } else {
+                graph.title = ""
             }
             plot(x, t='n', main=graph.title, xlab="", ylab="", yaxt="n", xaxt="n")
             text(x,rownames(table.with.all.freqs[,1:mfw]), cex=0.3)
@@ -1260,9 +1261,9 @@ if(analysis.type == "PCV" || analysis.type == "PCR") {
       if(text.id.on.graphs == "points" || text.id.on.graphs == "both") {
         plot(xy.coord,
              type="p",
-             xlim=plot.area[[1]],ylim=plot.area[[2]],
-             xlab="",ylab=PC2_lab,
-             main = graph.title,sub = paste(PC1_lab,"\n",graph.subtitle),
+             xlim=plot.area[[1]], ylim=plot.area[[2]],
+             xlab="", ylab=PC2_lab,
+             main = graph.title, sub = paste(PC1_lab,"\n",graph.subtitle),
              col=colors.of.pca.graph,
              lwd=plot.line.thickness) 
       }
@@ -1372,17 +1373,26 @@ if(titles.on.graphs == TRUE) {
 
 
 # name of the output file (strictly speaking: basename) for graphs
-graph.filename = paste(basename(getwd()),short.name.of.the.method,mfw.info,
-                       "MFWs_Culled",culling.info,pronouns.info,
-                       distance.name.on.file,"C",consensus.strength,start.at.info, sep="_")
-  if(analysis.type == "BCT") {
-    graph.filename = paste(basename(getwd()),short.name.of.the.method,mfw.info,
-                       "MFWs_Culled",culling.info,pronouns.info,
-                       distance.name.on.file,"C",consensus.strength,start.at.info, sep="_") 
-  } else {
-    graph.filename = paste(basename(getwd()),short.name.of.the.method,mfw.info,
-                       "MFWs_Culled",culling.info,pronouns.info, distance.name.on.file,start.at.info, sep="_") 
+
+# check if a custom filename has been set
+if(is.character(custom.graph.filename) == TRUE & 
+         length(custom.graph.filename) > 0) {
+    # if a custom file name exists, then use it
+    graph.filename = custom.graph.filename
+} else {
+  # otherwise, combine some information into the filename
+    if(analysis.type == "BCT") {
+        graph.filename = paste(basename(getwd()), short.name.of.the.method,
+                         mfw.info, "MFWs_Culled", culling.info,pronouns.info,
+                         distance.name.on.file, "C", consensus.strength,
+                         start.at.info, sep="_") 
+    } else {
+        graph.filename = paste(basename(getwd()), short.name.of.the.method,
+                         mfw.info, "MFWs_Culled", culling.info,pronouns.info, 
+                         distance.name.on.file, start.at.info, sep="_") 
+    }
 }
+
 
 # #################################################
 # plotting 
@@ -1395,28 +1405,28 @@ if(analysis.type != "BCT") {
     plot.current.task()
     }
   if(write.pdf.file == TRUE) {
-    pdf(file = paste(graph.filename,"%03d",".pdf",sep=""),
+    pdf(file = paste(graph.filename,"_%03d",".pdf",sep=""),
             width=plot.custom.width,height=plot.custom.height,
             pointsize=plot.font.size)
     plot.current.task()
     dev.off()
     }
   if(write.jpg.file == TRUE) {
-    jpeg(filename = paste(graph.filename,"%03d",".jpg",sep=""), 
+    jpeg(filename = paste(graph.filename,"_%03d",".jpg",sep=""), 
             width=plot.custom.width,height=plot.custom.height,
             units="in",res=300,pointsize=plot.font.size)
     plot.current.task()
     dev.off()
     }
   if(write.svg.file == TRUE) {
-    svg(filename = paste(graph.filename,"%03d",".svg",sep=""),
+    svg(filename = paste(graph.filename,"_%03d",".svg",sep=""),
             width=plot.custom.width,height=plot.custom.height,
             pointsize=plot.font.size)
     plot.current.task()
     dev.off()
     }
   if(write.png.file == TRUE) {
-    png(filename = paste(graph.filename,"%03d",".png",sep=""), 
+    png(filename = paste(graph.filename,"_%03d",".png",sep=""), 
             width=plot.custom.width,height=plot.custom.height,
             units="in",res=300,pointsize=plot.font.size)
     plot.current.task()
@@ -1660,28 +1670,28 @@ if(length(bootstrap.list) <= 2) {
     plot.current.task()
     }
   if(write.pdf.file == TRUE) {
-    pdf(file = paste(graph.filename,"%03d",".pdf",sep=""),
+    pdf(file = paste(graph.filename,"_%03d",".pdf",sep=""),
          width=plot.custom.width,height=plot.custom.height,
          pointsize=plot.font.size)
     plot.current.task()
     dev.off()
     }
   if(write.jpg.file == TRUE) {
-    jpeg(filename = paste(graph.filename,"%03d",".jpg",sep=""),
+    jpeg(filename = paste(graph.filename,"_%03d",".jpg",sep=""),
          width=plot.custom.width,height=plot.custom.height,
          units="in",res=300,pointsize=plot.font.size)
     plot.current.task()
     dev.off()
     }
   if(write.svg.file == TRUE) {
-    svg(filename=paste(graph.filename,"%03d",".svg",sep=""), 
+    svg(filename=paste(graph.filename,"_%03d",".svg",sep=""), 
          width=plot.custom.width,height=plot.custom.height,
          pointsize=plot.font.size)
     plot.current.task()
     dev.off()
     }
   if(write.png.file == TRUE) {
-    png(filename = paste(graph.filename,"%03d",".png",sep=""), 
+    png(filename = paste(graph.filename,"_%03d",".png",sep=""), 
          width=plot.custom.width,height=plot.custom.height,
          units="in",res=300,pointsize=plot.font.size)
     plot.current.task()

@@ -160,7 +160,7 @@ cv.folds = variables$cv.folds
 stop.words = variables$stop.words
 sample.overlap = variables$sample.overlap
 number.of.samples = variables$number.of.samples
-
+custom.graph.filename = variables$custom.graph.filename
 
 
 
@@ -1070,9 +1070,17 @@ if(classification.method == "delta") {
 
 
 
+# check if a custom filename has been set
+if(is.character(custom.graph.filename) == TRUE & 
+         length(custom.graph.filename) > 0) {
+    # if a custom file name exists, then use it
+    graph.filename = custom.graph.filename
+} else {
+  graph.filename = paste("rolling-", class.method, "_", mfw, "-features_", 
+                         slice.size, "-per-slice", sep="")
+}
 
-graph.filename = paste("rolling-", class.method, "_", mfw, "-features_", 
-                       slice.size, "-per-slice", sep="")
+
 
 plot.custom.width = 10 
 plot.custom.height = 4
