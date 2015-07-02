@@ -3,7 +3,11 @@
 
 
 
-
+== version 0.6.0, 2015/07/2
+ * support for Coptic
+ * customizable graphs size in rolling.classify()
+ * custom graph filename
+ * integration with CLARIN-PL stylometric infrastructure
 
 == version 0.5.9, 2015/01/30
  * non-ASCII chars in the source code neutralized

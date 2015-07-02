@@ -16,6 +16,7 @@ function(gui = FALSE,
          mfw = 100,
          culling = 0,
          milestone.points = NULL,
+         milestone.labels = NULL,
          plot.legend = TRUE,
          add.ticks = FALSE, ...) {
 
@@ -200,6 +201,9 @@ if(number.of.candidates < 1) {
 
 
 
+# overwriting the default values of the picture size (we need a rectangle...)
+variables$plot.custom.width = 10 
+variables$plot.custom.height = 4
 
 
 
@@ -865,7 +869,7 @@ names(classification.results) =  c(round(slice.size/2) +
 # plotting
 
 
-# it should be claases rather than mere rownames!!!!!!!!!!!!!!!!!!!!
+# it should be classes rather than mere rownames!!!!!!!!!!!!!!!!!!!!
 colors.first.choice = assign.plot.colors((unique(gsub("_.+","",rownames(training.set)))), opacity=0.99, col = colors.on.graphs)
 colors.second.choice = assign.plot.colors((unique(gsub("_.+","",rownames(training.set)))), opacity=0.6, col = colors.on.graphs)
 colors.third.choice = assign.plot.colors((unique(gsub("_.+","",rownames(training.set)))), opacity=0.3, col = colors.on.graphs)
@@ -895,7 +899,7 @@ entire.sample.length = (slice.size - slice.overlap) * length(classification.resu
   }
 
 
-# length of the assessed text + 10% 
+# size of the assessed dataset (in tokens) + 10% 
 sample.length.with.margin = entire.sample.length + entire.sample.length * 0.1
 
 
@@ -915,15 +919,19 @@ plot.current.task = function(){
         
         # adding vertical lines for each "xmilestone" string included in tested sample
         if(length(milestone.points) > 0){
-                identifiers = rep(unlist(strsplit("abcdefghijklmnopqrstuvwxyz","")),5)
-                identifiers = identifiers[1:length(milestone.points)]
+                if(length(milestone.labels) == 0) {
+                    identifiers = rep(unlist(strsplit("abcdefghijklmnopqrstuvwxyz","")),5)
+                    identifiers = identifiers[1:length(milestone.points)]
+                } else {
+                    identifiers = milestone.labels
+                }
                 if(classification.method == "delta" & length(attr(classification.results, "rankings")[1,]) > 2) {
                     segments(milestone.points,0.62,milestone.points,0.8, lty=3)
                 } else {
                     segments(milestone.points,0.47,milestone.points,0.8, lty=3)
                 }         
                 segments(milestone.points,-0.1,milestone.points,0.1, lty=3)
-                text(milestone.points,0.85, labels=identifiers, cex=0.7,srt=90)
+                text(milestone.points, 0.85, labels=identifiers, cex=0.7, srt=90, adj=c(0,1))
         }
         
         # position of the gray rectangle that shows the slice size
@@ -1081,9 +1089,6 @@ if(is.character(custom.graph.filename) == TRUE &
 }
 
 
-
-plot.custom.width = 10 
-plot.custom.height = 4
 
 
 

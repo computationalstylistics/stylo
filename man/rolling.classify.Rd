@@ -15,7 +15,8 @@ rolling.classify(gui = FALSE, training.corpus.dir = "reference_set",
          test.corpus = NULL,  features = NULL, path = NULL, 
          slice.size = 5000, slice.overlap = 4500, 
          training.set.sampling = "no.sampling", mfw = 100, culling = 0, 
-         milestone.points = NULL, plot.legend = TRUE, add.ticks = FALSE, 
+         milestone.points = NULL, milestone.labels = NULL, 
+         plot.legend = TRUE, add.ticks = FALSE, 
          ...)
 }
 \arguments{
@@ -78,9 +79,9 @@ rolling.classify(gui = FALSE, training.corpus.dir = "reference_set",
     is set using this parameter: default is 5,000 words. The samples 
     are allowed to partially overlap (see the next parameter). }
 
-  \item{slice.overlap}{if we specifies a \code{slice.size} of 5,000 
+  \item{slice.overlap}{if one specifies a \code{slice.size} of 5,000 
     and a \code{slice.overlap} of 4,500 (which is default), then 
-    the first sample of a text contains words 1--5,000, the second 
+    the first extracted sample contains words 1--5,000, the second 
     501--5,500, the third sample 1001--6,000, and so forth.}
   
   \item{training.set.sampling}{sometimes, it makes sense to split training 
@@ -102,6 +103,11 @@ rolling.classify(gui = FALSE, training.corpus.dir = "reference_set",
     or specify the break points using this parameter. E.g., to add
     two lines at 10,000 words and 15,000 words, use
     \code{milestone.points = c(10000, 15000)}.}
+
+  \item{milestone.labels}{when milestone points are used (see immediately 
+    above), they are automatically labelled using lowercase letters:
+    "a", "b", "c" etc. However, one can replace them with custom labels,
+    e.g. \code{milestone.labels = c("Act I", "Act II")}.}
 
   \item{plot.legend}{self-evident. Default: \code{TRUE}.}
 
