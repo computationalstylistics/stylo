@@ -28,6 +28,15 @@ passed.arguments = list(...)
 
 
 
+
+
+
+# saving custom height and width of the final picture (if specified by the user)
+save.plot.custom.width = passed.arguments$plot.custom.width
+save.plot.custom.height = passed.arguments$plot.custom.height
+
+
+
 # changing working directory (if applicable)
 #
 # first of all, retrieve the current path name
@@ -122,8 +131,8 @@ number.of.candidates = variables$number.of.candidates
 outputfile = variables$outputfile
 passed.arguments = variables$passed.arguments
 pca.visual.flavour = variables$pca.visual.flavour
-plot.custom.height = variables$plot.custom.height
-plot.custom.width = variables$plot.custom.width
+#plot.custom.height = variables$plot.custom.height
+#plot.custom.width = variables$plot.custom.width
 plot.font.size = variables$plot.font.size
 plot.line.thickness = variables$plot.line.thickness
 plot.options.reset = variables$plot.options.reset
@@ -164,6 +173,29 @@ number.of.samples = variables$number.of.samples
 custom.graph.filename = variables$custom.graph.filename
 
 
+# #############################################################################
+# additional options for dealing with custom picture size
+
+# additional settings relavant to rolling.classify only
+# (overriding the custom settings for the size of final graphs)
+plot.custom.width = 10
+plot.custom.height = 4
+
+# these are overwritten, if the user specified some values
+if(length(save.plot.custom.width) > 0) {
+      # if the saved value exists, apply it to the main variable
+      plot.custom.width = save.plot.custom.width
+}
+# these are overwritten, if the user specified some values
+if(length(save.plot.custom.height) > 0) {
+      # if the saved value exists, apply it to the main variable
+      plot.custom.height = save.plot.custom.height
+}
+
+
+
+
+
 
 # #############################################################################
 # Final settings (you are advised rather not to change them)
@@ -200,10 +232,6 @@ if(number.of.candidates < 1) {
 
 
 
-
-# overwriting the default values of the picture size (we need a rectangle...)
-variables$plot.custom.width = 10 
-variables$plot.custom.height = 4
 
 
 

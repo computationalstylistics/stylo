@@ -16,9 +16,11 @@ rolling.delta(gui = TRUE, path = NULL, primary.corpus.dir = "primary_set",
   \item{path}{if not specified, the current working directory will be used 
     for input/output procedures (reading files, outputting the results).}
 
-  \item{primary.corpus.dir}{the subdirectory (within the current working directory) that
-    contains a collection of texts written by the authorial candidates, likely to have been involved in the collaborative
-    work analyzed. If not specified, the default subdirectory  \code{primary_set} will be used.}
+  \item{primary.corpus.dir}{the subdirectory (within the current working 
+    directory) that contains a collection of texts written by the authorial 
+    candidates, likely to have been involved in the collaborative work 
+    analyzed. If not specified, the default subdirectory  \code{primary_set} 
+    will be used.}
 
   \item{secondary.corpus.dir}{the subdirectory (within the current working directory) that
     contains the collaborative work to be analyzed. If not specified, 
@@ -58,7 +60,7 @@ Rybicki, J., Kestemont, M. and Hoover D. (2014). Collaborative authorship:
 \author{Mike Kestemont, Maciej Eder, Jan Rybicki}
 
 \seealso{
-\code{\link{stylo}}, \code{\link{classify}}, \code{\link{oppose}}
+\code{\link{rolling.classify}}, \code{\link{stylo}}
 }
 \examples{
 \dontrun{
