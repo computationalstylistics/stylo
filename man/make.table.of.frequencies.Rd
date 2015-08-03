@@ -72,9 +72,9 @@ make.table.of.frequencies(my.corpus.clean, my.favorite.words,
 
 
 # to prepare a table of frequencies of all the words represented in 
-# a corpus, in descendent occurence order:
-complete.word.list = names(sort(table(unlist(my.corpus.clean)), 
-    decreasing = TRUE))
+# a corpus, in descendent occurence order, one needs to make the frequency
+# list first, via the function 'make.frequency.list'
+complete.word.list = make.frequency.list(my.corpus.clean)
 make.table.of.frequencies(my.corpus.clean, complete.word.list)
 
 

@@ -9,10 +9,9 @@ perform.nsc = function(training.set,
                        test.set,
                        classes.training.set = NULL,
                        classes.test.set = NULL,
+                       show.features = FALSE,
                        no.of.candidates = 3) {
-# Nearest Shrunken Centroid classification:
-  #  library(pamr)
-  #
+
   
   # getting the number of features (e.g. MFWs)
   no.of.cols = length(training.set[1,])
@@ -45,8 +44,12 @@ perform.nsc = function(training.set,
   # training a model
   model = pamr.train(mydata,sample.subset=c(1:length(classes.training)))
   cat("\n")
-# getting the most discriminative features
-#  the.features = pamr.listgenes(model,mydata,threshold=5,genenames=TRUE)[,2]
+  # getting the discriminative features (if an appropriate option was chosen)
+  if(show.features == TRUE) {
+      the.features = pamr.listgenes(model,mydata,threshold=5,genenames=TRUE)[,2]
+  } else {
+      the.features = NULL
+  }
   # testing the model on "new" data (i.e. the test.set)
   classification.results = pamr.predict(model,mydata$x,threshold=1, type="posterior")
   
@@ -84,7 +87,8 @@ perform.nsc = function(training.set,
   attr(classification.results, "distance.table") = selected.dist
   attr(classification.results, "rankings") = classification.rankings
   attr(classification.results, "scores") = classification.scores
-  
+  attr(classification.results, "features") = the.features
+
 
 return(classification.results)
 }

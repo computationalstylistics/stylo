@@ -10,6 +10,7 @@ perform.nsc(training.set,
               test.set, 
               classes.training.set = NULL, 
               classes.test.set = NULL, 
+              show.features = FALSE,
               no.of.candidates = 3) }
 \arguments{
 \item{training.set}{a table containing frequencies/counts for several
@@ -38,6 +39,10 @@ perform.nsc(training.set,
           test set. When missing, the row names of the test set
           table will be used (see above).}
 
+\item{show.features}{a logical value (default: FALSE). When the option is 
+          switched on, the most discriminative features (e.g. words) will 
+          be shown.}.
+
 \item{no.of.candidates}{how many nearest neighbors will be computed for
           each test sample (default = 3).}
 
@@ -45,7 +50,8 @@ perform.nsc(training.set,
 \value{
 The function returns a vector of "guessed" classes: each test sample is
 linked with one of the classes represented in the training set. Additionally,
-final scores and final rankings of candidates are returned as attributes.
+final scores and final rankings of candidates, as well as the discriminative
+features (if applicable) are returned as attributes.
 }
 \author{
 Maciej Eder

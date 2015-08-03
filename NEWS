@@ -3,7 +3,14 @@
 
 
 
-== version 0.6.0, 2015/07/2
+== version 0.5.9-9, 2015/08/3
+ * support for Georgian
+ * plot size in rolling.classify() improved
+ * distance measure engine thoroughly restructured
+ * cosine distance introduced
+ * new functions: dist.cosine
+
+== version 0.5.9-3, 2015/07/2
  * support for Coptic
  * customizable graphs size in rolling.classify()
  * custom graph filename

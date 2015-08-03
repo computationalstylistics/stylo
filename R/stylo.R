@@ -767,7 +767,7 @@ var.name(use.existing.wordlist)
 var.name(use.custom.list.of.files)
 var.name(analysis.type)
 var.name(consensus.strength)
-var.name(distance.measure)
+#var.name(distance.measure)
 var.name(sampling)
 var.name(sample.size)
 var.name(number.of.samples)
@@ -948,24 +948,43 @@ if((analysis.type == "CA") || (analysis.type == "BCT") || (analysis.type == "MDS
 
   if(distance.measure == "CD") {
     cat("Calculating classic Delta distances... \n")
+    distance.name.on.graph = "Classic Delta distance"
+    distance.name.on.file = "Classic Delta"
   }
   if(distance.measure == "AL") {
     cat("Calculating Argamon's Delta distances... \n")
+    distance.name.on.graph = "Argamon's Delta distance"
+    distance.name.on.file = "Argamon's Delta"
   }
   if(distance.measure == "ED") {
     cat("Calculating Eder's Delta distances... \n")
+    distance.name.on.graph = "Eder's Delta distance"
+    distance.name.on.file = "Eder's Delta"
   }
   if(distance.measure == "ES") {
     cat("Calculating Eder's Simple distances... \n")
+    distance.name.on.graph = "Eder's Simple distance"
+    distance.name.on.file = "Eder's Simple"    
   }
   if(distance.measure == "MH") {
     cat("Calculating Manhattan distances... \n")
+    distance.name.on.graph = "Manhattan distance"
+    distance.name.on.file = "Manhattan"
   }
   if(distance.measure == "CB") {
     cat("Calculating Canberra distances... \n")
+    distance.name.on.graph = "Canberra distance"
+    distance.name.on.file = "Canberra"
   }
   if(distance.measure == "EU") {
     cat("Calculating Euclidean distances... \n")
+    distance.name.on.graph = "Euclidean distance"
+    distance.name.on.file = "Euclidean"
+  }
+  if(distance.measure == "dist.cosine") {
+    cat("Calculating Cosine distances... \n")
+    distance.name.on.graph = "Cosine distance"
+    distance.name.on.file = "Cosine"
   }
 }
 
@@ -994,10 +1013,15 @@ cat(mfw, " ")
 # #################################################
 
 if((analysis.type == "CA") || (analysis.type == "BCT") || (analysis.type == "MDS")){
+
+
+
+################################ TEMPORARY !!!!!!!!!!!
+################################ TEMPORARY !!!!!!!!!!!
+
+
   # calculating Delta distances to a distance matrix
   if(distance.measure == "CD") {
-    distance.name.on.graph = "Classic Delta distance"
-    distance.name.on.file = "Classic Delta"
     distance.table = 
         as.matrix(dist(table.with.all.zscores[,1:mfw],
         method="manhattan")) / mfw
@@ -1005,8 +1029,6 @@ if((analysis.type == "CA") || (analysis.type == "BCT") || (analysis.type == "MDS
 
   # calculating Argamon's "Linear Delta"
   if(distance.measure == "AL") {
-    distance.name.on.graph = "Argamon's Delta distance"
-    distance.name.on.file = "Argamon's Delta"
     distance.table = 
         as.matrix(dist(table.with.all.zscores[,1:mfw],
         method="euclidean")) / mfw
@@ -1014,8 +1036,6 @@ if((analysis.type == "CA") || (analysis.type == "BCT") || (analysis.type == "MDS
 
   # calculating Delta distances with Eder's modifications
   if(distance.measure == "ED") {
-    distance.name.on.graph = "Eder's Delta distance"
-    distance.name.on.file = "Eder's Delta"
     zscores.plus.e.value = t(t(table.with.all.zscores[,1:mfw])*((1+mfw:1)/mfw))
     distance.table = as.matrix(dist(zscores.plus.e.value,method="manhattan"))
     }
@@ -1024,33 +1044,95 @@ if((analysis.type == "CA") || (analysis.type == "BCT") || (analysis.type == "MDS
   if(distance.measure == "ES") {
     distance.table = 
        as.matrix(dist(sqrt(table.with.all.freqs[,1:mfw]),method="manhattan"))
-    distance.name.on.graph = "Eder's Simple distance"
-    distance.name.on.file = "Eder's Simple"
     }
 
-  # calculating Manhattan distance to a distance matrix
+
+if(distance.measure != "CD" & distance.measure != "AL" & distance.measure != "ED" & distance.measure != "ES") {
+
+################################ TEMPORARY !!!!!!!!!!!
+
   if(distance.measure == "MH") {
-    distance.name.on.graph = "Manhattan distance"
-    distance.name.on.file = "Manhattan"
-    distance.table = 
-         as.matrix(dist(table.with.all.freqs[,1:mfw],method="manhattan"))
+        distance.measure = "manhattan"
     }
-
-  # calculating Canberra distance to a distance matrix
   if(distance.measure == "CB") {
-    distance.name.on.graph = "Canberra distance"
-    distance.name.on.file = "Canberra"
-    distance.table = 
-         as.matrix(dist(table.with.all.freqs[,1:mfw],method="canberra"))
+        distance.measure = "canberra"
+    }
+  if(distance.measure == "EU") {
+        distance.measure = "euclidean"
     }
 
-  # calculating Euclidean distance to a distance matrix
-  if(distance.measure == "EU") {
-    distance.name.on.graph = "Euclidean distance"
-    distance.name.on.file = "Euclidean"
-    distance.table = 
-         as.matrix(dist(table.with.all.freqs[,1:mfw],method="euclid"))
+input.freq.table = table.with.all.freqs[,1:mfw]
+
+#supported.measures = c("dist.euclidean", "dist.manhattan", "dist.canberra",
+#                       "dist.delta", "dist.eder", "dist.argamon",
+#                       "dist.simple", "dist.cosine")
+supported.measures = c("dist.euclidean", "dist.manhattan", "dist.canberra",
+                 #      "dist.delta", "dist.eder", "dist.argamon",
+                 #      "dist.simple", 
+                 "dist.cosine")
+
+################################ TEMPORARY !!!!!!!!!!!
+
+
+
+
+
+
+
+# if the requested distance name is confusing, stop
+if(length(grep(distance.measure, supported.measures)) > 1 ) {
+    stop("Ambiguous distance method: which one did you want to use, really?")
+
+# if the requested distance name was not found invoke a custom plugin
+} else if(length(grep(distance.measure, supported.measures)) == 0 ){
+
+    # first, check if a requested custom function exists 
+    if(is.function(get(distance.measure)) == TRUE) {
+        # if OK, then use the value of the variable 'distance.measure' to invoke 
+        # the function of the same name, with x as its argument
+        distance.table = do.call(distance.measure, list(x = input.freq.table))
+        # check if the invoked function did produce a distance
+        if(class(distance.table) != "dist") {
+            # say something nasty here, if it didn't:
+            stop("it wasn't a real distance measure function applied, was it?")
+        }
     }
+
+# when the chosen distance measure is among the supported ones, use it
+} else {
+
+    # extract the long name of the distance (the "official" name) 
+    distance = supported.measures[grep(distance.measure, supported.measures)]
+    # then check if this is one of standard methods supported by dist()
+    if(distance %in% c("dist.manhattan", "dist.euclidean", "dist.canberra")) {
+         # get rid of the "dist." in the distance name
+         distance = gsub("dist.", "", distance)
+         # apply a standard distance, using the generic dist() function
+         distance.table = as.matrix(dist(input.freq.table, method = distance))
+    } else {
+         # invoke one of the distances supported by 'stylo'
+         distance.table = do.call(distance, list(x = input.freq.table))
+    }
+    
+} 
+
+# convert the table to the format of matrix
+distance.table = as.matrix(distance.table)
+
+
+
+################################ TEMPORARY !!!!!!!!!!!
+}    # <- just for making sure that CD, AL, ED or ES were not chosen!
+
+
+
+
+
+
+
+
+
+
 
   # replaces the names of the samples (the extension ".txt" is cut off)
   rownames(distance.table)=gsub("(\\.txt$)||(\\.xml$)||(\\.html$)||(\\.htm$)",
