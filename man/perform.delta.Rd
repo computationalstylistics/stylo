@@ -82,7 +82,8 @@ Maciej Eder
 }
 \seealso{
 \code{\link{perform.svm}}, \code{\link{perform.nsc}},  
-\code{\link{perform.knn}}, \code{\link{perform.naivebayes}}
+\code{\link{perform.knn}}, \code{\link{perform.naivebayes}}, 
+\code{\link{dist.delta}}
 }
 \examples{
 \dontrun{

@@ -131,6 +131,12 @@ used, a distance table and some more stuff. Additionally, depending on which
 options have been chosen, the function produces a number of files used to save 
 the results, features assessed, generated tables of distances, etc.
 }
+\references{
+Eder, M. (2015). Rolling stylometry. "Digital Scholarship in the Humanities", 
+    30, Advance Access published April 6, 2015 (doi: 10.1093/llc/fqv010).
+
+Eder, M. (2014). Testing rolling stylometry. \url{https://goo.gl/f0YlOR}.
+}
 
 
 \author{Maciej Eder}

@@ -946,6 +946,13 @@ if((analysis.type == "CA") || (analysis.type == "BCT") || (analysis.type == "MDS
 # a short message on the screen about distance calculations (when appropriate):
 if((analysis.type == "CA") || (analysis.type == "BCT") || (analysis.type == "MDS")){
 
+
+
+# starting some variables that will be overwritten (unless a custom distance is used)
+distance.name.on.graph = distance.measure
+distance.name.on.file = distance.measure
+
+
   if(distance.measure == "CD") {
     cat("Calculating classic Delta distances... \n")
     distance.name.on.graph = "Classic Delta distance"
@@ -986,6 +993,7 @@ if((analysis.type == "CA") || (analysis.type == "BCT") || (analysis.type == "MDS
     distance.name.on.graph = "Cosine distance"
     distance.name.on.file = "Cosine"
   }
+
 }
 
 
@@ -1016,39 +1024,14 @@ if((analysis.type == "CA") || (analysis.type == "BCT") || (analysis.type == "MDS
 
 
 
+
+
+
+
+
+
 ################################ TEMPORARY !!!!!!!!!!!
 ################################ TEMPORARY !!!!!!!!!!!
-
-
-  # calculating Delta distances to a distance matrix
-  if(distance.measure == "CD") {
-    distance.table = 
-        as.matrix(dist(table.with.all.zscores[,1:mfw],
-        method="manhattan")) / mfw
-    }
-
-  # calculating Argamon's "Linear Delta"
-  if(distance.measure == "AL") {
-    distance.table = 
-        as.matrix(dist(table.with.all.zscores[,1:mfw],
-        method="euclidean")) / mfw
-    }
-
-  # calculating Delta distances with Eder's modifications
-  if(distance.measure == "ED") {
-    zscores.plus.e.value = t(t(table.with.all.zscores[,1:mfw])*((1+mfw:1)/mfw))
-    distance.table = as.matrix(dist(zscores.plus.e.value,method="manhattan"))
-    }
-
-  # calculating Eder's Simple distance to a distance matrix
-  if(distance.measure == "ES") {
-    distance.table = 
-       as.matrix(dist(sqrt(table.with.all.freqs[,1:mfw]),method="manhattan"))
-    }
-
-
-if(distance.measure != "CD" & distance.measure != "AL" & distance.measure != "ED" & distance.measure != "ES") {
-
 ################################ TEMPORARY !!!!!!!!!!!
 
   if(distance.measure == "MH") {
@@ -1060,22 +1043,36 @@ if(distance.measure != "CD" & distance.measure != "AL" & distance.measure != "ED
   if(distance.measure == "EU") {
         distance.measure = "euclidean"
     }
+  if(distance.measure == "CD") {
+        distance.measure = "delta"
+    }
+  if(distance.measure == "AL") {
+        distance.measure = "argamon"
+    }
+  if(distance.measure == "ED") {
+        distance.measure = "eder"
+    }
+  if(distance.measure == "ES") {
+        distance.measure = "simple"
+    }
 
-input.freq.table = table.with.all.freqs[,1:mfw]
-
-#supported.measures = c("dist.euclidean", "dist.manhattan", "dist.canberra",
-#                       "dist.delta", "dist.eder", "dist.argamon",
-#                       "dist.simple", "dist.cosine")
-supported.measures = c("dist.euclidean", "dist.manhattan", "dist.canberra",
-                 #      "dist.delta", "dist.eder", "dist.argamon",
-                 #      "dist.simple", 
-                 "dist.cosine")
-
+################################ TEMPORARY !!!!!!!!!!!
+################################ TEMPORARY !!!!!!!!!!!
 ################################ TEMPORARY !!!!!!!!!!!
 
 
 
 
+
+
+
+input.freq.table = table.with.all.freqs[,1:mfw]
+
+
+
+supported.measures = c("dist.euclidean", "dist.manhattan", "dist.canberra",
+                       "dist.delta", "dist.eder", "dist.argamon",
+                       "dist.simple", "dist.cosine")
 
 
 
@@ -1109,23 +1106,23 @@ if(length(grep(distance.measure, supported.measures)) > 1 ) {
          distance = gsub("dist.", "", distance)
          # apply a standard distance, using the generic dist() function
          distance.table = as.matrix(dist(input.freq.table, method = distance))
-    } else {
-         # invoke one of the distances supported by 'stylo'
+    # then, check for the non-standard methods but still supported by Stylo
+    } else if(distance %in% c("dist.simple", "dist.cosine")) {
+
+         # invoke one of the distance measures functions from Stylo    
          distance.table = do.call(distance, list(x = input.freq.table))
+    
+    } else {
+         # invoke one of the distances supported by 'stylo'; this is slightly
+         # different from the custom functions invoked above, since it uses
+         # another argument: z-scores can be calculated outside of the function
+         distance.table = do.call(distance, list(x = input.freq.table, scale = FALSE))
     }
     
 } 
 
 # convert the table to the format of matrix
 distance.table = as.matrix(distance.table)
-
-
-
-################################ TEMPORARY !!!!!!!!!!!
-}    # <- just for making sure that CD, AL, ED or ES were not chosen!
-
-
-
 
 
 

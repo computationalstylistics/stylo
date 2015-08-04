@@ -1,13 +1,12 @@
-\name{dist.cosine}
-\alias{dist.cosine}
+\name{dist.simple}
+\alias{dist.simple}
 \title{Cosine Distance}
 \description{
-Function for computing a cosine similarity of a matrix of values,
-e.g. a table of word frequencies. Recent findings (Jannidis et al. 2015) 
-show that this distance outperforms other nearest neighbor approaches 
-in the domain of authorship attribution.}
+Function for computing Eder's Simple distance of a matrix of values,
+e.g. a table of word frequencies. This is done by normalizing the input
+dataset by a square root function, and then applying Manhattan distance.}
 \usage{
-dist.cosine(x)
+dist.simple(x)
 }
 \arguments{
   \item{x}{a matrix or data table containing at least 2 rows and 2 cols,
@@ -18,17 +17,11 @@ The function returns an object of the class \code{dist}, containing distances
 between each pair of samples. To convert it to a square matrix instead,
 use the generic function \code{as.dist}.
 }
-\references{
-Jannidis, F., Pielstrom, S., Schoch, Ch. and Vitt, Th. (2015). Improving 
-    Burrows' Delta: An empirical evaluation of text distance measures.
-    In: "Digital Humanities 2015: Conference Abstracts" 
-    \url{http://dh2015.org/abstracts}.
-}
 
 \author{Maciej Eder}
 
 \seealso{
-\code{\link{stylo}}, \code{\link{classify}}, \code{\link{dist}}, 
+\code{\link{stylo}}, \code{\link{classify}}, \code{\link{dist.delta}}, 
 \code{\link{as.dist}}
 }
 \examples{
@@ -46,8 +39,8 @@ Jannidis, F., Pielstrom, S., Schoch, Ch. and Vitt, Th. (2015). Improving
         print(dataset)
         
 # then, applying a distance, in two flavors
-        dist.cosine(dataset)
-        as.matrix(dist.cosine(dataset))
+        dist.simple(dataset)
+        as.matrix(dist.simple(dataset))
 
 }
 %\keyword{distance measure}

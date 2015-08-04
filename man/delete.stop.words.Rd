@@ -14,11 +14,19 @@ delete.stop.words(input.data, stop.words = NULL)
 }
 
 \arguments{
-  \item{input.data}{either a vector containing words (actually, any countable features), or a data matrix/frame. The former in case of culling stop words from running text, the latter for culling them from tables of frequencies (then particular columns are excluded). The table should be oriented to contain samples in rows, variables in columns, and variables' names should be accessible via \code{colnames(input.table)}.}
+  \item{input.data}{either a vector containing words (actually, any countable 
+      features), or a data matrix/frame. The former in case of culling 
+      stop words from running text, the latter for culling them from tables 
+      of frequencies (then particular columns are excluded). The table should 
+      be oriented to contain samples in rows, variables in columns, and 
+      variables' names should be accessible via \code{colnames(input.table)}.}
+      
   \item{stop.words}{a vector of words to be excluded.}
 }
 \details{
-  This function might be usefull to perform culling, or automatic deletion of the words that are too characteristic for particular texts. See \code{help(culling)} for further details.
+  This function might be usefull to perform culling, or automatic deletion of 
+  the words that are too characteristic for particular texts. See 
+  \code{help(culling)} for further details.
 }
 \author{
 Maciej Eder

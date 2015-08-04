@@ -2,7 +2,7 @@
 # Cosine Distance
 # Function for computing a cosine similarity of a matrix of values,
 # e.g. a table of word frequencies.
-# The implementation highly inspired by the following post:
+# The implementation inspired by the following post:
 # http://stackoverflow.com/questions/2535234/find-cosine-similarity-in-r
 #
 # Argument: a matrix or data table containing at least 2 rows and 2 cols 
@@ -18,6 +18,14 @@ dist.cosine = function(x){
         stop("at least 2 cols and 2 rows are needed to compute a distance!")
     }
     
-    y = as.dist( 1 - x %*% t(x) / (sqrt(rowSums(x^2) %*% t(rowSums(x^2)))) ) 
+    # to get Centered Cosine dist (=Pearson Correlation Coeff.), one needs 
+    # to normalize the feature vectors by subtracting the vector means
+### x = t( t(x) - colMeans(x) )
+    
+    # this computes cosine dissimilarity; to have similarity, 1- applies
+    y = 1 - as.dist( x %*% t(x) / (sqrt(rowSums(x^2) %*% t(rowSums(x^2)))) ) 
+    # alternative way of approaching it:
+    # crossprod(x, y) / sqrt(crossprod(x) * crossprod(y))
+
     return(y)
 }

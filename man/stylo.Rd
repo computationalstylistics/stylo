@@ -83,7 +83,7 @@ Eder, M. (forthcoming). Visualization in stylometry: some problems and
 \author{Maciej Eder, Jan Rybicki, Mike Kestemont}
 
 \seealso{
-\code{\link{classify}}, \code{\link{oppose}}, \code{\link{rolling.delta}}
+\code{\link{classify}}, \code{\link{oppose}}, \code{\link{rolling.classify}}
 }
 \examples{
 \dontrun{
