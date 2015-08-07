@@ -12,7 +12,7 @@ distance measures are supported by this function.
 perform.delta(training.set, test.set, 
               classes.training.set = NULL, 
               classes.test.set = NULL, 
-              distance = "CD", no.of.candidates = 3, 
+              distance = "delta", no.of.candidates = 3, 
               z.scores.both.sets = TRUE) }
 \arguments{
 \item{training.set}{a table containing frequencies/counts for several
@@ -42,11 +42,12 @@ perform.delta(training.set, test.set,
           table will be used (see above).}
 
 \item{distance}{a kernel (i.e. a distance measure) used for computing 
-          similarities between texts. Available options so far: "CD" 
-          (Burrow's Delta, default), "AD" (Argamon's Linear Delta), 
-          "ED" (Eder's Delta), "ES" (Eder's Simple distance), 
-          "CB" (Canberra Distance), "MH" (Manhattan 
-          Distance), "EU" (Euclidean Distance).}
+          similarities between texts. Available options so far: "delta" 
+          (Burrow's Delta, default), "argamon" (Argamon's Linear Delta), 
+          "eder" (Eder's Delta), "simple" (Eder's Simple Distance), 
+          "canberra" (Canberra Distance), "manhattan" (Manhattan 
+          Distance), "euclidean" (Euclidean Distance), "cosine"
+          (Cosine Distance).}
 
 \item{no.of.candidates}{how many nearest neighbors will be computed for
           each test sample (default = 3).}

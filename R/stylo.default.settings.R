@@ -102,15 +102,15 @@ encoding = "native.enc"
 # explanation of the measures implemented in this script is pending.
 #
 # The available distance measures (choose ONE) are as follows:
-#   "CD" --> Classic Delta as developed by Burrows
-#   "AL" --> Argamon's Linear Delta (based on Euclidean principles)
-#   "ED" --> Eder's Delta (explanation and mathematical equation: soon)
-#   "ES" --> Eder's Simple (explanation and mathematical equation: soon)
-#   "MH" --> Manhattan Distance (obvious and well documented)
-#   "CB" --> Canberra Distance (risky, but sometimes amazingly good)
-#   "EU" --> Euclidean Distance (basic, and the most "natural")
+#   "delta" --> Classic Delta as developed by Burrows
+#   "argamon" --> Argamon's Linear Delta (based on Euclidean principles)
+#   "eder" --> Eder's Delta (explanation and mathematical equation: soon)
+#   "simple" --> Eder's Simple (explanation and mathematical equation: soon)
+#   "manhattan" --> Manhattan Distance (obvious and well documented)
+#   "canberra" --> Canberra Distance (risky, but sometimes amazingly good)
+#   "euclidean" --> Euclidean Distance (basic, and the most "natural")
 
-distance.measure = "CD"
+distance.measure = "delta"
 
 
 
@@ -493,13 +493,38 @@ visualization = "words"
 # #################################################
 
 
+
+# For the sake of backward compatibility, obsolete distance names
+# can be invoked by the user; they will be mapped into currently used ones
+
+  if(distance.measure == "MH") {
+        distance.measure = "manhattan"
+    }
+  if(distance.measure == "CB") {
+        distance.measure = "canberra"
+    }
+  if(distance.measure == "EU") {
+        distance.measure = "euclidean"
+    }
+  if(distance.measure == "CD") {
+        distance.measure = "delta"
+    }
+  if(distance.measure == "AL") {
+        distance.measure = "argamon"
+    }
+  if(distance.measure == "ED") {
+        distance.measure = "eder"
+    }
+  if(distance.measure == "ES") {
+        distance.measure = "simple"
+    }
+
 # This prevents us from choosing a non-existing distance measure -- in such
 # case the default distance (Classic Delta) will be switched on. Be aware
 # of correct spelling: then the default value will be assigned as well!
-
-if(distance.measure %in% c("CD","AL","ED","ES","MH","CB","EU") == FALSE) {
-  distance.measure = "CD"
-}
+#if(distance.measure %in% c("CD","AL","ED","ES","MH","CB","EU") == FALSE) {
+#  distance.measure = "CD"
+#}
 
 
 

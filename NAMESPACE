@@ -32,6 +32,7 @@ export(
   make.samples,
   make.table.of.frequencies,
   oppose,
+  parse.pos.tags,
   perform.culling,
   perform.delta,
   perform.knn,

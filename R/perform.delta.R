@@ -4,7 +4,7 @@ perform.delta = function(training.set,
                          test.set,
                          classes.training.set = NULL,
                          classes.test.set = NULL,
-                         distance = "CD",
+                         distance = "delta",
                          no.of.candidates = 3,
                          z.scores.both.sets = TRUE) {
 #
@@ -57,55 +57,70 @@ if(z.scores.both.sets == FALSE) {
 
 
 # some distances require just freqs
-freq.table.both.sets = rbind(training.set, test.set)
+input.freq.table = rbind(training.set, test.set)
 
 
 
 
 
-# calculating classic Delta distances
-if(distance == "CD") {
-  distance.table = 
-            as.matrix(dist(zscores.table.both.sets,
-            method="manhattan")) / no.of.cols
-  }
-# calculating Argamon's "Linear Delta"
-if(distance == "AL") {
-  distance.table = 
-            as.matrix(dist(zscores.table.both.sets,
-            method="euclidean")) / no.of.cols
-  }
-# calculating Delta distances with Eder's modifications
-if(distance == "ED") {
-  zscores.plus.e.value = t( t(zscores.table.both.sets) * ((1+(no.of.cols:1)) / no.of.cols) )
-  distance.table = as.matrix(dist(zscores.plus.e.value,method="manhattan"))
-  }
-# calculating Eder's Simple distance to a matrix distance.table
-if(distance == "ES") {
-  distance.table = 
-         as.matrix(dist(sqrt(freq.table.both.sets),method="manhattan"))
-  }
-# calculating Manhattan distance to a matrix distance.table
-if(distance == "MH") {
-  distance.table = 
-           as.matrix(dist(freq.table.both.sets,method="manhattan"))
-  }
-# calculating Canberra distance to a matrix distance.table
-if(distance == "CB") {
-  distance.table = 
-           as.matrix(dist(freq.table.both.sets,method="canberra"))
-  }
-# calculating Euclidean distance to a matrix distance.table
-if(distance == "EU") {
-  distance.table = 
-           as.matrix(dist(freq.table.both.sets,method="euclid"))
-  }
-#
+supported.measures = c("dist.euclidean", "dist.manhattan", "dist.canberra",
+                       "dist.delta", "dist.eder", "dist.argamon",
+                       "dist.simple", "dist.cosine")
+
+
+
+# if the requested distance name is confusing, stop
+if(length(grep(distance, supported.measures)) > 1 ) {
+    stop("Ambiguous distance method: which one did you want to use, really?")
+
+# if the requested distance name was not found invoke a custom plugin
+} else if(length(grep(distance, supported.measures)) == 0 ){
+
+    # first, check if a requested custom function exists 
+    if(is.function(get(distance)) == TRUE) {
+        # if OK, then use the value of the variable 'distance.measure' to invoke 
+        # the function of the same name, with x as its argument
+        distance.table = do.call(distance, list(x = input.freq.table))
+        # check if the invoked function did produce a distance
+        if(class(distance.table) != "dist") {
+            # say something nasty here, if it didn't:
+            stop("it wasn't a real distance measure function applied, was it?")
+        }
+    }
+
+# when the chosen distance measure is among the supported ones, use it
+} else {
+
+    # extract the long name of the distance (the "official" name) 
+    distance = supported.measures[grep(distance, supported.measures)]
+    # then check if this is one of standard methods supported by dist()
+    if(distance %in% c("dist.manhattan", "dist.euclidean", "dist.canberra")) {
+         # get rid of the "dist." in the distance name
+         distance = gsub("dist.", "", distance)
+         # apply a standard distance, using the generic dist() function
+         distance.table = as.matrix(dist(input.freq.table, method = distance))
+    # then, check for the non-standard methods but still supported by Stylo
+    } else if(distance %in% c("dist.simple", "dist.cosine")) {
+
+         # invoke one of the distance measures functions from Stylo    
+         distance.table = do.call(distance, list(x = input.freq.table))
+    
+    } else {
+         # invoke one of the distances supported by 'stylo'; this is slightly
+         # different from the custom functions invoked above, since it uses
+         # another argument: z-scores can be calculated outside of the function
+         distance.table = do.call(distance, list(x = zscores.table.both.sets, scale = FALSE))
+    }
+    
+} 
+
+# convert the table to the format of matrix
+distance.table = as.matrix(distance.table)
 
 
 
 
-# selecting an area of the distance table containig test samples (rows),
+# selecting an area of the distance table containing test samples (rows),
 # contrasted against training samples (columns)
 no.of.candid = length(training.set[,1])
 no.of.possib = length(test.set[,1])

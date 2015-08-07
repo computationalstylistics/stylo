@@ -1022,52 +1022,7 @@ cat(mfw, " ")
 
 if((analysis.type == "CA") || (analysis.type == "BCT") || (analysis.type == "MDS")){
 
-
-
-
-
-
-
-
-
-################################ TEMPORARY !!!!!!!!!!!
-################################ TEMPORARY !!!!!!!!!!!
-################################ TEMPORARY !!!!!!!!!!!
-
-  if(distance.measure == "MH") {
-        distance.measure = "manhattan"
-    }
-  if(distance.measure == "CB") {
-        distance.measure = "canberra"
-    }
-  if(distance.measure == "EU") {
-        distance.measure = "euclidean"
-    }
-  if(distance.measure == "CD") {
-        distance.measure = "delta"
-    }
-  if(distance.measure == "AL") {
-        distance.measure = "argamon"
-    }
-  if(distance.measure == "ED") {
-        distance.measure = "eder"
-    }
-  if(distance.measure == "ES") {
-        distance.measure = "simple"
-    }
-
-################################ TEMPORARY !!!!!!!!!!!
-################################ TEMPORARY !!!!!!!!!!!
-################################ TEMPORARY !!!!!!!!!!!
-
-
-
-
-
-
-
 input.freq.table = table.with.all.freqs[,1:mfw]
-
 
 
 supported.measures = c("dist.euclidean", "dist.manhattan", "dist.canberra",
@@ -1116,18 +1071,13 @@ if(length(grep(distance.measure, supported.measures)) > 1 ) {
          # invoke one of the distances supported by 'stylo'; this is slightly
          # different from the custom functions invoked above, since it uses
          # another argument: z-scores can be calculated outside of the function
-         distance.table = do.call(distance, list(x = input.freq.table, scale = FALSE))
+         distance.table = do.call(distance, list(x = table.with.all.zscores[,1:mfw], scale = FALSE))
     }
     
 } 
 
 # convert the table to the format of matrix
 distance.table = as.matrix(distance.table)
-
-
-
-
-
 
 
 

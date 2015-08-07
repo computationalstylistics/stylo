@@ -575,16 +575,17 @@ encoding.orig = variables$encoding
   entry_ES <- tkradiobutton(f3)
   entry_MH <- tkradiobutton(f3)
   entry_CB <- tkradiobutton(f3)
-  
   entry_EU <- tkradiobutton(f3)
+  entry_CS <- tkradiobutton(f3)
   #
-  tkconfigure(entry_CD,variable=distance.measure,value="CD")
-  tkconfigure(entry_AL,variable=distance.measure,value="AL")
-  tkconfigure(entry_ED,variable=distance.measure,value="ED")
-  tkconfigure(entry_ES,variable=distance.measure,value="ES")
-  tkconfigure(entry_MH,variable=distance.measure,value="MH")
-  tkconfigure(entry_CB,variable=distance.measure,value="CB")
-  tkconfigure(entry_EU,variable=distance.measure,value="EU")
+  tkconfigure(entry_CD,variable=distance.measure,value="delta")
+  tkconfigure(entry_AL,variable=distance.measure,value="argamon")
+  tkconfigure(entry_ED,variable=distance.measure,value="eder")
+  tkconfigure(entry_ES,variable=distance.measure,value="simple")
+  tkconfigure(entry_MH,variable=distance.measure,value="manhattan")
+  tkconfigure(entry_CB,variable=distance.measure,value="canberra")
+  tkconfigure(entry_EU,variable=distance.measure,value="euclidean")
+  tkconfigure(entry_CS,variable=distance.measure,value="cosine")  
   #
   entrylabel_CD <- tklabel(f3,text="Classic Delta")
   entrylabel_AL <- tklabel(f3,text="Argamon's Delta")
@@ -593,11 +594,12 @@ encoding.orig = variables$encoding
   entrylabel_MH <- tklabel(f3,text="Manhattan")
   entrylabel_CB <- tklabel(f3,text="Canberra")
   entrylabel_EU <- tklabel(f3,text="Euclidean")
+  entrylabel_CS <- tklabel(f3,text="Cosine")
   #
   tkgrid(tklabel(f3,text="  DISTANCES:"),entrylabel_CD,entrylabel_AL,entrylabel_ED,entrylabel_ES)
   tkgrid(tklabel(f3,text="            "),entry_CD,entry_AL,entry_ED,entry_ES)
-  tkgrid(tklabel(f3,text="            "),entrylabel_MH,entrylabel_CB,entrylabel_EU)
-  tkgrid(tklabel(f3,text="            "),entry_MH,entry_CB,entry_EU)
+  tkgrid(tklabel(f3,text="            "),entrylabel_MH,entrylabel_CB,entrylabel_EU,entrylabel_CS)
+  tkgrid(tklabel(f3,text="            "),entry_MH,entry_CB,entry_EU,entry_CS)
   tkgrid(tklabel(f3,text="    ")) # blank line for aesthetic purposes
   
   # Tooltips for the above
@@ -608,6 +610,7 @@ encoding.orig = variables$encoding
   tk2tip(entrylabel_MH, "Select Manhattan Distance (obvious and well documented).")
   tk2tip(entrylabel_CB, "Select Canberra Distance (risky, but sometimes amazingly good).")
   tk2tip(entrylabel_EU, "Select Euclidean Distance (basic and the most *natural*).")
+  tk2tip(entrylabel_CS, "Select Cosine Distance (probably the best choice!).")
   
   # next row: SAMPLING
   entry_SAMP <- tkradiobutton(f4)

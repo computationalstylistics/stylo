@@ -1012,26 +1012,29 @@ freq.table.both.sets = rbind(primary.set, secondary.set)
 
 if(tolower(classification.method) == "delta") {
         # a short message on the screen:
-        if(distance.measure == "CD") {
+        if(distance.measure == "delta") {
                 cat("Calculating classic Delta distances... \n")
         }
-        if(distance.measure == "AL") {
+        if(distance.measure == "argamon") {
                 cat("Calculating Argamon's Delta distances... \n")
         }
-        if(distance.measure == "ED") {
+        if(distance.measure == "eder") {
                 cat("Calculating Eder's Delta distances... \n")
         }
-        if(distance.measure == "ES") {
+        if(distance.measure == "eder") {
                 cat("Calculating Eder's Simple distances... \n")
         }
-        if(distance.measure == "MH") {
-                cat("Calculating Mahattan distances... \n")
+        if(distance.measure == "manhattan") {
+                cat("Calculating Manhattan distances... \n")
         }
-        if(distance.measure == "CB") {
+        if(distance.measure == "canberra") {
                 cat("Calculating Canberra distances... \n")
         }
-        if(distance.measure == "EU") {
+        if(distance.measure == "euclidean") {
                 cat("Calculating Euclidean distances... \n")
+        }
+        if(distance.measure == "cosine") {
+                cat("Calculating Cosine distances... \n")
         }
 }
 

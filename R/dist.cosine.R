@@ -20,7 +20,7 @@ dist.cosine = function(x){
     
     # to get Centered Cosine dist (=Pearson Correlation Coeff.), one needs 
     # to normalize the feature vectors by subtracting the vector means
-### x = t( t(x) - colMeans(x) )
+    # x = t( t(x) - colMeans(x) )
     
     # this computes cosine dissimilarity; to have similarity, 1- applies
     y = 1 - as.dist( x %*% t(x) / (sqrt(rowSums(x^2) %*% t(rowSums(x^2)))) ) 
