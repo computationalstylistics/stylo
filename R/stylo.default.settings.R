@@ -316,7 +316,7 @@ txm.compatibility.mode = FALSE
 
 # An output file (or files) will be generated when this option is set TRUE;
 # if this is set FALSE, next options are immaterial
-network = FALSE
+network = TRUE
 
 # Output format: either one table (edges), or two (edges and nodes);
 # "edges" | "both"

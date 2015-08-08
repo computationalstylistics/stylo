@@ -1,8 +1,4 @@
 
-#parse.corpus = function .......
-#add.to.corpus = .....
-
-
 # #################################################
 # Function for extracting relevant data structures
 # from POS-tagged texts or corpora.
@@ -14,10 +10,11 @@ parse.pos.tags = function(input.text,
                           feature = "pos") {
 
 
-extract.stuff = NULL
 
-  # putting the stuff into the form of function: it will be invoked later
-#  extract.stuff = function(x) {
+    # starting an empty function: just in case
+    extract.stuff = function(x) {NULL}
+
+
     if(tagger == "treetagger") {
         # the first column from a text (tab delimited) has to be extracted
         if(feature == "word") {
@@ -48,9 +45,7 @@ extract.stuff = NULL
     if(tagger == "takipi") {
         #  [TBD]
     }
-    #
-#  return(output)
-#  }    
+
         
 
     # the proper procedure applies, depending on what kind of data 
@@ -66,7 +61,6 @@ extract.stuff = NULL
         preprocessed.text = lapply(input.text, extract.stuff)
         class(preprocessed.text) = "stylo.corpus"
     }
-
 
 return(preprocessed.text)
 }
