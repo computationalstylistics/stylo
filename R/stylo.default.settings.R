@@ -87,6 +87,13 @@ preserve.case = FALSE
 encoding = "native.enc"
 
 
+# some classifiers, e.g. Nearest Shrunken Centroids, allows you to 
+# get the features that turned out to be most discriminative. Say TRUE
+# if you want to have them
+
+show.features = FALSE
+
+
 #######  MATHEMATICAL SETTINGS (DISTANCE MEASURE)  #################
 
 # Strictly speaking, the choice of the appropriate distance measure

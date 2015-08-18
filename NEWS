@@ -3,12 +3,15 @@
 
 
 
-== version 0.5.9-9, 2015/08/3
+== version 0.6.0, 2015/08/17
  * support for Georgian
  * plot size in rolling.classify() improved
  * distance measure engine thoroughly restructured
+ * custom distance measures allowed
  * cosine distance introduced
- * new functions: dist.cosine
+ * new functions: dist.cosine(), dist.delta(), dist.argamon(),
+                  dist.eder(), dist.simple()
+ * extracting POS tags via the function parse.pos.tags()
 
 == version 0.5.9-3, 2015/07/2
  * support for Coptic
@@ -64,7 +67,7 @@
 == version 0.5.6, 2014/04/20
  * support for Unicode on Windows
  * support for a few non Latin scripts
- * experimental support for CJK
+ * experimental support for CJK (Chinese-Japanese-Korean)
  * the function txt.to.words() remodelled
  * loading corpus files improved
  * printing variables on screen improved

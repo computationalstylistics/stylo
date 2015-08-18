@@ -171,7 +171,7 @@ stop.words = variables$stop.words
 sample.overlap = variables$sample.overlap
 number.of.samples = variables$number.of.samples
 custom.graph.filename = variables$custom.graph.filename
-
+show.features = variables$show.features
 
 # #############################################################################
 # additional options for dealing with custom picture size
@@ -856,7 +856,8 @@ if(tolower(classification.method) == "svm") {
 }
 
 if(tolower(classification.method) == "nsc") {
-  classification.results = perform.nsc(training.set, test.set)
+  classification.results = perform.nsc(training.set, test.set, 
+                                       show.features = show.features)
   ylabel = "NSC classification"
 }
 

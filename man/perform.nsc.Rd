@@ -41,7 +41,7 @@ perform.nsc(training.set,
 
 \item{show.features}{a logical value (default: FALSE). When the option is 
           switched on, the most discriminative features (e.g. words) will 
-          be shown.}.
+          be shown.}
 
 \item{no.of.candidates}{how many nearest neighbors will be computed for
           each test sample (default = 3).}
