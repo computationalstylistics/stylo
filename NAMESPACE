@@ -11,6 +11,15 @@ import(
   tsne
 )
 
+importFrom(grDevices, dev.off, gray, jpeg, pdf, png, rgb, svg)
+importFrom(graphics, abline, arrows, axis, barplot, box, boxplot, 
+             layout, legend, lines, mtext, par, plot, polygon, rect, 
+             segments, text, title)
+importFrom(stats, as.dendrogram, as.dist, biplot, chisq.test, cmdscale, 
+             dendrapply, dist, hclust, is.leaf, prcomp, predict, sd, 
+             wilcox.test)
+importFrom(utils, head, read.table, write.csv, write.table)
+
 export(
   assign.plot.colors,
   classify,
