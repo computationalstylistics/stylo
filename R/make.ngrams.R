@@ -22,7 +22,7 @@ function(input.text,ngram.size=1) {
     txt = input.text
     for(n in 2:ngram.size) {
     # agglutinating subsequent words/chars into n-grams
-    txt = paste(txt[1:(length(txt)-1)],input.text[n:length(input.text)])
+    txt = stri_paste(txt[1:(length(txt)-1)],input.text[n:length(input.text)],sep = " ")
     }
   } else {
   # if n-gram size is set to 1, then nothing will happen
