@@ -1,7 +1,7 @@
 
 # #################################################
 # Function for generating a frequency list of words or other (linguistic)
-# features. It basically count the elements of a vector and returns a vector
+# features. It basically counts the elements of a vector and returns a vector
 # of these elements in descending order of frequency.
 # Refer to help(make.frequency.list) for farther details.
 # #################################################
