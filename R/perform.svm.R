@@ -40,8 +40,8 @@ perform.svm = function(training.set,
   #
 
 
-  classes.training.set = gsub("_.*","",rownames(training.set))
-  classes.test.set = gsub("_.*","",rownames(test.set))
+#  classes.training.set = gsub("_.*","",rownames(training.set))
+#  classes.test.set = gsub("_.*","",rownames(test.set))
   classes = c(classes.training.set, classes.test.set)
   input.data = as.data.frame(rbind(training.set,test.set))
   input.data = cbind(classes, input.data)
