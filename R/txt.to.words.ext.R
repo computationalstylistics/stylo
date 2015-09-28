@@ -17,6 +17,15 @@ txt.to.words.ext = function(input.text,
          splitting.rule = NULL,
          preserve.case = FALSE) {
 
+                 
+     # since the function can be applied to lists and vectors,
+     # we need to define an internal function that will be applied afterwards
+     wrapper = function(input.text = input.text, 
+                        language = language, 
+                        splitting.rule = splitting.rule,
+                        preserve.case = preserve.case) {
+                 
+                 
   # if a custom splitting rule was detected...
   if(length(splitting.rule) > 0) {
       # sanity check
@@ -82,5 +91,31 @@ tokenized.text = input.text
     tokenized.text = tokenized.text[nchar(tokenized.text)>0]
     #
   }
+  
+  }
+  
+
+        # the proper procedure applies, depending on what kind of data 
+        # is analyzed
+        
+        # test if the dataset has a form of a single string (a vector)
+        if(is.list(input.text) == FALSE) {
+                # apply an appropriate replacement function
+                tokenized.text = wrapper(input.text = input.text, 
+                        language = language, 
+                        splitting.rule = splitting.rule,
+                        preserve.case = preserve.case)
+                # if the dataset has already a form of list
+        } else {
+                # applying an appropriate function to a corpus:
+                tokenized.text = lapply(input.text, wrapper, 
+                        language = language, 
+                        splitting.rule = splitting.rule,
+                        preserve.case = preserve.case)
+                class(tokenized.text) = "stylo.corpus"
+        }
+        
+
+  
 return(tokenized.text)
 }
