@@ -108,5 +108,6 @@ function(tokenized.text,
       names(corpus.cut.into.samples)[n+s] = names(samples.from.text)[s]
     }
   }
+class(corpus.cut.into.samples) = "stylo.corpus"
 return(corpus.cut.into.samples)
 }

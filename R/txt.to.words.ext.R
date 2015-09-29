@@ -66,11 +66,11 @@ txt.to.words.ext = function(input.text,
 ### TEMPORARILY SWITCHED OFF, due to some CRAN restrictions
 ### tokenized.text = gsub(iconv("\u2019",from="UTF-8"),"'",input.text)
 tokenized.text = input.text
-      # getting rid of contractions ('t, 's, 've, 'd, 'll, 'em, 'im) by 
+      # getting rid of contractions ('t, 's, 've, 'd, 'll, 'em, 'im, 're) by 
       # replacing their apostrophes with ^ (other apostrophes will not 
       # be replaced); of course, if your corpus is Cockney, you should edit 
       # the "([tsdm]|ll|ve|em|im)" statement accordingly.
-      tokenized.text = gsub("([[:alpha:]])'([tsdm]|ll|ve|em|im)\\b","\\1^\\2",
+      tokenized.text = gsub("([[:alpha:]])'([tsdm]|ll|ve|em|im|re)\\b","\\1^\\2",
                             tokenized.text) 
       # adding spaces around dashes (to distinguish dashes and hyphens)
       tokenized.text = gsub("[-]{2,5}"," -- ",tokenized.text)

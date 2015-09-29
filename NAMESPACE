@@ -41,6 +41,7 @@ export(
   make.samples,
   make.table.of.frequencies,
   oppose,
+  parse.corpus,
   parse.pos.tags,
   perform.culling,
   perform.delta,
