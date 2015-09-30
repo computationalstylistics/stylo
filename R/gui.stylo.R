@@ -8,8 +8,7 @@
 # Usage: gui.stylo()
 # #################################################    
 
-gui.stylo <-
-function(...) {
+gui.stylo = function(...) {
   
   # loading required libraries
   # (this will be obsolete when we solve the varibles import/export issues)
@@ -78,6 +77,7 @@ culling.incr = variables$culling.incr
 culling.max = variables$culling.max
 culling.min = variables$culling.min
 culling.of.all.samples = variables$culling.of.all.samples
+custom.graph.title = variables$custom.graph.title
 delete.pronouns = variables$delete.pronouns
 dendrogram.layout.horizontal = variables$dendrogram.layout.horizontal
 display.on.screen = variables$display.on.screen

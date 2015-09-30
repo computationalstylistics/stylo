@@ -10,13 +10,12 @@
 # #################################################
 
 
-stylo <-
-function(gui = TRUE, 
-         frequencies = NULL,
-         parsed.corpus = NULL,
-         features = NULL,
-         path = NULL, 
-         corpus.dir = "corpus", ...) {
+stylo = function(gui = TRUE, 
+             frequencies = NULL,
+             parsed.corpus = NULL,
+             features = NULL,
+             path = NULL, 
+             corpus.dir = "corpus", ...) {
 
 
 
@@ -98,6 +97,7 @@ culling.incr = variables$culling.incr
 culling.max = variables$culling.max
 culling.min = variables$culling.min
 culling.of.all.samples = variables$culling.of.all.samples
+custom.graph.title = variables$custom.graph.title
 delete.pronouns = variables$delete.pronouns
 dendrogram.layout.horizontal = variables$dendrogram.layout.horizontal
 display.on.screen = variables$display.on.screen
@@ -181,7 +181,7 @@ custom.graph.filename = variables$custom.graph.filename
 # If no language was chosen (or if a desired language is not supported, or if 
 # there was a spelling mistake), then the variable will be set to "English". 
 
-pronouns = stylo.pronouns(language=corpus.lang)
+pronouns = stylo.pronouns(language = corpus.lang)
 
 
 # Since it it not so easy to perform, say, 17.9 iterations, or analyze
@@ -260,8 +260,24 @@ if(txm.compatibility.mode == TRUE) {
 
 
 
+
+
 # Network analysis: variable initialization
 all.connections = 0
+
+
+
+
+
+# Is custom title requested? If yes, use it
+if(is.null(custom.graph.title) == FALSE) {
+        # but first, a tiny sanitizing is needed
+        graph.title = as.character(custom.graph.title)[1]
+} else {
+        # otherwise, assign the current working directory name
+        graph.title = basename(getwd())
+}
+
 
 
 
@@ -1389,7 +1405,7 @@ if(ngram.size > 1) {
   }
   #
 if(titles.on.graphs == TRUE) {
-  graph.title = paste(basename(getwd()),"\n",name.of.the.method)
+  graph.title = paste(graph.title, "\n", name.of.the.method)
   if(analysis.type == "BCT") {
       graph.subtitle = paste(mfw.info," MF",toupper(analyzed.features)," ",ngram.value," Culled @ ",culling.info,"%\n",
                     pronouns.info," ",distance.name.on.graph," Consensus ",consensus.strength," ",start.at.info, sep="") 

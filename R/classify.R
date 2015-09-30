@@ -160,7 +160,7 @@ cv.folds = variables$cv.folds
 stop.words = variables$stop.words
 sample.overlap = variables$sample.overlap
 number.of.samples = variables$number.of.samples
-
+custom.graph.title = variables$custom.graph.title
 
 
 # ['cv' is temporarily switched off, it always performs 'cv ="thorough"']

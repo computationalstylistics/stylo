@@ -10,11 +10,9 @@
 # Usage: gui.classify()
 # #################################################    
 
-gui.classify <-
-function(...) {
+
+gui.classify = function(...) {
   
-  # loading required library  #### it will not be needed
-#  library(tcltk2)
 
 
 
@@ -82,6 +80,7 @@ culling.incr = variables$culling.incr
 culling.max = variables$culling.max
 culling.min = variables$culling.min
 culling.of.all.samples = variables$culling.of.all.samples
+custom.graph.title = variables$custom.graph.title
 delete.pronouns = variables$delete.pronouns
 dendrogram.layout.horizontal = variables$dendrogram.layout.horizontal
 display.on.screen = variables$display.on.screen

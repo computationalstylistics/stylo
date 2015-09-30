@@ -5,10 +5,9 @@
 # it needs to be thoroughly re-written
 
 
-rolling.delta <-
-function(gui = TRUE, path = NULL,
-         primary.corpus.dir = "primary_set",
-         secondary.corpus.dir = "secondary_set") {
+rolling.delta = function(gui = TRUE, path = NULL,
+                         primary.corpus.dir = "primary_set",
+                         secondary.corpus.dir = "secondary_set") {
 
 
 

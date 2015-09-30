@@ -1,7 +1,10 @@
-stylo.default.settings <-
-function(...) {
 
 
+
+stylo.default.settings = function(...) {
+
+
+        
 
 # if any command-line arguments have been passed by a user, they will
 # be stored on the following list and used to overwrite the defaults
@@ -190,8 +193,11 @@ text.id.on.graphs = "labels"
 colors.on.graphs = "colors"
 
 # Do you want titles on your graphs, listing the most important parameters?
-
 titles.on.graphs = TRUE
+
+# do you want to set your custom (main) title on the final picture?
+# if not specified, the working directory name will be used as the title
+custom.graph.title = NULL
 
 
 # Layout of dendrogram: horizontal/vertical (Cluster Analysis only)
@@ -440,8 +446,8 @@ relative.frequencies = TRUE
 
 
 # Cross validation options: classify() only
-# choose one: "none", "standard", "thorough"
-# ['cv' is temporarily switched off, it always performs 'cv ="thorough"']
+# choose one: "none", "standard", "stratified"
+# ['cv' is temporarily switched off, it always performs 'cv ="stratified"']
 cv = "none"
 cv.folds = 0
 # no.of.samples.per.class

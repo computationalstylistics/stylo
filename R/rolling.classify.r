@@ -1,7 +1,6 @@
 
 
-rolling.classify <- 
-function(gui = FALSE,
+rolling.classify = function(gui = FALSE,
          training.corpus.dir = "reference_set",
          test.corpus.dir = "test_set",
          training.frequencies = NULL,
@@ -110,6 +109,7 @@ culling.incr = variables$culling.incr
 culling.max = variables$culling.max
 culling.min = variables$culling.min
 culling.of.all.samples = variables$culling.of.all.samples
+custom.graph.title = variables$custom.graph.title
 delete.pronouns = variables$delete.pronouns
 dendrogram.layout.horizontal = variables$dendrogram.layout.horizontal
 display.on.screen = variables$display.on.screen
