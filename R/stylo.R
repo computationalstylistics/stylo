@@ -273,9 +273,11 @@ all.connections = 0
 if(is.null(custom.graph.title) == FALSE) {
         # but first, a tiny sanitizing is needed
         graph.title = as.character(custom.graph.title)[1]
+        graph.main.title = graph.title
 } else {
         # otherwise, assign the current working directory name
         graph.title = basename(getwd())
+        graph.main.title = graph.title
 }
 
 
@@ -1192,7 +1194,7 @@ if(analysis.type == "CA") {
           dendrogram.with.colors = dendrapply(tree.with.clusters, colLab)
           # finally, ploting the whole stuff
           plot(dendrogram.with.colors,
-          main = graph.title,
+          main = graph.main.title,
           horiz = dendrogram.layout.horizontal) 
           if(dendrogram.layout.horizontal == TRUE) {
                   title(sub=graph.subtitle) 
@@ -1228,7 +1230,7 @@ if(analysis.type == "MDS") {
       plot(xy.coord, type="p", 
            ylab="", xlab="", 
            xlim=plot.area[[1]],ylim=plot.area[[2]],
-           main = graph.title,
+           main = graph.main.title,
            sub = graph.subtitle,
            col = colors.of.pca.graph,
            lwd = plot.line.thickness) 
@@ -1237,7 +1239,7 @@ if(analysis.type == "MDS") {
       plot(xy.coord, type="n", 
            ylab="", xlab="", 
            xlim=plot.area[[1]],ylim=plot.area[[2]],
-           main = graph.title,
+           main = graph.main.title,
            sub = graph.subtitle,
            col = colors.of.pca.graph,
            lwd = plot.line.thickness) 
@@ -1260,11 +1262,11 @@ if(analysis.type == "tSNE") {
     plot.current.task = function(){
         ecb = function(x,y){
             if(titles.on.graphs == TRUE) {
-                graph.title = paste(graph.title,"\nt-SNE visualisation")
+                graph.main.title = paste(graph.title,"\nt-SNE visualisation")
             } else {
-                graph.title = ""
+                graph.main.title = ""
             }
-            plot(x, t='n', main=graph.title, xlab="", ylab="", yaxt="n", xaxt="n")
+            plot(x, t='n', main=graph.main.title, xlab="", ylab="", yaxt="n", xaxt="n")
             text(x,rownames(table.with.all.freqs[,1:mfw]), cex=0.3)
         }
     tsne(X=table.with.all.freqs[,1:mfw], initial_dims=50, epoch_callback=ecb, perplexity=50, max_iter=2000)
@@ -1308,7 +1310,7 @@ if(analysis.type == "PCV" || analysis.type == "PCR") {
              type="p",
              xlim=plot.area[[1]], ylim=plot.area[[2]],
              xlab="", ylab=PC2_lab,
-             main = graph.title, sub = paste(PC1_lab,"\n",graph.subtitle),
+             main = graph.main.title, sub = paste(PC1_lab,"\n",graph.subtitle),
              col=colors.of.pca.graph,
              lwd=plot.line.thickness) 
       }
@@ -1317,7 +1319,7 @@ if(analysis.type == "PCV" || analysis.type == "PCR") {
              type="n",
              xlim=plot.area[[1]],ylim=plot.area[[2]],
              xlab="",ylab=PC2_lab,
-             main = graph.title,sub = paste(PC1_lab,"\n",graph.subtitle),
+             main = graph.main.title, sub = paste(PC1_lab,"\n",graph.subtitle),
              col=colors.of.pca.graph,
              lwd=plot.line.thickness) 
       }
@@ -1333,11 +1335,11 @@ if(analysis.type == "PCV" || analysis.type == "PCR") {
              col=c("grey70", "black"), 
              cex=c(0.7, 1), xlab="", 
              ylab=PC2_lab, 
-             main=paste(graph.title, "\n\n", sep=""), 
+             main=paste(graph.main.title, "\n\n", sep=""), 
              sub=paste(PC1_lab,"\n",graph.subtitle, sep=""),var.axes=FALSE)
     } else if(pca.visual.flavour == "technical"){
       layout(matrix(c(1,2), 2, 2, byrow = TRUE), widths=c(3,1))
-      biplot(pca.results, col=c("black", "grey40"), cex=c(1, 0.9), xlab="", ylab=PC2_lab, main=paste(graph.title, "\n\n", sep=""), sub=paste(PC1_lab,"\n",graph.subtitle, sep=""),var.axes=FALSE)
+      biplot(pca.results, col=c("black", "grey40"), cex=c(1, 0.9), xlab="", ylab=PC2_lab, main=paste(graph.main.title, "\n\n", sep=""), sub=paste(PC1_lab,"\n",graph.subtitle, sep=""),var.axes=FALSE)
       abline(h=0, v=0, col = "gray60",lty=3)
       # add the subpanel to the right 
       row = mat.or.vec(nc=ncol(pca.results$x),nr=1)
@@ -1405,7 +1407,7 @@ if(ngram.size > 1) {
   }
   #
 if(titles.on.graphs == TRUE) {
-  graph.title = paste(graph.title, "\n", name.of.the.method)
+  graph.main.title = paste(graph.title, "\n", name.of.the.method)
   if(analysis.type == "BCT") {
       graph.subtitle = paste(mfw.info," MF",toupper(analyzed.features)," ",ngram.value," Culled @ ",culling.info,"%\n",
                     pronouns.info," ",distance.name.on.graph," Consensus ",consensus.strength," ",start.at.info, sep="") 
@@ -1413,7 +1415,7 @@ if(titles.on.graphs == TRUE) {
       graph.subtitle = paste(mfw.info," MF",toupper(analyzed.features)," ",ngram.value," Culled @ ",culling.info,"%\n",
       pronouns.info," ",distance.name.on.graph," ",start.at.info, sep="") }
   } else {
-  graph.title = ""
+  graph.main.title = ""
   graph.subtitle = "" }
 
 
@@ -1705,7 +1707,7 @@ if(length(bootstrap.list) <= 2) {
            font=1,
            lab4ut="axial", 
            tip.color = colors.of.pca.graph)
-        title (main = graph.title)
+        title (main = graph.main.title)
         title (sub = graph.subtitle) }
 
 # The core code for the graphic output... Yes, you are right: you've seen
