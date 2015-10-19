@@ -140,7 +140,6 @@ perform.svm = function(training.set,
   attr(classification.results, "rankings") = classification.rankings
   attr(classification.results, "scores") = classification.scores
   
-
 return(classification.results)
 }
 

@@ -44,7 +44,7 @@ perform.nsc = function(training.set,
   cat("\n")
   # getting the discriminative features (if an appropriate option was chosen)
   if(show.features == TRUE) {
-      the.features = pamr.listgenes(model,mydata,threshold=1,genenames=TRUE)[,2]
+      the.features = pamr.listgenes(model,mydata,threshold=1,genenames=TRUE)#[,2]
   } else {
       the.features = NULL
   }
