@@ -160,7 +160,7 @@ cv.folds = variables$cv.folds
 stop.words = variables$stop.words
 sample.overlap = variables$sample.overlap
 number.of.samples = variables$number.of.samples
-
+custom.graph.title = variables$custom.graph.title
 
 
 # ['cv' is temporarily switched off, it always performs 'cv ="thorough"']
@@ -861,6 +861,12 @@ perfect.guessing = length(authors.II.set[authors.II.set %in% authors.I.set])
 
 
 
+#
+# CLASSES should be assigned differently!!!!!!!
+#
+#
+#
+
 
 
 
@@ -1198,7 +1204,7 @@ if(cv.folds > 0) {
   cross.validation.results.all = c()
 
 
-  
+
 
   # beginning of k-fold cross-validation (k being the number of iterations)
   for(iterations in 1 : cv.folds) {
@@ -1207,7 +1213,7 @@ if(cv.folds > 0) {
     # just for feeding the bootstrap module 
     freq.table.both.sets.binded = rbind(primary.set[,1:mfw],secondary.set[,1:mfw])
 
-          
+
     names.of.training.set.orig = rownames(primary.set)
     classes.training.set = gsub("_.*", "", rownames(primary.set))
     classes.test.set = gsub("_.*", "", rownames(secondary.set))

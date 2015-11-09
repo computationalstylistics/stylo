@@ -31,22 +31,20 @@ perform.nsc = function(training.set,
   
   #
   # training_set and test_set preparation; adding class labels to both sets
-  classes.training = gsub("_.*","",rownames(training.set))
-  classes.test = gsub("_.*","",rownames(test.set))
-  classes = c(classes.training, classes.test)
+  classes = c(classes.training.set, classes.test.set)
   input.data = as.data.frame(rbind(training.set,test.set))
   training.classes = c(1:length(training.set[,1]))
-  mydata=list(x = t(input.data),
+  mydata = list(x = t(input.data),
               y = as.factor(classes),
               geneid = as.character(1:length(colnames(training.set))), 
               genenames = colnames(training.set)
               )
   # training a model
-  model = pamr.train(mydata,sample.subset=c(1:length(classes.training)))
+  model = pamr.train(mydata,sample.subset=c(1:length(classes.training.set)))
   cat("\n")
   # getting the discriminative features (if an appropriate option was chosen)
   if(show.features == TRUE) {
-      the.features = pamr.listgenes(model,mydata,threshold=1,genenames=TRUE)[,2]
+      the.features = pamr.listgenes(model,mydata,threshold=1,genenames=TRUE)#[,2]
   } else {
       the.features = NULL
   }

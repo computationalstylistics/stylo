@@ -10,13 +10,12 @@
 # #################################################
 
 
-stylo <-
-function(gui = TRUE, 
-         frequencies = NULL,
-         parsed.corpus = NULL,
-         features = NULL,
-         path = NULL, 
-         corpus.dir = "corpus", ...) {
+stylo = function(gui = TRUE, 
+             frequencies = NULL,
+             parsed.corpus = NULL,
+             features = NULL,
+             path = NULL, 
+             corpus.dir = "corpus", ...) {
 
 
 
@@ -98,6 +97,7 @@ culling.incr = variables$culling.incr
 culling.max = variables$culling.max
 culling.min = variables$culling.min
 culling.of.all.samples = variables$culling.of.all.samples
+custom.graph.title = variables$custom.graph.title
 delete.pronouns = variables$delete.pronouns
 dendrogram.layout.horizontal = variables$dendrogram.layout.horizontal
 display.on.screen = variables$display.on.screen
@@ -181,7 +181,7 @@ custom.graph.filename = variables$custom.graph.filename
 # If no language was chosen (or if a desired language is not supported, or if 
 # there was a spelling mistake), then the variable will be set to "English". 
 
-pronouns = stylo.pronouns(language=corpus.lang)
+pronouns = stylo.pronouns(language = corpus.lang)
 
 
 # Since it it not so easy to perform, say, 17.9 iterations, or analyze
@@ -260,8 +260,26 @@ if(txm.compatibility.mode == TRUE) {
 
 
 
+
+
 # Network analysis: variable initialization
 all.connections = 0
+
+
+
+
+
+# Is custom title requested? If yes, use it
+if(is.null(custom.graph.title) == FALSE) {
+        # but first, a tiny sanitizing is needed
+        graph.title = as.character(custom.graph.title)[1]
+        graph.main.title = graph.title
+} else {
+        # otherwise, assign the current working directory name
+        graph.title = basename(getwd())
+        graph.main.title = graph.title
+}
+
 
 
 
@@ -953,45 +971,41 @@ distance.name.on.graph = distance.measure
 distance.name.on.file = distance.measure
 
 
-  if(distance.measure == "CD") {
+  if(distance.measure == "delta" | distance.measure == "dist.delta") {
     cat("Calculating classic Delta distances... \n")
     distance.name.on.graph = "Classic Delta distance"
     distance.name.on.file = "Classic Delta"
-  }
-  if(distance.measure == "AL") {
+  } else if(distance.measure == "argamon" | distance.measure == "dist.argamon") {
     cat("Calculating Argamon's Delta distances... \n")
     distance.name.on.graph = "Argamon's Delta distance"
     distance.name.on.file = "Argamon's Delta"
-  }
-  if(distance.measure == "ED") {
+  } else if(distance.measure == "eder" |  distance.measure == "dist.eder") {
     cat("Calculating Eder's Delta distances... \n")
     distance.name.on.graph = "Eder's Delta distance"
     distance.name.on.file = "Eder's Delta"
-  }
-  if(distance.measure == "ES") {
+  } else if(distance.measure == "simple" | distance.measure == "dist.simple") {
     cat("Calculating Eder's Simple distances... \n")
     distance.name.on.graph = "Eder's Simple distance"
     distance.name.on.file = "Eder's Simple"    
-  }
-  if(distance.measure == "MH") {
+  } else if(distance.measure == "manhattan" | distance.measure == "dist.manhattan") {
     cat("Calculating Manhattan distances... \n")
     distance.name.on.graph = "Manhattan distance"
     distance.name.on.file = "Manhattan"
-  }
-  if(distance.measure == "CB") {
+  } else if(distance.measure == "canberra" | distance.measure == "dist.canberra") {
     cat("Calculating Canberra distances... \n")
     distance.name.on.graph = "Canberra distance"
     distance.name.on.file = "Canberra"
-  }
-  if(distance.measure == "EU") {
+  } else if(distance.measure == "euclidean" | distance.measure == "dist.euclidean") {
     cat("Calculating Euclidean distances... \n")
     distance.name.on.graph = "Euclidean distance"
     distance.name.on.file = "Euclidean"
-  }
-  if(distance.measure == "dist.cosine") {
+  } else if(distance.measure == "cosine" | distance.measure == "dist.cosine") {
     cat("Calculating Cosine distances... \n")
     distance.name.on.graph = "Cosine distance"
     distance.name.on.file = "Cosine"
+  } else {
+    distance.name.on.graph = paste("Distance:", distance.measure)
+    distance.name.on.file = distance.measure
   }
 
 }
@@ -1176,7 +1190,7 @@ if(analysis.type == "CA") {
           dendrogram.with.colors = dendrapply(tree.with.clusters, colLab)
           # finally, ploting the whole stuff
           plot(dendrogram.with.colors,
-          main = graph.title,
+          main = graph.main.title,
           horiz = dendrogram.layout.horizontal) 
           if(dendrogram.layout.horizontal == TRUE) {
                   title(sub=graph.subtitle) 
@@ -1212,7 +1226,7 @@ if(analysis.type == "MDS") {
       plot(xy.coord, type="p", 
            ylab="", xlab="", 
            xlim=plot.area[[1]],ylim=plot.area[[2]],
-           main = graph.title,
+           main = graph.main.title,
            sub = graph.subtitle,
            col = colors.of.pca.graph,
            lwd = plot.line.thickness) 
@@ -1221,7 +1235,7 @@ if(analysis.type == "MDS") {
       plot(xy.coord, type="n", 
            ylab="", xlab="", 
            xlim=plot.area[[1]],ylim=plot.area[[2]],
-           main = graph.title,
+           main = graph.main.title,
            sub = graph.subtitle,
            col = colors.of.pca.graph,
            lwd = plot.line.thickness) 
@@ -1244,11 +1258,11 @@ if(analysis.type == "tSNE") {
     plot.current.task = function(){
         ecb = function(x,y){
             if(titles.on.graphs == TRUE) {
-                graph.title = paste(graph.title,"\nt-SNE visualisation")
+                graph.main.title = paste(graph.title,"\nt-SNE visualisation")
             } else {
-                graph.title = ""
+                graph.main.title = ""
             }
-            plot(x, t='n', main=graph.title, xlab="", ylab="", yaxt="n", xaxt="n")
+            plot(x, t='n', main=graph.main.title, xlab="", ylab="", yaxt="n", xaxt="n")
             text(x,rownames(table.with.all.freqs[,1:mfw]), cex=0.3)
         }
     tsne(X=table.with.all.freqs[,1:mfw], initial_dims=50, epoch_callback=ecb, perplexity=50, max_iter=2000)
@@ -1292,7 +1306,7 @@ if(analysis.type == "PCV" || analysis.type == "PCR") {
              type="p",
              xlim=plot.area[[1]], ylim=plot.area[[2]],
              xlab="", ylab=PC2_lab,
-             main = graph.title, sub = paste(PC1_lab,"\n",graph.subtitle),
+             main = graph.main.title, sub = paste(PC1_lab,"\n",graph.subtitle),
              col=colors.of.pca.graph,
              lwd=plot.line.thickness) 
       }
@@ -1301,7 +1315,7 @@ if(analysis.type == "PCV" || analysis.type == "PCR") {
              type="n",
              xlim=plot.area[[1]],ylim=plot.area[[2]],
              xlab="",ylab=PC2_lab,
-             main = graph.title,sub = paste(PC1_lab,"\n",graph.subtitle),
+             main = graph.main.title, sub = paste(PC1_lab,"\n",graph.subtitle),
              col=colors.of.pca.graph,
              lwd=plot.line.thickness) 
       }
@@ -1317,11 +1331,11 @@ if(analysis.type == "PCV" || analysis.type == "PCR") {
              col=c("grey70", "black"), 
              cex=c(0.7, 1), xlab="", 
              ylab=PC2_lab, 
-             main=paste(graph.title, "\n\n", sep=""), 
+             main=paste(graph.main.title, "\n\n", sep=""), 
              sub=paste(PC1_lab,"\n",graph.subtitle, sep=""),var.axes=FALSE)
     } else if(pca.visual.flavour == "technical"){
       layout(matrix(c(1,2), 2, 2, byrow = TRUE), widths=c(3,1))
-      biplot(pca.results, col=c("black", "grey40"), cex=c(1, 0.9), xlab="", ylab=PC2_lab, main=paste(graph.title, "\n\n", sep=""), sub=paste(PC1_lab,"\n",graph.subtitle, sep=""),var.axes=FALSE)
+      biplot(pca.results, col=c("black", "grey40"), cex=c(1, 0.9), xlab="", ylab=PC2_lab, main=paste(graph.main.title, "\n\n", sep=""), sub=paste(PC1_lab,"\n",graph.subtitle, sep=""),var.axes=FALSE)
       abline(h=0, v=0, col = "gray60",lty=3)
       # add the subpanel to the right 
       row = mat.or.vec(nc=ncol(pca.results$x),nr=1)
@@ -1389,7 +1403,7 @@ if(ngram.size > 1) {
   }
   #
 if(titles.on.graphs == TRUE) {
-  graph.title = paste(basename(getwd()),"\n",name.of.the.method)
+  graph.main.title = paste(graph.title, "\n", name.of.the.method)
   if(analysis.type == "BCT") {
       graph.subtitle = paste(mfw.info," MF",toupper(analyzed.features)," ",ngram.value," Culled @ ",culling.info,"%\n",
                     pronouns.info," ",distance.name.on.graph," Consensus ",consensus.strength," ",start.at.info, sep="") 
@@ -1397,7 +1411,7 @@ if(titles.on.graphs == TRUE) {
       graph.subtitle = paste(mfw.info," MF",toupper(analyzed.features)," ",ngram.value," Culled @ ",culling.info,"%\n",
       pronouns.info," ",distance.name.on.graph," ",start.at.info, sep="") }
   } else {
-  graph.title = ""
+  graph.main.title = ""
   graph.subtitle = "" }
 
 
@@ -1689,7 +1703,7 @@ if(length(bootstrap.list) <= 2) {
            font=1,
            lab4ut="axial", 
            tip.color = colors.of.pca.graph)
-        title (main = graph.title)
+        title (main = graph.main.title)
         title (sub = graph.subtitle) }
 
 # The core code for the graphic output... Yes, you are right: you've seen

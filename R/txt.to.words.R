@@ -9,8 +9,17 @@
 # that dependens on the operating system used
 # #################################################
 
-txt.to.words <-
-function(input.text, splitting.rule = NULL, preserve.case = FALSE) {
+txt.to.words = function(input.text, 
+                        splitting.rule = NULL, 
+                        preserve.case = FALSE) {
+#
+
+
+  # since the function can be applied to lists and vectors,
+  # we need to define an internal function that will be applied afterwards
+  wrapper = function(input.text = input.text, splitting.rule = splitting.rule, 
+                        preserve.case = preserve.case) {
+
   # converting characters to lowercase if necessary
   if (!(preserve.case)){
       input.text = tryCatch(tolower(input.text), 
@@ -64,6 +73,31 @@ function(input.text, splitting.rule = NULL, preserve.case = FALSE) {
     }
   # getting rid of emtpy strings
   tokenized.text = tokenized.text[nchar(tokenized.text) > 0]
+  
+  }
+ 
+  
+  
+        # the proper procedure applies, depending on what kind of data 
+        # is analyzed
+        
+        # test if the dataset has a form of a single string (a vector)
+        if(is.list(input.text) == FALSE) {
+                # apply an appropriate replacement function
+                tokenized.text = wrapper(input.text = input.text, 
+                        splitting.rule = splitting.rule,
+                        preserve.case = preserve.case)
+                # if the dataset has already a form of list
+        } else {
+                # applying an appropriate function to a corpus:
+                tokenized.text = lapply(input.text, wrapper, 
+                        splitting.rule = splitting.rule,
+                        preserve.case = preserve.case)
+                class(tokenized.text) = "stylo.corpus"
+        }
+        
+  
+  
 # outputting the results
 return(tokenized.text)
 }

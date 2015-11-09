@@ -1,15 +1,14 @@
 
 
 
-oppose <-
-function(gui = TRUE, 
-         path = NULL,
-         primary.corpus = NULL,
-         secondary.corpus = NULL,
-         test.corpus = NULL,
-         primary.corpus.dir = "primary_set",
-         secondary.corpus.dir = "secondary_set",
-         test.corpus.dir = "test_set", ...) {
+oppose = function(gui = TRUE, 
+             path = NULL,
+             primary.corpus = NULL,
+             secondary.corpus = NULL,
+             test.corpus = NULL,
+             primary.corpus.dir = "primary_set",
+             secondary.corpus.dir = "secondary_set",
+             test.corpus.dir = "test_set", ...) {
 #
 
 
@@ -200,9 +199,20 @@ write.png.file = variables$write.png.file
 write.svg.file = variables$write.svg.file
 z.scores.of.all.samples = variables$z.scores.of.all.samples
 # #############################################################################
+
+
 custom.graph.filename = variables$custom.graph.filename
+custom.graph.title = variables$custom.graph.title
 
 
+# Is custom title requested? If yes, use it
+if(is.null(custom.graph.title) == FALSE) {
+        # but first, a tiny sanitizing is needed
+        graph.title = as.character(custom.graph.title)[1]
+} else {
+        # otherwise, assign the current working directory name
+        graph.title = basename(getwd())
+}
 
 
 
@@ -752,13 +762,13 @@ if (visualization == "words" && oppose.method != "box.plot"){
                 text(preferred.indices.for.plotting, preferred.scores.for.plotting, as.character(preferred.words.for.plotting), cex=0.7, srt=90, adj=c(0,0))
                 text(avoided.indices.for.plotting, avoided.scores.for.plotting, as.character(avoided.words.for.plotting), cex=0.7, srt=90, adj=c(1,0))
                 abline(h=0, lty=2)      
-                mtext("Preferred", side=4, at=0.5, las=3)
-                mtext("Avoided", side=4, at=-0.5)
-                title(main=graph.title)
+                mtext("Preferred", side = 4, at = 0.5, las = 3)
+                mtext("Avoided", side = 4, at = -0.5)
+                title(main = graph.title)
         }
         
         if(titles.on.graph == TRUE) {
-                graph.title = paste(basename(getwd()),"\n",long.method.name)
+                graph.title = paste(graph.title,"\n",long.method.name)
         } else {
         graph.title = ""}        
         if(display.on.screen == TRUE){
@@ -949,7 +959,7 @@ if ((visualization == "markers") && (oppose.method != "box.plot")){
     }
   }
   if(titles.on.graph == TRUE) {
-    graph.title = paste(basename(getwd()),"\n",long.method.name)
+    graph.title = paste(graph.title,"\n",long.method.name)
     } else {
     graph.title = ""}    
 

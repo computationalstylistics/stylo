@@ -17,6 +17,15 @@ txt.to.words.ext = function(input.text,
          splitting.rule = NULL,
          preserve.case = FALSE) {
 
+                 
+     # since the function can be applied to lists and vectors,
+     # we need to define an internal function that will be applied afterwards
+     wrapper = function(input.text = input.text, 
+                        language = language, 
+                        splitting.rule = splitting.rule,
+                        preserve.case = preserve.case) {
+                 
+                 
   # if a custom splitting rule was detected...
   if(length(splitting.rule) > 0) {
       # sanity check
@@ -54,12 +63,14 @@ txt.to.words.ext = function(input.text,
           input.text = tolower(input.text)
         }
       # replacing non-ASCII apostrophes with simple ' (standard ASCII char)
-      tokenized.text = gsub(iconv("\u2019",from="UTF-8"),"'",input.text)
-      # getting rid of contractions ('t, 's, 've, 'd, 'll, 'em, 'im) by 
+### TEMPORARILY SWITCHED OFF, due to some CRAN restrictions
+### tokenized.text = gsub(iconv("\u2019",from="UTF-8"),"'",input.text)
+tokenized.text = input.text
+      # getting rid of contractions ('t, 's, 've, 'd, 'll, 'em, 'im, 're) by 
       # replacing their apostrophes with ^ (other apostrophes will not 
       # be replaced); of course, if your corpus is Cockney, you should edit 
       # the "([tsdm]|ll|ve|em|im)" statement accordingly.
-      tokenized.text = gsub("([[:alpha:]])'([tsdm]|ll|ve|em|im)\\b","\\1^\\2",
+      tokenized.text = gsub("([[:alpha:]])'([tsdm]|ll|ve|em|im|re)\\b","\\1^\\2",
                             tokenized.text) 
       # adding spaces around dashes (to distinguish dashes and hyphens)
       tokenized.text = gsub("[-]{2,5}"," -- ",tokenized.text)
@@ -80,5 +91,31 @@ txt.to.words.ext = function(input.text,
     tokenized.text = tokenized.text[nchar(tokenized.text)>0]
     #
   }
+  
+  }
+  
+
+        # the proper procedure applies, depending on what kind of data 
+        # is analyzed
+        
+        # test if the dataset has a form of a single string (a vector)
+        if(is.list(input.text) == FALSE) {
+                # apply an appropriate replacement function
+                tokenized.text = wrapper(input.text = input.text, 
+                        language = language, 
+                        splitting.rule = splitting.rule,
+                        preserve.case = preserve.case)
+                # if the dataset has already a form of list
+        } else {
+                # applying an appropriate function to a corpus:
+                tokenized.text = lapply(input.text, wrapper, 
+                        language = language, 
+                        splitting.rule = splitting.rule,
+                        preserve.case = preserve.case)
+                class(tokenized.text) = "stylo.corpus"
+        }
+        
+
+  
 return(tokenized.text)
 }
