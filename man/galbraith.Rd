@@ -18,8 +18,8 @@ The novels represented by this dataset are protected by copyright. For that reas
 \examples{
 data(galbraith)
 
-print(galbraith)
-summary(galbraith)
+rownames(galbraith)
 
+stylo(frequencies=galbraith, gui=FALSE)
 }
 \keyword{datasets}

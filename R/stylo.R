@@ -971,45 +971,41 @@ distance.name.on.graph = distance.measure
 distance.name.on.file = distance.measure
 
 
-  if(distance.measure == "CD") {
+  if(distance.measure == "delta" | distance.measure == "dist.delta") {
     cat("Calculating classic Delta distances... \n")
     distance.name.on.graph = "Classic Delta distance"
     distance.name.on.file = "Classic Delta"
-  }
-  if(distance.measure == "AL") {
+  } else if(distance.measure == "argamon" | distance.measure == "dist.argamon") {
     cat("Calculating Argamon's Delta distances... \n")
     distance.name.on.graph = "Argamon's Delta distance"
     distance.name.on.file = "Argamon's Delta"
-  }
-  if(distance.measure == "ED") {
+  } else if(distance.measure == "eder" |  distance.measure == "dist.eder") {
     cat("Calculating Eder's Delta distances... \n")
     distance.name.on.graph = "Eder's Delta distance"
     distance.name.on.file = "Eder's Delta"
-  }
-  if(distance.measure == "ES") {
+  } else if(distance.measure == "simple" | distance.measure == "dist.simple") {
     cat("Calculating Eder's Simple distances... \n")
     distance.name.on.graph = "Eder's Simple distance"
     distance.name.on.file = "Eder's Simple"    
-  }
-  if(distance.measure == "MH") {
+  } else if(distance.measure == "manhattan" | distance.measure == "dist.manhattan") {
     cat("Calculating Manhattan distances... \n")
     distance.name.on.graph = "Manhattan distance"
     distance.name.on.file = "Manhattan"
-  }
-  if(distance.measure == "CB") {
+  } else if(distance.measure == "canberra" | distance.measure == "dist.canberra") {
     cat("Calculating Canberra distances... \n")
     distance.name.on.graph = "Canberra distance"
     distance.name.on.file = "Canberra"
-  }
-  if(distance.measure == "EU") {
+  } else if(distance.measure == "euclidean" | distance.measure == "dist.euclidean") {
     cat("Calculating Euclidean distances... \n")
     distance.name.on.graph = "Euclidean distance"
     distance.name.on.file = "Euclidean"
-  }
-  if(distance.measure == "dist.cosine") {
+  } else if(distance.measure == "cosine" | distance.measure == "dist.cosine") {
     cat("Calculating Cosine distances... \n")
     distance.name.on.graph = "Cosine distance"
     distance.name.on.file = "Cosine"
+  } else {
+    distance.name.on.graph = paste("Distance:", distance.measure)
+    distance.name.on.file = distance.measure
   }
 
 }
