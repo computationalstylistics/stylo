@@ -4,6 +4,7 @@
 
 
 == version 0.6.2, 2015/11/11
+ * the package 'stringi' involved to optimize n-gram computing
  * three datasets added to the package
    - data(novels), a collection of 9 novels by
      the Bronte sisters and Jane Austen (full text)
