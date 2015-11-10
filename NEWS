@@ -3,6 +3,25 @@
 
 
 
+== version 0.6.2, 2015/11/11
+ * three datasets added to the package
+   - data(novels), a collection of 9 novels by
+     the Bronte sisters and Jane Austen (full text)
+   - data(galbraith), a table of frequencies of 26
+     novels by 5 authors, including Galbraith's "Cacoo's Calling"
+   - data(lee), a table of frequencies of 28 South-American
+     novels by 8 authors, including the new novel by Harper Lee
+ * new version of make.table.of.frequencies(),
+   which speeds up the tasks radically
+ * delete.markup(), delete.stop.words(), make.samples(),
+   make.frequency.list(), txt.to.features(), txt.to.words.ext()
+   remodelled so that can be applied to single texts and/or to corpora
+ * countless improvements in most of the functions
+
+== version 0.6.1, 2015/09/27
+ * UTF-8 issue in txt.to.words.ext() fixed,
+   according to the CRAN's request
+
 == version 0.6.0, 2015/08/17
  * support for Georgian
  * plot size in rolling.classify() improved
