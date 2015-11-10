@@ -88,6 +88,9 @@ words/characters and combined into n-grams (if applicable).
 
 \examples{
 data(novels)
+\dontrun{
+# depending on the size of the corpus, it might take a while
 parse.corpus(novels)
+}
 }
 %\keyword{text processing}
