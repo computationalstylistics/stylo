@@ -55,7 +55,7 @@ make.table.of.frequencies = function(corpus,
     current.vector.of.freqs = raw.freqs[features]
     # create a new vector (name assgned automatically) that will contain
     # the frequencies of the current sample
-    assign(paste("vector_of_freqs_", sprintf("%09s", i), sep=""), current.vector.of.freqs)
+    assign(paste("vector_of_freqs_", sprintf("%09d", i), sep=""), current.vector.of.freqs)
     # a short message on screen
     message("\b\b\b\b\b\b\b", appendLF = FALSE)
   }
