@@ -8,7 +8,7 @@
 
 
 load.corpus <-
-function(files, corpus.dir = "", encoding = "native.enc") {
+function(files = "all", corpus.dir = "", encoding = "native.enc") {
   # first of all, retrieve the current path name
   original.path = getwd()
   # checking if the specified directory exists
@@ -24,6 +24,11 @@ function(files, corpus.dir = "", encoding = "native.enc") {
   } else {
     # if the argument was empty, then relax
     cat("using current directory...\n")
+  }
+  # now, checking which files were requested; usually, the user is 
+  # expected to specify a vector with samples' names
+  if(length(files) == 1 & files[1] == "all") {
+  	  files = list.files()
   }
   # variable initialization
   loaded.corpus = list()

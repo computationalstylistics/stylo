@@ -89,6 +89,11 @@ make.table.of.frequencies = function(corpus,
   if(length(frequency.table) == 0) {
     stop("something must be wrong with the words/features you want to analyze")
   }
+  # assign a class
+  class(frequency.table) = "stylo.data"
+  # adding some information about the current function call
+  # to the final list of results
+  attr(frequency.table, "call") = match.call()
 # the result of the function
 return(frequency.table)
 }

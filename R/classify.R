@@ -162,6 +162,8 @@ sample.overlap = variables$sample.overlap
 number.of.samples = variables$number.of.samples
 custom.graph.title = variables$custom.graph.title
 
+show.features = variables$show.features
+
 
 # ['cv' is temporarily switched off, it always performs 'cv ="thorough"']
 # cv = variables$cv
@@ -1137,7 +1139,8 @@ if(tolower(classification.method) == "naivebayes") {
 
 if(tolower(classification.method) == "nsc") {
   classification.results = perform.nsc(training.set = primary.set[,1:mfw], 
-                                       test.set = secondary.set[,1:mfw])
+                                       test.set = secondary.set[,1:mfw], 
+                                       show.features = show.features)
 }
 
 
@@ -1271,16 +1274,17 @@ if(cv.folds > 0) {
                                    z.scores.both.sets = z.scores.of.all.samples)
   }
   if(tolower(classification.method) == "knn") {
-    classification.results = perform.knn(training.set,test.set, k.value)
+    classification.results = perform.knn(training.set, test.set, k.value)
   }
   if(tolower(classification.method) == "svm") {
-    classification.results = perform.svm(training.set,test.set)
+    classification.results = perform.svm(training.set, test.set)
   }
   if(tolower(classification.method) == "nsc") {
-    classification.results = perform.nsc(training.set,test.set)
+    classification.results = perform.nsc(training.set, test.set, 
+                                         show.features = show.features)
   }
   if(tolower(classification.method) == "naivebayes") {
-    classification.results = perform.naivebayes(training.set,test.set)
+    classification.results = perform.naivebayes(training.set, test.set)
   }
 
   
@@ -1446,6 +1450,10 @@ frequencies.both.sets = freq.table.both.sets
 features.actually.used = colnames(freq.table.both.sets[,1:mfw])
 features = mfw.list.of.all
 
+
+distinctive.features = attr(classification.results, "features")
+
+
 # what about removing some of the variables? (suppose there are thousands
 # of texts and dozens of features, and only 2GB of RAM...)
 
@@ -1483,8 +1491,8 @@ if(exists("distance.table")) {
   attr(distance.table, "description") = "final distances between each pair of samples"
   class(distance.table) = "stylo.data"
 }
-if(exists("nsc.distinctive.features")) {
-  attr(nsc.distinctive.features, "description") = "most discriminative features for NSC procedure"
+if(exists("distinctive.features") & length(distinctive.features) >0) {
+  attr(distinctive.features, "description") = "most discriminative features"
 # this sucks
 #  class(nsc.distinctive.features) = "stylo.data"
 }
@@ -1522,7 +1530,7 @@ variables.to.save = c("misclassified.samples",
                       "success.rate",
                       "overall.success.rate",
                       "distance.table", 
-                      "nsc.distinctive.features",
+                      "distinctive.features",
                       "features",
                       "features.actually.used",
                       "zscores.both.sets",

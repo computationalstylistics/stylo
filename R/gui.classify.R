@@ -133,6 +133,8 @@ write.pdf.file = variables$write.pdf.file
 write.png.file = variables$write.png.file
 write.svg.file = variables$write.svg.file
 z.scores.of.all.samples = variables$z.scores.of.all.samples
+
+show.features = variables$show.features
 # #############################################################################
 
 

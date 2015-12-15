@@ -1756,7 +1756,8 @@ if(length(bootstrap.list) <= 2) {
 features = mfw.list.of.all
 # just to give it a more comprehensive name:
 if(exists("pca.results") == TRUE ) {
-  pca.coordinates = pca.results$x[,1:3]
+  pca.coordinates = pca.results$x
+  pca.rotation = pca.results$rotation
 }
 if(exists("all.connections") == TRUE ) {
   table.edges = all.connections
@@ -1817,8 +1818,12 @@ if(exists("list.of.nodes")) {
 #  class(list.of.nodes) = "stylo.data"
 }
 if(exists("pca.coordinates")) {
-  attr(pca.coordinates, "description") = "PCA coordinates (PC1, PC2 and PC3)"
+  attr(pca.coordinates, "description") = "PCA matrix of coordinates for particular PCs"
   class(pca.coordinates) = c("stylo.data", "matrix")
+}
+if(exists("pca.rotation")) {
+  attr(pca.rotation, "description") = "PCA matrix of variable loadings' eigenvectors"
+  class(pca.rotation) = c("stylo.data", "matrix")
 }
 
 
@@ -1835,6 +1840,7 @@ variables.to.save = c("distance.table",
                       "features", 
                       "features.actually.used",
                       "pca.coordinates",
+                      "pca.rotation",
                       "table.of.edges", 
                       "list.of.edges", 
                       "list.of.nodes")

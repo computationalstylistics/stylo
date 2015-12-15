@@ -15,7 +15,7 @@
 #################################################################
 
 load.corpus.and.parse <-
-function(files,
+function(files = "all",
          corpus.dir = "",
          markup.type = "plain",
          language = "English",
@@ -30,7 +30,14 @@ function(files,
          preserve.case = FALSE,
          encoding = "native.enc") {
 
-  loaded.corpus = load.corpus(files = files,
+
+  # first, checking which files were requested; usually, the user is 
+  # expected to specify a vector with samples' names
+#  if(files[1] == "all") {
+#  	  files = list.files(all.files = FALSE)
+#  }
+
+loaded.corpus = load.corpus(files = files,
                               corpus.dir = corpus.dir,
                               encoding = encoding)
   # dropping file extensions from sample names

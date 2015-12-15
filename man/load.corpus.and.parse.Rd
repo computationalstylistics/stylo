@@ -9,7 +9,7 @@ and thus it requires a large number of arguments. The only obligatory
 argument, however, is a vector containing the names of the files to be loaded.
 }
 \usage{
-load.corpus.and.parse(files, corpus.dir = "", markup.type = "plain",
+load.corpus.and.parse(files = "all", corpus.dir = "", markup.type = "plain",
                       language = "English", splitting.rule = NULL,
                       sample.size = 10000, sampling = "no.sampling",
                       sample.overlap = 0, number.of.samples = 1,
@@ -18,7 +18,8 @@ load.corpus.and.parse(files, corpus.dir = "", markup.type = "plain",
                       encoding = "native.enc")
 }
 \arguments{
-  \item{files}{a vector of file names.}
+  \item{files}{a vector of file names. The default value \code{all} is an 
+    equivalent to \code{list.files()}.}
   \item{corpus.dir}{the directory containing the text files to be loaded; if
     not specified, the current directory will be used.}
   \item{markup.type}{choose one of the following values: \code{plain} 

@@ -380,6 +380,9 @@ how.many.correct.attributions = TRUE
 final.ranking.of.candidates = TRUE
 
 
+# NSC onlym, so far
+show.features = FALSE
+
 
 # SVM settings (refer to help(svm) from library(e1071) for details)
 #

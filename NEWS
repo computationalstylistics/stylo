@@ -10,7 +10,7 @@
      the Bronte sisters and Jane Austen (full text)
    - data(galbraith), a table of frequencies of 26
      novels by 5 authors, including Galbraith's "Cacoo's Calling"
-   - data(lee), a table of frequencies of 28 South-American
+   - data(lee), a table of frequencies of 28 American
      novels by 8 authors, including the new novel by Harper Lee
  * new version of make.table.of.frequencies(),
    which speeds up the tasks radically
