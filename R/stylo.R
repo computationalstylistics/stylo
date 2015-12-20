@@ -658,6 +658,7 @@ if(exists("frequencies.0.culling") == FALSE) {
   } else {
     # Extracting all the words used in the corpus
     wordlist.of.loaded.corpus = c()
+#wordlist.of.loaded.corpus = unlist(loaded.corpus)
     for (file in 1 : length(loaded.corpus)) {
       # loading the next sample from the list "corpus.filenames"
       current.text = loaded.corpus[[file]]
@@ -674,6 +675,8 @@ if(exists("frequencies.0.culling") == FALSE) {
     cat("The corpus consists of", length(c(wordlist.of.loaded.corpus)),"tokens\n")
     # the core procedure: frequency list
     mfw.list.of.all = sort(table(c(wordlist.of.loaded.corpus)),decreasing=T)
+    # deleting the huge vector of all the words from the entire corpus
+    rm(wordlist.of.loaded.corpus)
     # if the whole list is long, then cut off the tail, as specified in the GUI 
     # by the cutoff value
       if (length(mfw.list.of.all) > mfw.list.cutoff) {
@@ -1758,6 +1761,8 @@ features = mfw.list.of.all
 if(exists("pca.results") == TRUE ) {
   pca.coordinates = pca.results$x
   pca.rotation = pca.results$rotation
+  pca.sdev = pca.results$sdev
+  pca.var.exp = round((pca.results$sdev^2)/sum(pca.results$sdev^2) *100, 2)
 }
 if(exists("all.connections") == TRUE ) {
   table.edges = all.connections
@@ -1825,6 +1830,17 @@ if(exists("pca.rotation")) {
   attr(pca.rotation, "description") = "PCA matrix of variable loadings' eigenvectors"
   class(pca.rotation) = c("stylo.data", "matrix")
 }
+if(exists("pca.sdev")) {
+  attr(pca.sdev, "description") = "PCA: standard deviations or particular PCs"
+  class(pca.sdev) = c("stylo.data", "matrix")
+}
+if(exists("pca.var.exp")) {
+  attr(pca.var.exp, "description") = "PCA: explained variance [%] for particular PCs"
+  class(pca.var.exp) = c("stylo.data", "matrix")
+}
+
+
+
 
 
 
@@ -1841,6 +1857,8 @@ variables.to.save = c("distance.table",
                       "features.actually.used",
                       "pca.coordinates",
                       "pca.rotation",
+                      "pca.sdev",
+                      "pca.var.exp",
                       "table.of.edges", 
                       "list.of.edges", 
                       "list.of.nodes")

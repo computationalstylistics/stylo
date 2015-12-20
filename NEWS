@@ -3,6 +3,10 @@
 
 
 
+== version 0.6.3, 2015/12/20
+ * significant performance improvement in make.table.of.frequencies()
+ * PCA values (rotation, explained variance, etc.) saved in final results
+
 == version 0.6.2, 2015/11/11
  * the package 'stringi' involved to optimize n-gram computing
  * three datasets added to the package
@@ -20,8 +24,7 @@
  * countless improvements in most of the functions
 
 == version 0.6.1, 2015/09/27
- * UTF-8 issue in txt.to.words.ext() fixed,
-   according to the CRAN's request
+ * UTF-8 issue in txt.to.words.ext() fixed, according to the CRAN's request
 
 == version 0.6.0, 2015/08/17
  * support for Georgian
