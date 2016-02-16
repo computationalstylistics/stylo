@@ -153,10 +153,22 @@ encoding.orig = variables$encoding
   
     tt <- tktoplevel()
     tktitle(tt) <- "Stylometry with R | stylo | set parameters"
+
     
-    push_OK <- function(){
-        tkdestroy(tt)
+    
+    # Create a variable to keep track of the state of the dialog window:
+    #   If the window is active,                                      done = 0
+    #   If the window has been closed using the OK button,            done = 1
+
+    done <- tclVar(0)
+
+
+        push_OK <- function(){
+            tkdestroy(tt)
+            tclvalue(done) = 1
         }
+
+    
   
   corpus.format <- tclVar(corpus.format)
   mfw.min <- tclVar(mfw.min)
@@ -780,12 +792,21 @@ encoding.orig = variables$encoding
   tk2tip(cblabel_FREQSAVE, "Save frequency table(s) in separate text file(s).")
   tk2tip(cblabel_DUMPSAMPLES, "Save a dump of all samples in the directory 'Dumps' for post-analysis inspection.")
   
-
-
   tkgrid(tklabel(tt,text="    ")) # blank line (i.e., bottom margin)
+
   
+  
+    
+
   # wait until we have input
   tkwait.window(tt)
+
+  # set the doneVal = 1 when the OK button was clicke
+  # closing the window using any other button (or killing it) stops the script
+  doneVal = as.integer(tclvalue(done))
+  tkdestroy(tt)
+
+  
   
   variables$analyzed.features = as.character(tclvalue(analyzed.features))
   variables$ngram.size = as.numeric(tclvalue(ngram.size))
@@ -850,5 +871,10 @@ encoding.orig = variables$encoding
 
 
   
-  return(variables)
+  if (doneVal != 1) {
+	  variables = NULL
+  }
+
+  
+return(variables)
 }
