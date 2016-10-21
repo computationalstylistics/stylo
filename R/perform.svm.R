@@ -38,10 +38,15 @@ perform.svm = function(training.set,
   }
   
   #
+  
+  
+  # getting rid of the variables that are not represented in the training set
+  check.columns = colSums(training.set)
+  training.set = training.set[,(check.columns != 0)]
+  test.set = test.set[,(check.columns != 0)]
 
-
-#  classes.training.set = gsub("_.*","",rownames(training.set))
-#  classes.test.set = gsub("_.*","",rownames(test.set))
+  
+  
   classes = c(classes.training.set, classes.test.set)
   input.data = as.data.frame(rbind(training.set,test.set))
   input.data = cbind(classes, input.data)
@@ -130,6 +135,15 @@ perform.svm = function(training.set,
           classification.rankings = rbind(classification.rankings, current.ranking)
   }
   
+  
+  # preparing a confusion table
+  predicted_classes = classification.results
+  actual_classes = classes.test.set
+  confusion.matrix = table(predicted_classes, actual_classes)
+  # getting rid of the classes not represented in the training set (e.g. anonymous samples)
+#  confusion.matrix = confusion.matrix[,rownames(confusion.matrix)]
+
+  
   names(classification.results) = rownames(test.set)
   rownames(classification.rankings) = rownames(test.set)
   rownames(classification.scores) = rownames(test.set)
@@ -139,6 +153,8 @@ perform.svm = function(training.set,
   attr(classification.results, "distance.table") = selected.dist
   attr(classification.results, "rankings") = classification.rankings
   attr(classification.results, "scores") = classification.scores
+  attr(classification.results, "confusion_matrix") = confusion.matrix
+
   
 return(classification.results)
 }

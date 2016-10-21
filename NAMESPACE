@@ -24,6 +24,7 @@ importFrom(utils, head, read.table, write.csv, write.table)
 export(
   assign.plot.colors,
   classify,
+  crossv,
   define.plot.area,
   delete.markup,
   delete.stop.words,
@@ -50,6 +51,7 @@ export(
   perform.naivebayes,
   perform.nsc,
   perform.svm,
+  perform.impostors,
   rolling.classify,
   rolling.delta,
   stylo.default.settings,

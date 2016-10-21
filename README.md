@@ -10,7 +10,5 @@ See:
 https://sites.google.com/site/computationalstylistics/
 for further details.
 
-If you use Stylo in your academic publication, please consider citing the following paper:
-Eder, M., Kestemont, M. and Rybicki, J. (2013). Stylometry with R: a suite of tools. Digital Humanities 2013: Conference Abstracts. Lincoln: University of Nebraska-Lincoln, pp. 487-89 [pdf: http://dh2013.unl.edu/abstracts/].
-
+If you use Stylo in your academic publication, please consider citing the following paper: Eder, M., Rybicki, J. and Kestemont, M. (2016). Stylometry with R: a package for computational text analysis. "R Journal", 8(1): 107-121 [pdf: http://journal.r-project.org/archive/2016-1/eder-rybicki-kestemont.pdf].
 

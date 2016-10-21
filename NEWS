@@ -3,6 +3,21 @@
 
 
 
+== version 0.6.4, 2016/09/08
+ * citation hint updated; to see the changes type: citation("stylo")
+ * the impostors method almost implemented, see help(perform.impostors)
+ * confusion table for supervised classification via classify()
+ * a separate funtion for cross-validation, see help(crossv)
+ * a significant change in SVM wrapper: the procedure automatically
+   gets rid of the variables with all 0s in the training set
+ * the file inst/CITATION updated to meet recent CRAN requirements
+ * man files for perform.delta, perform.svm etc. updated: new executable
+   examples added, so that one can perform a supervised test without any corpus
+ * perform.knn(), perform.svm() etc. improved, in order to handle custom
+   vectors of classes provided by a user
+ * a reacher output of the oppose() function
+
+
 == version 0.6.3, 2015/12/20
  * significant performance improvement in make.table.of.frequencies()
  * PCA values (rotation, explained variance, etc.) saved in final results

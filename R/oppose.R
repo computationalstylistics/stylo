@@ -1045,6 +1045,12 @@ if (classification == TRUE && oppose.method != "box.plot") {
 
 
 # renaming some of the variables (for the sake of attractiveness)
+if(exists("words.preferred")) {
+  words.preferred.scores = words.preferred
+}
+if(exists("words.avoided")) {
+  words.avoided.scores = words.avoided
+}
 if(exists("words.preferred.by.primary.author")) {
   words.preferred = words.preferred.by.primary.author
 }
@@ -1074,12 +1080,14 @@ if(exists("summary.zeta.scores")) {
 if(exists("classification.results")) {
   attr(classification.results, "description") = "so far, there's nothing here"
 }
-if(exists("variable.to.be.done")) {
-  attr(variable.to.be.done, "description") = "so far, there's nothing here"
+if(exists("words.preferred.scores")) {
+  attr(words.preferred.scores, "description") = "Zeta scores for the preferred words"
 }
-if(exists("yet.another.variable")) {
-  attr(yet.another.variable, "description") = "another empty variable"
+if(exists("words.avoided.scores")) {
+  attr(words.avoided.scores, "description") = "Zeta scores for the avoided words"
 }
+
+
 
 
 
@@ -1093,6 +1101,8 @@ results.oppose = list()
 # elements that we want to add on this list
 variables.to.save = c("words.preferred",
                       "words.avoided",
+                      "words.avoided.scores",
+                      "words.preferred.scores",
                       "summary.zeta.scores",
                       "comparison","primary.slices","secondary.slices","test.slices",
                       "classification.results")

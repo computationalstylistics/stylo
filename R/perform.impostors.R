@@ -1,35 +1,72 @@
-# Delta in its various flavours
+# impostors, cf. Kestemont
 
-perform.delta = function(training.set, 
-                         test.set,
-                         classes.training.set = NULL,
-                         classes.test.set = NULL,
+
+# change the name of train and test set
+
+
+
+perform.impostors = function(candidate.set, 
+                         impostors.set,
+                         iterations = 100,
+                         features = 50,  # proportion of features to be assessed
+                         impostors = 30,
+                         classes.candidate.set = NULL,
+                         classes.impostors.set = NULL,
                          distance = "delta",
-                         no.of.candidates = 3,
-                         z.scores.both.sets = TRUE) {
-#
+# to be excluded!
+                         z.scores.both.sets = TRUE
+                         ) {
+
 
 
 
 # getting the number of features (e.g. MFWs)
-no.of.cols = length(training.set[1,])
+no.of.cols = length(candidate.set[1,])
 
 # checking if the two sets are of the same size
-if(length(test.set[1,]) != no.of.cols) {
-        stop("training set and test set must have the same number of variables!")
+if(length(impostors.set[1,]) != no.of.cols) {
+        stop("candidate set and impostors set must have the same number of variables!")
 }
 
 
 # assigning classes, if not specified
-if(length(classes.training.set) != length(rownames(training.set))) {
-        classes.training.set = c(gsub("_.*", "", rownames(training.set)))
+if(length(classes.candidate.set) != length(rownames(candidate.set))) {
+        classes.candidate.set = c(gsub("_.*", "", rownames(candidate.set)))
 }
 
-if(length(classes.test.set) != length(rownames(test.set))) {
-        classes.test.set = c(gsub("_.*", "", rownames(test.set)))
+if(length(classes.impostors.set) != length(rownames(impostors.set))) {
+        classes.impostors.set = c(gsub("_.*", "", rownames(impostors.set)))
 }
 
 #
+
+
+
+
+# what if the number of desired impostors is bigger than the coprus
+
+
+
+score = 0
+
+for(k in 1:iterations) {
+
+
+
+# extracting the features: the percentage passed as an argument
+# is first converted into an integer
+no.of.features = round(length(candidate.set[1,]) * features /100)
+
+# extracting the selection of features from the colnames of one of the sets
+feature.subset = sample(colnames(candidate.set))[1:no.of.features]
+
+# extracting a subset of column (= current features) from both sets 
+training.set = candidate.set[,feature.subset]
+test.set = impostors.set[,feature.subset]
+
+# picking randomly a specified number of texts written by the impostors
+current.impostors = sample(rownames(test.set), impostors)
+test.set = test.set[current.impostors,]
 
 
 
@@ -59,6 +96,10 @@ if(z.scores.both.sets == FALSE) {
 # some distances require just freqs
 input.freq.table = rbind(training.set, test.set)
 
+
+
+# sanitazing the input dataset, in order to avoid all zeros in a column
+input.freq.table = input.freq.table[,colSums(input.freq.table) != 0]
 
 
 
@@ -120,59 +161,31 @@ distance.table = as.matrix(distance.table)
 
 
 
-# selecting an area of the distance table containing test samples (rows),
-# contrasted against training samples (columns)
-no.of.candid = length(training.set[,1])
-no.of.possib = length(test.set[,1])
-selected.dist = 
-          as.matrix(distance.table[no.of.candid+1:no.of.possib,1:no.of.candid])
-# assigning class ID to train samples
-colnames(selected.dist) = classes.training.set
-#
 
 
+# if factor(classes.training.set) != 2, then complain
 
-  if(no.of.candidates > length(classes.training.set)) {
-          no.of.candidates = length(classes.training.set)
-  }
+# an extremely complicated way of getting the class that has 1 sample in the I set
+anon = names(table(classes.candidate.set))[table(classes.candidate.set) == 1]
+# target author, or the class that is not the anonymous text
+target.author = setdiff(classes.candidate.set, anon)
+# getting only the distances between the anon text and the corpus
+distances = distance.table[,gsub("_.*", "", colnames(distance.table)) == anon]
+# getting rid of the distance between the anon text and itself
+distances = distances[distances > 0]
 
+# get the nearest neighbor
+nearest = sort(distances)[1]
 
-# starting final variables
-classification.results = c()
-classification.scores = c()
-classification.rankings = c()
-
-for(h in 1:length(selected.dist[,1])) {
-        ranked.c = order(selected.dist[h,])[1:no.of.candidates]
-        current.sample = classes.training.set[ranked.c[1]]
-        classification.results = c(classification.results, current.sample)
-        #
-        current.ranking = classes.training.set[ranked.c]
-        current.scores = selected.dist[h,ranked.c]
-        classification.scores = rbind(classification.scores, current.scores)
-        classification.rankings = rbind(classification.rankings, current.ranking)
+# testing if the nearest author is in the target gropup
+if(gsub("_.*", "", names(nearest)) == target.author) {
+    score = score + 1/iterations
 }
 
-# preparing a confusion table
-predicted_classes = classification.results
-actual_classes = classes.test.set
-confusion.matrix = table(predicted_classes, actual_classes)
-# getting rid of the classes not represented in the training set (e.g. anonymous samples)
-# confusion.matrix = confusion.matrix[,rownames(confusion.matrix)]
+
+}
 
 
-names(classification.results) = rownames(test.set)
-rownames(classification.rankings) = rownames(test.set)
-rownames(classification.scores) = rownames(test.set)
-colnames(classification.rankings) = 1:no.of.candidates
-colnames(classification.scores) = 1:no.of.candidates
-
-attr(classification.results, "distance.table") = selected.dist
-attr(classification.results, "rankings") = classification.rankings
-attr(classification.results, "scores") = classification.scores
-attr(classification.results, "confusion_matrix") = confusion.matrix
-
-
-return(classification.results)
+return(1 - score)
 }
 
