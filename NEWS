@@ -15,7 +15,7 @@
    examples added, so that one can perform a supervised test without any corpus
  * perform.knn(), perform.svm() etc. improved, in order to handle custom
    vectors of classes provided by a user
- * a reacher output of the oppose() function
+ * an improved output of the oppose() function
 
 
 == version 0.6.3, 2015/12/20

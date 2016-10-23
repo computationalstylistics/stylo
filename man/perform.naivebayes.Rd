@@ -7,7 +7,7 @@ the Naive Bayes procedure provided by the package \code{e1071}.
 }
 \usage{
 perform.naivebayes(training.set, test.set, 
-        classes.training.set, classes.test.set) }
+        classes.training.set = NULL, classes.test.set = NULL) }
 \arguments{
 \item{training.set}{a table containing frequencies/counts for several
           variables -- e.g. most frequent words -- across a number of text

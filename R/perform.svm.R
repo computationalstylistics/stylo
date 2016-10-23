@@ -21,12 +21,26 @@ perform.svm = function(training.set,
   # library(e1071)
   #
 
-  # getting the number of features (e.g. MFWs)
-  no.of.cols = length(training.set[1,])
-    
+  # first, sanitizing the type of input data
+  if(length(dim(training.set)) != 2) {
+      stop("train set error: a 2-dimensional table (matrix) is required")
+  }
+  # if a vector (rather than a matrix) was used as a test set, a fake row
+  # will be added; actually, this will be a duplicate of the vector
+  if(is.vector(test.set) == TRUE) {
+      test.set = rbind(test.set, test.set)
+      rownames(test.set) = c("unknown", "unknown-copy")
+      # additionally, duplicating ID of the test classes (if specified)
+      if(length(classes.test.set) == 1) {
+      	  classes.test.set = c(classes.test.set, "unknown-copy")
+      }
+  }
+
+  
+
   # checking if the two sets are of the same size
-  if(length(test.set[1,]) != no.of.cols) {
-          stop("training set and test set should the same number of variables!")
+  if(length(test.set[1,]) != length(training.set[1,])) {
+          stop("training set and test set should have the same number of variables!")
   }
   
   # assigning classes, if not specified

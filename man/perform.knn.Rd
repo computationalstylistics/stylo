@@ -6,8 +6,8 @@ A machine-learning supervised classifier; this function is a wrapper for
 the k-NN procedure provided by the package \code{class}.
 }
 \usage{
-perform.knn(training.set, test.set, classes.training.set, 
-            classes.test.set, k.value = 1) }
+perform.knn(training.set, test.set, classes.training.set = NULL, 
+            classes.test.set = NULL, k.value = 1) }
 \arguments{
 \item{training.set}{a table containing frequencies/counts for several
           variables -- e.g. most frequent words -- across a number of text

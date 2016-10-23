@@ -10,5 +10,8 @@ See:
 https://sites.google.com/site/computationalstylistics/
 for further details.
 
-If you use Stylo in your academic publication, please consider citing the following paper: Eder, M., Rybicki, J. and Kestemont, M. (2016). Stylometry with R: a package for computational text analysis. "R Journal", 8(1): 107-121 [pdf: http://journal.r-project.org/archive/2016-1/eder-rybicki-kestemont.pdf].
+If you use 'stylo' in your academic publication, please consider citing the following paper: Eder, M., Rybicki, J. and Kestemont, M. (2016). Stylometry with R: a package for computational text analysis. "R Journal", 8(1): 107-121.
+
+The aforementioned paper on the package 'stylo' can be found here
+http://journal.r-project.org/archive/2016-1/eder-rybicki-kestemont.pdf
 
