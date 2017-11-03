@@ -26,7 +26,7 @@ containing as elements the texts loaded.
 \author{Maciej Eder}
 
 \seealso{
-\code{\link{stylo}}, \code{\link{classify}}, \code{\link{rolling.delta}}, 
+\code{\link{stylo}}, \code{\link{classify}}, \code{\link{rolling.classify}}, 
 \code{\link{oppose}}, \code{\link{txt.to.words}}
 }
 \examples{

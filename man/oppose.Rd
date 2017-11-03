@@ -75,9 +75,8 @@ primary set, words significantly avoided (or, preferred in the secondary set),
 and possibly some other results, if applicable.
 }
 \references{
-Eder, M. Kestemont, M. and Rybicki, J. (2013). Stylometry with R:
-    a suite of tools. In: "Digital Humanities 2013: Conference Abstracts". 
-    University of Nebraska-Lincoln, Lincoln, NE, pp. 487-89.
+Eder, M., Rybicki, J. and Kestemont, M. (2016). Stylometry with R: a package 
+    for computational text analysis. "R Journal", 8(1): 107-21.
 
 Burrows, J. F. (2007). All the way through: testing for authorship 
     in different frequency strata. "Literary and Linguistic Computing", 
@@ -94,10 +93,10 @@ Kilgariff A. (2001). Comparing Corpora. "International Journal of Corpus
     Linguistics" 6(1): 1-37.
 }
 
-\author{Maciej Eder, Mike Kestemont, Jan Rybicki}
+\author{Maciej Eder, Mike Kestemont}
 
 \seealso{
-\code{\link{stylo}}, \code{\link{classify}}, \code{\link{rolling.delta}}
+\code{\link{stylo}}, \code{\link{classify}}, \code{\link{rolling.classify}}
 }
 \examples{
 \dontrun{

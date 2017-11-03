@@ -82,7 +82,7 @@ option as an argument to your chosen function:
 The function returns a vector of tokenized words (or other units) as elements.
 }
 \author{
-Maciej Eder, Jan Rybicki, Mike Kestemont
+Maciej Eder, Mike Kestemont
 }
 \seealso{
 \code{\link{txt.to.words.ext}}, \code{\link{txt.to.features}},  

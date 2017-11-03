@@ -1,14 +1,14 @@
 Package: stylo
 Type: Package
 Title: Functions for a Variety of Stylometric Analyses
-Version: 0.6.4
-Date: 2016-10-23
+Version: 0.6.5
+Date: 2017-11-03
 Author: Maciej Eder, Jan Rybicki, Mike Kestemont
 Maintainer: Maciej Eder <maciejeder@gmail.com>
 URL: https://sites.google.com/site/computationalstylistics/
 Depends: R (>= 2.14)
 Imports: tcltk, tcltk2, ape, pamr, e1071, class, lattice, tsne
-Suggests: stringi
+Suggests: stringi, networkD3
 Description: A number of functions, supplemented by GUI, to perform various analyses in the field of computational stylistics, authorship attribution, etc.
 License: GPL (>= 3)
 

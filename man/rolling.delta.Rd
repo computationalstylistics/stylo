@@ -39,9 +39,8 @@ The function returns an object of the class \code{stylo.results}, and
 produces a final plot.
 }
 \references{
-Eder, M. Kestemont, M. and Rybicki, J. (2013). Stylometry with R:
-    a suite of tools. In: "Digital Humanities 2013: Conference Abstracts". 
-    University of Nebraska-Lincoln, Lincoln, NE, pp. 487-89.
+Eder, M., Rybicki, J. and Kestemont, M. (2016). Stylometry with R: a package 
+    for computational text analysis. "R Journal", 8(1): 107-21.
 
 van Dalen-Oskam, K. and van Zundert, J. (2007). Delta for Middle Dutch: 
     author and copyist distinction in Walewein. "Literary and Linguistic
@@ -54,6 +53,9 @@ Hoover, D. (2011). The Tutor's Story: a case study of mixed authorship.
 Rybicki, J., Kestemont, M. and Hoover D. (2014). Collaborative authorship: 
     Conrad, Ford and rolling delta. "Literary and Linguistic Computing",
     29(3): 422-31.
+    
+Eder, M. (2015). Rolling stylometry. "Digital Scholarship in the Humanities", 
+    31(3): 457-69.
 
 }
 

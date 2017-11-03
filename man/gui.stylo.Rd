@@ -2,7 +2,8 @@
 \alias{gui.stylo}
 \title{GUI for stylo}
 \description{
-Graphical user interface for the function \code{stylo}. This function sets most of the variables needed for \code{stylo}.
+Graphical user interface for the function \code{stylo}. This function sets 
+most of the variables needed for \code{stylo}.
 }
 \usage{
 gui.stylo(...)

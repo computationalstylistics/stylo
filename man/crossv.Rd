@@ -14,7 +14,7 @@ available samples are exhausted.
 }
 \usage{
 crossv(training.set, test.set = NULL, 
-       cv.mode = "leaveoneout", cv.folds = 10, 
+       cv.mode = "stratified", cv.folds = 10, 
        classes.training.set = NULL, classes.test.set = NULL, 
        classification.method = "delta", ...)
 }

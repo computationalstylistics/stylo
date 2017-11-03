@@ -3,7 +3,7 @@
 
 crossv = function(training.set, 
                   test.set = NULL,
-                  cv.mode = "leaveoneout",
+                  cv.mode = "stratified",
                   cv.folds = 10,
                   classes.training.set = NULL,
                   classes.test.set = NULL,
@@ -61,7 +61,7 @@ if(length(classes.test.set) != length(test.set[,1])) {
   cv.misclassifications = list()
 
   # an table of combined frequencies of set I and II
-  freq.table.both.sets.binded = rbind(training.set, test.set)
+  freq.table.both.sets.bound = rbind(training.set, test.set)
   classes.train = classes.training.set
   classes.test = classes.test.set    
   classes.both.sets = c(classes.train, classes.test)
@@ -112,15 +112,26 @@ if(length(classes.test.set) != length(test.set[,1])) {
 
 
     # establishing the training set for the current cv fold:
-    cv.train = freq.table.both.sets.binded[train.samples,]
+    cv.train = freq.table.both.sets.bound[train.samples,]
     cv.classes.train = classes.both.sets[train.samples]
 
     # establishing the test set for the current cv fold
-    cv.test = freq.table.both.sets.binded[-c(train.samples),]
+    cv.test = freq.table.both.sets.bound[-c(train.samples),]
     cv.classes.test = classes.both.sets[-c(train.samples)]
 
 
+    # additionally, sanitizing the test set
+    # whenever it contains but 1 sample, another 'fake' sample will be added
+    if(cv.mode == "leaveoneout") {
+        cv.test = rbind(cv.test, cv.test)
+        sample.name = rownames(freq.table.both.sets.bound)[-c(train.samples)]
+        rownames(cv.test) = c(sample.name, "fake_row")
+        cv.classes.test = c(cv.classes.test, cv.classes.test)
+        fake.row.test.set = TRUE
+    }
 
+    
+    # now, performing classification:
     if(tolower(classification.method) == "delta") {
       classification.results = perform.delta(cv.train, cv.test, 
                         cv.classes.train, cv.classes.test, ...)

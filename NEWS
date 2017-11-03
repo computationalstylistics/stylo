@@ -3,6 +3,13 @@
 
 
 
+== version 0.6.5, 2017/11/03
+ * support for interactive network visualisations
+ * corrected Spanish pronouns
+ * fixes in documentation
+ * countless minor fixes
+
+
 == version 0.6.4, 2016/09/08
  * citation hint updated; to see the changes type: citation("stylo")
  * the impostors method almost implemented, see help(perform.impostors)

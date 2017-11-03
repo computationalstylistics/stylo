@@ -55,6 +55,7 @@ export(
   rolling.classify,
   rolling.delta,
   stylo.default.settings,
+  stylo.network,
   stylo.pronouns,
   stylo,
   txt.to.features,

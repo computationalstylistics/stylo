@@ -2,7 +2,8 @@
 \alias{assign.plot.colors}
 \title{Assign colors to samples}
 \description{
-Function that assigns unique colors to each class represented in a corpus: used for graph auto-coloring.
+Function that assigns unique colors to each class represented in a corpus: 
+used for graph auto-coloring.
 }
 \usage{
 assign.plot.colors(labels, col = "colors", opacity = 1)
@@ -13,18 +14,21 @@ it is obligatory to use an underscore as a class delimiter. Consider
 the following examples: c("Sterne_Tristram", "Sterne_Sentimental",
 "Fielding_Tom", ...), where the classes are the authors' names, and 
 c("M_Joyce_Dubliners", "F_Woolf_Night_and_day", "M_Conrad_Lord_Jim", ...), 
-where the classes are M(ale) and F(emale) according to authors' gender. Note that only the part up to the first underscore in the sample's name will be included in the class label.}
+where the classes are M(ale) and F(emale) according to authors' gender. 
+Note that only the part up to the first underscore in the sample's name will be 
+included in the class label.}
 \item{col}{an optional argument specifying the color palette to be used: "colors" for 
 full-color output (default), "greyscale" for greyscale (useful 
 for preparing publishable pictures), and "black", if no colors should be used.}
-\item{opacity}{optional argument to set transparency/opacity of the colors. 0 means full transparency, 1 means full opacity (default).}
+\item{opacity}{optional argument to set transparency/opacity of the colors. 
+0 means full transparency, 1 means full opacity (default).}
 }
 \details{
 Function for graph auto-coloring; depending on the user's choice 
 it assigns either colors or greyscale tones to matching strings of 
-characters which stand for class identifiers. These
-metadata will typically be encoded in the texts' filenames. (As class delimiter, the 
-underscore character should be used). Alternatively, all labels can be plotted in black.
+characters which stand for class identifiers. These metadata will typically 
+be encoded in the texts' filenames. (As class delimiter, the underscore 
+character should be used). Alternatively, all labels can be plotted in black.
 }
 \value{
 The function returns a vector of colors, using their conventional names 
