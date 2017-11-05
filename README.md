@@ -7,7 +7,7 @@ See: https://sites.google.com/site/computationalstylistics/ for further details.
 
 If you find the package `stylo` useful and plan to publish your results, please consider citing the following paper:
 
-**Eder, M., Rybicki, J. and Kestemont, M.** (2016). Stylometry with R: a package for computational text analysis. _R Journal_, 8(1): 107-21.  [http://journal.r-project.org/archive/2016-1/eder-rybicki-kestemont.pdf](http://journal.r-project.org/archive/2016-1/eder-rybicki-kestemont.pdf)
+**Eder, M., Rybicki, J. and Kestemont, M.** (2016). Stylometry with R: a package for computational text analysis. _R Journal_, 8(1): 107-21.  [https://journal.r-project.org/archive/2016/RJ-2016-007/index.html](https://journal.r-project.org/archive/2016/RJ-2016-007/index.html)
 
 
 
@@ -58,7 +58,7 @@ install_github("computationalstylistics/stylo")
 
 ### Installing from a local file
 
-download the package from **here**; save the file anywhere on your computer where you will be able to find it; launch R; set working directory to the folder where the downloaded file is:
+Download the package from **here**; save the file anywhere on your computer where you will be able to find it; launch R; set working directory to the folder where the downloaded file is (please keep it mind that the slashes might look different in different operating systems):
 
 ```
 setwd("i/hope/i/can/remember/where/it/was/")
