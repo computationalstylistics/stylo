@@ -165,7 +165,7 @@ custom.graph.title = variables$custom.graph.title
 show.features = variables$show.features
 
 
-# ['cv' is temporarily switched off, it always performs 'cv ="thorough"']
+# ['cv' is temporarily switched off, it always performs 'cv ="stratified"']
 # cv = variables$cv
 
 
@@ -1385,6 +1385,20 @@ if(save.analyzed.freqs == TRUE) {
 
 
 
+
+
+
+
+
+#######
+####### the features, confusion matrices, etc., should be captured here!!!!!!
+#######
+
+
+
+
+
+
 }    # <-- the internal loop for(i) returns here
 # #################################################
 
@@ -1438,7 +1452,7 @@ cat("\n")
 # in ver. 0.0.1 of the script, which provided just a basic Delta test
 # with no additional options. Since it is quite a lot of work to modernize 
 # the variables' names in the code (and parhaps it is too late now...), 
-# this simple wrappers will rename at least the exported variables:
+# these simple wrappers will rename at least the variables to be exported:
 success.rate = all.guesses
   if(length(success.rate) >1) {
     overall.success.rate = mean(all.guesses)
@@ -1446,7 +1460,6 @@ success.rate = all.guesses
 frequencies.training.set = freq.I.set.0.culling
 frequencies.test.set = freq.II.set.0.culling
 frequencies.both.sets = freq.table.both.sets
-#zscores.both.sets = zscores.table.both.sets
 features.actually.used = colnames(freq.table.both.sets[,1:mfw])
 features = mfw.list.of.all
 
@@ -1491,8 +1504,8 @@ if(exists("distance.table")) {
   attr(distance.table, "description") = "final distances between each pair of samples"
   class(distance.table) = "stylo.data"
 }
-if(exists("distinctive.features") & length(distinctive.features) >0) {
-  attr(distinctive.features, "description") = "most discriminative features"
+if(exists("distinctive.features") & length(distinctive.features) > 0) {
+  attr(distinctive.features, "description") = "most distinctive features"
 # this sucks
 #  class(nsc.distinctive.features) = "stylo.data"
 }

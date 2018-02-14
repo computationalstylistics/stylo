@@ -1044,7 +1044,7 @@ input.freq.table = table.with.all.freqs[,1:mfw]
 
 supported.measures = c("dist.euclidean", "dist.manhattan", "dist.canberra",
                        "dist.delta", "dist.eder", "dist.argamon",
-                       "dist.simple", "dist.cosine")
+                       "dist.simple", "dist.cosine", "dist.wurzburg")
 
 
 
@@ -1083,7 +1083,12 @@ if(length(grep(distance.measure, supported.measures)) > 1 ) {
 
          # invoke one of the distance measures functions from Stylo    
          distance.table = do.call(distance, list(x = input.freq.table))
-    
+
+    } else if(distance == "dist.wurzburg") {
+
+         # invoke one of the distance measures functions from Stylo    
+         distance.table = do.call(distance, list(x = table.with.all.zscores[,1:mfw]))
+            
     } else {
          # invoke one of the distances supported by 'stylo'; this is slightly
          # different from the custom functions invoked above, since it uses

@@ -591,7 +591,7 @@ encoding.orig = variables$encoding
   entry_CS <- tkradiobutton(f3)
   #
   tkconfigure(entry_CD,variable=distance.measure,value="delta")
-  tkconfigure(entry_AL,variable=distance.measure,value="argamon")
+  tkconfigure(entry_AL,variable=distance.measure,value="wurzburg")
   tkconfigure(entry_ED,variable=distance.measure,value="eder")
   tkconfigure(entry_ES,variable=distance.measure,value="simple")
   tkconfigure(entry_MH,variable=distance.measure,value="manhattan")
@@ -600,7 +600,7 @@ encoding.orig = variables$encoding
   tkconfigure(entry_CS,variable=distance.measure,value="cosine")  
   #
   entrylabel_CD <- tklabel(f3,text="Classic Delta")
-  entrylabel_AL <- tklabel(f3,text="Argamon's Delta")
+  entrylabel_AL <- tklabel(f3,text="Cosine Delta")
   entrylabel_ED <- tklabel(f3,text="Eder's Delta")
   entrylabel_ES <- tklabel(f3,text="Eder's Simple")
   entrylabel_MH <- tklabel(f3,text="Manhattan")
@@ -616,13 +616,13 @@ encoding.orig = variables$encoding
   
   # Tooltips for the above
   tk2tip(entrylabel_CD, "Select the Classic Delta measure as developed by Burrows.")
-  tk2tip(entrylabel_AL, "Select Argamon's Linear Delta (based on Euclidean principles).")
-  tk2tip(entrylabel_ED, "Select Eder's Delta (explanation and mathematical equation: TBA).")
-  tk2tip(entrylabel_ES, "Select Eder's Simple measure (explanation and mathematical equation: TBA).")
+  tk2tip(entrylabel_AL, "Select Cosine Delta (aka Wurzburg Delta), which seems to outperform other measures.")
+  tk2tip(entrylabel_ED, "Select Eder's Delta (weights the frequencies, in order to decrease the influence of the less frequent words).")
+  tk2tip(entrylabel_ES, "Select Eder's Simple measure (the frequencies are transformed via square root).")
   tk2tip(entrylabel_MH, "Select Manhattan Distance (obvious and well documented).")
   tk2tip(entrylabel_CB, "Select Canberra Distance (risky, but sometimes amazingly good).")
   tk2tip(entrylabel_EU, "Select Euclidean Distance (basic and the most *natural*).")
-  tk2tip(entrylabel_CS, "Select Cosine Distance (probably the best choice!).")
+  tk2tip(entrylabel_CS, "Select Cosine Distance (a classic distance in multidimensional methods).")
   
   # next row: SAMPLING
   entry_SAMP <- tkradiobutton(f4)

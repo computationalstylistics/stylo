@@ -33,6 +33,7 @@ export(
   dist.delta,
   dist.eder,
   dist.simple,
+  dist.wurzburg,
   gui.classify,
   gui.oppose,
   gui.stylo,
