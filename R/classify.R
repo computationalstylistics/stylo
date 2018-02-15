@@ -1111,10 +1111,8 @@ if(tolower(classification.method) == "delta") {
                                 test.set = secondary.set[,1:mfw],
                                 distance = distance.measure,
                                 z.scores.both.sets = z.scores.of.all.samples)
-#
-# this should be provided by the function perform.delta (value: list of objects)
-#distance.table = "sorry! temporarily out of order"
-#
+  distance.table = attr(classification.results, "distance.table")
+
 }
 
 
@@ -1142,7 +1140,6 @@ if(tolower(classification.method) == "nsc") {
                                        test.set = secondary.set[,1:mfw], 
                                        show.features = show.features)
 }
-
 
 
 
@@ -1272,6 +1269,7 @@ if(cv.folds > 0) {
                                    test.set, 
                                    distance = distance.measure,
                                    z.scores.both.sets = z.scores.of.all.samples)
+    distance.table = attr(classification.results, "distance.table")
   }
   if(tolower(classification.method) == "knn") {
     classification.results = perform.knn(training.set, test.set, k.value)
@@ -1287,6 +1285,7 @@ if(cv.folds > 0) {
     classification.results = perform.naivebayes(training.set, test.set)
   }
 
+  
   
   # retrieving classes of the new training set
   classes.training = gsub("_.*","",rownames(training.set))

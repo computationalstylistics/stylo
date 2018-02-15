@@ -576,51 +576,61 @@ encoding.orig = variables$encoding
   tk2tip(cblabel_ALL_L, "If this is left unchecked, both frequency tables \nare built using a pre-prepared wordlist of the primary set. \nChecking this box compiles the list \nbasing on both primary and secondary sets.")
   tk2tip(cblabel_ALL_Z, "If this is left unchecked, then the z-scores \nare based on the primary set only (applicable to Delta).")
 
-  # next row: DELTA SETTINGS: DISTANCES
+   # next row: DISTANCES
   #
   entry_CD <- tkradiobutton(f3)
-  entry_AL <- tkradiobutton(f3)
+  entry_WD <- tkradiobutton(f3)
   entry_ED <- tkradiobutton(f3)
   entry_ES <- tkradiobutton(f3)
+  entry_EN <- tkradiobutton(f3)
   entry_MH <- tkradiobutton(f3)
   entry_CB <- tkradiobutton(f3)
   entry_EU <- tkradiobutton(f3)
   entry_CS <- tkradiobutton(f3)
+  entry_MM <- tkradiobutton(f3)
+
   #
   tkconfigure(entry_CD,variable=distance.measure,value="delta")
-  tkconfigure(entry_AL,variable=distance.measure,value="wurzburg")
+  tkconfigure(entry_WD,variable=distance.measure,value="wurzburg")
   tkconfigure(entry_ED,variable=distance.measure,value="eder")
   tkconfigure(entry_ES,variable=distance.measure,value="simple")
+  tkconfigure(entry_EN,variable=distance.measure,value="entropy")
   tkconfigure(entry_MH,variable=distance.measure,value="manhattan")
   tkconfigure(entry_CB,variable=distance.measure,value="canberra")
-  tkconfigure(entry_EU,variable=distance.measure,value="euclides")
+  tkconfigure(entry_EU,variable=distance.measure,value="euclidean")
   tkconfigure(entry_CS,variable=distance.measure,value="cosine")
+  tkconfigure(entry_MM,variable=distance.measure,value="minmax")
   #
   entrylabel_CD <- tklabel(f3,text="Classic Delta")
-  entrylabel_AL <- tklabel(f3,text="Cosine Delta")
+  entrylabel_WD <- tklabel(f3,text="Cosine Delta")
   entrylabel_ED <- tklabel(f3,text="Eder's Delta")
   entrylabel_ES <- tklabel(f3,text="Eder's Simple")
+  entrylabel_EN <- tklabel(f3,text="Entropy")
   entrylabel_MH <- tklabel(f3,text="Manhattan")
   entrylabel_CB <- tklabel(f3,text="Canberra")
   entrylabel_EU <- tklabel(f3,text="Euclidean")
   entrylabel_CS <- tklabel(f3,text="Cosine")
+  entrylabel_MM <- tklabel(f3,text="Min-Max")
   #
-  tkgrid(tklabel(f3,text="  DELTA DISTANCE:  "),entrylabel_CD,entrylabel_AL,entrylabel_ED,entrylabel_ES)
-  tkgrid(tklabel(f3,text="            "),entry_CD,entry_AL,entry_ED,entry_ES)
-  tkgrid(tklabel(f3,text="            "),entrylabel_MH,entrylabel_CB,entrylabel_EU,entrylabel_CS)
-  tkgrid(tklabel(f3,text="            "),entry_MH,entry_CB,entry_EU,entry_CS)
+  tkgrid(tklabel(f3,text="  DELTA DISTANCE:  "),entrylabel_CD,entrylabel_WD,entrylabel_ED,entrylabel_ES,entrylabel_EN)
+  tkgrid(tklabel(f3,text="            "),entry_CD,entry_WD,entry_ED,entry_ES,entry_EN)
+  tkgrid(tklabel(f3,text="            "),entrylabel_MH,entrylabel_CB,entrylabel_EU,entrylabel_CS,entrylabel_MM)
+  tkgrid(tklabel(f3,text="            "),entry_MH,entry_CB,entry_EU,entry_CS,entry_MM)
   tkgrid(tklabel(f3,text="    ")) # blank line for aesthetic purposes
 
   # Tooltips for the above
-  tk2tip(entrylabel_CD, "Select the Classic Delta measure as developed by Burrows.")
-  tk2tip(entrylabel_AL, "Select Cosine Delta (aka Wurzburg Delta), which seems to outperform other measures.")
+  tk2tip(entrylabel_CD, "Select the Classic Delta measure as introduced by Burrows.")
+  tk2tip(entrylabel_WD, "Select Cosine Delta (aka Wurzburg Delta), which seems to outperform other measures.")
   tk2tip(entrylabel_ED, "Select Eder's Delta (weights the frequencies, in order to decrease the influence of the less frequent words).")
   tk2tip(entrylabel_ES, "Select Eder's Simple measure (the frequencies are transformed via square root).")
+  tk2tip(entrylabel_EN, "Select Entropy Delta, or Manhattan appied to entropy-transformed dataset.")
   tk2tip(entrylabel_MH, "Select Manhattan Distance (obvious and well documented).")
   tk2tip(entrylabel_CB, "Select Canberra Distance (risky, but sometimes amazingly good).")
   tk2tip(entrylabel_EU, "Select Euclidean Distance (basic and the most *natural*).")
   tk2tip(entrylabel_CS, "Select Cosine Distance (a classic distance in multidimensional methods).")
-    
+  tk2tip(entrylabel_MM, "Select Min-Max distance (aka Ruzicka distance).")
+
+  
   # next row: OTHER METHODS
   
   entry_LINEAR <- tkradiobutton(f3)
