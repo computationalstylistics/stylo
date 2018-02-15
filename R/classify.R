@@ -1482,8 +1482,7 @@ distinctive.features = attr(classification.results, "features")
 
 
 if(exists("misclassified.samples")) {
-  attr(misclassified.samples, "description") = "............"
-#  class(misclassified.samples) = "stylo.data"
+  attr(misclassified.samples, "description") = "texts (samples) that were not correctly classified"
 }
 if(exists("cross.validation.summary") & length(cross.validation.summary) >0 ) {
   attr(cross.validation.summary, "description") = "correctly guessed samples (cross-validation folds)"
@@ -1505,8 +1504,6 @@ if(exists("distance.table")) {
 }
 if(exists("distinctive.features") & length(distinctive.features) > 0) {
   attr(distinctive.features, "description") = "most distinctive features"
-# this sucks
-#  class(nsc.distinctive.features) = "stylo.data"
 }
 if(exists("frequencies.both.sets")) {
   attr(frequencies.both.sets, "description") = "frequencies of words/features accross the corpus"
