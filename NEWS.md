@@ -1,8 +1,7 @@
-
 ## stylo news ##
 
 
-### version 0.6.6, 2018/02/14
+### version 0.6.6, 2018/04/13
   * Cosine Delta implemented and aviable via GUI
   * Min-Max distance implemented
   * Entropy distance implemented
