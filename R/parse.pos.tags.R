@@ -43,7 +43,32 @@ parse.pos.tags = function(input.text,
         }
     }
     if(tagger == "takipi") {
-        #  [TBD]
+        # TaKIPI is a tagger for Polish, outputting its results in XML.
+        #
+        # extracting word forms
+        if(feature == "word") {
+            extract.stuff = function(x) {
+                y = grep("<orth>(.*)</orth>", x, value = TRUE)
+                z = gsub("<orth>(.*)</orth>", "\\1", y)
+                return(z)
+            }
+        }
+        # extracting lemmata
+        if(feature == "lemma") {
+            extract.stuff = function(x) {
+                y = grep("<lex disamb=\"1\">", x, value = TRUE)
+                z = gsub("<.*<base>(.+)</base>.*", "\\1", y)
+                return(z)
+            }
+        }
+        # extracting POS-tags
+        if(feature == "pos") {
+            extract.stuff = function(x) {
+                y = grep("<lex disamb=\"1\">", x, value = TRUE)
+                z = gsub("<lex disamb=\"1\"><base>.*</base><ctag>(.+)</ctag></lex>", "\\1", y)
+                return(z)
+            }
+        }
     }
 
         
