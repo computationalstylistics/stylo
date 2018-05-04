@@ -2,8 +2,9 @@
 \alias{parse.pos.tags}
 \title{Extract POS-tags or Words from Annotated Corpora}
 \description{Function for extracting textual data from annotated corpora.
-It uderstands Stanford Tagger, TreeTagger, and TaKIPI (a tagger for Polish) 
-output formats. Either part-of-speech tags, or words, or lemmata can be extracted.}
+It uderstands Stanford Tagger, TreeTagger TaKIPI (a tagger for Polish),
+and Alpino (a tagger for Dutch) output formats. Either part-of-speech tags, 
+or words, or lemmata can be extracted.}
 
 \usage{
 parse.pos.tags(input.text, tagger = "stanford", feature = "pos")
