@@ -144,12 +144,18 @@ imposters = function(reference.set,
             # is first converted into an integer
             no.of.features = round(length(imposters.set[1,]) * features)
             
+            # picking a sample of the size defined by "no.of.features"; no replacement
+            feature.IDs = sample(length(colnames(imposters.set)), no.of.features)
+            # since some of the distance measures require that the original order 
+            # of features is kept, let's sort them
+            feature.IDs = sort(feature.IDs)
+            
             # extracting the selection of features from the colnames of one of the sets
-            feature.subset = sample(colnames(imposters.set))[1:no.of.features]
+            feature.subset = sample(colnames(imposters.set))[feature.IDs]
             
             # randomly picking the imposters: the percentage passed as an argument
             # is first converted into an integer
-            no.of.imposters = round(length(imposters.set[,1]) * features)
+            no.of.imposters = round(length(imposters.set[,1]) * imposters)
         
             # extracting the selection of imposters from the rownames 
             imposters.subset = sample(rownames(imposters.set))[1:no.of.imposters]
