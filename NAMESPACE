@@ -39,6 +39,7 @@ export(
   gui.classify,
   gui.oppose,
   gui.stylo,
+  imposters,
   load.corpus.and.parse,
   load.corpus,
   make.frequency.list,
