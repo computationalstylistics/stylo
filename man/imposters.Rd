@@ -113,4 +113,25 @@ Maciej Eder
 \seealso{
 \code{\link{perform.delta}}
 }
+\examples{
+# activating the datasets with "The Cuckoo's Calling", possibly written by JK Rowling
+data(galbraith)
+
+# running the imposters method against all the remaining authorial classes
+imposters(galbraith)
+
+\dontrun{
+# Let's assume there is a table with frequencies, the 8th row of which contains
+# the data for a text one wants to verify.
+
+# getting the 8th row from the dataset
+text_to_be_tested = dataset[8,]
+
+# building the reference set so that it does not contain the 8th row
+remaining_frequencies = dataset[-c(8),]
+
+# launching the imposters method:
+imposters(reference.set = remaining_frequencies, test = text_to_be_tested)
+}
+}
 %\keyword{classification}
