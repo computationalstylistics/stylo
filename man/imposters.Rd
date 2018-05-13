@@ -1,58 +1,70 @@
 \name{imposters}
 \alias{imposters}
-\title{An Authorship Verification Classifier Known as the Imposters Method}
+\title{Authorship Verification Classifier Known as the Imposters Method}
 \description{
 A machine-learning supervised classifier tailored to assess authorship
 verification tasks. This function is an implementation of the 2nd order
 verification system known as the General Imposters framework (GI), 
 and introduced by Koppel and Winter (2014). The current implementation 
-tries to stick -- as closely as possible -- to the description provided 
+tries to stick -- with some improvements -- to the description provided 
 by Kestemont et al. (2016: 88).
 }
 \usage{
 imposters(reference.set, 
-                     test = NULL,
-                     candidate.set = NULL,
-                     iterations = 100,
-                     features = 0.5,
-                     imposters = 0.5,
-                     classes.reference.set = NULL,
-                     classes.candidate.set = NULL,
-                     distance = "delta", 
-                     ...) 
+          test = NULL,
+          candidate.set = NULL,
+          iterations = 100,
+          features = 0.5,
+          imposters = 0.5,
+          classes.reference.set = NULL,
+          classes.candidate.set = NULL,
+          ...) 
 }
 \arguments{
 \item{reference.set}{a table containing frequencies/counts for several
           variables -- e.g. most frequent words -- across a number of texts
-          written by a target author (i.e. the candidate to authorship). 
-          This table should also contain an anonymous sample to be assessed.
+          written by different authors. It is really important to put there
+          a selection of "imposters", or the authors that could not have written
+          the text to be assessed. If no \code{candidate.set} is used, then the
+          table should also contain some texts written by possible candidates to 
+          authorship, or the authors that are suspected of being the actual author. 
           Make sure that the rows contain samples, and the columns -- 
           variables (words, n-grams, or whatever needs to be analyzed).}
 
 \item{test}{a text to be checked for authorship, represented as a vector
-          of, say, word frequencies. If no }
+          of, say, word frequencies. The variables used (i.e. columns) 
+          must match the columns of the reference set. If nothing is indicated, 
+          then the function will try to infer the test text from the 
+          \code{reference.set}; when worse comes to worst, the first text 
+          in the reference set will be excluded as the test text.}
 
-\item{impostors.set}{a table containing frequencies/counts for the control set.
-	      This set should contain the samples by the impostors, or the 
-	      authors that could not have written the anonymous sample in question.
+\item{candidate.set}{a table containing frequencies/counts for the candidate set.
+	      This set should contain texts written by possible candidates to 
+          authorship, or the authors that are suspected of being the actual author.
           The variables used (i.e. columns) must match the columns of the 
-          candidate set.}
+          reference set. If no \code{candidate.set} is indicated, the function
+          will test iteratively all the classes (one at a time) from the reference
+          set.}
 
 \item{iterations}{the model is rafined in N iterations. A reasonable number 
           of turns is a few dozen or so (see the argument "features" below).}
 
-\item{features}{the "impostors" method is sometimes referred to as a 2nd order
-          authorship verification system, since it selects randomly, in N
-          iterations, a given subset of features (words, n-grams, etc.)
-          and performs a classification. This argument specifies the
-          percentage of features to be randomly chosen; the default value
-          is 50.}
+\item{features}{a proportion of features to be analyzed. The imposters method 
+          selects randomly, in N iterations, a given subset of features 
+          (words, n-grams, etc.) and performs a classification. It is assumed that
+          a large number of iteration, each involving a randomly selected subset
+          of features, leads to a reliable coverage of features, among which
+          some outliers might be hidden. The argument specifies the
+          proportion of features to be randomly chosen; the indicated value 
+          should lay in the range between 0 and 1 (the default being 0.5).}
 
-\item{impostors}{in each iteration, a specified number of texts from the 
-          control set is chosen (randomly). The default number is 30.}
+\item{imposters}{a proportion of text by the imposters to be analyzed. In each 
+          iteration, a specified number of texts from the comparison set is chosen 
+          (randomly). See above, for the features' choice. The default value
+          of this parameter is 0.5.}
 
-\item{classes.candidate.set}{a vector containing class identifiers for the
-          authorial set. When missing, the row names of the set
+\item{classes.reference.set}{a vector containing class identifiers for the
+          reference set. When missing, the row names of the set
           table will be used; the assumed classes are the strings of 
           characters followed by the first underscore. Consider the following 
           examples: c("Sterne_Tristram",
@@ -63,26 +75,28 @@ imposters(reference.set,
           Note that only the part up to the first underscore in the
           sample's name will be included in the class label.}
 
-\item{classes.impostors.set}{a vector containing class identifiers for the
-          control set. When missing, the row names of the set
+\item{classes.candidate.set}{a vector containing class identifiers for the
+          candidate set. When missing, the row names of the set
           table will be used (see above).}
 
-\item{distance}{a kernel (i.e. a distance measure) used for computing 
-          similarities between texts. Available options so far: "delta" 
-          (Burrow's Delta, default), "argamon" (Argamon's Linear Delta), 
+\item{...}{any other argument that can be passed to the classifier; see 
+          \code{perform.delta} for the parameters to be tweaked. In the current
+          version of the function, only distance measure used for computing 
+          similarities between texts can be set. Available options so far: "delta" 
+          (Burrows's Delta, default), "argamon" (Argamon's Linear Delta), 
           "eder" (Eder's Delta), "simple" (Eder's Simple Distance), 
           "canberra" (Canberra Distance), "manhattan" (Manhattan 
           Distance), "euclidean" (Euclidean Distance), "cosine"
-          (Cosine Distance). THIS OPTION WILL BE CHANGED IN NEXT VERSIONS.}
-
-\item{...}{any other argument that can be passed to the classifier; see 
-          \code{perform.delta} for the parameters to be tweaked.}
+          (Cosine Distance), "wurzburg" (Cosine Delta), "minmax" 
+          (Minmax Distance, also known as the Ruzicka measure).
+          }
 }
 \value{
 The function returns a single score indicating the probability that an
 anonymouns sample analyzed was/wasn't written by a candidate author. 
 As a proportion, the score lies between 0 and 1 (higher scores indicate a higher 
-attribution confidence).
+attribution confidence). If more than one class is assessed, the resulting scores
+are returned as a vector.
 }
 \references{
 Koppel, M. , and Winter, Y. (2014). Determining if two documents are 

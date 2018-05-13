@@ -2,8 +2,7 @@
 
 ### version 0.6.7, 2018/05/12
   * supports the following taggers: TaKIPI (for Polish), Alpino (Dutch)
-  * the Imposters method revised
-
+  * the Imposters method reimplemented
 
 
 ### version 0.6.6, 2018/04/13
