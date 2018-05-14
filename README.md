@@ -12,9 +12,18 @@ analyses in the field of computational stylistics, authorship attribution, etc.
 
 See: https://sites.google.com/site/computationalstylistics/ for further details.
 
+
+
+
+
+
+## Citation
+
 If you find the package `stylo` useful and plan to publish your results, please consider citing the following paper:
 
 **Eder, M., Rybicki, J. and Kestemont, M.** (2016). Stylometry with R: a package for computational text analysis. _R Journal_, 8(1): 107-21.  [https://journal.r-project.org/archive/2016/RJ-2016-007/index.html](https://journal.r-project.org/archive/2016/RJ-2016-007/index.html)
+
+
 
 
 
@@ -25,6 +34,11 @@ There are three ways of installing `stylo`:
 * from CRAN repository
 * from the GitHub repository, via the package `devtools`
 * from a locally downloaded file
+
+
+
+
+
 
 ###  Installing from CRAN
 
@@ -48,6 +62,9 @@ defaults write org.R-project.R force.LANG en_US.UTF-8
 Next, close the Terminal and start up R again.
 
 
+
+
+
 ### from the GitHub repository
 
 A convenient way to install R packages directly from the GitHub repository is to use the package `devtools`. Unless you have already installed it, you should do it now:
@@ -60,6 +77,8 @@ Then, install the package `stylo`
 library(devtools)
 install_github("computationalstylistics/stylo")
 ```
+
+
 
 
 
