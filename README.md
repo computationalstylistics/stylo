@@ -4,7 +4,15 @@
 **License:** [GPL-3](https://opensource.org/licenses/GPL-3.0)
 
 
-[![CRAN Version](http://www.r-pkg.org/badges/version/stylo)](https://CRAN.R-project.org/package=stylo) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/computationalstylistics/stylo?branch=master&svg=true)](https://ci.appveyor.com/project/computationalstylistics/stylo) [![Travis-CI Build Status](https://travis-ci.org/computationalstylistics/stylo.svg?branch=master)](https://travis-ci.org/computationalstylistics/stylo) [![Coverage Status](https://img.shields.io/codecov/c/github/computationalstylistics/stylo/master.svg)](https://codecov.io/github/computationalstylistics/stylo?branch=master)
+[![CRAN Version](http://www.r-pkg.org/badges/version/stylo)](https://CRAN.R-project.org/package=stylo)
+
+
+![AppVeyor](https://img.shields.io/appveyor/ci/gruntjs/grunt.svg)
+
+
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/computationalstylistics/stylo?branch=master&svg=true)](https://ci.appveyor.com/project/computationalstylistics/stylo) 
+
+[![Travis-CI Build Status](https://travis-ci.org/computationalstylistics/stylo.svg?branch=master)](https://travis-ci.org/computationalstylistics/stylo) [![Coverage Status](https://img.shields.io/codecov/c/github/computationalstylistics/stylo/master.svg)](https://codecov.io/github/computationalstylistics/stylo?branch=master)
 ![Downloads](http://cranlogs.r-pkg.org/badges/stylo)
 
 
