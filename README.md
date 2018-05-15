@@ -40,7 +40,7 @@ There are three ways of installing `stylo`:
 
 
 
-###  Installing from CRAN
+###  1. Installing from CRAN
 
 Launch R, make sure you are connected to the internet, type: 
 
@@ -65,7 +65,7 @@ Next, close the Terminal and start up R again.
 
 
 
-### from the GitHub repository
+### 2. Installing from the GitHub repository
 
 A convenient way to install R packages directly from the GitHub repository is to use the package `devtools`. Unless you have already installed it, you should do it now:
 
@@ -82,7 +82,7 @@ install_github("computationalstylistics/stylo")
 
 
 
-### Installing from a local file
+### 3. Installing from a local file
 
 Download the package from **here**; save the file anywhere on your computer where you will be able to find it; launch R; set working directory to the folder where the downloaded file is (please keep it mind that the slashes might look different in different operating systems):
 
@@ -106,6 +106,26 @@ install.packages("e1071")
 install.packages("pamr")
 install.packages("tsne")
 ```
+
+
+
+## Usage
+
+
+The following sections are meant to give the users a general outline of what the package can do, rather than providing a comprehensive description of its functionalities
+
+* for (real) beginners: a crush introduction in the form of a [slideshow](https://computationalstylistics.github.io/stylo_nutshell/)
+* for (sort of) beginners: a concise [HOWTO](https://sites.google.com/site/computationalstylistics/stylo/stylo_howto.pdf)
+* for advanced users: a paper in [R Journal](https://journal.r-project.org/archive/2016/RJ-2016-007/RJ-2016-007.pdf)
+* full documentation [at CRAN](https://cran.r-project.org/web/packages/stylo/stylo.pdf)
+
+
+
+
+
+
+
+
 
 
 
