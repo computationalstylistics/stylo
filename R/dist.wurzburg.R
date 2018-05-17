@@ -20,6 +20,9 @@ dist.wurzburg = function(x){
     # first, z-scoring the input dataset
     x = scale(x)
     
+    # checking for all-zeros columns: they spoil the final results!
+    x = x[ , attr(x ,"scaled:scale") != 0]
+    
     # to get Centered Cosine dist (=Pearson Correlation Coeff.), one needs 
     # to normalize the feature vectors by subtracting the vector means
     # x = t( t(x) - colMeans(x) )

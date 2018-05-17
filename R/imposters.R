@@ -132,6 +132,8 @@ imposters = function(reference.set,
         # otherwise (= in most cases) select only the texts by a current candidate
         } else {
             current.candidate = candidate.set[classes.candidate.set == candidate, ]
+########
+#current.candidate = colMeans(current.candidate)
         }
         # get the centroid?
         imposters.set = reference.set[classes.reference.set != candidate, ]
@@ -162,16 +164,19 @@ imposters = function(reference.set,
             
             # building new subsets given the above constrains (no. of features etc.)
             # first, shrinking the candidate set, depending on its dimensionality
-            if(is.vector(candidate.set) == TRUE) {
-                shrunken.candidate.set = candidate.set[feature.subset]
+            if(is.vector(current.candidate) == TRUE) {
+                shrunken.candidate.set = current.candidate[feature.subset]
             } else {
-                shrunken.candidate.set = candidate.set[,feature.subset]
+                shrunken.candidate.set = current.candidate[, feature.subset]
             }
             shrunken.imposters.set = imposters.set[imposters.subset,feature.subset]
             shrunken.test = test[feature.subset]
             
             # final reshaping, for the sake of the classifier
             training.set = rbind(shrunken.candidate.set, shrunken.imposters.set)
+            # THIS IS AN UGLY WORKAROUND, TO PREVENT SOME PSEUDO-FALSE POSITIVES
+            # adding the candidate's class to the training set
+            rownames(training.set)[1] = paste(candidate, "_test", sep = "")
             test.set = shrunken.test
             
             # THE MAIN STEP: LAUNCHING THE CLASSIFIER
