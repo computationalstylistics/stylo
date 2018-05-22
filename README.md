@@ -112,7 +112,7 @@ install.packages("tsne")
 ## Usage
 
 
-The following sections are meant to give the users a general outline of what the package can do, rather than providing a comprehensive description of its functionalities
+The following sections are meant to give the users a general outline of what the package can do, rather than providing a comprehensive description of its functionalities.
 
 * for (real) beginners: a crush introduction in the form of a [slideshow](https://computationalstylistics.github.io/stylo_nutshell/)
 * for (sort of) beginners: a concise [HOWTO](https://sites.google.com/site/computationalstylistics/stylo/stylo_howto.pdf)

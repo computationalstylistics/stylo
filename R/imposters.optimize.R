@@ -7,6 +7,7 @@
 
 # !!!so far, the dist. measure is not flexible!!!
 
+# !!!parameter.incr!!!
 
 imposters.optimize = function(reference.set = NULL,
                      classes.reference.set = NULL,
@@ -29,8 +30,7 @@ classes.reference.set = classes.reference.set[classes.reference.set %in% more.th
 predicted.scores = c()
 expected.scores = c()
 
-#for(i in 1:length(reference.set[,1])) {
-for(i in c(1:3,10:11)) {
+for(i in 1:length(reference.set[,1])) {
     current.test.text = reference.set[i,]
     current.reference.set = reference.set[-c(i),]
 
@@ -40,8 +40,8 @@ for(i in c(1:3,10:11)) {
                                     test = current.test.text, distance = "delta"))
     current.expected = as.numeric(classes.reference.set[i] == unique(classes.reference.set))
     
-    predicted.scores = c(predicted.scores, current.predicted)
-    expected.scores = c(expected.scores, current.expected)
+    predicted.scores = rbind(predicted.scores, current.predicted)
+    expected.scores = rbind(expected.scores, current.expected)
     
 }
 
@@ -62,10 +62,12 @@ rescale = function(score, p1, p2) {
 }
 
 
+predicted = round(sapply(as.vector(predicted.scores), rescale, p1 = 0.2, p2 = 0.9))
+confusion.matrix = table(as.vector(expected.scores), predicted)
 
 
-predicted = round(sapply(predicted.scores, rescale, p1 = 0.2, p2 = 0.9))
-confusion.matrix = table(expected.scores, predicted)
+#predicted = round(sapply(predicted.scores, rescale, p1 = 0.2, p2 = 0.9))
+#confusion.matrix = table(expected.scores, predicted)
 
 # true negatives
 TN = confusion.matrix[1,1]
@@ -88,9 +90,12 @@ auc = c()
 
 parameter.incr = 0.1
 
+
+
+
 for(p1 in seq(0, 1, parameter.incr) ) {
     for(p2 in seq(p1, 1, parameter.incr) ) {
-        predicted = round(sapply(predicted.scores, rescale, p1, p2))
+        predicted = round(sapply(as.vector(predicted.scores), rescale, p1, p2))
         
         confusion.matrix = table(expected.scores, predicted)
 
