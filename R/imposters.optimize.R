@@ -62,6 +62,27 @@ rescale = function(score, p1, p2) {
 }
 
 
+############
+############
+
+predicted.scores[expected.scores == 1]
+
+plot(density(predicted.scores[expected.scores == 0]), col = "red")
+lines(density(predicted.scores[expected.scores == 1]), col = "green")
+
+
+predicted.prime = sapply(predicted.scores, rescale, p1 = 0.6, p2 = 0.9)
+plot(density(predicted.prime[expected.scores == 0]), col = "red")
+lines(density(predicted.prime[expected.scores == 1]), col = "green")
+
+############
+############
+
+
+
+
+
+
 predicted = round(sapply(as.vector(predicted.scores), rescale, p1 = 0.2, p2 = 0.9))
 confusion.matrix = table(as.vector(expected.scores), predicted)
 

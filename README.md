@@ -4,7 +4,7 @@
 **License:** [GPL-3](https://opensource.org/licenses/GPL-3.0)
 
 
-[![CRAN Version](http://www.r-pkg.org/badges/version/stylo)](https://CRAN.R-project.org/package=stylo) [![Travis-CI Build Status](https://travis-ci.org/computationalstylistics/stylo.svg?branch=master)](https://travis-ci.org/computationalstylistics/stylo) ![Downloads](http://cranlogs.r-pkg.org/badges/stylo)
+![CRAN Version](http://www.r-pkg.org/badges/version/stylo)](https://CRAN.R-project.org/package=stylo) ![Travis-CI Build Status](https://travis-ci.org/computationalstylistics/stylo.svg?branch=master)](https://travis-ci.org/computationalstylistics/stylo) ![CRAN Downloads](http://cranlogs.r-pkg.org/badges/grand-total/stylo)](https://www.rpackages.io/package/stylo) ![Downloads](http://cranlogs.r-pkg.org/badges/stylo)
 
 
 This package provides a number of functions, supplemented by a GUI, to perform various
