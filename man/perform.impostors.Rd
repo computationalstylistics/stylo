@@ -1,6 +1,7 @@
 \name{perform.impostors}
 \alias{perform.impostors}
-\title{An Authorship Verification Classifier Known as the Impostors Method}
+\title{An Authorship Verification Classifier Known as the Impostors Method. ATTENTION:
+this function is obsolete; refer to a new implementation, aka the imposters() function!}
 \description{
 A machine-learning supervised classifier tailored to assess authorship
 verification tasks. This function is an implementation of the 2nd order
@@ -75,7 +76,8 @@ perform.impostors(candidate.set, impostors.set, iterations = 100,
 }
 \value{
 The function returns a single score indicating the probability that an
-anonymouns sample analyzed was/wasn't written by a candidate author. As a proportion, the score lies between 0 and 1 (higher scores indicate a higher attribution confidence).
+anonymouns sample analyzed was/wasn't written by a candidate author. As a proportion, 
+the score lies between 0 and 1 (higher scores indicate a higher attribution confidence).
 }
 \references{
 Koppel, M. , and Winter, Y. (2014). Determining if two documents are 
@@ -90,6 +92,6 @@ Kestemont, M., Stover, J., Koppel, M., Karsdorp, F. and Daelemans, W. (2016).
 Maciej Eder
 }
 \seealso{
-\code{\link{perform.delta}}
+\code{\link{imposters}}
 }
 %\keyword{classification}

@@ -111,16 +111,20 @@ Kestemont, M., Stover, J., Koppel, M., Karsdorp, F. and Daelemans, W. (2016).
 Maciej Eder
 }
 \seealso{
-\code{\link{perform.delta}}
+\code{\link{perform.delta}}, \code{\link{imposters.optimize}}
 }
 \examples{
+\dontrun{
+# performing the imposters method on the dataset provided by the package:
+
 # activating the datasets with "The Cuckoo's Calling", possibly written by JK Rowling
 data(galbraith)
 
 # running the imposters method against all the remaining authorial classes
 imposters(galbraith)
 
-\dontrun{
+# general usage:
+
 # Let's assume there is a table with frequencies, the 8th row of which contains
 # the data for a text one wants to verify.
 
