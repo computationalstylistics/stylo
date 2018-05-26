@@ -111,21 +111,12 @@ install.packages("tsne")
 
 ## Usage
 
-
-The following sections are meant to give the users a general outline of what the package can do, rather than providing a comprehensive description of its functionalities.
+This section is meant to give the users a general outline of what the package can do, rather than providing a comprehensive description of designing a stylometric test using the R package `stylo`. Refer to the following documents:
 
 * for (real) beginners: a crush introduction in the form of a [slideshow](https://computationalstylistics.github.io/stylo_nutshell/)
 * for (sort of) beginners: a concise [HOWTO](https://sites.google.com/site/computationalstylistics/stylo/stylo_howto.pdf)
 * for advanced users: a paper in [R Journal](https://journal.r-project.org/archive/2016/RJ-2016-007/RJ-2016-007.pdf)
-* full documentation [at CRAN](https://cran.r-project.org/web/packages/stylo/stylo.pdf)
-
-
-
-
-
-
-
-
+* full documentation at [CRAN](https://cran.r-project.org/web/packages/stylo/stylo.pdf)
 
 
 
