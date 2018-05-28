@@ -10,8 +10,6 @@
 This package provides a number of functions, supplemented by a GUI, to perform various
 analyses in the field of computational stylistics, authorship attribution, etc.
 
-See: https://sites.google.com/site/computationalstylistics/ for further details.
-
 
 
 
@@ -118,6 +116,11 @@ This section is meant to give the users a general outline of what the package ca
 * for advanced users: a paper in [R Journal](https://journal.r-project.org/archive/2016/RJ-2016-007/RJ-2016-007.pdf)
 * full documentation at [CRAN](https://cran.r-project.org/web/packages/stylo/stylo.pdf)
 
+
+
+## Other relevant resources
+
+The package `stylo` has been created as a by-product of a few projects conducted by the Computational Stylistics Group. See  [this website](https://sites.google.com/site/computationalstylistics/) for further details.
 
 
 
