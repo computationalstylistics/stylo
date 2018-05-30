@@ -120,6 +120,8 @@ This section is meant to give the users a general outline of what the package ca
 
 ## Other relevant resources
 
+A post on [Authorship verification with the package `stylo`](https://computationalstylistics.github.io/docs/imposters)
+
 The package `stylo` has been created as a by-product of a few projects conducted by the Computational Stylistics Group. See  [this website](https://sites.google.com/site/computationalstylistics/) for further details.
 
 
