@@ -120,7 +120,11 @@ This section is meant to give the users a general outline of what the package ca
 
 ## Other relevant resources
 
-A post on [Authorship verification with the package `stylo`](https://computationalstylistics.github.io/docs/imposters)
+A few [posts](https://computationalstylistics.github.io/) on different non-obvious functions and solutions using the package `stylo`.
+
+Despite a black legend, R and Python are not necessarily in a deadly clash: here is a great [post](https://cligs.hypotheses.org/577) by José Calvo Tello on invoking the package `stylo` directly from Python!
+
+Using the package `stylo` with the TXM environment: see [this post](https://groupes.renater.fr/wiki/txm-users/public/tutorial_to_use_stylo_into_txm) by Serge Heiden.
 
 The package `stylo` has been created as a by-product of a few projects conducted by the Computational Stylistics Group. See  [this website](https://sites.google.com/site/computationalstylistics/) for further details.
 
