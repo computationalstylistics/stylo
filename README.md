@@ -118,9 +118,28 @@ This section is meant to give the users a general outline of what the package ca
 
 
 
+
+
+
+## Non-obvious functions and applications
+
+
+[Authorship verification with the package 'stylo'](https://computationalstylistics.github.io/docs/imposters)
+
+[Cross-validation using the function `classify()`](https://computationalstylistics.github.io/docs/cross_validation)
+
+[Custom distance measures](https://computationalstylistics.github.io/docs/custom_distances)
+
+[Testing rolling stylometry](https://computationalstylistics.github.io/docs/rolling_stylometry)
+
+
+
+
+
+
+
 ## Other relevant resources
 
-* [A few posts](https://computationalstylistics.github.io/) on different non-obvious functions and solutions using the package `stylo`.
 
 * Despite a black legend, R and Python are not necessarily in a deadly clash: here is [a great post](https://cligs.hypotheses.org/577) by José Calvo Tello on invoking the package `stylo` directly from Python!
 
