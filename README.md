@@ -126,6 +126,8 @@ This section is meant to give the users a general outline of what the package ca
 
 * Using the package `stylo` with the TXM environment: see [this post](https://groupes.renater.fr/wiki/txm-users/public/tutorial_to_use_stylo_into_txm) by Serge Heiden.
 
+* Probably not a  bad idea to check a comprehensive [Stylometry Bibliography](https://www.zotero.org/groups/643516/stylometry_bibliography) curated by Christof Schöch, before starting an experiment in text analysis.
+
 * The package `stylo` has been created as a by-product of a few projects conducted by the Computational Stylistics Group. See  [this website](https://sites.google.com/site/computationalstylistics/) for further details.
 
 
