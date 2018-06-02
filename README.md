@@ -121,16 +121,16 @@ This section is meant to give the users a general outline of what the package ca
 
 
 
-## Non-obvious functions and applications
+## Docs on non-obvious functions
 
 
-[Authorship verification with the package 'stylo'](https://computationalstylistics.github.io/docs/imposters)
+* [Authorship verification with the package 'stylo'](https://computationalstylistics.github.io/docs/imposters)
 
-[Cross-validation using the function `classify()`](https://computationalstylistics.github.io/docs/cross_validation)
+* [Cross-validation using the function `classify()`](https://computationalstylistics.github.io/docs/cross_validation)
 
-[Custom distance measures](https://computationalstylistics.github.io/docs/custom_distances)
+* [Custom distance measures](https://computationalstylistics.github.io/docs/custom_distances)
 
-[Testing rolling stylometry](https://computationalstylistics.github.io/docs/rolling_stylometry)
+* [Testing rolling stylometry](https://computationalstylistics.github.io/docs/rolling_stylometry)
 
 
 
