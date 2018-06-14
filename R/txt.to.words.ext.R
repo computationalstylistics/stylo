@@ -43,8 +43,19 @@ txt.to.words.ext = function(input.text,
     # Loading the file; optionally, fiddling with apostrophes and contractions:    #
     # This is the standard procedure of splitting input texts
     if(tolower(language) == "cjk") {
-      tokenized.text = txt.to.words(input.text, 
-                                    splitting.rule="[^\U4E00-\U9FFF]+",
+      tokenized.text = txt.to.words(input.text,  
+                                    splitting.rule = paste("[^A-Za-z",
+                                        # Japanese (Hiragana)
+                                        "\U3040-\U309F",
+                                        # Japanese (Katagana):
+                                        "\U30A0-\U30FF",
+                                        # CJK Unified Ideographs: 
+                                        "\U4E00-\U9FFF",
+                                        # CJK Unified Ideographs Extension A: 
+                                        "\U3400-\U4DBF",
+                                        # Hangul (Korean script):
+                                        "\UAC00-\UD7AF",
+                                        "]+", sep=""),
                                     preserve.case=TRUE)
       }
     if(tolower(language) != "english.contr" & 

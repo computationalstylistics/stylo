@@ -1,5 +1,10 @@
 ## stylo news ##
 
+
+### version 0.6.8, 2018/06/14
+  * support for JCK significantly improved
+  
+
 ### version 0.6.7, 2018/05/12
   * supports the following taggers: TaKIPI (for Polish), Alpino (Dutch)
   * the Imposters method reimplemented, via the new function imposters()
