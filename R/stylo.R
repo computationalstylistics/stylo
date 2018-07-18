@@ -1625,14 +1625,14 @@ if((exists("distance.table") == TRUE) & (network == TRUE)) {
     }
     #
     # assigning column names and row names
-    colnames(edges) = c("Id","Source","Target","Weight","Type")
+    colnames(edges) = c("Source","Target","Weight","Type")
     rownames(edges) = c(1:length(edges[,1]))
     # for some reason, the table has to be explicitly declared
     edges = as.data.frame(edges)
     # preparing a file name
     edges.filename = paste(graph.filename,"EDGES.csv",sep="")
     # writing to a file
-    write.csv(file=edges.filename,quote=F,edges)
+    write.csv(edges, file = edges.filename, quote = FALSE, row.names = FALSE)
     #
     #
   } else {
@@ -1663,7 +1663,7 @@ if((exists("distance.table") == TRUE) & (network == TRUE)) {
     }
     #
     # assigning column names and row names
-    colnames(edges) = c("Id","Source","Target","Weight","Type")
+    colnames(edges) = c("Source","Target","Weight","Type")
     rownames(edges) = c(1:length(edges[,1]))
     # for some reason, the table has to be explicitly declared
     edges = as.data.frame(edges, stringsAsFactors=FALSE)
@@ -1680,11 +1680,11 @@ if((exists("distance.table") == TRUE) & (network == TRUE)) {
     # preparing a file name (edges)
     edges.filename = paste(graph.filename,"EDGES.csv",sep="")
     # writing to a file (edges)
-    write.csv(file=edges.filename,quote=F,edges)
+    write.csv(edges, file = edges.filename, quote = FALSE, row.names = FALSE)
     # preparing a file name (nodes)
     nodes.filename = paste(graph.filename,"NODES.csv",sep="")
     # writing to a file (nodes)
-    write.csv(file=nodes.filename,quote=F,nodes)
+    write.csv(nodes, file = nodes.filename, quote = FALSE, row.names = FALSE)
   }
 }
 
