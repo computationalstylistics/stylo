@@ -1625,7 +1625,7 @@ if((exists("distance.table") == TRUE) & (network == TRUE)) {
     }
     #
     # assigning column names and row names
-    colnames(edges) = c("Source","Target","Weight","Type")
+    colnames(edges) = c("Id","Source","Target","Weight","Type")
     rownames(edges) = c(1:length(edges[,1]))
     # for some reason, the table has to be explicitly declared
     edges = as.data.frame(edges)
@@ -1663,7 +1663,7 @@ if((exists("distance.table") == TRUE) & (network == TRUE)) {
     }
     #
     # assigning column names and row names
-    colnames(edges) = c("Source","Target","Weight","Type")
+    colnames(edges) = c("Id","Source","Target","Weight","Type")
     rownames(edges) = c(1:length(edges[,1]))
     # for some reason, the table has to be explicitly declared
     edges = as.data.frame(edges, stringsAsFactors=FALSE)
