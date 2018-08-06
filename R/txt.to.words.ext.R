@@ -49,6 +49,8 @@ txt.to.words.ext = function(input.text,
                                         "\U3040-\U309F",
                                         # Japanese (Katagana):
                                         "\U30A0-\U30FF",
+                                        # Japanese repetition symbols:
+                                        "\U3005\U3031-\U3035",
                                         # CJK Unified Ideographs: 
                                         "\U4E00-\U9FFF",
                                         # CJK Unified Ideographs Extension A: 

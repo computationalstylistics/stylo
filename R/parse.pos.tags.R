@@ -2,7 +2,7 @@
 # #################################################
 # Function for extracting relevant data structures
 # from POS-tagged texts or corpora.
-# type = "treetagger", "stanford", "takipi"
+# type = "treetagger", "stanford", "takipi", "alpino" (pick one)
 # #################################################
 
 parse.pos.tags = function(input.text, 
@@ -103,14 +103,13 @@ parse.pos.tags = function(input.text,
 
         
 
-    # the proper procedure applies, depending on what kind of data 
-    # is analyzed
+    # the core procedure follows
 
     # test if the dataset has a form of a single string (a vector)
     if(is.list(input.text) == FALSE) {
     # apply an appropriate replacement function
         preprocessed.text = extract.stuff(input.text)
-    # if the dataset has already a form of list
+    # if the dataset already is shaped as a list
     } else {
         # applying an appropriate function to a corpus:
         preprocessed.text = lapply(input.text, extract.stuff)

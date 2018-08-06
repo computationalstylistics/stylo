@@ -46,7 +46,7 @@ txt.to.words = function(input.text,
           "\U0400-\U0481\U048A-\U0527",
           # Hebrew:
           "\U05D0-\U05EA\U05F0-\U05F4",
-          # Arabic:
+          # Arabic/Farsi:
           "\U0620-\U065F\U066E-\U06D3\U06D5\U06DC",
           # extended Latin:
           "\U1E00-\U1EFF",
@@ -56,6 +56,18 @@ txt.to.words = function(input.text,
           "\U03E2-\U03EF\U2C80-\U2CF3",
           # Georgian:
           "\U10A0-\U10FF",
+          # Japanese (Hiragana)
+          "\U3040-\U309F",
+          # Japanese (Katagana):
+          "\U30A0-\U30FF",
+          # Japanese repetition symbols:
+          "\U3005\U3031-\U3035",
+          # CJK Unified Ideographs: 
+          "\U4E00-\U9FFF",
+          # CJK Unified Ideographs Extension A: 
+          "\U3400-\U4DBF",
+          # Hangul (Korean script):
+          "\UAC00-\UD7AF",
           "]+",
           sep="")
       tokenized.text = c(unlist(strsplit(input.text, splitting.rule)))

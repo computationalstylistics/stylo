@@ -2,7 +2,8 @@
 
 
 ### version 0.6.8, 2018/06/14
-  * support for JCK significantly improved
+  * support for JCK (Japanese-Chinese-Korean) significantly improved
+  * a fix for exporting networks to Gephi ver. 0.9.2
   
 
 ### version 0.6.7, 2018/05/12
