@@ -43,7 +43,7 @@ if(is.character(path) == TRUE & length(path) > 0) {
   }
 } else {
   # if the argument was empty, then relax
-  cat("using current directory...\n")
+  message("using current directory...\n")
 }
 
 if(is.character(corpus.dir) == FALSE | nchar(corpus.dir) == 0) {
@@ -68,9 +68,9 @@ if (gui == TRUE) {
             suppressWarnings(tcltk::.TkUp))) {
         variables = gui.stylo(...)
       } else {
-        cat("\n")
-        cat("GUI could not be launched -- default settings will be used;\n")
-        cat("otherwise please pass your variables as command-line agruments\n\n")
+        message("\n")
+        message("GUI could not be launched -- default settings will be used;\n")
+        message("otherwise please pass your variables as command-line agruments\n\n")
       }
 }
 
@@ -228,7 +228,7 @@ if(txm.compatibility.mode == TRUE) {
     # set the variable use.existing.freq.tables to skip uploading corpus files
     use.existing.freq.tables == TRUE
   } else {
-     cat("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
+     message("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
     "Oops! To use TXM compatibility mode, you have to launch TXM first!\n",
     "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n")
     stop("Incorrect input data")
@@ -347,11 +347,11 @@ features.exist = FALSE
         # link this vector into the variable used for calculations
         mfw.list.of.all = features
       } else {
-        cat("\n")
-        cat("You seem to have chosen an existing set of features\n")
-        cat("Unfortunately, something is wrong: check if your variable\n")
-        cat("has a form of vector\n")
-        cat("\n")
+        message("\n")
+        message("You seem to have chosen an existing set of features\n")
+        message("Unfortunately, something is wrong: check if your variable\n")
+        message("has a form of vector\n")
+        message("\n")
         stop("Wrong format: a vector of features (e.g. words) was expected")
       }
     # selecting the above vector as a valid set of features
@@ -365,7 +365,7 @@ features.exist = FALSE
       # does the file exist? 
       if(file.exists(features) == TRUE) {
         # file with a vector of features will be loaded
-        cat("\n", "reading a custom set of features from a file...", "\n",sep="")
+        message("\n", "reading a custom set of features from a file...", "\n")
         # reading a file: newlines are supposed to be delimiters
         features = scan(features,what="char",sep="\n",encoding=encoding)
         # getting rid of the lines beginning with the "#" char
@@ -374,7 +374,7 @@ features.exist = FALSE
         mfw.list.of.all = features
       } else {
         # if there's no such a file, then don't try to use it
-        cat("\n", "file \"",features, "\" could not be found\n",sep="")
+        message("\n", "file \"",features, "\" could not be found\n")
         stop("Wrong file name")
       }
     # selecting the above vector as a valid set of features
@@ -398,11 +398,11 @@ corpus.exists = FALSE
         # if yes, then convert the above object into a matrix (just in case)
         frequencies = as.matrix(frequencies)
       } else {
-        cat("\n")
-        cat("You seem to have chosen an existing table with frequencies\n")
-        cat("Unfortunately, something is wrong: check if your variable\n")
-        cat("has a form of matrix/data frame\n")
-        cat("\n")
+        message("\n")
+        message("You seem to have chosen an existing table with frequencies\n")
+        message("Unfortunately, something is wrong: check if your variable\n")
+        message("has a form of matrix/data frame\n")
+        message("\n")
         stop("Wrong format of the table of frequencies")
       }
       # this code makes sure that the table has variables' names
@@ -424,11 +424,11 @@ corpus.exists = FALSE
       # does the file exist?
       if(file.exists(frequencies) == TRUE) {
         # file with frequencies will be loaded
-        cat("\n", "reading a file containing frequencies...", "\n",sep="")
+        message("\n", "reading a file containing frequencies...", "\n")
         frequencies = t(read.table(frequencies, encoding=encoding))
       } else {
         # if there's no such a file, then don't try to use it
-        cat("\n", "file \"",frequencies, "\" could not be found\n",sep="")
+        message("\n", "file \"",frequencies, "\" could not be found\n")
         stop("Wrong file name")
       }
     # selecting the above matrix as a valid corpus
@@ -440,12 +440,12 @@ corpus.exists = FALSE
   if(features.exist == TRUE & corpus.exists == TRUE) {
       # checking if the chosen features do match the columns of the table
       if(length(grep("TRUE",colnames(frequencies) %in% features)) < 2) {
-        cat("The features you want to analyze do not match the variables' names:\n")
-        cat("\n")
-        cat("Available features:",head(colnames(frequencies)), "...\n")
-        cat("Chosen features:", head(features), "...\n")
-        cat("\n")
-        cat("Check the rotation of your table and the names of its rows and columns.\n")
+        message("The features you want to analyze do not match the variables' names:\n")
+        message("\n")
+        message("Available features: ",head(colnames(frequencies)), "...\n")
+        message("Chosen features: ", head(features), "...\n")
+        message("\n")
+        message("Check the rotation of your table and the names of its rows and columns.\n")
         stop("Input data mismatch")
       } else {
         # if everything is right, select the subset of columns from the table:
@@ -466,10 +466,10 @@ corpus.exists = FALSE
   # Additionally, check if the table with frequencies is long enough
   if(corpus.exists == TRUE) {
     if(length(frequencies[,1]) < 2 | length(frequencies[1,]) < 2 ) {
-      cat("\n")
-      cat("There is not enough samples and/or features to be analyzed.\n")
-      cat("Try to use tables of at least two rows by two columns.\n")
-      cat("\n")
+      message("\n")
+      message("There is not enough samples and/or features to be analyzed.\n")
+      message("Try to use tables of at least two rows by two columns.\n")
+      message("\n")
       stop("Wrong size of the table of frequencies")
     }
   }
@@ -500,16 +500,16 @@ if(corpus.exists == TRUE) {
           }
         # if everything is fine, use this variable as a valid corpus
         loaded.corpus = parsed.corpus
-        cat("Corpus loaded successfully.\n")  
+        message("Corpus loaded successfully.\n")  
         corpus.exists = TRUE
       } else {
-        cat("\n")
-        cat("The object you've specified as your corpus cannot be used.\n")
-        cat("It should be a list containing particular text samples\n")
-        cat("(vectors containing sequencies of words/n-grams or other features).\n")
-        cat("The samples (elements of the list) should have their names.\n")
-        cat("Alternatively, try to build your corpus from text files (default).\n")
-        cat("\n")
+        message("\n")
+        message("The object you've specified as your corpus cannot be used.\n")
+        message("It should be a list containing particular text samples\n")
+        message("(vectors containing sequencies of words/n-grams or other features).\n")
+        message("The samples (elements of the list) should have their names.\n")
+        message("Alternatively, try to build your corpus from text files (default).\n")
+        message("\n")
         stop("Wrong corpus format")
       } 
   }
@@ -541,8 +541,8 @@ if(corpus.exists == FALSE) {
     # the listed files can be separated by spaces, tabs, or newlines
       if(use.custom.list.of.files ==TRUE & file.exists("files_to_analyze.txt") ==TRUE) { 
         # a message on the screen
-        cat("\n")
-        cat("external list of files will be used for uploading the corpus\n\n")
+        message("\n")
+        message("external list of files will be used for uploading the corpus\n\n")
         # retrieving the filenames from a file
         corpus.filenames = scan("files_to_analyze.txt",
                                 what="char",
@@ -554,10 +554,10 @@ if(corpus.exists == FALSE) {
           # checking whether all the files indicated on the list really exist
           if( length(setdiff(corpus.filenames,list.files(corpus.dir))) > 0 ){
             # if not, then sent a message and list the suspicious filenames
-            cat("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
-            cat("the following files have not been found:\n")
-            cat(setdiff(corpus.filenames, list.files(corpus.dir)),"\n\n")
-            cat("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
+            message("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
+            message("the following files have not been found:\n")
+            message(setdiff(corpus.filenames, list.files(corpus.dir)),"\n\n")
+            message("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
             # use only those files that match
             corpus.filenames = intersect(corpus.filenames, list.files(corpus.dir))
           }
@@ -570,20 +570,20 @@ if(corpus.exists == FALSE) {
   
   # Checking whether the required files and subdirectory exist
     if(file.exists(corpus.dir) == FALSE) {
-      cat("\n\n", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
+      message("\n\n", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
           "Hey! The working directory should contain the subdirectory \"",
           corpus.dir,"\"\n",
-          "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
+          "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n")
       # back to the original working directory
       setwd(original.path)
       # error message
       stop("Corpus prepared incorrectly")
     }
     if(length(corpus.filenames) <2 & sampling != "normal.sampling")  {
-      cat("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
+      message("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
           "Ho! The subdirectory \"",corpus.dir,"\" should contain at least 
           two text samples!\n",
-          "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
+          "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n")
       # back to the original working directory
       setwd(original.path)
       # error message
@@ -593,13 +593,13 @@ if(corpus.exists == FALSE) {
 
   # some messages on the screen
     if (sampling == "normal.sampling"){
-      cat(paste("Performing sampling (using sample size = ", sample.size,
-            " words)\n", sep=""))
+      message("Performing sampling (using sample size = ", sample.size,
+            " words)\n")
     } else if(sampling == "random.sampling"){
-      cat(paste("Performing random sampling (using random sample size = ", 
-            " words)\n", sep=""))
+      message("Performing random sampling (using random sample size = ", 
+            " words)\n")
     } else if (sampling == "no.sampling"){
-      cat(paste("Performing no sampling (using entire text as sample)", "\n", sep=""))
+      message("Performing no sampling (using entire text as sample)", "\n")
     } else {
       stop("Exception raised: something is wrong with the sampling parameter you have 
             specified...")
@@ -636,14 +636,14 @@ if(corpus.exists == FALSE) {
 if(exists("frequencies.0.culling") == FALSE) {
 
   # a message
-  cat("\n")
-  cat("Total nr. of samples in the corpus: ", length(loaded.corpus), "\n")
+  message("\n")
+  message("Total nr. of samples in the corpus: ", length(loaded.corpus), "\n")
 
 
   # the directory with corpus must contain enough texts;
   # if the number of text samples is lower than 2, the script will abort.
   if( (length(loaded.corpus) < 2) & (sampling == "no.sampling") ) {
-      cat("\n\n","your corpus folder seems to be empty!", "\n\n")
+      message("\n\n","your corpus folder seems to be empty!", "\n\n")
       stop("corpus error")
   }
 
@@ -652,8 +652,8 @@ if(exists("frequencies.0.culling") == FALSE) {
   # frequent words (or n-grams, or anything else) used in the current corpus, 
   # in descending order, without frequencies (just a list of words/features). 
   if (features.exist == TRUE) {
-    cat("\n")
-    cat("using an existing wordlist (vector of features)...\n")
+    message("\n")
+    message("using an existing wordlist (vector of features)...\n")
     mfw.list.of.all = features
   } else {
     # Extracting all the words used in the corpus
@@ -665,14 +665,14 @@ if(exists("frequencies.0.culling") == FALSE) {
       # putting the files together:
       wordlist.of.loaded.corpus = c(wordlist.of.loaded.corpus, current.text)
       # short message on screen
-      cat(".")
-      if(file/25 == floor(file/25)) { cat("\n")} # a newline every 25th sample
+      message(".")
+      if(file/25 == floor(file/25)) { message("\n")} # a newline every 25th sample
     }
     
     # Preparing a sorted frequency list of the whole primary set (or both sets).
     # short message
-    cat("\n")
-    cat("The corpus consists of", length(c(wordlist.of.loaded.corpus)),"tokens\n")
+    message("\n")
+    message("The corpus consists of ", length(c(wordlist.of.loaded.corpus))," tokens\n")
     # the core procedure: frequency list
     mfw.list.of.all = sort(table(c(wordlist.of.loaded.corpus)),decreasing=T)
     # deleting the huge vector of all the words from the entire corpus
@@ -707,7 +707,7 @@ if(exists("frequencies.0.culling") == FALSE) {
   }   # <----- conditional expr. if(features.exist == TRUE) terminates here
 
   # blank line on the screen
-  cat("\n")
+  message("\n")
   
   # empty the dump-dir if it already existed and create it if it did not previously exist
   if(dump.samples == TRUE){
@@ -936,8 +936,8 @@ table.with.all.freqs = table.with.all.freqs[,start.at:length(table.with.all.freq
 
 
 
-cat("\n\n")
-cat("culling @ ", current.culling,"\t","available features (words) ",
+message("\n\n")
+message("culling @ ", current.culling,"\t","available features (words) ",
                   length(table.with.all.freqs[1,]),"\n")
 
 
@@ -947,7 +947,7 @@ cat("culling @ ", current.culling,"\t","available features (words) ",
 
 if((analysis.type == "CA") || (analysis.type == "BCT") || (analysis.type == "MDS")){
   # calculating z-scores (a message on the screen)
-  cat("Calculating z-scores... \n\n")
+  message("Calculating z-scores... \n\n")
   # Entropy distance: experimental, but entirely available yet
   # (the results do not really differ than for typical word frequencies)
   #
@@ -975,35 +975,35 @@ distance.name.on.file = distance.measure
 
 
   if(distance.measure == "delta" | distance.measure == "dist.delta") {
-    cat("Calculating classic Delta distances... \n")
+    message("Calculating classic Delta distances... \n")
     distance.name.on.graph = "Classic Delta distance"
     distance.name.on.file = "Classic Delta"
   } else if(distance.measure == "argamon" | distance.measure == "dist.argamon") {
-    cat("Calculating Argamon's Delta distances... \n")
+    message("Calculating Argamon's Delta distances... \n")
     distance.name.on.graph = "Argamon's Delta distance"
     distance.name.on.file = "Argamon's Delta"
   } else if(distance.measure == "eder" |  distance.measure == "dist.eder") {
-    cat("Calculating Eder's Delta distances... \n")
+    message("Calculating Eder's Delta distances... \n")
     distance.name.on.graph = "Eder's Delta distance"
     distance.name.on.file = "Eder's Delta"
   } else if(distance.measure == "simple" | distance.measure == "dist.simple") {
-    cat("Calculating Eder's Simple distances... \n")
+    message("Calculating Eder's Simple distances... \n")
     distance.name.on.graph = "Eder's Simple distance"
     distance.name.on.file = "Eder's Simple"    
   } else if(distance.measure == "manhattan" | distance.measure == "dist.manhattan") {
-    cat("Calculating Manhattan distances... \n")
+    message("Calculating Manhattan distances... \n")
     distance.name.on.graph = "Manhattan distance"
     distance.name.on.file = "Manhattan"
   } else if(distance.measure == "canberra" | distance.measure == "dist.canberra") {
-    cat("Calculating Canberra distances... \n")
+    message("Calculating Canberra distances... \n")
     distance.name.on.graph = "Canberra distance"
     distance.name.on.file = "Canberra"
   } else if(distance.measure == "euclidean" | distance.measure == "dist.euclidean") {
-    cat("Calculating Euclidean distances... \n")
+    message("Calculating Euclidean distances... \n")
     distance.name.on.graph = "Euclidean distance"
     distance.name.on.file = "Euclidean"
   } else if(distance.measure == "cosine" | distance.measure == "dist.cosine") {
-    cat("Calculating Cosine distances... \n")
+    message("Calculating Cosine distances... \n")
     distance.name.on.graph = "Cosine distance"
     distance.name.on.file = "Cosine"
   } else {
@@ -1016,7 +1016,7 @@ distance.name.on.file = distance.measure
 
 
 
-cat("MFW used: ")
+message("MFW used: ")
 
 for(i in seq(mfw.min,mfw.max,round(mfw.incr)) ) {
 mfw = i
@@ -1031,7 +1031,7 @@ if(mfw > length(colnames(table.with.all.freqs)) ) {
 number.of.current.iteration = number.of.current.iteration + 1
 
 # the current task (number of MFW currently analyzed) echoed on the screen
-cat(mfw, " ")
+message(mfw, " ")
 
 # #################################################
 # module for calculating distances between texts
@@ -1581,7 +1581,7 @@ all.connections = all.connections + connections
 # #################################################
 
 # blank line on the screen
-cat("\n")
+message("\n")
 
 
 }    # <-- the main loop for(j) returns here
@@ -1703,7 +1703,7 @@ if(analysis.type == "BCT") {
 
 # as above, the task to be plotted is saved as a function
 if(length(bootstrap.list) <= 2) {
-  cat("\n\nSORRY, BUT YOU ARE EXPECTING TOO MUCH...!\n\n",
+  message("\n\nSORRY, BUT YOU ARE EXPECTING TOO MUCH...!\n\n",
   "There should be at least 3 iterations to make a consensus tree\n\n")
   } else {
   plot.current.task = function(){ 
