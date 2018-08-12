@@ -68,7 +68,6 @@ txt.to.words.ext = function(input.text,
     # this smashes the distinction and converts both types to the letter u
     if(tolower(language) == "latin.corr") {
       tokenized.text = gsub("v", "u", tokenized.text)
-      tokenized.text = gsub("&", "et", tokenized.text)
     }
     # this code is used for English corpora only
     if(tolower(language) == "english.contr" | tolower(language) == "english.all") {
