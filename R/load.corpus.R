@@ -23,7 +23,7 @@ function(files = "all", corpus.dir = "", encoding = "native.enc") {
     }
   } else {
     # if the argument was empty, then relax
-    cat("using current directory...\n")
+    message("using current directory...\n")
   }
   # now, checking which files were requested; usually, the user is 
   # expected to specify a vector with samples' names
@@ -35,10 +35,10 @@ function(files = "all", corpus.dir = "", encoding = "native.enc") {
   # uploading all files listed in the vector "files"
   for (file in files) {
     if(file.exists(file) == FALSE) {
-      cat("!\n")
-      cat("\"", file, "\"? no such a file -- check your directory!\n",sep="")
+      message("!\n")
+      message("\"", file, "\"? no such a file -- check your directory!\n")
     } else {
-      cat(paste("loading ", file, "\t", "...", "\n", sep=""))
+      message("loading ", file, "\t", "...", "\n")
       # loading the next file from the list "corpus.filenames";
       # if an error occurred, ignore it and send a message on the screen
       current.file = tryCatch(scan(file,what="char", encoding=encoding,
@@ -49,8 +49,8 @@ function(files = "all", corpus.dir = "", encoding = "native.enc") {
         if(length(current.file) > 0) {
           loaded.corpus[[file]] = current.file
         } else {
-          cat("!\n")
-          cat("the file", file, "could not be loaded for an unknown reason\n")
+          message("!\n")
+          message("the file ", file, " could not be loaded for an unknown reason\n")
         }
     }
   }
