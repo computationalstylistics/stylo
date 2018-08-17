@@ -1,7 +1,6 @@
 
 
-print.stylo.results <- 
-function(x, ...) {
+print.stylo.results = function(x, ...) {
 
   results.variable = c(
     "my.cool.results", "my.discovery", "my.stylometric.test",
@@ -24,11 +23,11 @@ function(x, ...) {
   message("recent configuration, etc.")
   message("")
   message("Advanced users: you can pipe the results to a variable, e.g.:")
-  message("\t",random.results.variable," = ", deparse(x$name))
-  message("this will create a class ", paste("\"",random.results.variable,"\"",sep=""), 
+  message("\t ", random.results.variable, " = ", deparse(x$name))
+  message("this will create a class ", paste("\"", random.results.variable, "\"", sep = ""), 
       " containing some presumably") 
   message("interesting stuff. The class created, you can type, e.g.:")
-  message("\t summary(",random.results.variable,")")
+  message("\t summary(", random.results.variable, ")")
   message("to see which variables are stored there and how to use them.")
   message("")
   message("")
