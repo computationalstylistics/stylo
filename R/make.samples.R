@@ -22,7 +22,7 @@ function(tokenized.text,
   # checking if there are any names attached to the texts
   if(is.character(names(tokenized.text)) == FALSE) {
     # if not, some generic names will be assigned
-    names(tokenized.text) = paste("paste",1:length(tokenized.text),sep="_")
+    names(tokenized.text) = paste("paste", 1:length(tokenized.text), sep = "_")
   }
   # starting an empty list
   corpus.cut.into.samples = list()
@@ -35,16 +35,16 @@ function(tokenized.text,
     if (length(current.text) < 10 || 
         (sampling == "normal.sampling" && length(current.text) < sample.size) || 
         (sampling == "random.sampling" && length(current.text) < sample.size)) {
-      cat("\n\n",head(current.text,100), "...\t", "This text is too short!", 
-          "\n\n")
+      warning("\n\n", head(current.text, 100), "...\t", "This text is too short!", 
+          "\n")
       stop("Corpus error...")
     }
     #
     if(sample.size < sample.overlap) {
-            cat("------------------------------------------------\n")
-            cat("Sample overlap bigger that sample size?! NO WAY!\n")
-            cat("performing no sample overlap...\n")
-            cat("------------------------------------------------\n")
+            message("------------------------------------------------")
+            message("Sample overlap bigger that sample size?! NO WAY!")
+            message("performing no sample overlap...")
+            message("------------------------------------------------")
             sample.overlap = 0
     }
     # at this point, each text in the corpus has been tokenized
@@ -54,11 +54,11 @@ function(tokenized.text,
       # initialize variables to sample the text
       text.length = length(current.text)
       number.of.samples = floor((text.length-sample.overlap)/(sample.size-sample.overlap))
-      cat(names(tokenized.text)[i],"\n")
-      cat(paste("\t", "- text length (in words): ", text.length, "\n", sep=""))
-      cat(paste("\t", "- nr. of samples: ", number.of.samples, "\n", sep=""))
-      cat(paste("\t", "- nr. of words dropped at the end of the text: ", 
-                text.length-(number.of.samples*(sample.size-sample.overlap)), "\n", sep=""))
+      message(names(tokenized.text)[i])
+      message(paste("\t", "- text length (in words): ", text.length, sep = ""))
+      message(paste("\t", "- nr. of samples: ", number.of.samples, sep = ""))
+      message(paste("\t", "- nr. of words dropped at the end of the text: ", 
+                text.length-(number.of.samples*(sample.size-sample.overlap)), sep = ""))
       # iterate over the samples:
       current.start.index = 1
       for(sample.index in 1:number.of.samples) {
@@ -77,17 +77,17 @@ function(tokenized.text,
       # of a given length will be excerpted;
       # initialize variables to sample the text
       text.length = length(current.text)
-      cat(names(tokenized.text)[i],"\n")
-      cat(paste("\t", "- text length (in words): ", text.length, "\n", sep=""))
-      cat(paste("\t", "- nr. of random samples: ", number.of.samples, "\n", sep=""))
-      cat(paste("\t", "- sample length: ", sample.size, "\n", sep=""))
+      message(names(tokenized.text)[i])
+      message(paste("\t", "- text length (in words): ", text.length, sep = ""))
+      message(paste("\t", "- nr. of random samples: ", number.of.samples, sep = ""))
+      message(paste("\t", "- sample length: ", sample.size, sep = ""))
       # iterate over the samples:
       for(sample.index in 1:number.of.samples) {
         current.sample = head(sample(current.text, replace = sampling.with.replacement), sample.size)
         # flush current sample:
         samples.from.text[[sample.index]] = current.sample
         # assign a new id to current sample
-        id = paste(names(tokenized.text)[i],"_",sample.index,sep="")
+        id = paste(names(tokenized.text)[i], "_", sample.index, sep = "")
         names(samples.from.text)[sample.index] = id
         # increment index for next iteration
         current.sample = c()
