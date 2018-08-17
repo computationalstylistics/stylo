@@ -1,7 +1,7 @@
 
 # #################################################
 # Function for loading text files 
-# Usage: load.corpus(files=c("first.txt","second.txt",...))
+# Usage: load.corpus(files = c("first.txt", "second.txt", ...))
 # Required argument: vector containing file names
 # Optional argument: a directory containing the corpus
 # #################################################
@@ -38,11 +38,11 @@ function(files = "all", corpus.dir = "", encoding = "native.enc") {
       message("!\n")
       message("\"", file, "\"? no such a file -- check your directory!\n")
     } else {
-      message("loading ", file, "\t", "...", "\n")
+      message("loading ", file, "\t", "...")
       # loading the next file from the list "corpus.filenames";
       # if an error occurred, ignore it and send a message on the screen
-      current.file = tryCatch(scan(file,what="char", encoding=encoding,
-                                   sep="\n", quiet=T),
+      current.file = tryCatch(scan(file, what = "char", encoding = encoding,
+                                   sep = "\n", quiet = TRUE),
                               error = function(e) NULL)
       # if successful, append the scanned file into the corpus,
       # otherwise send a message

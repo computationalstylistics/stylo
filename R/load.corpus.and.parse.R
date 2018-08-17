@@ -45,7 +45,7 @@ loaded.corpus = load.corpus(files = files,
                          names(loaded.corpus) )
 
   # deleting xml/html markup by applying the function "delete.markup"
-  loaded.corpus = lapply(loaded.corpus, delete.markup, markup.type=markup.type)
+  loaded.corpus = lapply(loaded.corpus, delete.markup, markup.type = markup.type)
   # deleting punctuation, splitting into words
   message("slicing input text into tokens...\n")
   loaded.corpus = lapply(loaded.corpus, txt.to.words.ext,
@@ -61,9 +61,9 @@ loaded.corpus = load.corpus(files = files,
   }
   # split into chars (if applicable), agglutinate into n-grams
   # [it takes a good while when char n-grams are chosen]
-  message("turning words into features, e.g. char n-grams (if applicable)...\n")
-  loaded.corpus = lapply(loaded.corpus,txt.to.features,
-                         features=features,ngram.size=ngram.size)
+  message("\nturning words into features, e.g. char n-grams (if applicable)...")
+  loaded.corpus = lapply(loaded.corpus, txt.to.features,
+                         features = features, ngram.size = ngram.size)
   # optionally, excerpt randomly a number of features from original data
   if(sampling == "random.sampling") {
     loaded.corpus = make.samples(loaded.corpus,
