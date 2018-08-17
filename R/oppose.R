@@ -50,7 +50,7 @@ if(is.character(path) == TRUE & length(path) > 0) {
   }
 } else {
   # if the argument was empty, then relax
-  cat("using current directory...\n")
+  message("using current directory...")
 }
 
 
@@ -82,9 +82,9 @@ if (gui == TRUE) {
             suppressWarnings(tcltk::.TkUp))) {
         variables = gui.oppose(...)
       } else {
-        cat("\n")
-        cat("GUI could not be launched -- default settings will be used;\n")
-        cat("otherwise please pass your variables as command-line agruments\n\n")
+        message("")
+        message("GUI could not be launched -- default settings will be used;")
+        message("otherwise please pass your variables as command-line agruments\n")
       }
 }
 
@@ -247,13 +247,12 @@ for(iteration in 1:2) {
         # if everything is fine, use this variable as a valid corpus
 #        loaded.corpus = parsed.corpus
       } else {
-        cat("\n")
-        cat("The object you've specified as your corpus cannot be used.\n")
-        cat("It should be a list containing particular text samples\n")
-        cat("(vectors containing sequencies of words/n-grams or other features).\n")
-        cat("The samples (elements of the list) should have their names.\n")
-        cat("Alternatively, try to build your corpus from text files (default).\n")
-        cat("\n")
+        message("")
+        message("The object you've specified as your corpus cannot be used.")
+        message("It should be a list containing particular text samples")
+        message("(vectors containing sequencies of words/n-grams or other features).")
+        message("The samples (elements of the list) should have their names.")
+        message("Alternatively, try to build your corpus from text files (default).\n")
         stop("Wrong corpus format")
       } 
   }
@@ -272,10 +271,10 @@ for(iteration in 1:2) {
 # Two iterations completed, another sanity check should be applied
 if(corpus.exists == FALSE) {
     if(length(corpus.of.primary.set) >1 & length(corpus.of.secondary.set) >1 ) {
-      cat("Two subcorpora loaded successfully.\n")  
+      message("Two subcorpora loaded successfully.")  
       corpus.exists = TRUE
     } else {
-      cat("The subcorpora will be loaded from text files...\n")
+      message("The subcorpora will be loaded from text files...")
       corpus.exists = FALSE
     }
 }
@@ -302,10 +301,10 @@ if(corpus.exists == FALSE) {
 
   # Checking whether required files and subdirectories exist
   if(file.exists(primary.corpus.dir) == FALSE | file.exists(secondary.corpus.dir) == FALSE) {
-    cat("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
+    message("\n\n", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
         "Working directory should contain two subdirectories: 
-        \"",primary.corpus.dir,"\" and \"",secondary.corpus.dir,"\"\n",
-        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
+        \"", primary.corpus.dir, "\" and \"", secondary.corpus.dir, "\"\n",
+        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n", sep = "")
     # back to the original working directory
     setwd(original.path)
     # error message
@@ -313,10 +312,10 @@ if(corpus.exists == FALSE) {
   }
   # Checking if the subdirectories contain any stuff
   if(length(filenames.primary.set) <2 | length(filenames.secondary.set) <2) {
-    cat("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
-        "Both subdirectories \"",primary.corpus.dir,"\" and \"",
-        secondary.corpus.dir,"\" should contain at least two text samples!\n",
-        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
+    message("\n\n", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
+        "Both subdirectories \"", primary.corpus.dir, "\" and \"",
+        secondary.corpus.dir, "\"\nshould contain at least two text samples!\n",
+        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n", sep = "")
     # back to the original working directory
     setwd(original.path)
     # error message
@@ -374,11 +373,9 @@ if(corpus.exists == FALSE) {
   
 
 # blank line on the screen
-cat("\n")
 
-
-cat("\n")
-cat("Slicing the texts into samples...\n\n")
+message("")
+message("Slicing the texts into samples...")
 
 primary.slices = make.samples(corpus.of.primary.set, 
                               sample.size = text.slice.length,
@@ -398,14 +395,14 @@ secondary.slices = make.samples(corpus.of.secondary.set,
 
 # ###############################################################
 
-cat("\n")
-cat("Extracting distinctive words... (this might take a while)")
+message("")
+message("Extracting distinctive words... (this might take a while)")
 
 
 
 
-cat("\n")
-cat("Primary set...\n")
+message("")
+message("Primary set...")
 
 # iterating over the samples and slices, checking them agains the wordlist
 # do.call() is a game-changer here, in terms of the computation time (5x or so)
@@ -421,7 +418,7 @@ names(comparison.primary) = wordlist
 
 
 
-cat("Secondary set...\n\n\n")
+message("Secondary set...\n\n")
 
 # iterating over the samples and slices, checking them agains the wordlist
 # do.call() is a game-changer here, in terms of the computation time (5x or so)
@@ -451,7 +448,7 @@ comparison = cbind(comparison.primary,comparison.secondary)
 # this should not happen, but sometimes it does -- getting rid of it
 comparison = comparison[rowSums(comparison) != 0,]
 
-cat("comparison done!\n\n")
+message("comparison done!\n")
 
 
 
@@ -462,27 +459,27 @@ cat("comparison done!\n\n")
 #########################################################################
 # Finally, we want to save some of the variable values for later use;
 # they are automatically loaded into the GUI at the next run of the script.
-        cat("",file="oppose_config.txt",append=F)
-        var.name<-function(x) { 
-                if(is.character(x)==TRUE) {
-                        cat(paste(deparse(substitute(x)),"=\"",x,"\"", sep=""),file="oppose_config.txt",sep="\n",append=T)
-        } else {
-                        cat(paste(deparse(substitute(x)),x, sep="="),file="oppose_config.txt",sep="\n",append=T) }
-        } 
-        var.name(text.slice.length)
-        var.name(text.slice.overlap)
-        var.name(rare.occurrences.threshold)
-        var.name(zeta.filter.threshold)
-        var.name(oppose.method)
-        var.name(display.on.screen)
-        var.name(write.pdf.file)
-        var.name(write.png.file)
-        var.name(use.color.graphs)
-        var.name(titles.on.graph)
-        var.name(identify.points)
-        var.name(visualization)
-        var.name(classification)
-        var.name(plot.token)
+cat("", file = "oppose_config.txt", append = FALSE)
+var.name = function(x) { 
+    if(is.character(x) == TRUE) {
+        cat(paste(deparse(substitute(x)), " = \"", x, "\"", sep = ""), file = "oppose_config.txt", sep = "\n", append = TRUE)
+    } else {
+        cat(paste(deparse(substitute(x)), x, sep = " = "), file = "oppose_config.txt", sep = "\n", append = TRUE) }
+    } 
+var.name(text.slice.length)
+var.name(text.slice.overlap)
+var.name(rare.occurrences.threshold)
+var.name(zeta.filter.threshold)
+var.name(oppose.method)
+var.name(display.on.screen)
+var.name(write.pdf.file)
+var.name(write.png.file)
+var.name(use.color.graphs)
+var.name(titles.on.graph)
+var.name(identify.points)
+var.name(visualization)
+var.name(classification)
+var.name(plot.token)
 #########################################################################
 
 
@@ -563,9 +560,9 @@ if (oppose.method == "box.plot"){
 
 # mann.whitney / wilcoxon (see A. Kilgariff, Comparing Corpora. "International Journal of Corpus Linguistics" 6(1):1-37)
 if (oppose.method == "mann.whitney"){
-        cat("performing Wilcoxon/Mann-Whitney test: try to be patient...\n\n")
-        long.method.name="Wilcoxon | Mann-Whitney"
-        short.method.name="Wilcox"
+        message("performing Wilcoxon/Mann-Whitney test: try to be patient...\n")
+        long.method.name = "Wilcoxon | Mann-Whitney"
+        short.method.name = "Wilcox"
         statistics = c()
         all_tokens = c()
         for (slice in primary.slices){all_tokens = union(all_tokens, slice)}
@@ -574,7 +571,7 @@ if (oppose.method == "mann.whitney"){
         statistics = c()
         # loop through tokens
         for (token in all_tokens){
-                cat(token, "\n")
+                message(token)
                 # collect freqs in primary slices
                 primary_counts = c()
                 for (slice in primary.slices){primary_counts = c(primary_counts, sum(slice==token))}
@@ -664,7 +661,7 @@ cat("# The file contains words that were extracted in the oppose script:",
   "# You can either delete unwanted words, or mark them with \"#\"",
   "# -----------------------------------------------------------------------",
   "",
-      file="words_preferred.txt", sep="\n")
+      file = "words_preferred.txt", sep = "\n")
 # the current wordlist into a file
     # checking if encoding conversion is needed
     if(encoding == "native.enc") {
@@ -673,7 +670,7 @@ cat("# The file contains words that were extracted in the oppose script:",
       data.to.be.saved = iconv(words.preferred.by.primary.author, to=encoding)
     }
 # writing the stuff
-cat(data.to.be.saved,file="words_preferred.txt", sep="\n",append=T)
+cat(data.to.be.saved, file = "words_preferred.txt", sep = "\n", append = TRUE)
 #
 #
 # 
@@ -687,7 +684,7 @@ cat("# The file contains words that were extracted in Burrows' Zeta test:",
   "# You can either delete unwanted words, or mark them with \"#\"",
   "# -----------------------------------------------------------------------",
   "",
-      file="words_avoided.txt", sep="\n")
+      file = "words_avoided.txt", sep = "\n")
 # the current wordlist into a file
     # checking if encoding conversion is needed
     if(encoding == "native.enc") {
@@ -696,7 +693,7 @@ cat("# The file contains words that were extracted in Burrows' Zeta test:",
       data.to.be.saved = iconv(words.avoided.by.primary.author, to=encoding)
     }
 # writing the stuff
-cat(data.to.be.saved,file="words_avoided.txt", sep="\n",append=T)
+cat(data.to.be.saved, file = "words_avoided.txt", sep = "\n", append = TRUE)
 #
 # 
 }
@@ -716,12 +713,12 @@ cat(data.to.be.saved,file="words_avoided.txt", sep="\n",append=T)
 if (visualization == "words" | visualization == "markers"){
         if(length(words.avoided.by.primary.author) +
         length(words.preferred.by.primary.author) < 10) {
-                cat("there is not enough discriminative words to continue,\n",
+                message("there is not enough discriminative words to continue,\n",
                 "either the filter threshold is too strong, or the sample",
                 " size too small\n", "  number of preferred words:\t",
                 length(words.preferred.by.primary.author), "\n",
                 "  number of avoided words:\t",
-                length(words.avoided.by.primary.author), "\n", sep="")
+                length(words.avoided.by.primary.author), sep = "")
         visualization = "none"
         stage.II.similarity.test = FALSE
         }
@@ -836,12 +833,12 @@ filenames.test.set = list.files(test.corpus.dir)
 
 #
 # blank line on the screen
-cat("\n")
+message("")
 #
 }                       
 } else {
-cat("No test set samples found\n",
-    "Performing a simple comparison of the training samples...\n")
+message("No test set samples found\n",
+    "Performing a simple comparison of the training samples...")
 }
 #
 #
@@ -849,7 +846,7 @@ cat("No test set samples found\n",
 
 
 
-cat("\n\n\n")
+message("")
 
 
 # variable initiation
