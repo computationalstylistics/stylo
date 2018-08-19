@@ -1063,7 +1063,7 @@ if(mfw > length(colnames(freq.table.both.sets)) ) {
 
 
 # the current task (number of MFW currently analyzed) echoed on the screen
-message(mfw, " ")
+message(mfw, " ", appendLF = FALSE)
 
 
 

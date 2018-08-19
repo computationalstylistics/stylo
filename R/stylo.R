@@ -1028,7 +1028,7 @@ if(mfw > length(colnames(table.with.all.freqs)) ) {
 number.of.current.iteration = number.of.current.iteration + 1
 
 # the current task (number of MFW currently analyzed) echoed on the screen
-message(mfw, " ")
+message(mfw, " ", appendLF = FALSE)
 
 # #################################################
 # module for calculating distances between texts
