@@ -1,6 +1,6 @@
 # stylo: R package for stylometric analyses
 
-**Authors:** Maciej Eder, Mike Kestemont, Jan Rybicki<br/>
+**Authors:** Maciej Eder<sup>*</sup>, Mike Kestemont, Jan Rybicki<br/>
 **License:** [GPL-3](https://opensource.org/licenses/GPL-3.0)
 
 
@@ -124,13 +124,13 @@ This section is meant to give the users a general outline of what the package ca
 ## Docs on non-obvious functions
 
 
-* [Authorship verification with the package 'stylo'](https://computationalstylistics.github.io/docs/imposters)
+* [Authorship verification with the package 'stylo'](https://computationalstylistics.github.io/blog/imposters)
 
-* [Cross-validation using the function `classify()`](https://computationalstylistics.github.io/docs/cross_validation)
+* [Cross-validation using the function `classify()`](https://computationalstylistics.github.io/blog/cross_validation)
 
-* [Custom distance measures](https://computationalstylistics.github.io/docs/custom_distances)
+* [Custom distance measures](https://computationalstylistics.github.io/blog/custom_distances)
 
-* [Testing rolling stylometry](https://computationalstylistics.github.io/docs/rolling_stylometry)
+* [Testing rolling stylometry](https://computationalstylistics.github.io/blog/rolling_stylometry)
 
 
 
