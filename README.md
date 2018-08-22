@@ -125,11 +125,8 @@ This section is meant to give the users a general outline of what the package ca
 
 
 * [Authorship verification with the package 'stylo'](https://computationalstylistics.github.io/blog/imposters)
-
 * [Cross-validation using the function `classify()`](https://computationalstylistics.github.io/blog/cross_validation)
-
 * [Custom distance measures](https://computationalstylistics.github.io/blog/custom_distances)
-
 * [Testing rolling stylometry](https://computationalstylistics.github.io/blog/rolling_stylometry)
 
 
@@ -147,7 +144,9 @@ This section is meant to give the users a general outline of what the package ca
 
 * Probably not a  bad idea to check a comprehensive [Stylometry Bibliography](https://www.zotero.org/groups/643516/stylometry_bibliography) curated by Christof Schöch, before starting an experiment in text analysis.
 
-* The package `stylo` has been created as a by-product of a few projects conducted by the Computational Stylistics Group. See  [this website](https://sites.google.com/site/computationalstylistics/) for further details.
+* The package `stylo` has been created as a by-product of a few projects conducted by the Computational Stylistics Group. See [this website](https://computationalstylistics.github.io/) for further details. An [older version](https://sites.google.com/site/computationalstylistics/) of the webpage is also there, even if it has not been be updated for a while.
+
+ 
 
 
 
