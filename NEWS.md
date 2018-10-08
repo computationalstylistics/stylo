@@ -4,7 +4,8 @@
 ### version 0.6.8, 2018/06/14
   * support for JCK (Japanese-Chinese-Korean) significantly improved
   * a fix for exporting networks to Gephi ver. 0.9.2
-  
+  * support for rmarkdown: stylo(), classify(), oppose()
+
 
 ### version 0.6.7, 2018/05/12
   * supports the following taggers: TaKIPI (for Polish), Alpino (Dutch)

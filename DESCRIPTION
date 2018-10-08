@@ -2,7 +2,7 @@ Package: stylo
 Type: Package
 Title: Stylometric Analyses
 Version: 0.6.8
-Date: 2018-08-6
+Date: 2018-10-8
 Author: Maciej Eder, Jan Rybicki, Mike Kestemont
 Maintainer: Maciej Eder <maciejeder@gmail.com>
 URL: https://github.com/computationalstylistics/stylo
