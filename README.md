@@ -48,16 +48,24 @@ install.packages("stylo")
 
 choose your favorite CRAN mirror (a window will pop up), click OK.
 
-**NOTE** (Mac OS users): the package "stylo" requires X11 support being installed. To quote "R for Mac OS X FAQ" (http://cran.r-project.org/bin/macosx/RMacOSX-FAQ.html): "Each binary distribution of R available through CRAN is build to use the X11 implementation of Tcl/Tk. Of course a X windows server has to be started first: this should happen automatically on OS X, provided it has been installed (it needs a separate install on Mountain Lion or later). The first time things are done in the X server there can be a long delay whilst a font cache is constructed; starting the server can take several seconds." The newest versions of R (>3.1.0) seem to have Tcl/Tk support out-of-the-box, though.
+**NOTE** (Mac OS users): the package “stylo” requires X11 support being installed. To quote "R for Mac OS X FAQ" (http://cran.r-project.org/bin/macosx/RMacOSX-FAQ.html): “Each binary distribution of R available through CRAN is build to use the X11 implementation of Tcl/Tk. Of course a X windows server has to be started first: this should happen automatically on OS X, provided it has been installed (it needs a separate install on Mountain Lion or later). The first time things are done in the X server there can be a long delay whilst a font cache is constructed; starting the server can take several seconds.”
 
-**ANOTHER NOTE** (Mac Os users again): when you install a recent version of R on OS X (e.g. Mavericks), you might run into encoding errors when you start up R (e.g. "WARNING: You're using a non-UTF8 locale" etc.). In that case, you should close R, open a new window in Applications > Terminal and execute the following line:
-
+You might also run into encoding errors when you start up R (e.g. “WARNING: You're using a non-UTF8 locale” etc.). In that case, you should close R, open a new window in Applications > Terminal and execute the following line:
 
 ```
 defaults write org.R-project.R force.LANG en_US.UTF-8
 ```
 
 Next, close the Terminal and start up R again.
+
+**ANOTHER NOTE** A slightly different workaround of the above problem (Mac users again):
+
+* Install XQuartz, restart Mac
+* Open Terminal, type: `sudo ln -s /opt/X11 /usr/X11`
+* Run XQuartz
+* Run R, type: `system ('defaults write org.R-project.R force.LANG en_US.UTF-8')`
+
+
 
 
 
