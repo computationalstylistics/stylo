@@ -8,7 +8,7 @@ Maintainer: Maciej Eder <maciejeder@gmail.com>
 URL: https://github.com/computationalstylistics/stylo
 Depends: R (>= 2.14)
 Imports: tcltk, tcltk2, ape, pamr, e1071, class, lattice, tsne
-Suggests: stringi, networkD3
+Suggests: stringi, networkD3, readr
 Description: Supervised and unsupervised multivariate methods, supplemented by GUI and some visualizations, to perform various analyses in the field of computational stylistics, authorship attribution, etc. For further reference, see Eder et al. (2016), <https://journal.r-project.org/archive/2016/RJ-2016-007/index.html>.
 License: GPL (>= 3)
 
