@@ -5,7 +5,7 @@
 #' output to the terminal.
 
 check.encoding = function(corpus.dir = "corpus/",
-                          output.file = "encodings.csv"
+                          output.file = NULL
                           ){
   
   # Constant:
@@ -62,9 +62,16 @@ check.encoding = function(corpus.dir = "corpus/",
   
   
   # Output detailed results
-  write.csv(results, output.file)
-  output.path = paste(getwd(), output.file, sep = "/")
-  message(paste("Detailed results have been saved to", output.path))
+  if(!is.null(output.file)){
+    write.csv(results, output.file)
+    output.path = paste(getwd(), output.file, sep = "/")
+    message(paste("Detailed results have been saved to", output.path))
+  } else {
+    message("To produce a full report, rerun check.encoding() and define an output cvs file
+    using the option \n
+            
+                  output.file \n")
+  }
   
   # Suggest using change.encoding()
   if(dominant.encoding[1] != "UTF-8" | dominant.encoding.number[1] != sum){
