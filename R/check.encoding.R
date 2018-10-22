@@ -11,6 +11,13 @@ check.encoding = function(corpus.dir = "corpus/",
   # Constant:
   size.warning.threshold = 50
   
+  # Check for 'readr' package
+  test.readr = tryCatch(readr::parse_factor(c("a", "b"), letters), error = function(e) NULL)
+  if(is.null(test.readr) == TRUE) {
+    stop("To use this function, you have to install the library 'readr',
+              e.g. by typing install.packages('readr') in the console")
+    }
+
   file.list = list.files(corpus.dir)
   
   # Analyze encoding
@@ -69,7 +76,6 @@ check.encoding = function(corpus.dir = "corpus/",
   } else {
     message("To produce a full report, rerun check.encoding() and define an output cvs file
     using the option \n
-            
                   output.file \n")
   }
   
