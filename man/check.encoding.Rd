@@ -5,20 +5,20 @@
 \description{
 The default character encoding in stylo is UTF-8, deviating from it can 
 cause problems. This function allows users to check the character 
-encoding in a corpus. A summary if returned to the termial and a detailed
+encoding in a corpus. A summary is returned to the termial and a detailed
 list reporting the most probable encodings of all the text files in the
-folder are written to a csv file. The function is basically a wrapper 
+folder can be written to a csv file. The function is basically a wrapper 
 around the function \code{guess_encoding()} from the 'readr' package by
 Wickham et al. (2017). To change the encoding to UTF-8, try the 
 \code{change.encoding()} function.
 }
 \usage{
-check.encoding(corpus.dir = "corpus/", output.file = "encodings.csv")
+check.encoding(corpus.dir = "corpus/", output.file = NULL)
 }
 \arguments{
   \item{corpus.dir}{path to the folder containing the corpus.}
 
-  \item{output.file}{path to a csv file that reprots the most probable encoding
+  \item{output.file}{path to a csv file that reports the most probable encoding
   for each text file in the corpus.}
 }
 \details{
@@ -45,8 +45,8 @@ check.encoding()
 # specifying another folder:
 check.encoding("~/corpora/example1/")
 
-# specifying both input folder and output file:
-check.encoding("~/corpora/example1/", output.file = "~/experiments/charencoding/example1.csv")
+# specifying an output file:
+check.encoding(output.file = "~/experiments/charencoding/example1.csv")
 
 }
 }

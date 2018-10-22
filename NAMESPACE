@@ -23,6 +23,7 @@ importFrom(utils, head, read.table, write.csv, write.table)
 
 export(
   assign.plot.colors,
+  change.encoding,
   check.encoding,
   classify,
   crossv,

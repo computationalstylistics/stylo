@@ -50,7 +50,7 @@ change.encoding = function(corpus.dir = "corpus/",
   for(file in file.list){
     in.path = paste(corpus.dir, file, sep = "")
     out.path = paste(output.dir, file, sep = "")
-    text = paste(readLines(in.path), collapse=" ")
+    text = paste(readLines(in.path, warn = FALSE), collapse=" ")
     text = iconv(text, from = from, to = to)
     write(text, out.path)
     message(paste("Converting", file, "to", to))
