@@ -66,8 +66,11 @@ Next, close the Terminal and start up R again.
 * Run R, type: `system ('defaults write org.R-project.R force.LANG en_US.UTF-8')`
 
 
+**YET ANOTHER NOTE** On MacOS Mojave one usually faces the problem of not properly recognized tcltk support. Open your terminal and type the following command:
 
+`xcode-select --install`
 
+This will download and install xcode developer tools and fix the problem. The problem is that one needs to explicitly agree to the license agreement.
 
 
 
