@@ -3,14 +3,14 @@
 # FUNCTION: make.table.of.frequencies
 # preparing a huge table with all the frequencies.
 # Two arguments are required: (1) text data: either 
-# a corpus (list), or a single text (vector); 
+# a tokenized corpus (list), or a single text (vector); 
 # (2) a vector containig the words (a reference word list)
 # to rearrange particular frequency list in accordance
 # to this vector. Optional argument: (3) absent.sensitive
 # which is used to prevent building tables of non-existing
 # words. When switched on, the variables that contain but O
-# in all samples, will be excluded. Hovewer, in some cases
-# this is important to keep all the variables regardless of
+# in all samples, will be excluded. However, in some cases
+# is is important to keep all the variables regardless of
 # their values. It is the case of comparing two corpora:
 # even if a given word did not occur in the whole corpus A,
 # it might have occured in the corpus B. In short: if 
@@ -18,10 +18,6 @@
 # this option to FALSE.
 # #################################################
 
-<<<<<<< HEAD
-make.table.of.frequencies <- 
-function(corpus, features, absent.sensitive = TRUE, relative = TRUE) {
-=======
 make.table.of.frequencies = function(corpus, 
                                      features, 
                                      absent.sensitive = TRUE, 
@@ -32,7 +28,6 @@ make.table.of.frequencies = function(corpus,
   current.levels = features
   features = factor(features, levels = current.levels, ordered = TRUE)
 
->>>>>>> master
   # variable initialization
   frequency.table = c()
   # checking the format of input data (vector? list?); converting to a list
@@ -45,6 +40,8 @@ make.table.of.frequencies = function(corpus,
     names(corpus) = paste("sample",1:length(corpus),sep="_")
   }
 
+  message(paste("processing ", length(corpus), " text samples"))
+  
   for(i in 1:length(corpus)) {
     # loading the next sample (= next item) from the corpus
     current.sample = factor(corpus[[i]], levels = current.levels)
@@ -58,19 +55,6 @@ make.table.of.frequencies = function(corpus,
     }
     # adjusting the frequencies to the list of features passed as an argument
     current.vector.of.freqs = raw.freqs[features]
-<<<<<<< HEAD
-    # taking the names (sc. words) from the reference list of words
-    names(current.vector.of.freqs) = features
-    # sticking the current sample into the frequency table
-    frequency.table = rbind(frequency.table, current.vector.of.freqs)
-    # a short message on the screen (not applicable if there is only one text):
-    if(length(corpus) > 1) {
-      cat(".")
-      if(i/25 == floor(i/25)) { cat("\n")} # a newline every 25th sample
-    }
-  }
-  cat("\n")
-=======
     # create a new vector (name assgned automatically) that will contain
     # the frequencies of the current sample
     assign(paste("vector_of_freqs_", sprintf("%09d", i), sep=""), current.vector.of.freqs)
@@ -89,9 +73,9 @@ make.table.of.frequencies = function(corpus,
   # un-factoring features
   features = as.character(features)
   
->>>>>>> master
   # adjusting names of the samples
   rownames(frequency.table) = names(corpus)
+  colnames(frequency.table) = features
   # all NA values will be set to 0
   frequency.table[which(is.na(frequency.table))] = 0
   #
