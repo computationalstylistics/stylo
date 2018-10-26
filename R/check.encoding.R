@@ -24,7 +24,7 @@ check.encoding = function(corpus.dir = "corpus/",
   corpus.encodings = character()
   for(file in file.list){
     file.path = paste(corpus.dir, file, sep = "")
-    file.encoding = as.character(guess_encoding(file.path)[1, 1])
+    file.encoding = as.character(readr::guess_encoding(file.path)[1, 1])
     corpus.encodings = append(corpus.encodings, file.encoding)
   }
   

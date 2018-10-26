@@ -1,6 +1,11 @@
 ## stylo news ##
 
 
+### version 0.6.9, 2018/10/26
+  * check.encoding() and change.encoding() introduced
+  * {Steffen Pielstroem joins!}
+
+
 ### version 0.6.8, 2018/06/14
   * support for JCK (Japanese-Chinese-Korean) significantly improved
   * a fix for exporting networks to Gephi ver. 0.9.2
