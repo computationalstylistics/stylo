@@ -10,11 +10,11 @@
 # #################################################
 
 
-stylo = function(gui = TRUE, 
+stylo = function(gui = TRUE,
              frequencies = NULL,
              parsed.corpus = NULL,
              features = NULL,
-             path = NULL, 
+             path = NULL,
              corpus.dir = "corpus", ...) {
 
 
@@ -51,6 +51,16 @@ if(is.character(corpus.dir) == FALSE | nchar(corpus.dir) == 0) {
 }
 
 
+# Choose directory:
+#
+# Just a few lines that allow users to choose the working directory if working
+# with the GUI.
+
+if(gui == TRUE & is.null(path)){
+  selected.path = tk_choose.dir(caption = "Select your working directory. It should a subdirectory called *corpus* ")
+  setwd(selected.path)
+}
+
 
 # loading the default settings as defined in the following function
 # (it absorbes the arguments passed from command-line)
@@ -63,8 +73,8 @@ variables = stylo.default.settings(...)
 if (gui == TRUE) {
       # first, checking if the GUI can be displayed
       # (the conditional expression is stolen form the generic function "menu")
-      if (.Platform$OS.type == "windows" || .Platform$GUI == 
-            "AQUA" || (capabilities("tcltk") && capabilities("X11") && 
+      if (.Platform$OS.type == "windows" || .Platform$GUI ==
+            "AQUA" || (capabilities("tcltk") && capabilities("X11") &&
             suppressWarnings(tcltk::.TkUp))) {
         variables = gui.stylo(...)
       } else {
@@ -178,16 +188,16 @@ custom.graph.filename = variables$custom.graph.filename
 # Final settings (you are advised rather not to change them)
 # #############################################################################
 
-# If no language was chosen (or if a desired language is not supported, or if 
-# there was a spelling mistake), then the variable will be set to "English". 
+# If no language was chosen (or if a desired language is not supported, or if
+# there was a spelling mistake), then the variable will be set to "English".
 
 pronouns = stylo.pronouns(language = corpus.lang)
 
 
 # Since it it not so easy to perform, say, 17.9 iterations, or analyze
-# 543.3 words, the code below rounds off all numerical variables to 
-# the nearest positive integers, to prevent you from making silly jokes 
-# with funny settings. (OK, it is still possible to crash the script in 
+# 543.3 words, the code below rounds off all numerical variables to
+# the nearest positive integers, to prevent you from making silly jokes
+# with funny settings. (OK, it is still possible to crash the script in
 # more ways than one, but you will have to find them on your own).
 
   mfw.min = round(mfw.min)
@@ -241,15 +251,15 @@ if(txm.compatibility.mode == TRUE) {
 ###############################################################################
 # Backward compatibility: if "use.existing.freq.tables" is switched on, then
 # a file with a frequency table will be used, provided that it exists
-  if(use.existing.freq.tables == TRUE 
-                            & file.exists("table_with_frequencies.txt") == TRUE ) { 
+  if(use.existing.freq.tables == TRUE
+                            & file.exists("table_with_frequencies.txt") == TRUE ) {
     frequencies = "table_with_frequencies.txt"
   } else {
     use.existing.freq.tables = FALSE
   }
 # Backward compatibility: if "use.existing.wordlist" is switched on, then
 # the file "wordlist.txt" be used, provided that it does exist
-  if(use.existing.wordlist == TRUE & file.exists("wordlist.txt") == TRUE ) { 
+  if(use.existing.wordlist == TRUE & file.exists("wordlist.txt") == TRUE ) {
     features = "wordlist.txt"
   } else {
     use.existing.wordlist = FALSE
@@ -327,7 +337,7 @@ if(write.jpg.file == TRUE || write.png.file == TRUE){
 
 
 
- 
+
 
 
 
@@ -360,8 +370,8 @@ features.exist = FALSE
   # presumably, this is a file name where a list of words is stored
   if(length(features) == 1) {
     # to prevent using non-letter characters (e.g. integers)
-    features = as.character(features) 
-      # does the file exist? 
+    features = as.character(features)
+      # does the file exist?
       if(file.exists(features) == TRUE) {
         # file with a vector of features will be loaded
         message("\nreading a custom set of features from a file...")
@@ -378,7 +388,7 @@ features.exist = FALSE
       }
     # selecting the above vector as a valid set of features
     features.exist = TRUE
-  } 
+  }
 ###############################################################################
 
 
@@ -418,7 +428,7 @@ corpus.exists = FALSE
   # presumably, this is a file name where a table is stored
   if(length(frequencies) == 1) {
     # to prevent using non-letter characters (e.g. integers)
-    frequencies = as.character(frequencies) 
+    frequencies = as.character(frequencies)
       # does the file exist?
       if(file.exists(frequencies) == TRUE) {
         # file with frequencies will be loaded
@@ -431,7 +441,7 @@ corpus.exists = FALSE
       }
     # selecting the above matrix as a valid corpus
     corpus.exists = TRUE
-  } 
+  }
 
 
   # If a custom set of features was indicated, try to pick the matching variables only
@@ -481,7 +491,7 @@ if(corpus.exists == TRUE) {
 
 
 # If the tables with frequencies could not loaded so far (for any reason), try to load
-# an external corpus (R object) passed as an argument 
+# an external corpus (R object) passed as an argument
 
 ###############################################################################
 # Checking if the argument "parsed.corpus" has been used
@@ -497,7 +507,7 @@ if(corpus.exists == TRUE) {
           }
         # if everything is fine, use this variable as a valid corpus
         loaded.corpus = parsed.corpus
-        message("Corpus loaded successfully.\n")  
+        message("Corpus loaded successfully.\n")
         corpus.exists = TRUE
       } else {
         message("\n")
@@ -508,7 +518,7 @@ if(corpus.exists == TRUE) {
         message("Alternatively, try to build your corpus from text files (default).\n")
         message("\n")
         stop("Wrong corpus format")
-      } 
+      }
   }
 ###############################################################################
 
@@ -529,14 +539,14 @@ if(corpus.exists == FALSE) {
   if (interactive.files == TRUE) {
     # go to corpus directory
     setwd(corpus.dir)
-    corpus.filenames = basename(tk_choose.files(default = "", 
+    corpus.filenames = basename(tk_choose.files(default = "",
                                 caption = "Select at least 2 files", multi = TRUE))
     # back to the working directory
     setwd("..")
   } else {
     # alternatively, one can use the files listed in "files_to_analyze.txt";
     # the listed files can be separated by spaces, tabs, or newlines
-      if(use.custom.list.of.files ==TRUE & file.exists("files_to_analyze.txt") ==TRUE) { 
+      if(use.custom.list.of.files ==TRUE & file.exists("files_to_analyze.txt") ==TRUE) {
         # a message on the screen
         message("\n")
         message("external list of files will be used for uploading the corpus\n\n")
@@ -564,7 +574,7 @@ if(corpus.exists == FALSE) {
       }
   }
 
-  
+
   # Checking whether the required files and subdirectory exist
     if(file.exists(corpus.dir) == FALSE) {
       message("\n\n", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
@@ -578,7 +588,7 @@ if(corpus.exists == FALSE) {
     }
     if(length(corpus.filenames) <2 & sampling != "normal.sampling")  {
       message("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
-          "Ho! The subdirectory \"",corpus.dir,"\" should contain at least 
+          "Ho! The subdirectory \"",corpus.dir,"\" should contain at least
           two text samples!\n",
           "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n")
       # back to the original working directory
@@ -593,12 +603,12 @@ if(corpus.exists == FALSE) {
       message("Performing sampling (using sample size = ", sample.size,
             " words)\n")
     } else if(sampling == "random.sampling"){
-      message("Performing random sampling (using random sample size = ", 
+      message("Performing random sampling (using random sample size = ",
             " words)\n")
     } else if (sampling == "no.sampling"){
       message("Performing no sampling (using entire text as sample)", "\n")
     } else {
-      stop("Exception raised: something is wrong with the sampling parameter you have 
+      stop("Exception raised: something is wrong with the sampling parameter you have
             specified...")
     }
 
@@ -614,7 +624,7 @@ if(corpus.exists == FALSE) {
                          sample.size = sample.size,
                          sampling = sampling,
                          sampling.with.replacement = sampling.with.replacement,
-                         sample.overlap = sample.overlap, 
+                         sample.overlap = sample.overlap,
                          number.of.samples = number.of.samples,
                          features = analyzed.features,
                          ngram.size = ngram.size,
@@ -644,10 +654,10 @@ if(exists("frequencies.0.culling") == FALSE) {
       stop("corpus error")
   }
 
-  # If an external vector of features (usually: the most frequent words) has not 
-  # been specified (cf. the argument "features"), then we need a list of the most 
-  # frequent words (or n-grams, or anything else) used in the current corpus, 
-  # in descending order, without frequencies (just a list of words/features). 
+  # If an external vector of features (usually: the most frequent words) has not
+  # been specified (cf. the argument "features"), then we need a list of the most
+  # frequent words (or n-grams, or anything else) used in the current corpus,
+  # in descending order, without frequencies (just a list of words/features).
   if (features.exist == TRUE) {
     message("")
     message("using an existing wordlist (vector of features)...")
@@ -665,7 +675,7 @@ if(exists("frequencies.0.culling") == FALSE) {
       message(".", appendLF = FALSE)
       if(file/25 == floor(file/25)) { message("")} # a newline every 25th sample
     }
-    
+
     # Preparing a sorted frequency list of the whole primary set (or both sets).
     # short message
     message("")
@@ -674,7 +684,7 @@ if(exists("frequencies.0.culling") == FALSE) {
     mfw.list.of.all = sort(table(c(wordlist.of.loaded.corpus)),decreasing=T)
     # deleting the huge vector of all the words from the entire corpus
     rm(wordlist.of.loaded.corpus)
-    # if the whole list is long, then cut off the tail, as specified in the GUI 
+    # if the whole list is long, then cut off the tail, as specified in the GUI
     # by the cutoff value
       if (length(mfw.list.of.all) > mfw.list.cutoff) {
         mfw.list.of.all = mfw.list.of.all[1:mfw.list.cutoff]
@@ -686,7 +696,7 @@ if(exists("frequencies.0.culling") == FALSE) {
     # some comments into the file containing wordlist
     cat("# This file contains the words that were used for building the table",
       "# of frequencies. It can be also used for further tasks, and for this",
-      "# purpose it can be manually revised, edited, deleted, culled, etc.", 
+      "# purpose it can be manually revised, edited, deleted, culled, etc.",
       "# You can either delete unwanted words, or mark them with \"#\"",
       "# -----------------------------------------------------------------------",
       "", file="wordlist.txt", sep="\n")
@@ -705,13 +715,13 @@ if(exists("frequencies.0.culling") == FALSE) {
 
   # blank line on the screen
   message("")
-  
+
   # empty the dump-dir if it already existed and create it if it did not previously exist
   if(dump.samples == TRUE){
 	  if (file.exists("sample_dump")){
 		# a dump-dir seems to have been created during a previous run
 		# tmp delete the dump-dir to remove all of its previous contents
-		unlink("sample_dump", recursive = TRUE) 
+		unlink("sample_dump", recursive = TRUE)
 	  }
 	# (re)create the dump-dir
 	dir.create("sample_dump")
@@ -726,7 +736,7 @@ if(exists("frequencies.0.culling") == FALSE) {
 
   # preparing a huge table of all the frequencies for the whole corpus
   frequencies.0.culling = make.table.of.frequencies(corpus = loaded.corpus,
-                                               features = mfw.list.of.all, 
+                                               features = mfw.list.of.all,
                                                relative = relative.frequencies)
 
 
@@ -759,7 +769,7 @@ if(exists("frequencies.0.culling") == FALSE) {
 # Finally, we want to save some of the variable values for later use;
 # they are automatically loaded into the GUI at the next run of the script.
 cat("", file = "stylo_config.txt", append = FALSE)
-var.name <- function(x) { 
+var.name <- function(x) {
       if(is.character(x) == TRUE) {
         cat(paste(deparse(substitute(x))," = \"", x ,"\"", sep=""), file = "stylo_config.txt", sep = "\n", append = TRUE)
       } else {
@@ -859,7 +869,7 @@ if (analysis.type == "BCT") {
 # if max value is LOWER than min value, make them equal
   if(culling.max < culling.min) {
   culling.max = culling.min
-  }  
+  }
 # avoiding infinite loops
   if(culling.incr <= 1) {
   culling.incr = 10
@@ -874,24 +884,24 @@ for(j in (culling.min/culling.incr):(culling.max/culling.incr)) {
         current.culling = j * culling.incr
 
         # applying culling
-        table.with.all.freqs = perform.culling(frequencies.0.culling, 
+        table.with.all.freqs = perform.culling(frequencies.0.culling,
                                         current.culling)
 
 
         # additionally, deleting pronouns (if applicable)
         if(delete.pronouns == TRUE) {
-                table.with.all.freqs = 
+                table.with.all.freqs =
                 delete.stop.words(table.with.all.freqs, pronouns)
         }
-        
+
 
         # optionally, deleting stop words
         if(is.vector(stop.words) == TRUE) {
-                table.with.all.freqs = delete.stop.words(table.with.all.freqs, 
+                table.with.all.freqs = delete.stop.words(table.with.all.freqs,
                                                          stop.words)
         }
-        
-        
+
+
 
 
 
@@ -899,7 +909,7 @@ for(j in (culling.min/culling.incr):(culling.max/culling.incr)) {
 
 # starting the frequency list at frequency rank set in option start.at above
 
-# TO SAY THE TRUTH, IT CAN BE DONE MUCH EARLIER: at the moment when 
+# TO SAY THE TRUTH, IT CAN BE DONE MUCH EARLIER: at the moment when
 # the frequency list for either I set or both sets is produced,
 # it can be cut and used for building freq. tables
 
@@ -952,7 +962,7 @@ if((analysis.type == "CA") || (analysis.type == "BCT") || (analysis.type == "MDS
   #B =t(t(log(table.with.all.freqs + 2)) / -(colSums(A * log(A))))
   #table.with.all.freqs = B
   #
-  # calculating z-scores 
+  # calculating z-scores
   table.with.all.zscores = scale(table.with.all.freqs)
   table.with.all.zscores = table.with.all.zscores[,]
 }
@@ -986,7 +996,7 @@ distance.name.on.file = distance.measure
   } else if(distance.measure == "simple" | distance.measure == "dist.simple") {
     message("Calculating Eder's Simple distances...")
     distance.name.on.graph = "Eder's Simple distance"
-    distance.name.on.file = "Eder's Simple"    
+    distance.name.on.file = "Eder's Simple"
   } else if(distance.measure == "manhattan" | distance.measure == "dist.manhattan") {
     message("Calculating Manhattan distances...")
     distance.name.on.graph = "Manhattan distance"
@@ -1053,9 +1063,9 @@ if(length(grep(distance.measure, supported.measures)) > 1 ) {
 # if the requested distance name was not found invoke a custom plugin
 } else if(length(grep(distance.measure, supported.measures)) == 0 ){
 
-    # first, check if a requested custom function exists 
+    # first, check if a requested custom function exists
     if(is.function(get(distance.measure)) == TRUE) {
-        # if OK, then use the value of the variable 'distance.measure' to invoke 
+        # if OK, then use the value of the variable 'distance.measure' to invoke
         # the function of the same name, with x as its argument
         distance.table = do.call(distance.measure, list(x = input.freq.table))
         # check if the invoked function did produce a distance
@@ -1068,7 +1078,7 @@ if(length(grep(distance.measure, supported.measures)) > 1 ) {
 # when the chosen distance measure is among the supported ones, use it
 } else {
 
-    # extract the long name of the distance (the "official" name) 
+    # extract the long name of the distance (the "official" name)
     distance = supported.measures[grep(distance.measure, supported.measures)]
     # then check if this is one of standard methods supported by dist()
     if(distance %in% c("dist.manhattan", "dist.euclidean", "dist.canberra")) {
@@ -1079,22 +1089,22 @@ if(length(grep(distance.measure, supported.measures)) > 1 ) {
     # then, check for the non-standard methods but still supported by Stylo
     } else if(distance %in% c("dist.simple", "dist.cosine", "dist.entropy", "dist.minmax")) {
 
-         # invoke one of the distance measures functions from Stylo    
+         # invoke one of the distance measures functions from Stylo
          distance.table = do.call(distance, list(x = input.freq.table[,1:mfw]))
 
     } else if(distance == "dist.wurzburg") {
 
-         # invoke one of the distance measures functions from Stylo    
+         # invoke one of the distance measures functions from Stylo
          distance.table = do.call(distance, list(x = table.with.all.zscores[,1:mfw]))
-            
+
     } else {
          # invoke one of the distances supported by 'stylo'; this is slightly
          # different from the custom functions invoked above, since it uses
          # another argument: z-scores can be calculated outside of the function
          distance.table = do.call(distance, list(x = table.with.all.zscores[,1:mfw], scale = FALSE))
     }
-    
-} 
+
+}
 
 # convert the table to the format of matrix
 distance.table = as.matrix(distance.table)
@@ -1113,7 +1123,7 @@ distance.table = as.matrix(distance.table)
 
 
 # #################################################
-# a tiny module for graph auto-coloring: 
+# a tiny module for graph auto-coloring:
 # uses the function "assign.plot.colors()"
 # #################################################
 
@@ -1136,22 +1146,22 @@ colors.of.pca.graph = assign.plot.colors(labels = names.of.texts,
 # a filename of the current job. First, variables are initiated...
 name.of.the.method = ""
 short.name.of.the.method = ""
-mfw.info = mfw 
+mfw.info = mfw
 plot.current.task = function() {NULL}
 
 # getting rid of redundant start.at information
   if(start.at == 1) {
-    start.at.info = ""  
+    start.at.info = ""
     } else {
     start.at.info = paste("Started at",start.at) }
 # getting rid of redundant pronoun information
   if(delete.pronouns == TRUE) {
-    pronouns.info = paste("Pronouns deleted")  
+    pronouns.info = paste("Pronouns deleted")
     } else {
     pronouns.info = "" }
 # getting rid of redundant culling information
   if(culling.min == culling.max) {
-    culling.info = culling.min 
+    culling.info = culling.min
     } else {
     culling.info = paste(culling.min, "-", culling.max, sep = "") }
 
@@ -1160,11 +1170,11 @@ if(analysis.type == "CA") {
   name.of.the.method = "Cluster Analysis"
   short.name.of.the.method = "CA"
   if(dendrogram.layout.horizontal == TRUE) {
-    dendrogram.margins =  c(5,4,4,8)+0.1 
+    dendrogram.margins =  c(5,4,4,8)+0.1
     } else {
     dendrogram.margins = c(8,5,4,4)+0.1 }
   # the following task will be plotted
-  plot.current.task = function(){ 
+  plot.current.task = function(){
     par(mar=dendrogram.margins)
         # neighbor joining clustering algorithm needs a different call:
         if(linkage == "nj") {
@@ -1196,11 +1206,11 @@ if(analysis.type == "CA") {
           dendrogram.with.colors = dendrapply(tree.with.clusters, colLab)
           # finally, ploting the whole stuff
           plot(dendrogram.with.colors, main = graph.main.title,
-                  horiz = dendrogram.layout.horizontal) 
+                  horiz = dendrogram.layout.horizontal)
           if(dendrogram.layout.horizontal == TRUE) {
-                  title(sub = graph.subtitle) 
+                  title(sub = graph.subtitle)
           } else {
-                  title(sub = graph.subtitle, outer = TRUE, line = -1)  
+                  title(sub = graph.subtitle, outer = TRUE, line = -1)
           }
         }
     }
@@ -1212,7 +1222,7 @@ if(analysis.type == "MDS") {
   name.of.the.method = "Multidimensional Scaling"
   distance.name.on.graph = ""
   distance.name.on.file = ""
-  short.name.of.the.method = "MDS" 
+  short.name.of.the.method = "MDS"
   mds.results = cmdscale(distance.table, eig = TRUE)
   # prepare the xy coordinates, add the margins, add the label offset
   xy.coord = mds.results$points[,1:2]
@@ -1226,27 +1236,27 @@ if(analysis.type == "MDS") {
                                xymargins = add.to.margins,
                                v.offset = label.offset)
   # define the plotting function needed:
-  plot.current.task = function(){ 
+  plot.current.task = function(){
     if(text.id.on.graphs == "points" || text.id.on.graphs == "both") {
-      plot(xy.coord, type = "p", 
-           ylab = "", xlab = "", 
+      plot(xy.coord, type = "p",
+           ylab = "", xlab = "",
            xlim = plot.area[[1]], ylim = plot.area[[2]],
            main = graph.main.title,
            sub = graph.subtitle,
            col = colors.of.pca.graph,
-           lwd = plot.line.thickness) 
+           lwd = plot.line.thickness)
       }
     if(text.id.on.graphs == "labels") {
-      plot(xy.coord, type = "n", 
-           ylab = "", xlab = "", 
+      plot(xy.coord, type = "n",
+           ylab = "", xlab = "",
            xlim = plot.area[[1]], ylim = plot.area[[2]],
            main = graph.main.title,
            sub = graph.subtitle,
            col = colors.of.pca.graph,
-           lwd = plot.line.thickness) 
+           lwd = plot.line.thickness)
       }
     if(text.id.on.graphs == "labels" || text.id.on.graphs == "both") {
-      text(label.coord, rownames(label.coord), col=colors.of.pca.graph) 
+      text(label.coord, rownames(label.coord), col=colors.of.pca.graph)
       }
     axis(1, lwd = plot.line.thickness)
     axis(2, lwd = plot.line.thickness)
@@ -1313,7 +1323,7 @@ if(analysis.type == "PCV" || analysis.type == "PCR") {
              xlab = "", ylab = PC2_lab,
              main = graph.main.title, sub = paste(PC1_lab, "\n", graph.subtitle),
              col = colors.of.pca.graph,
-             lwd = plot.line.thickness) 
+             lwd = plot.line.thickness)
       }
       if(text.id.on.graphs == "labels") {
         plot(xy.coord,
@@ -1322,34 +1332,34 @@ if(analysis.type == "PCV" || analysis.type == "PCR") {
              xlab = "", ylab = PC2_lab,
              main = graph.main.title, sub = paste(PC1_lab, "\n", graph.subtitle),
              col = colors.of.pca.graph,
-             lwd = plot.line.thickness) 
+             lwd = plot.line.thickness)
       }
       abline(h=0, v=0, col = "gray60",lty=2)
       if(text.id.on.graphs == "labels" || text.id.on.graphs == "both") {
-        text(label.coord, rownames(pca.results$x), col = colors.of.pca.graph) 
+        text(label.coord, rownames(pca.results$x), col = colors.of.pca.graph)
       }
       axis(1, lwd = plot.line.thickness)
       axis(2, lwd = plot.line.thickness)
       box(lwd = plot.line.thickness)
     } else if(pca.visual.flavour == "loadings"){
-      biplot(pca.results, 
-             col=c("grey70", "black"), 
-             cex=c(0.7, 1), xlab = "", 
-             ylab = PC2_lab, 
-             main = paste(graph.main.title, "\n\n", sep=""), 
+      biplot(pca.results,
+             col=c("grey70", "black"),
+             cex=c(0.7, 1), xlab = "",
+             ylab = PC2_lab,
+             main = paste(graph.main.title, "\n\n", sep=""),
              sub = paste(PC1_lab, "\n", graph.subtitle, sep=""), var.axes = FALSE)
     } else if(pca.visual.flavour == "technical"){
       layout(matrix(c(1,2), 2, 2, byrow = TRUE), widths=c(3,1))
       biplot(pca.results, col=c("black", "grey40"), cex=c(1, 0.9), xlab="", ylab=PC2_lab, main=paste(graph.main.title, "\n\n", sep=""), sub=paste(PC1_lab,"\n",graph.subtitle, sep=""),var.axes=FALSE)
       abline(h=0, v=0, col = "gray60",lty=3)
-      # add the subpanel to the right 
+      # add the subpanel to the right
       row = mat.or.vec(nc = ncol(pca.results$x), nr = 1)
       for (i in 1:ncol(row)){row[,i] = "grey45"}
       # paint the first two PCS black -- i.e. the ones actually plotted
       row[,1] = "black"
       row[,2] = "black"
       barplot(expl.var, col = row, xlab = "Principal components", ylab = "Proportion of variance explained (in %)")
-      # set a horizontal dashed line, indicating the psychological 5% barrier  
+      # set a horizontal dashed line, indicating the psychological 5% barrier
       abline(h = 5, lty = 3)
     } else if(pca.visual.flavour == "symbols"){
       # determine labels involved
@@ -1359,11 +1369,11 @@ if(analysis.type == "PCV" || analysis.type == "PCR") {
       }
       COOR = data.frame(pca.results$x[,1:2], LABEL = labels)
       labels = c(levels(COOR$LABEL))
-      # visualize 
+      # visualize
       sps = trellis.par.get("superpose.symbol")
       sps$pch = 1:length(labels)
       trellis.par.set("superpose.symbol", sps)
-      ltheme = canonical.theme(color = FALSE)      
+      ltheme = canonical.theme(color = FALSE)
       lattice.options(default.theme = ltheme)
       pl = xyplot(data = COOR, x = PC2~PC1, xlab = paste(PC1_lab, "\n", graph.subtitle, sep = ""), ylab = PC2_lab, groups = COOR$LABEL, sub = "", key = list(columns = 2, text = list(labels), points = Rows(sps, 1:length(labels))),
              panel = function(x, ...){
@@ -1375,16 +1385,16 @@ if(analysis.type == "PCV" || analysis.type == "PCR") {
     }
   }
 }
-        
+
 
 # prepares a list of dendrogram-like structures for a bootstrap consensus tree
 # (the final tree will be generated later, outside the main loop of the script)
 if (analysis.type == "BCT") {
   mfw.info = paste(mfw.min, "-", mfw.info, sep = "")
   name.of.the.method = "Bootstrap Consensus Tree"
-  short.name.of.the.method = "Consensus" 
+  short.name.of.the.method = "Consensus"
   # calculates the dendrogram for current settings
-  # 
+  #
 ########################################################################
 ########################################################################
 # compatibility mode: to make one's old experiments reproducible
@@ -1398,7 +1408,7 @@ if (analysis.type == "BCT") {
   # adds the current dendrogram to the list of all dendrograms
   bootstrap.list[[number.of.current.iteration]] = current.bootstrap.results }
 
-  
+
 # establishing the text to appear on the graph (unless "notitle" was chosen)
 if(ngram.size > 1) {
       ngram.value = paste(ngram.size, "-grams", sep="")
@@ -1410,7 +1420,7 @@ if(titles.on.graphs == TRUE) {
   graph.main.title = paste(graph.title, "\n", name.of.the.method)
   if(analysis.type == "BCT") {
       graph.subtitle = paste(mfw.info," MF",toupper(analyzed.features)," ",ngram.value," Culled @ ",culling.info,"%\n",
-                    pronouns.info," ",distance.name.on.graph," Consensus ",consensus.strength," ",start.at.info, sep="") 
+                    pronouns.info," ",distance.name.on.graph," Consensus ",consensus.strength," ",start.at.info, sep="")
   } else {
       graph.subtitle = paste(mfw.info," MF",toupper(analyzed.features)," ",ngram.value," Culled @ ",culling.info,"%\n",
       pronouns.info," ",distance.name.on.graph," ",start.at.info, sep="") }
@@ -1422,7 +1432,7 @@ if(titles.on.graphs == TRUE) {
 # name of the output file (strictly speaking: basename) for graphs
 
 # check if a custom filename has been set
-if(is.character(custom.graph.filename) == TRUE & 
+if(is.character(custom.graph.filename) == TRUE &
          length(custom.graph.filename) > 0) {
     # if a custom file name exists, then use it
     graph.filename = custom.graph.filename
@@ -1432,20 +1442,20 @@ if(is.character(custom.graph.filename) == TRUE &
         graph.filename = paste(basename(getwd()), short.name.of.the.method,
                          mfw.info, "MFWs_Culled", culling.info,pronouns.info,
                          distance.name.on.file, "C", consensus.strength,
-                         start.at.info, sep="_") 
+                         start.at.info, sep="_")
     } else {
         graph.filename = paste(basename(getwd()), short.name.of.the.method,
-                         mfw.info, "MFWs_Culled", culling.info,pronouns.info, 
-                         distance.name.on.file, start.at.info, sep = "_") 
+                         mfw.info, "MFWs_Culled", culling.info,pronouns.info,
+                         distance.name.on.file, start.at.info, sep = "_")
     }
 }
 
 
 # #################################################
-# plotting 
+# plotting
 # #################################################
 
-# The core code for the graphic output (if bootstrap consensus tree 
+# The core code for the graphic output (if bootstrap consensus tree
 # is specified, the plot will be initiated later)
 if(analysis.type != "BCT") {
   if(display.on.screen == TRUE) {
@@ -1459,7 +1469,7 @@ if(analysis.type != "BCT") {
     dev.off()
     }
   if(write.jpg.file == TRUE) {
-    jpeg(filename = paste(graph.filename,"_%03d",".jpg",sep=""), 
+    jpeg(filename = paste(graph.filename,"_%03d",".jpg",sep=""),
             width=plot.custom.width,height=plot.custom.height,
             units="in",res=300,pointsize=plot.font.size)
     plot.current.task()
@@ -1473,7 +1483,7 @@ if(analysis.type != "BCT") {
     dev.off()
     }
   if(write.png.file == TRUE) {
-    png(filename = paste(graph.filename,"_%03d",".png",sep=""), 
+    png(filename = paste(graph.filename,"_%03d",".png",sep=""),
             width=plot.custom.width,height=plot.custom.height,
             units="in",res=300,pointsize=plot.font.size)
     plot.current.task()
@@ -1550,7 +1560,7 @@ if((exists("distance.table") == TRUE) & (network == TRUE)) {
     #connections[i,(order(distances[i,])[2])] = 3
     #connections[i,(order(distances[i,])[3])] = 2
     #connections[i,(order(distances[i,])[4])] = 1
-    # 
+    #
     for(k in 1:linked.neighbors) {
       connections[i,(order(distances[i,])[k+1])] = linked.neighbors - k + 1
     }
@@ -1683,7 +1693,7 @@ if((exists("distance.table") == TRUE) & (network == TRUE)) {
   }
 }
 
-# finally, removing the network if it does not really exist 
+# finally, removing the network if it does not really exist
 if(length(all.connections) == 1) {
  rm(all.connections)
 }
@@ -1701,11 +1711,11 @@ if(length(bootstrap.list) <= 2) {
   message("\n\nSORRY, BUT YOU ARE EXPECTING TOO MUCH...!\n",
   "There should be at least 3 iterations to make a consensus tree\n")
   } else {
-  plot.current.task = function(){ 
+  plot.current.task = function(){
         plot(consensus(bootstrap.list, p=consensus.strength),
            type="u",
            font=1,
-           lab4ut="axial", 
+           lab4ut="axial",
            tip.color = colors.of.pca.graph)
         title (main = graph.main.title)
         title (sub = graph.subtitle) }
@@ -1731,14 +1741,14 @@ if(length(bootstrap.list) <= 2) {
     dev.off()
     }
   if(write.svg.file == TRUE) {
-    svg(filename=paste(graph.filename,"_%03d",".svg",sep=""), 
+    svg(filename=paste(graph.filename,"_%03d",".svg",sep=""),
          width=plot.custom.width,height=plot.custom.height,
          pointsize=plot.font.size)
     plot.current.task()
     dev.off()
     }
   if(write.png.file == TRUE) {
-    png(filename = paste(graph.filename,"_%03d",".png",sep=""), 
+    png(filename = paste(graph.filename,"_%03d",".png",sep=""),
          width=plot.custom.width,height=plot.custom.height,
          units="in",res=300,pointsize=plot.font.size)
     plot.current.task()
@@ -1850,18 +1860,18 @@ if(exists("pca.var.exp")) {
 # This list will be turned into the class "styloresults"
 results.stylo = list()
 # elements that we want to add on this list
-variables.to.save = c("distance.table", 
+variables.to.save = c("distance.table",
                       "frequencies.0.culling",
-                      "table.with.all.freqs", 
+                      "table.with.all.freqs",
                       "table.with.all.zscores",
-                      "features", 
+                      "features",
                       "features.actually.used",
                       "pca.coordinates",
                       "pca.rotation",
                       "pca.sdev",
                       "pca.var.exp",
-                      "table.of.edges", 
-                      "list.of.edges", 
+                      "table.of.edges",
+                      "list.of.edges",
                       "list.of.nodes")
 # checking if they really exist; getting rid of non-existing ones:
 filtered.variables = ls()[ls() %in% variables.to.save]
