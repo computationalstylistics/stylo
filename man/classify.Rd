@@ -1,6 +1,6 @@
 \name{classify}
 \alias{classify}
-\title{Machine-learning classification}
+\title{Machine-learning supervised classification}
 \description{Function that performs a number of machine-learning methods
 for classification used in computational stylistics: Delta (Burrows, 2002), 
 k-Nearest Neighbors, Support Vector Machines, Naive Bayes, 
@@ -86,9 +86,8 @@ the results, features assessed, generated tables of distances, etc.
 }
 
 \references{
-Eder, M. Kestemont, M. and Rybicki, J. (2013). Stylometry with R:
-    a suite of tools. In: "Digital Humanities 2013: Conference Abstracts". 
-    University of Nebraska-Lincoln, Lincoln, NE, pp. 487-89.
+Eder, M., Rybicki, J. and Kestemont, M. (2016). Stylometry with R: a package 
+    for computational text analysis. "R Journal", 8(1): 107-21.
 
 Burrows, J. F. (2002). "Delta": a measure of stylistic difference and 
     a guide to likely authorship. "Literary and Linguistic Computing", 
@@ -103,7 +102,7 @@ Argamon, S. (2008). Interpreting Burrows's Delta: geometric and
   23(2): 131-47. 
 }
 
-\author{Maciej Eder, Mike Kestemont, Jan Rybicki}
+\author{Maciej Eder, Mike Kestemont}
 
 \seealso{
 \code{\link{stylo}}, \code{\link{rolling.delta}}, \code{\link{oppose}}

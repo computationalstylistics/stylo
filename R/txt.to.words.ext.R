@@ -43,8 +43,21 @@ txt.to.words.ext = function(input.text,
     # Loading the file; optionally, fiddling with apostrophes and contractions:    #
     # This is the standard procedure of splitting input texts
     if(tolower(language) == "cjk") {
-      tokenized.text = txt.to.words(input.text, 
-                                    splitting.rule="[^\U4E00-\U9FFF]+",
+      tokenized.text = txt.to.words(input.text,  
+                                    splitting.rule = paste("[^A-Za-z",
+                                        # Japanese (Hiragana)
+                                        "\U3040-\U309F",
+                                        # Japanese (Katagana):
+                                        "\U30A0-\U30FF",
+                                        # Japanese repetition symbols:
+                                        "\U3005\U3031-\U3035",
+                                        # CJK Unified Ideographs: 
+                                        "\U4E00-\U9FFF",
+                                        # CJK Unified Ideographs Extension A: 
+                                        "\U3400-\U4DBF",
+                                        # Hangul (Korean script):
+                                        "\UAC00-\UD7AF",
+                                        "]+", sep=""),
                                     preserve.case=TRUE)
       }
     if(tolower(language) != "english.contr" & 
@@ -55,6 +68,8 @@ txt.to.words.ext = function(input.text,
     # this smashes the distinction and converts both types to the letter u
     if(tolower(language) == "latin.corr") {
       tokenized.text = gsub("v", "u", tokenized.text)
+      tokenized.text = gsub("&", "et", tokenized.text)
+      tokenized.text = gsub("j", "i", tokenized.text)
     }
     # this code is used for English corpora only
     if(tolower(language) == "english.contr" | tolower(language) == "english.all") {

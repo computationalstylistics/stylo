@@ -1,8 +1,8 @@
 
 # Function that performs a number of machine-learning methods
-# of classification used in computational stylistics: Delta (Burrows, 2002), 
-# k-Nearest Neighbors classification, Support Vectors Machines, Naive Bayes, 
-# and Nearest Shrunken Centroids (Jockers and Witten, 2010). Most of the options 
+# of classification used in computational stylistics: Delta (Burrows, 2002),
+# k-Nearest Neighbors classification, Support Vectors Machines, Naive Bayes,
+# and Nearest Shrunken Centroids (Jockers and Witten, 2010). Most of the options
 # are derived from the 'stylo' function.
 
 classify <-
@@ -11,7 +11,7 @@ function(gui = TRUE,
          test.frequencies = NULL,
          training.corpus = NULL,
          test.corpus = NULL,
-         features = NULL, 
+         features = NULL,
          path = NULL,
          training.corpus.dir = "primary_set",
          test.corpus.dir = "secondary_set", ...) {
@@ -43,7 +43,7 @@ if(is.character(path) == TRUE & length(path) > 0) {
   }
 } else {
   # if the argument was empty, then relax
-  cat("using current directory...\n")
+  message("using current directory...")
 }
 
 
@@ -54,7 +54,15 @@ if(is.character(test.corpus.dir) == FALSE | nchar(test.corpus.dir) == 0) {
   test.corpus.dir = "secondary_set"
 }
 
+# Choose directory:
+#
+# Just a few lines that allow users to choose the working directory if working
+# with the GUI.
 
+if(gui == TRUE & is.null(path)){
+  selected.path = tk_choose.dir(caption = "Select your working directory. It should a subdirectory called *corpus* ")
+  setwd(selected.path)
+}
 
 # loading the default settings as defined in the following function
 # (it absorbes the arguments passed from command-line)
@@ -68,14 +76,14 @@ variables = stylo.default.settings(...)
 if (gui == TRUE) {
       # first, checking if the GUI can be displayed
       # (the conditional expression is stolen form the generic function "menu")
-      if (.Platform$OS.type == "windows" || .Platform$GUI == 
-            "AQUA" || (capabilities("tcltk") && capabilities("X11") && 
+      if (.Platform$OS.type == "windows" || .Platform$GUI ==
+            "AQUA" || (capabilities("tcltk") && capabilities("X11") &&
             suppressWarnings(tcltk::.TkUp))) {
         variables = gui.classify(...)
       } else {
-        cat("\n")
-        cat("GUI could not be launched -- default settings will be used;\n")
-        cat("otherwise please pass your variables as command-line agruments\n\n")
+        message("")
+        message("GUI could not be launched -- default settings will be used;")
+        message("otherwise please pass your variables as command-line agruments\n")
       }
 }
 
@@ -162,8 +170,10 @@ sample.overlap = variables$sample.overlap
 number.of.samples = variables$number.of.samples
 custom.graph.title = variables$custom.graph.title
 
+show.features = variables$show.features
 
-# ['cv' is temporarily switched off, it always performs 'cv ="thorough"']
+
+# ['cv' is temporarily switched off, it always performs 'cv ="stratified"']
 # cv = variables$cv
 
 
@@ -176,16 +186,16 @@ custom.graph.title = variables$custom.graph.title
 # #############################################################################
 
 
-# Given a language option ("English", "Polish", "Latin" etc., as described 
+# Given a language option ("English", "Polish", "Latin" etc., as described
 # above), this procedure selects one of the lists of pronouns
-# If no language was chosen (or if a desired language is not supported, or if 
-# there was a spelling mistake), then the variable will be set to "English". 
+# If no language was chosen (or if a desired language is not supported, or if
+# there was a spelling mistake), then the variable will be set to "English".
 
 pronouns = stylo.pronouns(language=corpus.lang)
 
 
 # Since it it not so easy to perform, say, 17.9 iterations, or analyze
-# 543.3 words, the code below justifies all numerical variables, to prevent 
+# 543.3 words, the code below justifies all numerical variables, to prevent
 # you from your stupid jokes with funny settings. (OK, it is still
 # possible to crash the script but we will not give you a hint)
   mfw.min = round(mfw.min)
@@ -208,9 +218,9 @@ if(number.of.candidates < 1) {
 ###############################################################################
 # Backward compatibility: if "use.existing.freq.tables" is switched on, then
 # two files with frequency tables will be used, provided that they do exist
-  if(use.existing.freq.tables == TRUE 
+  if(use.existing.freq.tables == TRUE
                       & file.exists("freq_table_primary_set.txt") == TRUE
-                      & file.exists("freq_table_secondary_set.txt") == TRUE ) { 
+                      & file.exists("freq_table_secondary_set.txt") == TRUE ) {
     training.frequencies = "freq_table_primary_set.txt"
     test.frequencies = "freq_table_secondary_set.txt"
   } else {
@@ -218,7 +228,7 @@ if(number.of.candidates < 1) {
   }
 # Backward compatibility: if "use.existing.wordlist" is switched on, then
 # the file "wordlist.txt" will be used, provided that it does exist
-  if(use.existing.wordlist == TRUE & file.exists("wordlist.txt") == TRUE ) { 
+  if(use.existing.wordlist == TRUE & file.exists("wordlist.txt") == TRUE ) {
     features = "wordlist.txt"
   } else {
     use.existing.wordlist = FALSE
@@ -247,7 +257,7 @@ if(number.of.candidates < 1) {
 # the module for loading a corpus from text files;
 # it can be omitted if the frequency table for
 # both primary and secondary sets already exist
-# (then "use.existing.freq.tables" should be set 
+# (then "use.existing.freq.tables" should be set
 # to TRUE in the preamble of the script/GUI)
 # #################################################
 #
@@ -267,11 +277,10 @@ features.exist = FALSE
         # link this vector into the variable used for calculations
         mfw.list.of.all = features
       } else {
-        cat("\n")
-        cat("You seem to have chosen an existing set of features\n")
-        cat("Unfortunately, something is wrong: check if your variable\n")
-        cat("has a form of vector\n")
-        cat("\n")
+        message("")
+        message("You seem to have chosen an existing set of features")
+        message("Unfortunately, something is wrong: check if your variable")
+        message("has a form of vector\n")
         stop("Wrong format: a vector of features (e.g. words) was expected")
       }
     # selecting the above vector as a valid set of features
@@ -281,25 +290,25 @@ features.exist = FALSE
   # presumably, this is a file name where a list of words is stored
   if(length(features) == 1) {
     # to prevent using non-letter characters (e.g. integers)
-    features = as.character(features) 
-      # does the file exist? 
+    features = as.character(features)
+      # does the file exist?
       if(file.exists(features) == TRUE) {
         # file with a vector of features will be loaded
-        cat("\n", "reading a custom set of features from a file...", "\n",sep="")
+        message("\n", "reading a custom set of features from a file...")
         # reading a file: newlines are supposed to be delimiters
-        features = scan(features,what="char",sep="\n",encoding=encoding)
+        features = scan(features, what = "char", sep = "\n", encoding = encoding)
         # getting rid of the lines beginning with the "#" char
-        features = c(grep("^[^#]",features,value=TRUE))
+        features = c(grep("^[^#]", features, value = TRUE))
         # link this vector into the variable used for calculations
         mfw.list.of.all = features
       } else {
         # if there's no such a file, then don't try to use it
-        cat("\n", "file \"",features, "\" could not be found\n",sep="")
+        message("\n", "file \"", features, "\" could not be found")
         stop("Wrong file name")
       }
     # selecting the above vector as a valid set of features
     features.exist = TRUE
-  } 
+  }
 ###############################################################################
 
 
@@ -333,20 +342,19 @@ for(iteration in 1:2) {
         # if yes, then convert the above object into a matrix (just in case)
         frequencies = as.matrix(frequencies)
       } else {
-        cat("\n")
-        cat("You seem to have chosen an existing table with frequencies\n")
-        cat("Unfortunately, something is wrong: check if your variable\n")
-        cat("has a form of matrix/data frame\n")
-        cat("\n")
+        message("")
+        message("You seem to have chosen an existing table with frequencies")
+        message("Unfortunately, something is wrong: check if your variable")
+        message("has a form of matrix/data frame\n")
         stop("Wrong format of the table of frequencies")
       }
       # this code makes sure that the table has variables' names
       if(length(colnames(frequencies)) == 0) {
-        colnames(frequencies) = paste("var",1:length(frequencies[1,]),sep="_")
+        colnames(frequencies) = paste("var", 1:length(frequencies[1,]), sep = "_")
       }
       # this code makes sure that the table has samples' names
       if(length(rownames(frequencies)) == 0) {
-        rownames(frequencies) = paste("sample",1:length(frequencies[,1]),sep="_")
+        rownames(frequencies) = paste("sample", 1:length(frequencies[,1]), sep = "_")
       }
     # selecting the above matrix as a valid corpus
     corpus.exists = TRUE
@@ -355,37 +363,37 @@ for(iteration in 1:2) {
   # presumably, this is a file name where a table is stored
   if(length(frequencies) == 1) {
     # to prevent using non-letter characters (e.g. integers)
-    frequencies = as.character(frequencies) 
+    frequencies = as.character(frequencies)
       # does the file exist?
       if(file.exists(frequencies) == TRUE) {
         # file with frequencies will be loaded
-        cat("\n", "reading a file containing frequencies...", "\n",sep="")
-        frequencies = t(read.table(frequencies, encoding=encoding))
+        message("\nreading a file containing frequencies...")
+        frequencies = t(read.table(frequencies, encoding = encoding))
       } else {
         # if there's no such a file, then don't try to use it
-        cat("\n", "file \"",frequencies, "\" could not be found\n",sep="")
+        message("\n", "file \"", frequencies, "\" could not be found")
         stop("Wrong file name")
       }
     # selecting the above matrix as a valid corpus
     corpus.exists = TRUE
-  } 
+  }
 
 
 
   # If a custom set of features was indicated, try to pick the matching variables only
   if(features.exist == TRUE & corpus.exists == TRUE) {
       # checking if the chosen features do match the columns of the table
-      if(length(grep("TRUE",colnames(frequencies) %in% features)) < 2) {
-        cat("The features you want to analyze do not match the variables' names:\n")
-        cat("\n")
-        cat("Available features:",head(colnames(frequencies)), "...\n")
-        cat("Chosen features:", head(features), "...\n")
-        cat("\n")
-        cat("Check the rotation of your table and the names of its rows and columns.\n")
+      if(length(grep("TRUE", colnames(frequencies) %in% features)) < 2) {
+        message("The features you want to analyze do not match the variables' names:")
+        message("")
+        message("Available features: ", head(colnames(frequencies)), "...")
+        message("Chosen features: ", head(features), "...")
+        message("")
+        message("Check the rotation of your table and the names of its rows and columns.")
         stop("Input data mismatch")
       } else {
         # if everything is right, select the subset of columns from the table:
-        frequencies = frequencies[,colnames(frequencies) %in% features]
+        frequencies = frequencies[ , colnames(frequencies) %in% features]
       }
   }
 
@@ -402,10 +410,9 @@ for(iteration in 1:2) {
   # Additionally, check if the table with frequencies is long enough
   if(corpus.exists == TRUE) {
     if(length(frequencies[,1]) < 2 | length(frequencies[1,]) < 2 ) {
-      cat("\n")
-      cat("There is not enough samples and/or features to be analyzed.\n")
-      cat("Try to use tables of at least two rows by two columns.\n")
-      cat("\n")
+      message("")
+      message("There is not enough samples and/or features to be analyzed.")
+      message("Try to use tables of at least two rows by two columns.\n")
       stop("Wrong size of the table of frequencies")
     }
   }
@@ -413,28 +420,28 @@ for(iteration in 1:2) {
   # 1st iteration: setting the matrix containing the training set (if applicable)
   if(corpus.exists == TRUE & iteration == 1) {
     freq.I.set.0.culling = frequencies
-    cat("Training set successfully loaded.\n")
+    message("Training set successfully loaded.")
   }
   # 2nd iteration: setting the matrix containing the test set (if applicable)
   if(corpus.exists == TRUE & iteration == 2) {
     freq.II.set.0.culling = frequencies
-    cat("Test set successfully loaded.\n")
+    message("Test set successfully loaded.")
   }
 
 # attempts at loading the training set and the test set: the loop returns here
-} 
+}
 
 # Two iterations completed, another sanity check should be applied
   # First, let's check if the I set was loaded
   if(!exists("freq.I.set.0.culling") & exists("freq.II.set.0.culling")) {
-    cat("Training set is missing, though.\n")  
-    cat("Trying to build both tables from scratch.\n") 
+    message("Training set is missing, though.")
+    message("Trying to build both tables from scratch.")
     corpus.exists = FALSE
   }
   # Secondly, let's check the II set
   if(exists("freq.I.set.0.culling") & !exists("freq.II.set.0.culling")) {
-    cat("Test set is missing, though.\n")  
-    cat("Trying to build both tables from scratch.\n") 
+    message("Test set is missing, though.")
+    message("Trying to build both tables from scratch.")
     corpus.exists = FALSE
   }
 ###############################################################################
@@ -442,8 +449,8 @@ for(iteration in 1:2) {
 
 
 
-# If the tables with frequencies could not loaded so far (for any reason), 
-# try to load an external corpus (R object) passed as an argument 
+# If the tables with frequencies could not loaded so far (for any reason),
+# try to load an external corpus (R object) passed as an argument
 
 ###############################################################################
 # Checking if the argument "training.corpus" and/or "test.corpus" has been used
@@ -465,20 +472,19 @@ for(iteration in 1:2) {
       if(is.list(parsed.corpus) == TRUE & length(parsed.corpus) > 1) {
           # checking if the samples have their names; otherwise, assign generic ones:
           if( length(names(parsed.corpus)) != length(parsed.corpus) ) {
-            names(parsed.corpus) = paste("sample",1:length(parsed.corpus),sep="_")
+            names(parsed.corpus) = paste("sample", 1:length(parsed.corpus), sep="_")
           }
         # if everything is fine, use this variable as a valid corpus
 #        loaded.corpus = parsed.corpus
       } else {
-        cat("\n")
-        cat("The object you've specified as your corpus cannot be used.\n")
-        cat("It should be a list containing particular text samples\n")
-        cat("(vectors containing sequencies of words/n-grams or other features).\n")
-        cat("The samples (elements of the list) should have their names.\n")
-        cat("Alternatively, try to build your corpus from text files (default).\n")
-        cat("\n")
+        message("")
+        message("The object you've specified as your corpus cannot be used.")
+        message("It should be a list containing particular text samples")
+        message("(vectors containing sequencies of words/n-grams or other features).")
+        message("The samples (elements of the list) should have their names.")
+        message("Alternatively, try to build your corpus from text files (default).\n")
         stop("Wrong corpus format")
-      } 
+      }
   }
 
   # 1st iteration: setting the matrix containing the training set (if applicable)
@@ -490,15 +496,15 @@ for(iteration in 1:2) {
     corpus.of.secondary.set = parsed.corpus
   }
 # attempts at loading the training set and the test set: the loop returns here
-} 
+}
 
 # Two iterations completed, another sanity check should be applied
 if(corpus.exists == FALSE) {
     if(length(corpus.of.primary.set) >1 & length(corpus.of.secondary.set) >1 ) {
-      cat("Two subcorpora loaded successfully.\n")  
+      message("Two subcorpora loaded successfully.")
       corpus.exists = TRUE
     } else {
-      cat("The subcorpora will be loaded from text files...\n")
+      message("The subcorpora will be loaded from text files...")
       corpus.exists = FALSE
     }
 }
@@ -523,10 +529,10 @@ if(corpus.exists == FALSE) {
 
   # Checking whether required files and subdirectories exist
   if(file.exists(training.corpus.dir) == FALSE | file.exists(test.corpus.dir) == FALSE) {
-    cat("\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
-        "Working directory should contain two subdirectories: 
-        \"",training.corpus.dir,"\" and \"",test.corpus.dir,"\"\n",
-        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
+    message("\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
+            "Working directory should contain two subdirectories:
+            \"", training.corpus.dir, "\" and \"", test.corpus.dir, "\"\n",
+            "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
     # back to the original working directory
     setwd(original.path)
     # error message
@@ -534,10 +540,10 @@ if(corpus.exists == FALSE) {
   }
   # Checking if the subdirectories contain any stuff
   if(length(filenames.primary.set) <2 | length(filenames.secondary.set) <2) {
-    cat("\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
-        "Both subdirectories \"",training.corpus.dir,"\" and \"",
-        test.corpus.dir,"\" should contain at least two text samples!\n",
-        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
+    message("\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
+            "Both subdirectories \"", training.corpus.dir, "\" and \"",
+            test.corpus.dir, "\"\nshould contain at least two text samples!\n",
+            "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
     # back to the original working directory
     setwd(original.path)
     # error message
@@ -555,13 +561,13 @@ if(corpus.exists == FALSE) {
                          sample.size = sample.size,
                          sampling = sampling,
                          sampling.with.replacement = sampling.with.replacement,
-                         sample.overlap = sample.overlap, 
+                         sample.overlap = sample.overlap,
                          number.of.samples = number.of.samples,
                          features = analyzed.features,
                          ngram.size = ngram.size)
 
   # loading text files: test set
-  corpus.of.secondary.set = load.corpus.and.parse(files=filenames.secondary.set,
+  corpus.of.secondary.set = load.corpus.and.parse(files = filenames.secondary.set,
                          corpus.dir = test.corpus.dir,
                          encoding = encoding,
                          markup.type = corpus.format,
@@ -571,7 +577,7 @@ if(corpus.exists == FALSE) {
                          sample.size = sample.size,
                          sampling = sampling,
                          sampling.with.replacement = sampling.with.replacement,
-                         sample.overlap = sample.overlap, 
+                         sample.overlap = sample.overlap,
                          number.of.samples = number.of.samples,
                          features = analyzed.features,
                          ngram.size = ngram.size)
@@ -590,28 +596,28 @@ if(corpus.exists == FALSE) {
 if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
 
   # blank line on the screen
-  cat("\n")
+  message("")
 
   # both corpora (training set and test set) shoud contain some texts;
   # if the number of text samples is lower than 2, the script will stop
   if(length(corpus.of.primary.set) < 2 || length(corpus.of.secondary.set) < 1) {
-    cat("\n\n","either the training set or the test set is empty!", "\n\n")
+    message("\n\n", "either the training set or the test set is empty!", "\n")
     stop("corpus error")
   }
 
-  # If an external vector of features (usually: the most frequent words) has not 
-  # been specified (cf. the argument "features"), then we need a list of the most 
-  # frequent words (or n-grams, or anything else) used in the current corpus, 
-  # in descending order, without frequencies (just a list of words/features). 
+  # If an external vector of features (usually: the most frequent words) has not
+  # been specified (cf. the argument "features"), then we need a list of the most
+  # frequent words (or n-grams, or anything else) used in the current corpus,
+  # in descending order, without frequencies (just a list of words/features).
   if (features.exist == TRUE) {
-    cat("\n")
-    cat("using an existing wordlist (vector of features)...\n")
+    message("")
+    message("using an existing wordlist (vector of features)...")
     mfw.list.of.all = features
   } else {
-    # Extracting all the words (features) used in the texts of primary set 
+    # Extracting all the words (features) used in the texts of primary set
     # (or both if "Z-scores all" is set to TRUE)
     wordlist.of.primary.set = c()
-    cat("\n")
+    message("")
     # iterating over the samples stored in corpus.of.primary.set
     for (file in 1 : length(corpus.of.primary.set)) {
       # loading the next sample from the list filenames.primary.set,
@@ -619,35 +625,35 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
       # putting the samples together:
       wordlist.of.primary.set = c(wordlist.of.primary.set, current.text)
       # short message on screen
-      cat(".")
-      if(file/25 == floor(file/25)) { cat("\n")} # a newline every 25th sample
+      message(".", appendLF = FALSE)
+      if(file/25 == floor(file/25)) { message("")} # a newline every 25th sample
     }
     # including words of the secondary set in the reference wordlist (if specified)
       if (reference.wordlist.of.all.samples == TRUE) {
         wordlist.of.secondary.set = c()
-        cat("\n")
+        message("")
         for (file in 1 : length(corpus.of.secondary.set)) {
           # loading the next sample from the list filenames.secondary.set,
           current.text = corpus.of.secondary.set[[file]]
           # putting samples together:
           wordlist.of.secondary.set = c(wordlist.of.secondary.set, current.text)
           # short message on screen
-          cat(".")
-          if(file/25 == floor(file/25)) { cat("\n")} # a newline every 25th sample
+          message(".", appendLF = FALSE)
+          if(file/25 == floor(file/25)) { message("")} # a newline every 25th sample
         }
       } else {
         # otherwise, create an empty vector
         wordlist.of.secondary.set = c()
       }
-      
+
     # Preparing a sorted frequency list of the whole primary set (or both sets).
     # short message
-    cat("\n")
-    cat(length(c(wordlist.of.primary.set,wordlist.of.secondary.set)),"tokens",
-         "will be used to create a list of features\n")
+    message(" ")
+    message(length(c(wordlist.of.primary.set, wordlist.of.secondary.set)), " tokens ",
+         "will be used to create a list of features")
     # the core procedure: frequency list
-    mfw.list.of.all = sort(table(c(wordlist.of.primary.set,wordlist.of.secondary.set)),
-                            decreasing=T)
+    mfw.list.of.all = sort(table(c(wordlist.of.primary.set, wordlist.of.secondary.set)),
+                            decreasing = TRUE)
     # if the whole list is long, then cut off the tail (e.g., > 5000 mfw)
       if (length(mfw.list.of.all) > mfw.list.cutoff) {
         mfw.list.of.all = mfw.list.of.all[1:mfw.list.cutoff]
@@ -659,10 +665,10 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
     # some comments into the file containing wordlist
     cat("# This file contains the words that were used for building the table",
       "# of frequencies. It can be also used for the next tasks, and for this",
-      "# purpose it can be manually revised, edited, deleted, culled, etc.", 
+      "# purpose it can be manually revised, edited, deleted, culled, etc.",
       "# You can either delete unwanted words, or mark them with \"#\"",
       "# -----------------------------------------------------------------------",
-      "", file="wordlist.txt", sep="\n")
+      "", file = "wordlist.txt", sep = "\n")
     # the current wordlist into a file
       # checking if encoding conversion is needed
       if(encoding == "native.enc") {
@@ -671,9 +677,8 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
         data.to.be.saved = iconv(mfw.list.of.all, to=encoding)
       }
   # writing the stuff
-  cat(data.to.be.saved,file="wordlist.txt", sep="\n",append=T)
-      
-    
+  cat(data.to.be.saved, file = "wordlist.txt", sep = "\n", append = TRUE)
+
   }   # <----- conditional expr. if(features.exist == TRUE) terminates here
 
 
@@ -687,14 +692,14 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
 	  if (file.exists("sample_dump_primary_set")){
 		# a dump-dir seems to have been created during a previous run
 		# tmp delete the dump-dir to remove all of its previous contents
-		unlink("sample_dump_primary_set", recursive = TRUE) 
+		unlink("sample_dump_primary_set", recursive = TRUE)
 	  }
 	# (re)create the dump-dir
 	dir.create("sample_dump_primary_set")
     # writing the stuff into files
     setwd("sample_dump_primary_set")
       for(i in names(corpus.of.primary.set)) {
-        cat(corpus.of.primary.set[[i]],file=paste(names(corpus.of.primary.set[i]),".txt",sep=""))
+        cat(corpus.of.primary.set[[i]], file = paste(names(corpus.of.primary.set[i]), ".txt", sep = ""))
       }
     setwd("..")
   }
@@ -703,14 +708,14 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
 	  if (file.exists("sample_dump_secondary_set")){
 		# a dump-dir seems to have been created during a previous run
 		# tmp delete the dump-dir to remove all of its previous contents
-		unlink("sample_dump_secondary_set", recursive = TRUE) 
+		unlink("sample_dump_secondary_set", recursive = TRUE)
 	  }
 	# (re)create the dump-dir
 	dir.create("sample_dump_secondary_set")
     # writing the stuff into files
     setwd("sample_dump_secondary_set")
       for(i in names(corpus.of.secondary.set)) {
-        cat(corpus.of.secondary.set[[i]],file=paste(names(corpus.of.secondary.set[i]),".txt",sep=""))
+        cat(corpus.of.secondary.set[[i]], file = paste(names(corpus.of.secondary.set[i]), ".txt", sep = ""))
       }
     setwd("..")
   }
@@ -722,7 +727,7 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
 
 
   # blank line on the screen
-  cat("\n")
+  message("")
 
 
   # preparing a huge table of all the frequencies for the training set
@@ -739,7 +744,7 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
 
   # writing the frequency tables to text files (they can be re-used!)
   # first, the training set
-      # checking if any re-encoding is needed 
+      # checking if any re-encoding is needed
       if(encoding == "native.enc") {
         data.to.be.saved = t(freq.I.set.0.culling)
       } else {
@@ -751,7 +756,7 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
   write.table(data.to.be.saved, file = "freq_table_primary_set.txt")
 
   # now, the test set
-      # checking if any re-encoding is needed 
+      # checking if any re-encoding is needed
       if(encoding == "native.enc") {
         data.to.be.saved = t(freq.II.set.0.culling)
       } else {
@@ -762,7 +767,7 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
   # writing the stuff
   write.table(data.to.be.saved, file = "freq_table_secondary_set.txt")
 
-  
+
 }
 ###############################################################################
 
@@ -777,12 +782,12 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
 # #################################################
 
 # Finally, we want to save some variable values for later use
-cat("",file="classify_config.txt",append=F)
-var.name <- function(x) { 
-      if(is.character(x)==TRUE) {
-      cat(paste(deparse(substitute(x)),"=\"",x,"\"", sep=""),file="classify_config.txt",sep="\n",append=T)
+cat("", file = "classify_config.txt", append = FALSE)
+var.name <- function(x) {
+      if(is.character(x) == TRUE) {
+      cat(paste(deparse(substitute(x)), " = \"", x, "\"", sep = ""), file = "classify_config.txt", sep = "\n", append = TRUE)
         } else {
-          cat(paste(deparse(substitute(x)),x, sep="="),file="classify_config.txt",sep="\n",append=T) }
+          cat(paste(deparse(substitute(x)), x, sep = " = "), file = "classify_config.txt", sep = "\n", append = TRUE) }
         }
 
  var.name(corpus.format)
@@ -822,10 +827,10 @@ var.name <- function(x) {
  var.name(save.distance.tables)
  var.name(save.analyzed.features)
  var.name(save.analyzed.freqs)
- 
 
- 
- 
+
+
+
 # #################################################
 
 
@@ -840,7 +845,7 @@ var.name <- function(x) {
 
 
 # cleaning the outputfile
-cat("",file=outputfile,append=F)
+cat("", file = outputfile, append = FALSE)
 
 # saving the original mfw.max value in mfw.max.original
 # this is useful for subtitles of bootstrap graphs
@@ -855,17 +860,11 @@ total.no.of.possible.attrib = c()
 
 # retrieving the total number of texts to be "guessed"
 # (anonymous texts and unique authorial samples will not be counted)
-authors.I.set = c(gsub("_.*","",rownames(freq.I.set.0.culling)))
-authors.II.set = c(gsub("_.*","",rownames(freq.II.set.0.culling)))
+authors.I.set = c(gsub("_.*", "", rownames(freq.I.set.0.culling)))
+authors.II.set = c(gsub("_.*", "", rownames(freq.II.set.0.culling)))
 perfect.guessing = length(authors.II.set[authors.II.set %in% authors.I.set])
 
 
-
-#
-# CLASSES should be assigned differently!!!!!!!
-#
-#
-#
 
 
 
@@ -895,7 +894,7 @@ perfect.guessing = length(authors.II.set[authors.II.set %in% authors.I.set])
 # if max value is LOWER than min value, make them equal
   if(culling.max < culling.min) {
   culling.max = culling.min
-  }  
+  }
 # avoiding infinite loops
   if(culling.incr <= 1) {
   culling.incr = 10
@@ -910,44 +909,44 @@ for(j in (culling.min/culling.incr):(culling.max/culling.incr)) {
 
         current.culling = j * culling.incr
 
-        
+
         # applying culling
-        # an additional table composed of relative word frequencies 
+        # an additional table composed of relative word frequencies
         # of joint primary and secondary sets
         if(culling.of.all.samples == FALSE) {
                 # applying the function culling to the I set
-                primary.set = perform.culling(freq.I.set.0.culling,  
+                primary.set = perform.culling(freq.I.set.0.culling,
                                              current.culling)
                 # selecting the same variables from the II set
                 secondary.set = freq.II.set.0.culling[,colnames(primary.set)]
         } else {
                 # combining the two sets
-                freq.table.both.sets = rbind(freq.I.set.0.culling, 
+                freq.table.both.sets = rbind(freq.I.set.0.culling,
                                              freq.II.set.0.culling)
                 # applying the culling function to the combined table
-                freq.table.both.sets = perform.culling(freq.table.both.sets, 
+                freq.table.both.sets = perform.culling(freq.table.both.sets,
                                              current.culling)
                 # split the combined table into two sets again
                 primary.set = freq.table.both.sets[rownames(freq.I.set.0.culling),]
                 secondary.set = freq.table.both.sets[rownames(freq.II.set.0.culling),]
         }
 
-        
+
 
         # additionally, deleting pronouns (if applicable)
         if(delete.pronouns == TRUE) {
                 primary.set = delete.stop.words(primary.set, pronouns)
                 secondary.set = delete.stop.words(secondary.set, pronouns)
         }
-        
+
 
         # optionally, deleting stop words
         if(is.vector(stop.words) == TRUE) {
-                primary.set = delete.stop.words(primary.set, stop.words)        
+                primary.set = delete.stop.words(primary.set, stop.words)
                 secondary.set = delete.stop.words(secondary.set, stop.words)
         }
 
-        
+
 
 
 # #################################################
@@ -959,7 +958,7 @@ for(j in (culling.min/culling.incr):(culling.max/culling.incr)) {
 
 # starting the frequency list at frequency rank set in option start.at above
 
-# TO SAY THE TRUTH, IT CAN BE DONE MUCH EARLIER: at the moment when 
+# TO SAY THE TRUTH, IT CAN BE DONE MUCH EARLIER: at the moment when
 # the frequency list for either I set or both sets is produced,
 # it can be cut and used for building freq. tables
 
@@ -991,17 +990,17 @@ secondary.set = secondary.set[,start.at:length(secondary.set[1,])]
 
 
 
-cat("\n")
-cat("culling @ ", current.culling,"\t","available words ",
-                  length(primary.set[1,]),"\n")
+message("")
+message("culling @ ", current.culling, "\t", "available words ",
+                  length(primary.set[1,]))
 
 
 
 
-                  
 
 
-# an additional table composed of relative word frequencies 
+
+# an additional table composed of relative word frequencies
 # of joint primary and secondary sets
 freq.table.both.sets = rbind(primary.set, secondary.set)
 
@@ -1019,28 +1018,28 @@ freq.table.both.sets = rbind(primary.set, secondary.set)
 if(tolower(classification.method) == "delta") {
         # a short message on the screen:
         if(distance.measure == "delta") {
-                cat("Calculating classic Delta distances... \n")
+                message("Calculating classic Delta distances...")
         }
         if(distance.measure == "argamon") {
-                cat("Calculating Argamon's Delta distances... \n")
+                message("Calculating Argamon's Delta distances...")
         }
         if(distance.measure == "eder") {
-                cat("Calculating Eder's Delta distances... \n")
+                message("Calculating Eder's Delta distances...")
         }
         if(distance.measure == "eder") {
-                cat("Calculating Eder's Simple distances... \n")
+                message("Calculating Eder's Simple distances...")
         }
         if(distance.measure == "manhattan") {
-                cat("Calculating Manhattan distances... \n")
+                message("Calculating Manhattan distances...")
         }
         if(distance.measure == "canberra") {
-                cat("Calculating Canberra distances... \n")
+                message("Calculating Canberra distances...")
         }
         if(distance.measure == "euclidean") {
-                cat("Calculating Euclidean distances... \n")
+                message("Calculating Euclidean distances...")
         }
         if(distance.measure == "cosine") {
-                cat("Calculating Cosine distances... \n")
+                message("Calculating Cosine distances...")
         }
 }
 
@@ -1072,7 +1071,7 @@ if(mfw > length(colnames(freq.table.both.sets)) ) {
 
 
 # the current task (number of MFW currently analyzed) echoed on the screen
-cat(mfw, " ")
+message(mfw, " ", appendLF = FALSE)
 
 
 
@@ -1105,41 +1104,39 @@ cat(mfw, " ")
 
 
 if(tolower(classification.method) == "delta") {
-  classification.results = perform.delta(training.set = primary.set[,1:mfw], 
+  classification.results = perform.delta(training.set = primary.set[,1:mfw],
                                 test.set = secondary.set[,1:mfw],
                                 distance = distance.measure,
                                 z.scores.both.sets = z.scores.of.all.samples)
-#
-# this should be provided by the function perform.delta (value: list of objects)
-#distance.table = "sorry! temporarily out of order"
-#
+  distance.table = attr(classification.results, "distance.table")
+
 }
 
 
 if(tolower(classification.method) == "knn") {
-  classification.results = perform.knn(training.set = primary.set[,1:mfw], 
+  classification.results = perform.knn(training.set = primary.set[,1:mfw],
                                        test.set = secondary.set[,1:mfw],
                                        k.value = k.value)
 }
 
 
 if(tolower(classification.method) == "svm") {
-  classification.results = perform.svm(training.set = primary.set[,1:mfw], 
+  classification.results = perform.svm(training.set = primary.set[,1:mfw],
                                        test.set = secondary.set[,1:mfw])
 }
 
 
 if(tolower(classification.method) == "naivebayes") {
-  classification.results = perform.naivebayes(training.set= primary.set[,1:mfw], 
+  classification.results = perform.naivebayes(training.set= primary.set[,1:mfw],
                                               test.set = secondary.set[,1:mfw])
 }
 
 
 if(tolower(classification.method) == "nsc") {
-  classification.results = perform.nsc(training.set = primary.set[,1:mfw], 
-                                       test.set = secondary.set[,1:mfw])
+  classification.results = perform.nsc(training.set = primary.set[,1:mfw],
+                                       test.set = secondary.set[,1:mfw],
+                                       show.features = show.features)
 }
-
 
 
 
@@ -1151,14 +1148,13 @@ classes.test = gsub("_.*","",rownames(secondary.set))
 
 # returns the ranking of the most likely candidates as a list
 if(final.ranking.of.candidates == TRUE) {
-    cat("\n\n\n",file=outputfile,append=T)
-      misclassified.samples = 
+    cat("\n\n\n", file = outputfile, append = TRUE)
+      misclassified.samples =
                    paste(rownames(secondary.set), "\t-->\t",
                    classification.results)[classes.test!=classification.results]
-      cat(misclassified.samples, file=outputfile, append=T, sep="\n") 
+      cat(misclassified.samples, file = outputfile, append = TRUE, sep = "\n")
       # temporarily (the results should be made available, eventually)
       rm(misclassified.samples)
-#    }
 }
 
 
@@ -1166,17 +1162,17 @@ if(final.ranking.of.candidates == TRUE) {
 
 # returns the number of correct attributions
 if(how.many.correct.attributions == TRUE) {
-    no.of.correct.attrib = sum(as.numeric(classes.test == 
+    no.of.correct.attrib = sum(as.numeric(classes.test ==
                                  classification.results))
-    total.no.of.correct.attrib = 
+    total.no.of.correct.attrib =
          c(total.no.of.correct.attrib, no.of.correct.attrib)
-    total.no.of.possible.attrib = 
+    total.no.of.possible.attrib =
          c(total.no.of.possible.attrib, perfect.guessing)
-    cat("\n",file=outputfile,append=T)
-    cat(mfw, " MFW , culled @ ",current.culling,"%,  ",
-         no.of.correct.attrib," of ", perfect.guessing,"\t(",
-         round(no.of.correct.attrib / perfect.guessing * 100, 1),"%)",
-         "\n",file=outputfile,append=T,sep="")
+    cat("\n", file = outputfile, append = TRUE)
+    cat(mfw, " MFW , culled @ ", current.culling, "%,  ",
+         no.of.correct.attrib, " of ", perfect.guessing, "\t(",
+         round(no.of.correct.attrib / perfect.guessing * 100, 1), "%)",
+         "\n", file = outputfile, append = TRUE, sep = "")
 }
 
 
@@ -1191,13 +1187,13 @@ if(how.many.correct.attributions == TRUE) {
 
 if(cv.folds > 0) {
 
-  cat("\n")
-  cat("cross-validation...\n")
- 
+  message("")
+  message("cross-validation...")
+
 
   #bootstrap.output = "bootstrap_output.txt"
-  # cleaning the bootstrapfile
-  #cat("",file=bootstrap.output,append=F)
+  #cleaning the bootstrapfile
+  #cat("", file = bootstrap.output, append = FALSE)
 
   # creating an empty matrix for the final success scores
   cross.validation.results = c()
@@ -1210,8 +1206,8 @@ if(cv.folds > 0) {
   for(iterations in 1 : cv.folds) {
 
     # an additional table combined of frequencies of set I and II
-    # just for feeding the bootstrap module 
-    freq.table.both.sets.binded = rbind(primary.set[,1:mfw],secondary.set[,1:mfw])
+    # just for feeding the bootstrap module
+    freq.table.both.sets.binded = rbind(primary.set[,1:mfw], secondary.set[,1:mfw])
 
 
     names.of.training.set.orig = rownames(primary.set)
@@ -1219,19 +1215,19 @@ if(cv.folds > 0) {
     classes.test.set = gsub("_.*", "", rownames(secondary.set))
     names.both.sets = rownames(freq.table.both.sets.binded)
     classes.both.sets = c(classes.training.set, classes.test.set)
-    
+
     training.samples = c()
     test.samples = c()
 
-    
+
       # this looks for classes that were not represented so far in I set
       for(i in names(table(classes.training.set)) ) {
         #
         # count the number of samples of class i included originally in I set
         no.of.training.samples = sum(as.numeric(classes.training.set == i))
         # determine the class' name, surround the name with word boundary char
-        class.name = paste("\\b",i,"\\b",sep="")
-        # in both sets, identify the positions of current class' samples 
+        class.name = paste("\\b", i, "\\b", sep = "")
+        # in both sets, identify the positions of current class' samples
         pinpoint.samples = grep(class.name, classes.both.sets)
         # sanity check, just in case
         if(length(pinpoint.samples) > no.of.training.samples) {
@@ -1259,50 +1255,53 @@ if(cv.folds > 0) {
   # establishing the test set
   test.set = freq.table.both.sets.binded[test.samples,]
 
-  
+
  # zscores.training.set = zscores.table.both.sets[training.samples,]
  # zscores.test.set = zscores.table.both.sets[test.samples,]
-    
+
 
   if(tolower(classification.method) == "delta") {
     classification.results = perform.delta(training.set,
-                                   test.set, 
+                                   test.set,
                                    distance = distance.measure,
                                    z.scores.both.sets = z.scores.of.all.samples)
+    distance.table = attr(classification.results, "distance.table")
   }
   if(tolower(classification.method) == "knn") {
-    classification.results = perform.knn(training.set,test.set, k.value)
+    classification.results = perform.knn(training.set, test.set, k.value)
   }
   if(tolower(classification.method) == "svm") {
-    classification.results = perform.svm(training.set,test.set)
+    classification.results = perform.svm(training.set, test.set)
   }
   if(tolower(classification.method) == "nsc") {
-    classification.results = perform.nsc(training.set,test.set)
+    classification.results = perform.nsc(training.set, test.set,
+                                         show.features = show.features)
   }
   if(tolower(classification.method) == "naivebayes") {
-    classification.results = perform.naivebayes(training.set,test.set)
+    classification.results = perform.naivebayes(training.set, test.set)
   }
 
-  
+
+
   # retrieving classes of the new training set
-  classes.training = gsub("_.*","",rownames(training.set))
-  
+  classes.training = gsub("_.*", "", rownames(training.set))
+
   # retrieving classes of the new test set
-  classes.test = gsub("_.*","",rownames(test.set))
+  classes.test = gsub("_.*", "", rownames(test.set))
 
 
-  
+
     # returns the number of correct attributions
     if(how.many.correct.attributions == TRUE) {
-          no.of.correct.attrib = sum(as.numeric(classes.test == 
+          no.of.correct.attrib = sum(as.numeric(classes.test ==
                                      classification.results))
       # getting the max. number of samples that couold be guessed
       perfect.guessing.cv = sum(as.numeric(classes.test %in% classes.training))
-      cat("\n",file=outputfile,append=T)
-      cat(mfw, " MFW , culled @ ",current.culling,"%,  ",
-               no.of.correct.attrib," of ", perfect.guessing.cv,"\t(",
-               round(no.of.correct.attrib / perfect.guessing.cv * 100, 1),"%)",
-               "\n",file=outputfile,append=T,sep="")
+      cat("\n", file = outputfile, append = TRUE)
+      cat(mfw, " MFW , culled @ ", current.culling, "%,  ",
+               no.of.correct.attrib, " of ", perfect.guessing.cv, "\t(",
+               round(no.of.correct.attrib / perfect.guessing.cv * 100, 1), "%)",
+               "\n", file = outputfile, append = TRUE, sep = "")
       # percentage of correct attributions
       success.rate.cv = no.of.correct.attrib / perfect.guessing.cv * 100
       # combining results for k folds
@@ -1311,7 +1310,7 @@ if(cv.folds > 0) {
 
   }
 
-  
+
   cross.validation.results.all = cbind(cross.validation.results.all, cross.validation.results)
   colnames(cross.validation.results.all) = paste(mfw, "@", current.culling, sep="")
 }   # <-- if(cv.folds > 0)
@@ -1334,17 +1333,17 @@ if(exists("cross.validation.results.all")) {
 
 # writing distance table(s) to a file (if an appropriate option has been chosen)
 if(save.distance.tables == TRUE && exists("distance.table") == TRUE) {
-  distance.table.filename = paste("distance_table_",mfw,"mfw_",current.culling,"c.txt",sep="")
+  distance.table.filename = paste("distance_table_", mfw, "mfw_", current.culling, "c.txt", sep = "")
     # checking if encoding conversion is needed
     if(encoding == "native.enc") {
       data.to.be.saved = distance.table
     } else {
       data.to.be.saved = distance.table
-      rownames(data.to.be.saved) = iconv(rownames(data.to.be.saved), to=encoding)
-      colnames(data.to.be.saved) = iconv(colnames(data.to.be.saved), to=encoding)
+      rownames(data.to.be.saved) = iconv(rownames(data.to.be.saved), to = encoding)
+      colnames(data.to.be.saved) = iconv(colnames(data.to.be.saved), to = encoding)
     }
   # writing the stuff
-  write.table(file=distance.table.filename, data.to.be.saved)
+  write.table(file = distance.table.filename, data.to.be.saved)
 }
 
 # writing the words (or features) actually used in the analysis
@@ -1355,12 +1354,12 @@ if(save.analyzed.features == TRUE) {
     if(encoding == "native.enc") {
       data.to.be.saved = features.actually.used
     } else {
-      data.to.be.saved = iconv(features.actually.used, to=encoding)
+      data.to.be.saved = iconv(features.actually.used, to = encoding)
     }
   # writing the stuff
   cat(data.to.be.saved,
-     file=paste("features_analyzed_",mfw,"mfw_",current.culling,"c.txt",sep=""),
-     sep="\n")
+     file = paste("features_analyzed_", mfw, "mfw_", current.culling, "c.txt", sep = ""),
+     sep = "\n")
 }
 
 # writing the frequency table that was actually used in the analysis
@@ -1370,13 +1369,27 @@ if(save.analyzed.freqs == TRUE) {
       data.to.be.saved = t(freq.table.both.sets[,1:mfw])
     } else {
       data.to.be.saved = t(freq.table.both.sets[,1:mfw])
-      rownames(data.to.be.saved) = iconv(rownames(data.to.be.saved), to=encoding)
-      colnames(data.to.be.saved) = iconv(colnames(data.to.be.saved), to=encoding)
+      rownames(data.to.be.saved) = iconv(rownames(data.to.be.saved), to = encoding)
+      colnames(data.to.be.saved) = iconv(colnames(data.to.be.saved), to = encoding)
     }
   # writting the stuff -- the file name will be changed accordingly
   write.table(data.to.be.saved,
-     file=paste("frequencies_analyzed_",mfw,"mfw_",current.culling,"c.txt",sep=""))
+     file = paste("frequencies_analyzed_", mfw, "mfw_", current.culling, "c.txt", sep = ""))
 }
+
+
+
+
+
+
+
+
+
+#######
+####### the features, confusion matrices, etc., should be captured here!!!!!!
+#######
+
+
 
 
 
@@ -1385,7 +1398,7 @@ if(save.analyzed.freqs == TRUE) {
 # #################################################
 
 # blank line on the screen
-cat("\n")
+message("")
 
 
 }    # <-- the main loop for(j) returns here
@@ -1402,27 +1415,27 @@ total.no.of.possible.attrib = sum(total.no.of.possible.attrib)
 # information about the current task into the logfile
 cat("\nGeneral attributive success:  ", total.no.of.correct.attrib, " of ",
            total.no.of.possible.attrib, " (",
-           round(total.no.of.correct.attrib/total.no.of.possible.attrib*100, 1), 
-           "%)\n",file=outputfile,append=T,sep="")
-cat("\nMFWs from ",mfw.min," to ",mfw.max.original,
-                  " @ increment ",mfw.incr,"\nCulling from ",culling.min,
-                  " to ",culling.max," @ increment ",culling.incr,
-                  "\nPronouns deleted: ",delete.pronouns,"\n",
-				  file=outputfile,append=T,sep="")
+           round(total.no.of.correct.attrib/total.no.of.possible.attrib*100, 1),
+           "%)\n", file = outputfile, append = TRUE, sep = "")
+cat("\nMFWs from ", mfw.min, " to ", mfw.max.original,
+                  " @ increment ", mfw.incr, "\nCulling from ", culling.min,
+                  " to ", culling.max, " @ increment ", culling.incr,
+                  "\nPronouns deleted: ", delete.pronouns, "\n",
+				  file = outputfile, append = TRUE, sep = "")
 # additional empty line in outputfile (EOF)
-cat("\n",file=outputfile,append=T)
+cat("\n", file = outputfile, append = TRUE)
 
 
 # the same information (about the current task) on screen
-cat("\nGeneral attributive success:  ", total.no.of.correct.attrib, " of ",
+message("\nGeneral attributive success:  ", total.no.of.correct.attrib, " of ",
            total.no.of.possible.attrib, " (",
-           round(total.no.of.correct.attrib/total.no.of.possible.attrib*100,1), 
-           "%, sd =", round(sd(all.guesses),1),"%)\n")
-cat("\nMFWs from ",mfw.min," to ",mfw.max.original,
-                  " @ increment ",mfw.incr,"\nCulling from ",culling.min,
-                  " to ",culling.max," @ increment ",culling.incr,
-                  "\nPronouns deleted: ",delete.pronouns,"\n",sep="")
-cat("\n")
+           round(total.no.of.correct.attrib/total.no.of.possible.attrib*100,1),
+           "%, sd =", round(sd(all.guesses),1),"%)")
+message("\nMFWs from ", mfw.min, " to ", mfw.max.original,
+                  " @ increment ", mfw.incr, "\nCulling from ", culling.min,
+                  " to ", culling.max, " @ increment ", culling.incr,
+                  "\nPronouns deleted: ", delete.pronouns, sep = "")
+message("")
 
 
 ###########################################################
@@ -1432,9 +1445,9 @@ cat("\n")
 
 # Names of many variables are incredibly unfashionable: they were acceptable
 # in ver. 0.0.1 of the script, which provided just a basic Delta test
-# with no additional options. Since it is quite a lot of work to modernize 
-# the variables' names in the code (and parhaps it is too late now...), 
-# this simple wrappers will rename at least the exported variables:
+# with no additional options. Since it is quite a lot of work to modernize
+# the variables' names in the code (and parhaps it is too late now...),
+# these simple wrappers will rename at least the variables to be exported:
 success.rate = all.guesses
   if(length(success.rate) >1) {
     overall.success.rate = mean(all.guesses)
@@ -1442,9 +1455,12 @@ success.rate = all.guesses
 frequencies.training.set = freq.I.set.0.culling
 frequencies.test.set = freq.II.set.0.culling
 frequencies.both.sets = freq.table.both.sets
-#zscores.both.sets = zscores.table.both.sets
 features.actually.used = colnames(freq.table.both.sets[,1:mfw])
 features = mfw.list.of.all
+
+
+distinctive.features = attr(classification.results, "features")
+
 
 # what about removing some of the variables? (suppose there are thousands
 # of texts and dozens of features, and only 2GB of RAM...)
@@ -1462,8 +1478,7 @@ features = mfw.list.of.all
 
 
 if(exists("misclassified.samples")) {
-  attr(misclassified.samples, "description") = "............"
-#  class(misclassified.samples) = "stylo.data"
+  attr(misclassified.samples, "description") = "texts (samples) that were not correctly classified"
 }
 if(exists("cross.validation.summary") & length(cross.validation.summary) >0 ) {
   attr(cross.validation.summary, "description") = "correctly guessed samples (cross-validation folds)"
@@ -1483,10 +1498,8 @@ if(exists("distance.table")) {
   attr(distance.table, "description") = "final distances between each pair of samples"
   class(distance.table) = "stylo.data"
 }
-if(exists("nsc.distinctive.features")) {
-  attr(nsc.distinctive.features, "description") = "most discriminative features for NSC procedure"
-# this sucks
-#  class(nsc.distinctive.features) = "stylo.data"
+if(exists("distinctive.features") & length(distinctive.features) > 0) {
+  attr(distinctive.features, "description") = "most distinctive features"
 }
 if(exists("frequencies.both.sets")) {
   attr(frequencies.both.sets, "description") = "frequencies of words/features accross the corpus"
@@ -1521,12 +1534,12 @@ results.classify = list()
 variables.to.save = c("misclassified.samples",
                       "success.rate",
                       "overall.success.rate",
-                      "distance.table", 
-                      "nsc.distinctive.features",
+                      "distance.table",
+                      "distinctive.features",
                       "features",
                       "features.actually.used",
                       "zscores.both.sets",
-                      "frequencies.both.sets", 
+                      "frequencies.both.sets",
                       "frequencies.training.set",
                       "cross.validation.summary",
                       "frequencies.test.set")
@@ -1560,8 +1573,6 @@ class(results.classify) = "stylo.results"
 # back to the original working directory
 setwd(original.path)
 
-# return the value of the function 
+# return the value of the function
 return(results.classify)
 }
-
-

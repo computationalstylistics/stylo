@@ -7,7 +7,7 @@ rolling.classify = function(gui = FALSE,
          test.frequencies = NULL,
          training.corpus = NULL,
          test.corpus = NULL,
-         features = NULL, 
+         features = NULL,
          path = NULL,
          slice.size = 5000,
          slice.overlap = 4500,
@@ -55,6 +55,17 @@ if(is.character(path) == TRUE & length(path) > 0) {
   cat("using current directory...\n")
 }
 
+# Choose directory via GUI:
+#
+# Just a few lines that allow users to choose the working directory if working
+# with the GUI.
+
+if(gui == TRUE & is.null(path)){
+  selected.path = tk_choose.dir(caption = "Select your working directory. It should a subdirectory called *corpus* ")
+  setwd(selected.path)
+}
+
+
 
 if(is.character(training.corpus.dir)==FALSE | nchar(training.corpus.dir)==0) {
   training.corpus.dir = "reference_set"
@@ -77,8 +88,8 @@ variables = stylo.default.settings(...)
 if (gui == TRUE) {
       # first, checking if the GUI can be displayed
       # (the conditional expression is stolen form the generic function "menu")
-      if (.Platform$OS.type == "windows" || .Platform$GUI == 
-            "AQUA" || (capabilities("tcltk") && capabilities("X11") && 
+      if (.Platform$OS.type == "windows" || .Platform$GUI ==
+            "AQUA" || (capabilities("tcltk") && capabilities("X11") &&
             suppressWarnings(tcltk::.TkUp))) {
         #variables = gui.classify(...)
         cat("\n")
@@ -202,16 +213,16 @@ if(length(save.plot.custom.height) > 0) {
 # #############################################################################
 
 
-# Given a language option ("English", "Polish", "Latin" etc., as described 
+# Given a language option ("English", "Polish", "Latin" etc., as described
 # above), this procedure selects one of the lists of pronouns
-# If no language was chosen (or if a desired language is not supported, or if 
-# there was a spelling mistake), then the variable will be set to "English". 
+# If no language was chosen (or if a desired language is not supported, or if
+# there was a spelling mistake), then the variable will be set to "English".
 
 pronouns = stylo.pronouns(language=corpus.lang)
 
 
 # Since it it not so easy to perform, say, 17.9 iterations, or analyze
-# 543.3 words, the code below justifies all numerical variables, to prevent 
+# 543.3 words, the code below justifies all numerical variables, to prevent
 # you from your stupid jokes with funny settings. (OK, it is still
 # possible to crash the script but we will not give you a hint)
   mfw.min = round(mfw.min)
@@ -240,7 +251,7 @@ if(number.of.candidates < 1) {
 # the module for loading a corpus from text files;
 # it can be omitted if the frequency table for
 # both training and test sets already exist
-# (then "use.existing.freq.tables" should be set to TRUE 
+# (then "use.existing.freq.tables" should be set to TRUE
 # #################################################
 #
 
@@ -271,8 +282,8 @@ features.exist = FALSE
   # presumably, this is a file name where a list of words is stored
   if(length(features) == 1) {
     # to prevent using non-letter characters (e.g. integers)
-    features = as.character(features) 
-      # does the file exist? 
+    features = as.character(features)
+      # does the file exist?
       if(file.exists(features) == TRUE) {
         # file with a vector of features will be loaded
         cat("\n", "reading a custom set of features from a file...", "\n",sep="")
@@ -287,7 +298,7 @@ features.exist = FALSE
       }
     # selecting the above vector as a valid set of features
     features.exist = TRUE
-  } 
+  }
 ###############################################################################
 
 
@@ -343,7 +354,7 @@ for(iteration in 1:2) {
   # presumably, this is a file name where a table is stored
   if(length(frequencies) == 1) {
     # to prevent using non-letter characters (e.g. integers)
-    frequencies = as.character(frequencies) 
+    frequencies = as.character(frequencies)
       # does the file exist?
       if(file.exists(frequencies) == TRUE) {
         # file with frequencies will be loaded
@@ -356,7 +367,7 @@ for(iteration in 1:2) {
       }
     # selecting the above matrix as a valid corpus
     corpus.exists = TRUE
-  } 
+  }
 
 
 
@@ -408,19 +419,19 @@ for(iteration in 1:2) {
   }
 
 # attempts at loading the training set and the test set: the loop returns here
-} 
+}
 
 # Two iterations completed, another sanity check should be applied
   # First, let's check if the I set was loaded
   if(!exists("freq.I.set.0.culling") & exists("freq.II.set.0.culling")) {
-    cat("Training set is missing, though.\n")  
-    cat("Trying to build both tables from scratch.\n") 
+    cat("Training set is missing, though.\n")
+    cat("Trying to build both tables from scratch.\n")
     corpus.exists = FALSE
   }
   # Secondly, let's check the II set
   if(exists("freq.I.set.0.culling") & !exists("freq.II.set.0.culling")) {
-    cat("Test set is missing, though.\n")  
-    cat("Trying to build both tables from scratch.\n") 
+    cat("Test set is missing, though.\n")
+    cat("Trying to build both tables from scratch.\n")
     corpus.exists = FALSE
   }
 ###############################################################################
@@ -428,8 +439,8 @@ for(iteration in 1:2) {
 
 
 
-# If the tables with frequencies could not loaded so far (for any reason), 
-# try to load an external corpus (R object) passed as an argument 
+# If the tables with frequencies could not loaded so far (for any reason),
+# try to load an external corpus (R object) passed as an argument
 
 ###############################################################################
 # Checking if the argument "training.corpus" and/or "test.corpus" has been used
@@ -464,7 +475,7 @@ for(iteration in 1:2) {
         cat("Alternatively, try to build your corpus from text files (default).\n")
         cat("\n")
         stop("Wrong corpus format")
-      } 
+      }
   }
 
   # 1st iteration: setting the matrix containing the training set (if applicable)
@@ -476,12 +487,12 @@ for(iteration in 1:2) {
     corpus.of.secondary.set = parsed.corpus
   }
 # attempts at loading the training set and the test set: the loop returns here
-} 
+}
 
 # Two iterations completed, another sanity check should be applied
 if(corpus.exists == FALSE) {
     if(length(corpus.of.primary.set) >1 & length(corpus.of.secondary.set) >1 ) {
-      cat("Two subcorpora loaded successfully.\n")  
+      cat("Two subcorpora loaded successfully.\n")
       corpus.exists = TRUE
     } else {
       cat("The subcorpora will be loaded from text files...\n")
@@ -510,7 +521,7 @@ if(corpus.exists == FALSE) {
   # Checking whether required files and subdirectories exist
   if(file.exists(training.corpus.dir) == FALSE | file.exists(test.corpus.dir) == FALSE) {
     cat("\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
-        "Working directory should contain two subdirectories: 
+        "Working directory should contain two subdirectories:
         \"",training.corpus.dir,"\" and \"",test.corpus.dir,"\"\n",
         "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
     # back to the original working directory
@@ -521,7 +532,7 @@ if(corpus.exists == FALSE) {
   # Checking if the subdirectories contain any stuff
   if(length(filenames.primary.set) <2 | length(filenames.secondary.set) >1) {
     cat("\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
-        "The subdirectory \"",training.corpus.dir,"\" should contain at least", 
+        "The subdirectory \"",training.corpus.dir,"\" should contain at least",
         " two text samples; \n\"",
         test.corpus.dir,"\" should contain exactly one sample!\n",
         "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
@@ -607,17 +618,17 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
     stop("corpus error")
   }
 
-  # If an external vector of features (usually: the most frequent words) has not 
-  # been specified (cf. the argument "features"), then we need a list of the most 
-  # frequent words (or n-grams, or anything else) used in the current corpus, 
-  # in descending order, without frequencies (just a list of words/features). 
+  # If an external vector of features (usually: the most frequent words) has not
+  # been specified (cf. the argument "features"), then we need a list of the most
+  # frequent words (or n-grams, or anything else) used in the current corpus,
+  # in descending order, without frequencies (just a list of words/features).
   if (features.exist == TRUE) {
     cat("\n")
     cat("using an existing wordlist (vector of features)...\n")
     # just to say something
     features = features
   } else {
-    # Extracting all the words (features) used in the texts of primary set 
+    # Extracting all the words (features) used in the texts of primary set
     # (or both if "Z-scores all" is set to TRUE)
     wordlist.of.primary.set = c()
     cat("\n")
@@ -648,7 +659,7 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
         # otherwise, create an empty vector
         wordlist.of.secondary.set = c()
       }
-      
+
     # Preparing a sorted frequency list of the whole primary set (or both sets).
     # short message
     cat("\n")
@@ -668,7 +679,7 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
     # some comments into the file containing wordlist
     cat("# This file contains the words that were used for building the table",
       "# of frequencies. It can be also used for the next tasks, and for this",
-      "# purpose it can be manually revised, edited, deleted, culled, etc.", 
+      "# purpose it can be manually revised, edited, deleted, culled, etc.",
       "# You can either delete unwanted words, or mark them with \"#\"",
       "# -----------------------------------------------------------------------",
       "", file="wordlist.txt", sep="\n")
@@ -681,8 +692,8 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
       }
   # writing the stuff
   cat(data.to.be.saved,file="wordlist.txt", sep="\n",append=T)
-      
-    
+
+
   }   # <----- conditional expr. if(features.exist == TRUE) terminates here
 
 
@@ -697,7 +708,7 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
 	  if (file.exists("sample_dump_primary_set")){
 		# a dump-dir seems to have been created during a previous run
 		# tmp delete the dump-dir to remove all of its previous contents
-		unlink("sample_dump_primary_set", recursive = TRUE) 
+		unlink("sample_dump_primary_set", recursive = TRUE)
 	  }
 	# (re)create the dump-dir
 	dir.create("sample_dump_primary_set")
@@ -713,7 +724,7 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
 	  if (file.exists("sample_dump_secondary_set")){
 		# a dump-dir seems to have been created during a previous run
 		# tmp delete the dump-dir to remove all of its previous contents
-		unlink("sample_dump_secondary_set", recursive = TRUE) 
+		unlink("sample_dump_secondary_set", recursive = TRUE)
 	  }
 	# (re)create the dump-dir
 	dir.create("sample_dump_secondary_set")
@@ -749,7 +760,7 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
 
   # writing the frequency tables to text files (they can be re-used!)
   # first, the training set
-      # checking if any re-encoding is needed 
+      # checking if any re-encoding is needed
       if(encoding == "native.enc") {
         data.to.be.saved = t(freq.I.set.0.culling)
       } else {
@@ -761,7 +772,7 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
   write.table(data.to.be.saved, file = "freq_table_reference_set.txt")
 
   # now, the test set
-      # checking if any re-encoding is needed 
+      # checking if any re-encoding is needed
       if(encoding == "native.enc") {
         data.to.be.saved = t(freq.II.set.0.culling)
       } else {
@@ -772,7 +783,7 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
   # writing the stuff
   write.table(data.to.be.saved, file = "freq_table_sliced_sample.txt")
 
-  
+
 }
 ###############################################################################
 
@@ -788,7 +799,7 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
 
 
         # applying culling
-        # an additional table composed of relative word frequencies 
+        # an additional table composed of relative word frequencies
         # of joint primary and secondary sets
         if(culling.of.all.samples == FALSE) {
                 # applying the function culling to the I set
@@ -797,7 +808,7 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
                 secondary.set = freq.II.set.0.culling[,colnames(primary.set)]
         } else {
                 # combining the two sets
-                freq.table.both.sets = rbind(freq.I.set.0.culling, 
+                freq.table.both.sets = rbind(freq.I.set.0.culling,
                                              freq.II.set.0.culling)
                 # applying the culling function to the combined table
                 freq.table.both.sets = perform.culling(freq.table.both.sets, culling)
@@ -806,18 +817,18 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
                 secondary.set = freq.table.both.sets[rownames(freq.II.set.0.culling),]
         }
 
-        
+
 
         # additionally, deleting pronouns (if applicable)
         if(delete.pronouns == TRUE) {
                 primary.set = delete.stop.words(primary.set, pronouns)
                 secondary.set = delete.stop.words(secondary.set, pronouns)
         }
-        
+
 
         # optionally, deleting stop words
         if(is.vector(stop.words) == TRUE) {
-                primary.set = delete.stop.words(primary.set, stop.words)        
+                primary.set = delete.stop.words(primary.set, stop.words)
                 secondary.set = delete.stop.words(secondary.set, stop.words)
         }
 
@@ -844,7 +855,7 @@ test.set = secondary.set[,start.at:mfw]
 # classification
 
 if(tolower(classification.method) == "delta") {
-  classification.results = perform.delta(training.set, test.set, 
+  classification.results = perform.delta(training.set, test.set,
                                 distance = distance.measure,
                                 z.scores.both.sets = z.scores.of.all.samples)
   ylabel = "Delta classification"
@@ -856,7 +867,7 @@ if(tolower(classification.method) == "svm") {
 }
 
 if(tolower(classification.method) == "nsc") {
-  classification.results = perform.nsc(training.set, test.set, 
+  classification.results = perform.nsc(training.set, test.set,
                                        show.features = show.features)
   ylabel = "NSC classification"
 }
@@ -879,8 +890,8 @@ if(tolower(classification.method) == "naivebayes") {
 # 2nd: (slice.size / 2) + (slice.size - slice.overlap)
 # 3rd: (slice.size / 2) + (slice.size - slice.overlap) + (slice.size - slice.overlap)
 # Nth: (slice.size / 2) + ((slice.size - slice.overlap) * (N - 1))
-names(classification.results) =  c(round(slice.size/2) + 
-                                    ((slice.size - slice.overlap) * 
+names(classification.results) =  c(round(slice.size/2) +
+                                    ((slice.size - slice.overlap) *
                                     (1:length(names(classification.results)) -1)) )
 #
 
@@ -928,7 +939,7 @@ entire.sample.length = (slice.size - slice.overlap) * length(classification.resu
   }
 
 
-# size of the assessed dataset (in tokens) + 10% 
+# size of the assessed dataset (in tokens) + 10%
 sample.length.with.margin = entire.sample.length + entire.sample.length * 0.1
 
 
@@ -939,13 +950,13 @@ sample.length.with.margin = entire.sample.length + entire.sample.length * 0.1
 
 
 
-plot.current.task = function(){ 
+plot.current.task = function(){
         # starting an empty plot
-        plot(NULL, xlim = c(0, sample.length.with.margin), ylim=c(0,1), type="n", 
+        plot(NULL, xlim = c(0, sample.length.with.margin), ylim=c(0,1), type="n",
              axes=FALSE, ylab=ylabel, xlab="story development (in words)")
         # adding an axis at the bottom
         axis(1, las=0)
-        
+
         # adding vertical lines for each "xmilestone" string included in tested sample
         if(length(milestone.points) > 0){
                 if(length(milestone.labels) == 0) {
@@ -958,73 +969,73 @@ plot.current.task = function(){
                     segments(milestone.points,0.62,milestone.points,0.8, lty=3)
                 } else {
                     segments(milestone.points,0.47,milestone.points,0.8, lty=3)
-                }         
+                }
                 segments(milestone.points,-0.1,milestone.points,0.1, lty=3)
                 text(milestone.points, 0.85, labels=identifiers, cex=0.7, srt=90, adj=c(0,1))
         }
-        
+
         # position of the gray rectangle that shows the slice size
         x = entire.sample.length-10*slice.size
-        
+
         # drawing a rectangle; its length depending on the number of stripes
         if(classification.method == "delta" & length(attr(classification.results, "rankings")[1,]) > 2) {
             rect(x, c(-0.1,0.62), x+slice.size, c(0.13,1), border=NA, col=rgb(0.4,0.4,0.4,0.3))
         } else {
             rect(x, c(-0.1,0.47), x+slice.size, c(0.13,1), border=NA, col=rgb(0.4,0.4,0.4,0.3))
         }
-        
+
         # adding arrows to show the slice size
         arrows(x, 0.95, x+slice.size, 0.95, length=0.05, code=3)
         # depending on relative position of the rectangle, adding a label either
         # on its right, or on the left side
         if(x < entire.sample.length/2) {
-            text(x+slice.size, 0.95, paste(" ", slice.size, "words  "), cex=0.75, adj=c(0,0.5)) 
+            text(x+slice.size, 0.95, paste(" ", slice.size, "words  "), cex=0.75, adj=c(0,0.5))
         } else {
             text(x, 0.95, paste(" ", slice.size, "words  "), cex=0.75, adj=c(1,0.5))
         }
-        
-        
+
+
         # using a very nice function rle() for identifying sequences of equal values
         end.segment = as.numeric(names(rle(first.choice)$values)) + (slice.size / 2) - (slice.overlap / 2)
-        # replacing the last element with the text length 
+        # replacing the last element with the text length
         end.segment[length(end.segment)] = entire.sample.length
         #zero.point = (slice.size / 2) - (slice.overlap / 2)
         zero.point = 0
         # use the final points, but get rid of the last one and add a zero.point at the front
         start.segment = c(zero.point, end.segment[1:(length(end.segment)-1)])
-        
-        
-        
+
+
+
         # additional identifier for every single sample
         if(add.ticks == TRUE) {
           segments(as.numeric(names(classification.results)),0.14,as.numeric(names(classification.results)),0.12,
           col=colors.first.choice[classification.results] )
         }
-        
-        
-        
+
+
+
         # strip I
-        
+
         # identifying points where the style changes
         style.change.points = end.segment[1:(length(end.segment)-1)]
         # adding lines at each style break point
         segments(style.change.points,0.14,style.change.points,0)
         # drawing the strip: a sequence of colored rectangles
         rect(start.segment,0.15,end.segment,0.3,border=NA, col=colors.first.choice[rle(first.choice)$values])
-        
-        
-        
+
+
+
         # strip II
-        
+
         end.segment = as.numeric(names(rle(second.choice)$values)) + (slice.size / 2) - (slice.overlap / 2)
         end.segment[length(end.segment)] = entire.sample.length
         zero.point = 0
         start.segment = c(zero.point, end.segment[1:(length(end.segment)-1)])
         # drawing the strip: a sequence of colored rectangles
         rect(start.segment,0.31,end.segment,0.45,border=NA, col=colors.second.choice[rle(second.choice)$values])
-        
-        
-        
+
+
+
         # strip III (for delta)
         if(classification.method == "delta" && length(attr(classification.results, "rankings")[1,]) > 2) {
                 end.segment = as.numeric(names(rle(third.choice)$values)) + (slice.size / 2) - (slice.overlap / 2)
@@ -1034,24 +1045,24 @@ plot.current.task = function(){
                 # drawing the strip: a sequence of colored rectangles
                 rect(start.segment,0.46,end.segment,0.6,border=NA, col=colors.third.choice[rle(third.choice)$values])
         }
-        
-        
-        
+
+
+
         if(classification.method == "svm" || classification.method == "nsc") {
-                
+
                 scores.raw = attr(classification.results, "scores")
                 rownames(scores.raw) = names(classification.results)
                 y = round(scores.raw, 1)
-                
+
                 # adjusting the svm decision values to the current scale {0,1}
                 if(classification.method == "svm") {
-                        y = (y + 1) / 2 
+                        y = (y + 1) / 2
                         y[y < 0.1] = 0
                         y[y > 1] = 1
                 }
-                
+
                 # 1st candidate:
-                
+
                 end.segment = as.numeric(names(rle(y[,1])$values)) + (slice.size / 2) - (slice.size / 2)
                 end.segment[length(end.segment)] = entire.sample.length
                 zero.point = 0
@@ -1059,35 +1070,35 @@ plot.current.task = function(){
                 # the area to be masked by a white rectangle, scaled to the stripe width
                 masking.range = (1 - rle(y[,1])$values) * 0.15
                 rect(start.segment,0.15,end.segment,masking.range+0.15,border=NA, col="white")
-                
+
                 # 2nd candidate:
-                
+
                 end.segment = as.numeric(names(rle(y[,2])$values)) + (slice.size / 2) - (slice.size / 2)
                 end.segment[length(end.segment)] = entire.sample.length
                 zero.point = 0
                 start.segment = c(zero.point, end.segment[1:(length(end.segment)-1)])
                 masking.range = (1 - rle(y[,2])$values) * 0.15
                 rect(start.segment,0.46,end.segment,0.46-masking.range,border=NA,col="white")
-                
+
         }
-        
-        
+
+
         # adding two vertical lines at the beginning and at the end
         abline(v=0, lty=2)
         abline(v=entire.sample.length, lty=2)
-        
-        
+
+
         # adding an optional legend on the right side of the plot
         if(plot.legend == TRUE) {
                 legend(x = entire.sample.length, y = 0.95,
-                       legend = names(colors.first.choice), 
+                       legend = names(colors.first.choice),
                        col = colors.first.choice,
                        bty = "n",
                        cex=0.75,
                        lwd = 5)
         }
-        
-        
+
+
         # adding optional ranking hints
         if(classification.method == "delta" && plot.legend == TRUE) {
                 text(0, 0.225, expression(1^ st), adj = c(1.8,0.5))
@@ -1108,12 +1119,12 @@ if(classification.method == "delta") {
 
 
 # check if a custom filename has been set
-if(is.character(custom.graph.filename) == TRUE & 
+if(is.character(custom.graph.filename) == TRUE &
          length(custom.graph.filename) > 0) {
     # if a custom file name exists, then use it
     graph.filename = custom.graph.filename
 } else {
-  graph.filename = paste("rolling-", class.method, "_", mfw, "-features_", 
+  graph.filename = paste("rolling-", class.method, "_", mfw, "-features_",
                          slice.size, "-per-slice", sep="")
 }
 
@@ -1132,7 +1143,7 @@ if(is.character(custom.graph.filename) == TRUE &
     dev.off()
     }
   if(write.jpg.file == TRUE) {
-    jpeg(filename = paste(graph.filename, ".jpg", sep=""), 
+    jpeg(filename = paste(graph.filename, ".jpg", sep=""),
             width=plot.custom.width,height=plot.custom.height,
             units="in",res=300,pointsize=plot.font.size)
     plot.current.task()
@@ -1146,7 +1157,7 @@ if(is.character(custom.graph.filename) == TRUE &
     dev.off()
     }
   if(write.png.file == TRUE) {
-    png(filename = paste(graph.filename, ".png", sep=""), 
+    png(filename = paste(graph.filename, ".png", sep=""),
             width=plot.custom.width,height=plot.custom.height,
             units="in",res=300,pointsize=plot.font.size)
     plot.current.task()
@@ -1253,7 +1264,7 @@ class(results.rolling.classify) = "stylo.results"
 # back to the original working directory
 setwd(original.path)
 
-# return the value of the function 
+# return the value of the function
 return(results.rolling.classify)
 
 }

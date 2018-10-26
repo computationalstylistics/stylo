@@ -15,7 +15,10 @@ txt.to.words.ext(input.text, language = "English", splitting.rule = NULL,
   \item{language}{an optional argument specifying the language of the texts 
     analyzed. Values that will affect the function's output are: 
     \code{English.contr}, \code{English.all}, \code{Latin.corr} (their 
-    meaning is explained below). The default value is \code{English}.}
+    meaning is explained below), \code{JCK} for Japanese, Chinese and Korean,
+    as well as \code{other} for a variety of non-Latin scripts, including 
+    Cyryllic, Greek, Arabic, Hebrew, Coptic, Georgian etc. The default 
+    value is \code{English}.}
   \item{splitting.rule}{if you are not satisfied with the default language
     settings (or your input string of characters is not a regular text,
     but a sequence of, say, dance movements represented using symbolic signs),
@@ -23,7 +26,7 @@ txt.to.words.ext(input.text, language = "English", splitting.rule = NULL,
     option will overwrite the above language settings. For further details,
     refer to \code{help(txt.to.words)}.}
   \item{preserve.case}{Whether or not to lowercase all character in the corpus 
-    (default = F).}
+    (default = FALSE).}
 }
 \details{
 Function for splitting a given input text into single words (chains 
@@ -41,7 +44,7 @@ option \code{preserve.case} lets you specify whether you wish to lowercase all
 characters in the corpus.
 }
 \author{
-Maciej Eder, Jan Rybicki, Mike Kestemont
+Maciej Eder, Mike Kestemont
 }
 \seealso{
 \code{\link{txt.to.words}}, \code{\link{txt.to.features}},  

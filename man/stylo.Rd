@@ -57,7 +57,7 @@ stylo(gui = TRUE, frequencies = NULL, parsed.corpus = NULL,
     loaded into, say, Gephi.}
 }
 \details{
-If no additional argument is passed, then the functions tries to load
+If no additional argument is passed, then the function tries to load
 text files from the default subdirectory \code{corpus}. 
 There are a lot of additional options that should be passed to this
 function; they are all loaded when \code{stylo.default.settings} is 
@@ -72,12 +72,12 @@ options have been chosen, the function produces a number of files containing
 results, plots, tables of distances, etc.
 }
 \references{
-Eder, M. Kestemont, M. and Rybicki, J. (2013). Stylometry with R:
-    a suite of tools. In: "Digital Humanities 2013: Conference Abstracts". 
-    University of Nebraska-Lincoln, Lincoln, NE, pp. 487-89.
+Eder, M., Rybicki, J. and Kestemont, M. (2016). Stylometry with R: a package 
+    for computational text analysis. "R Journal", 8(1): 107-21.
     
-Eder, M. (forthcoming). Visualization in stylometry: some problems and 
-    solutions.
+Eder, M. (2017). Visualization in stylometry: cluster analysis using networks. 
+    "Digital Scholarship in the Humanities", 32(1): 50-64.
+
 }
 
 \author{Maciej Eder, Jan Rybicki, Mike Kestemont}

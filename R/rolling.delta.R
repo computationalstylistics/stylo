@@ -30,6 +30,15 @@ if(is.character(path) == TRUE & length(path) > 0) {
 cat("using current directory...\n")
 }
 
+# Choose directory via GUI:
+#
+# Just a few lines that allow users to choose the working directory if working
+# with the GUI.
+
+if(gui == TRUE & is.null(path)){
+  selected.path = tk_choose.dir(caption = "Select your working directory. It should a subdirectory called *corpus* ")
+  setwd(selected.path)
+}
 
 
 
@@ -54,7 +63,7 @@ col11="purple"
 col12="orange"
 
 # ############################################################################
-# 
+#
 # ver. 0.0.8, 2013/05/27 --> script does not depend on operating system
 # ver. 0.0.4, 2012/10/08 --> added option to save image files
 # ver. 0.0.3, 2012/10/05 --> bug fixes
@@ -72,8 +81,8 @@ col12="orange"
 # If you wish to use a simple yet effective graphical interface (GUI),
 # just set the following option to TRUE, otherwise switch this option to FALSE
 # and edit manually the rest of variables (see below).
-# If you switch this option on, the values indicated in the following sections 
-# will serve as default for the GUI for the first run of the script on a corpus. 
+# If you switch this option on, the values indicated in the following sections
+# will serve as default for the GUI for the first run of the script on a corpus.
 # In the subsequent runs, last values will appear as default in the GUI.
 
 interactive.mode.with.GUI = TRUE
@@ -97,9 +106,9 @@ text.slice.stepsize = 1000 # # expressed in words, also if you're using characte
 # "plain", "xml", "xml.drama", "xml.notitles", "html"
 corpus.format = "plain"
 
-# how many MFW ("Most frequent Words") should be taken into analysis 
+# how many MFW ("Most frequent Words") should be taken into analysis
 # start.at option enables skipping top frequency words: you should
-# indicate the desired start position of your list (in most cases you will 
+# indicate the desired start position of your list (in most cases you will
 # probably prefer setting it to 1, the rank of the single most frequent word,
 # so that no words are skipped at the top of the frequency spectrum).
 
@@ -107,11 +116,11 @@ start.at = 1
 mfw.max = 1000
 
 
-# culling rate specifies the percentage of texts in a corpus in which a given word 
-# must be found in order to be included in the analysis. Thus, a 100% culling 
-# rate limits the analysis to words that appear at least once in every text 
-# in the corpus; at a 50% culling rate, a word is included into the analysis 
-# when it appears in at least half of the texts in the corpus; a 0% culling 
+# culling rate specifies the percentage of texts in a corpus in which a given word
+# must be found in order to be included in the analysis. Thus, a 100% culling
+# rate limits the analysis to words that appear at least once in every text
+# in the corpus; at a 50% culling rate, a word is included into the analysis
+# when it appears in at least half of the texts in the corpus; a 0% culling
 # rate (or no culling) means that no words are omitted.
 
 culling = 100
@@ -137,12 +146,12 @@ corpus.lang = "English.all"
 # It has been argued, however, that other features are also worth considering,
 # especially word and/or character n-grams. The general concept of n-grams
 # is to divide a string of single words/characters into a sequence of n
-# elements. Given a sample sentence "This is a simple example", the character 
+# elements. Given a sample sentence "This is a simple example", the character
 # 2-grams are as follows: "th", "hi", "is", "s ", " i", "is", "s ", " a", "a ",
 # " s", "si", "im", "mp", etc. The same sentence split into word 2-grams:
 # "this is", "is a", "a simple", "simple sentence".
 # Another question is whether it really increases the accuracy of attribution;
-# further reading: Eder, M. (2011). Style-markers in authorship attribution: 
+# further reading: Eder, M. (2011). Style-markers in authorship attribution:
 # A cross-language study of the authorial fingerprint. "Studies in Polish
 # Linguistics" 6: 101-16.
 # Two types of n-grams are available: characters (option "c"), and words ("w").
@@ -158,10 +167,10 @@ ngram.size = 1
 # Although this choice is not easy, some of the following measures
 # seem to be more suitable for linguistic purposes than others.
 # On theoretical grounds, Euclidean Distance and Manhattan
-# Distance should be avoided in stylometry. Canberra Distance is quite 
-# troublesome but effective e.g. for Latin (it should be combined with 
-# careful culling settings and a limited number of MFW taken into analysis). 
-# For English, usually Classic Delta is a good choice. A theoretical 
+# Distance should be avoided in stylometry. Canberra Distance is quite
+# troublesome but effective e.g. for Latin (it should be combined with
+# careful culling settings and a limited number of MFW taken into analysis).
+# For English, usually Classic Delta is a good choice. A theoretical
 # explanation of the measures implemented in this script is pending.
 #
 # The available distance measures (choose ONE) are as follows:
@@ -180,7 +189,7 @@ distance.measure = "CD"
 
 # Do you want to display the graph on the screen?
 # Do you want to write the graph directly to a graphics file? Which format?
-# You can display the graph on the screen AND write to a file (the latter 
+# You can display the graph on the screen AND write to a file (the latter
 # will be done with much better quality).
 
 display.on.screen = FALSE
@@ -195,7 +204,7 @@ write.png.file = TRUE
 
 
 # Usually, it is recommended to cut off the tail of the word-list;
-# if you do not want to cut the list, then the variable may be set to an 
+# if you do not want to cut the list, then the variable may be set to an
 # absurdly big number, or to "mfw.list.cutoff = mfw.list.of.all"
 # (and then you are advised to use a fast computer).
 
@@ -206,96 +215,96 @@ mfw.list.cutoff = 5000
 # * what are the selection criteria used here? Personal, possessive, ...? *
 
   # English
-  eng.pronouns = c("he", "her", "hers", "herself", "him", "himself", "his", 
-    "i", "me", "mine", "my", "myself", "our", "ours", "ourselves", "she", 
-    "thee", "their", "them", "themselves", "they", "thou", "thy", "thyself", 
+  eng.pronouns = c("he", "her", "hers", "herself", "him", "himself", "his",
+    "i", "me", "mine", "my", "myself", "our", "ours", "ourselves", "she",
+    "thee", "their", "them", "themselves", "they", "thou", "thy", "thyself",
     "us", "we", "ye", "you", "your", "yours", "yourself")
   # Latin
-  lat.pronouns = c("ea", "eae", "eam", "earum", "eas", "ego", "ei", "eis", 
-    "eius", "eo", "eorum", "eos", "eum", "id", "illa", "illae", "illam", 
-    "illarum", "illas", "ille", "illi", "illis", "illius", "illo", "illorum", 
-    "illos", "illud", "illum", "is", "me", "mea", "meae", "meam", "mearum", 
-    "meas", "mei", "meis", "meo", "meos", "meorum", "meum", "meus", "mihi", 
-    "nobis", "nos", "noster", "nostra", "nostrae", "nostram", "nostrarum", 
-    "nostras", "nostri", "nostris", "nostro", "nostros", "nostrorum", 
-    "nostrum", "sua", "suae", "suam", "suarum", "suas", "sui", "suis", "suo", 
-    "suos", "suorum", "suum", "suus", "te", "tibi", "tu", "tua", "tuae", 
-    "tuam", "tuarum", "tuas", "tui", "tuis", "tuo", "tuos", "tuorum", "tuum", 
-    "tuus", "vester", "vestra", "vestrae", "vestram", "vestrarum", "vestras", 
-    "vestri", "vestris", "vestro", "vestros", "vestrorum", "vestrum", "vobis", 
+  lat.pronouns = c("ea", "eae", "eam", "earum", "eas", "ego", "ei", "eis",
+    "eius", "eo", "eorum", "eos", "eum", "id", "illa", "illae", "illam",
+    "illarum", "illas", "ille", "illi", "illis", "illius", "illo", "illorum",
+    "illos", "illud", "illum", "is", "me", "mea", "meae", "meam", "mearum",
+    "meas", "mei", "meis", "meo", "meos", "meorum", "meum", "meus", "mihi",
+    "nobis", "nos", "noster", "nostra", "nostrae", "nostram", "nostrarum",
+    "nostras", "nostri", "nostris", "nostro", "nostros", "nostrorum",
+    "nostrum", "sua", "suae", "suam", "suarum", "suas", "sui", "suis", "suo",
+    "suos", "suorum", "suum", "suus", "te", "tibi", "tu", "tua", "tuae",
+    "tuam", "tuarum", "tuas", "tui", "tuis", "tuo", "tuos", "tuorum", "tuum",
+    "tuus", "vester", "vestra", "vestrae", "vestram", "vestrarum", "vestras",
+    "vestri", "vestris", "vestro", "vestros", "vestrorum", "vestrum", "vobis",
     "vos")
   # French
-  fra.pronouns = c("je", "me", "moi", "tu", "te", "toi", "il", "elle", "le", 
-    "la", "lui", "se", "lui", "elle", "soi", "nous", "vous", "ils", "elles", 
+  fra.pronouns = c("je", "me", "moi", "tu", "te", "toi", "il", "elle", "le",
+    "la", "lui", "se", "lui", "elle", "soi", "nous", "vous", "ils", "elles",
     "les", "leur", "se", "eux", "elles", "soi")
   # German
-  ger.pronouns = c("ich", "mich", "mir", "mein", "meine", "meiner", "meines", 
-    "du", "dich", "dir", "dein", "deine", "deiner", "deines", "er", "sich", 
-    "ihr", "ihrer", "ihn", "ihnen", "sein", "seiner", "seines", "seine", 
+  ger.pronouns = c("ich", "mich", "mir", "mein", "meine", "meiner", "meines",
+    "du", "dich", "dir", "dein", "deine", "deiner", "deines", "er", "sich",
+    "ihr", "ihrer", "ihn", "ihnen", "sein", "seiner", "seines", "seine",
     "sie", "wir", "uns", "unser", "unsere", "euch", "eure", "euer")
   # Italian
-  ita.pronouns = c("ci", "gli", "io", "la", "le", "lei", "li", "loro", "lo", 
-    "lui", "me", "mi", "noi", "si", "te", "ti", "tu", "vi", "voi", "egli", 
-    "ella", "esso", "essa", "essi", "esse", "mio", "mia", "miei", "mie", 
-    "tuo", "tua", "tuoi", "tue", "suo", "sua", "suoi", "sue", "nostro", 
-    "nostra", "nostri", "nostre", "vostro", "vostra", "vostri", "vostre", 
+  ita.pronouns = c("ci", "gli", "io", "la", "le", "lei", "li", "loro", "lo",
+    "lui", "me", "mi", "noi", "si", "te", "ti", "tu", "vi", "voi", "egli",
+    "ella", "esso", "essa", "essi", "esse", "mio", "mia", "miei", "mie",
+    "tuo", "tua", "tuoi", "tue", "suo", "sua", "suoi", "sue", "nostro",
+    "nostra", "nostri", "nostre", "vostro", "vostra", "vostri", "vostre",
     "loro", "loro", "loro", "loro")
   # Polish
-  pol.pronouns = c("ci", "ciebie", "ci\304\231", "go", "ich", "im", "ja", 
-    "j\304\205", "je", "jego", "jej", "jemu", "ma", "m\304\205", "me", "mego", 
-    "mej", "memu", "mi", "mn\304\205", "mnie", "moi", "moich", "moim", 
-    "moimi", "moja", "moj\304\205", "moje", "mojego", "mojej", "mojemu", 
-    "m\303\263j", "mu", "my", "mych", "mym", "mymi", "nam", "nami", "nas", 
-    "ni\304\205", "nich", "nie", "niego", "niej", "niemu", "nim", "nimi", 
-    "on", "ona", "one", "oni", "ono", "swa", "sw\304\205", "swe", "swego", 
-    "swej", "swemu", "swoi", "swoich", "swoim", "swoimi", "swoja", 
-    "swoj\304\205", "swoje", "swojego", "swojej", "swojemu", "sw\303\263j", 
-    "swych", "swym", "swymi", "tob\304\205", "tobie", "twa", "tw\304\205", 
-    "twe", "twego", "twej", "twemu", "twoi", "twoich", "twoim", "twoimi", 
-    "twoja", "twoj\304\205", "twoje", "twojego", "twojej", "twojemu", 
-    "tw\303\263j", "twych", "twym", "twymi", "ty", "wam", "wami", "was", 
-    "wy", "wasz", "wasza", "wasze", "waszym", "waszymi", "waszych", 
+  pol.pronouns = c("ci", "ciebie", "ci\304\231", "go", "ich", "im", "ja",
+    "j\304\205", "je", "jego", "jej", "jemu", "ma", "m\304\205", "me", "mego",
+    "mej", "memu", "mi", "mn\304\205", "mnie", "moi", "moich", "moim",
+    "moimi", "moja", "moj\304\205", "moje", "mojego", "mojej", "mojemu",
+    "m\303\263j", "mu", "my", "mych", "mym", "mymi", "nam", "nami", "nas",
+    "ni\304\205", "nich", "nie", "niego", "niej", "niemu", "nim", "nimi",
+    "on", "ona", "one", "oni", "ono", "swa", "sw\304\205", "swe", "swego",
+    "swej", "swemu", "swoi", "swoich", "swoim", "swoimi", "swoja",
+    "swoj\304\205", "swoje", "swojego", "swojej", "swojemu", "sw\303\263j",
+    "swych", "swym", "swymi", "tob\304\205", "tobie", "twa", "tw\304\205",
+    "twe", "twego", "twej", "twemu", "twoi", "twoich", "twoim", "twoimi",
+    "twoja", "twoj\304\205", "twoje", "twojego", "twojej", "twojemu",
+    "tw\303\263j", "twych", "twym", "twymi", "ty", "wam", "wami", "was",
+    "wy", "wasz", "wasza", "wasze", "waszym", "waszymi", "waszych",
     "waszego", "waszej", "wasz\304\205")
   # Hungarian
-  hun.pronouns = c("annak", "az", "azzal", "bele", "bel\303\251", 
-    "bel\303\251d", "bel\303\251je", "bel\303\251j\303\274k", "bel\303\251m", 
-    "bel\303\251nk", "bel\303\251tek", "bel\303\266le", "bel\305\221led", 
-    "bel\305\221lem", "bel\305\221letek", "bel\305\221l\303\274k", 
-    "bel\305\221l\303\274nk", "benne", "benned", "bennem", "bennetek", 
-    "benn\303\274k", "benn\303\274nk", "\303\251n", "ennek", "eny\303\251im", 
-    "eny\303\251m", "eny\303\251mek", "\303\251rte", "\303\251rted", 
-    "\303\251rtem", "\303\251rtetek", "\303\251rt\303\274k", 
-    "\303\251rt\303\274nk", "ez", "ezzel", "hozz\303\241", "hozz\303\241d", 
-    "hozz\303\241ja", "hozz\303\241juk", "hozz\303\241m", "hozz\303\241nk", 
-    "hozz\303\241tok", "maga", "mag\303\241\303\251", "mag\303\241\303\251i", 
-    "maguk", "maguk\303\251", "maguk\303\251i", "mi", "mieink", "mienk", 
-    "mi\303\251nk", "n\303\241la", "n\303\241lad", "n\303\241lam", 
-    "n\303\241latok", "n\303\241luk", "n\303\241lunk", "neked", "nekem", 
-    "neki", "nekik", "nektek", "nek\303\274nk", "\305\221", "\305\221k", 
-    "\303\266n", "\303\266n\303\251", "\303\266n\303\251i", "\303\266nnek", 
-    "\303\266nnel", "\303\266n\303\266k", "\303\266n\303\266k\303\251", 
-    "\303\266n\303\266k\303\251i", "\303\266n\303\266kkel", 
-    "\303\266n\303\266knek", "\303\266v\303\251", "\303\266v\303\251i", 
-    "\303\266v\303\251ik", "\303\266v\303\251k", "r\303\241d", "r\303\241ja", 
-    "rajta", "rajtad", "rajtam", "rajtatok", "rajtuk", "rajtunk", 
-    "r\303\241juk", "r\303\241m", "r\303\241nk", "r\303\241tok", 
-    "r\303\263la", "r\303\263lad", "r\303\263lam", "r\303\263latok", 
-    "r\303\263luk", "r\303\263lunk", "te", "ti", "tied", "ti\303\251d", 
-    "tieid", "tieitek ", "tietek", "ti\303\251tek", "t\305\221le", 
-    "t\305\221led", "t\305\221lem", "t\303\266letek", "t\305\221l\303\274k", 
-    "t\305\221l\303\274nk", "vele", "veled", "velem", "veletek", 
+  hun.pronouns = c("annak", "az", "azzal", "bele", "bel\303\251",
+    "bel\303\251d", "bel\303\251je", "bel\303\251j\303\274k", "bel\303\251m",
+    "bel\303\251nk", "bel\303\251tek", "bel\303\266le", "bel\305\221led",
+    "bel\305\221lem", "bel\305\221letek", "bel\305\221l\303\274k",
+    "bel\305\221l\303\274nk", "benne", "benned", "bennem", "bennetek",
+    "benn\303\274k", "benn\303\274nk", "\303\251n", "ennek", "eny\303\251im",
+    "eny\303\251m", "eny\303\251mek", "\303\251rte", "\303\251rted",
+    "\303\251rtem", "\303\251rtetek", "\303\251rt\303\274k",
+    "\303\251rt\303\274nk", "ez", "ezzel", "hozz\303\241", "hozz\303\241d",
+    "hozz\303\241ja", "hozz\303\241juk", "hozz\303\241m", "hozz\303\241nk",
+    "hozz\303\241tok", "maga", "mag\303\241\303\251", "mag\303\241\303\251i",
+    "maguk", "maguk\303\251", "maguk\303\251i", "mi", "mieink", "mienk",
+    "mi\303\251nk", "n\303\241la", "n\303\241lad", "n\303\241lam",
+    "n\303\241latok", "n\303\241luk", "n\303\241lunk", "neked", "nekem",
+    "neki", "nekik", "nektek", "nek\303\274nk", "\305\221", "\305\221k",
+    "\303\266n", "\303\266n\303\251", "\303\266n\303\251i", "\303\266nnek",
+    "\303\266nnel", "\303\266n\303\266k", "\303\266n\303\266k\303\251",
+    "\303\266n\303\266k\303\251i", "\303\266n\303\266kkel",
+    "\303\266n\303\266knek", "\303\266v\303\251", "\303\266v\303\251i",
+    "\303\266v\303\251ik", "\303\266v\303\251k", "r\303\241d", "r\303\241ja",
+    "rajta", "rajtad", "rajtam", "rajtatok", "rajtuk", "rajtunk",
+    "r\303\241juk", "r\303\241m", "r\303\241nk", "r\303\241tok",
+    "r\303\263la", "r\303\263lad", "r\303\263lam", "r\303\263latok",
+    "r\303\263luk", "r\303\263lunk", "te", "ti", "tied", "ti\303\251d",
+    "tieid", "tieitek ", "tietek", "ti\303\251tek", "t\305\221le",
+    "t\305\221led", "t\305\221lem", "t\303\266letek", "t\305\221l\303\274k",
+    "t\305\221l\303\274nk", "vele", "veled", "velem", "veletek",
     "vel\303\274k", "vel\303\274nk")
   # Dutch
-  dut.pronouns = c("hij", "haar", "haarzelf", "hijzelf", "hemzelf", "hem", 
-    "ik", "ikzelf", "mijn", "mij", "mijzelf", "me", "mezelf", "zich", 
-    "zichzelf", "ons", "onze", "onszelf", "u", "uw", "uzelf", "zij", 
-    "zijzelf", "wij", "wijzelf", "jij", "jijzelf", "jouw", "jouwe", "jou", 
-    "jouzelf", "elkaar", "hen", "henzelf", "hun", "hunzelf", "zich", 
+  dut.pronouns = c("hij", "haar", "haarzelf", "hijzelf", "hemzelf", "hem",
+    "ik", "ikzelf", "mijn", "mij", "mijzelf", "me", "mezelf", "zich",
+    "zichzelf", "ons", "onze", "onszelf", "u", "uw", "uzelf", "zij",
+    "zijzelf", "wij", "wijzelf", "jij", "jijzelf", "jouw", "jouwe", "jou",
+    "jouzelf", "elkaar", "hen", "henzelf", "hun", "hunzelf", "zich",
     "elkaar", "wie", "wat", "welke")
   # Spanish
-  sp.pronouns = c("yo", "me", "m\303\255", "t\303\272", "te", "ti", "usted", 
-    "ud", "le", "lo", "la", "se", "s\303\255", "\303\251l", "lo", "ella", 
-    "nos", "nosotros", "nosotras", "vosotros", "vosotras", "ustedes", "ud", 
+  sp.pronouns = c("yo", "me", "m\303\255", "t\303\272", "te", "ti", "usted",
+    "ud", "le", "lo", "la", "se", "s\303\255", "\303\251l", "lo", "ella",
+    "nos", "nosotros", "nosotras", "vosotros", "vosotras", "ustedes", "ud",
     "les", "los", "las", "se", "ellos", "los", "ellas")
 
 
@@ -308,10 +317,10 @@ mfw.list.cutoff = 5000
 # sanity check for some of the initial variables -- just in case
 # #################################################
 
-# Given a language option ("English", "Polish", "Latin" etc., as described 
+# Given a language option ("English", "Polish", "Latin" etc., as described
 # above), this procedure selects one of the lists of pronouns
-# If no language was chosen (or if a desired language is not supported, or if 
-# there was a spelling mistake), then the variable will be set to "English". 
+# If no language was chosen (or if a desired language is not supported, or if
+# there was a spelling mistake), then the variable will be set to "English".
 # If "Pronouns deleted" is set to FALSE, this is immaterial.
 
 if(exists("pronouns") == FALSE){ # checking if the "pronouns" box is empty
@@ -329,34 +338,34 @@ if(distance.measure %in% c("CD","AL","ED","ES","MH","CB","EU") == FALSE) {
 
 # #################################################
 #
-# the GUI module 
+# the GUI module
 #
 # #################################################
 
-# At the beginning of the script, you could decide whether use the GUI module 
+# At the beginning of the script, you could decide whether use the GUI module
 # or not; if the appropriate option was switched on, the GUI will start now;
 # Since it's written in TclTk, with some additional twists, you need to install
-# the tcltk2 package (on top of the regular tcltk, which is usually installed 
+# the tcltk2 package (on top of the regular tcltk, which is usually installed
 # with R anyway.
 
 if (interactive.mode.with.GUI == TRUE) {
 #	library(tcltk2)
-	
+
 	if(file.exists("config.txt") == TRUE) {
 		source("config.txt") }
-	
+
 	.Tcl("font create myDefaultFont -family tahoma -size 8")
-	.Tcl("option add *font myDefaultFont")  
-	
+	.Tcl("option add *font myDefaultFont")
+
 	cancel_pause <- FALSE
 	tt <- tktoplevel()
 	tktitle(tt) <- "Rolling Delta | set parameters"
-	
+
 	push_OK <- function(){
 		cancel_pause <<- TRUE
 		tkdestroy(tt)
 	}
-	
+
 	corpus.format <- tclVar(corpus.format)
 	start.at <- tclVar(start.at)
 	mfw.max <- tclVar(mfw.max)
@@ -371,7 +380,7 @@ if (interactive.mode.with.GUI == TRUE) {
 	write.pdf.file <- tclVar(write.pdf.file)
 	write.jpg.file <- tclVar(write.jpg.file)
 	write.svg.file <- tclVar(write.svg.file)
-	write.png.file <- tclVar(write.png.file)	
+	write.png.file <- tclVar(write.png.file)
 	text.slice.length <- tclVar(text.slice.length)
 	text.slice.stepsize <- tclVar(text.slice.stepsize)
 	plot.options.reset <- tclVar(plot.options.reset)
@@ -391,14 +400,14 @@ if (interactive.mode.with.GUI == TRUE) {
 	col10 <- tclVar(col10)
 	col11 <- tclVar(col11)
 	col12 <- tclVar(col12)
-	
+
 	f1 <- tkframe(tt)
 	f2 <- tkframe(tt)
 	f3 <- tkframe(tt)
 	f4 <- tkframe(tt)
 	f5 <- tkframe(tt)
 	f6 <- tkframe(tt)
-	
+
 # layout of the GUI begins here:
 	tab1 <- function() {
 		tkgrid(f1,row=1,column=0,columnspan=6)
@@ -496,9 +505,9 @@ if (interactive.mode.with.GUI == TRUE) {
 	tkgrid(t3.but, column=2, row=0)
 	tkgrid(t4.but, column=3, row=0)
 	tkgrid(t5.but, column=4, row=0)
-	tkgrid(t6.but, column=5, row=0)	
+	tkgrid(t6.but, column=5, row=0)
 # Grid for individual tabs
-	
+
 # initial state!
 	tkgrid(f1,row=1,column=0,columnspan=6)
 	tkconfigure(t1.but,state="disabled", background="white")
@@ -510,10 +519,10 @@ if (interactive.mode.with.GUI == TRUE) {
 # next row: the OK button
 #
 	button_1 <- tkbutton(tt,text="       OK       ",command=push_OK,relief="raised",background="aliceblue")
-	tkbind(button_1,"<Return>",push_OK) 
+	tkbind(button_1,"<Return>",push_OK)
 	tkgrid(button_1,columnspan=6)
 	tk2tip(button_1, "Press this only if you've visited all the tabs, or if you know\nyou want to leave values in some as they are.")
-	
+
 ########################################################################################################################
 # layout of the GUI begins here:
 #
@@ -552,7 +561,7 @@ if (interactive.mode.with.GUI == TRUE) {
 	tk2tip(entrylabel_XMLNoTitles, "XML contents only: all tags, TEI headers, \nand chapter/section (sub)titles between <head>...</head> tags are removed.")
 	tk2tip(entrylabel_HTML, "HTML headers, menus, links and other tags are removed.")
 	tkgrid(tklabel(f1,text="    ")) # blank line for aesthetic purposes
-	
+
 # next row: LANGUAGE
 #
 	entry_ENG <- tkradiobutton(f1)
@@ -601,7 +610,7 @@ if (interactive.mode.with.GUI == TRUE) {
 	tkgrid(tklabel(f1,text="          "),entrylabel_DUT,entrylabel_GER)
 	tkgrid(tklabel(f1,text="          "),entry_DUT,entry_GER)
 	tkgrid(tklabel(f1,text="    ")) # blank line for aesthetic purposes
-	
+
 # Tooltips for the above
 	tk2tip(entrylabel_ENG, "Plain English: contractions and \ncompound words are split")
 	tk2tip(entrylabel_POL, "Plain Polish: contractions and \ncompound words are split")
@@ -615,7 +624,7 @@ if (interactive.mode.with.GUI == TRUE) {
 	tk2tip(entrylabel_LA2, "Modified Latin: U and V \nboth treated as U")
 	tk2tip(entrylabel_DUT, "Plain Dutch: contractions and \ncompound words are split")
 	tk2tip(entrylabel_SPA, "Plain Castilian: contractions and \ncompound words are split")
-	
+
 # next row: TEXT FEATURES
 	entry_W <- tkradiobutton(f2)
 	entry_L <- tkradiobutton(f2)
@@ -631,13 +640,13 @@ if (interactive.mode.with.GUI == TRUE) {
 #
 	tkgrid(tklabel(f2,text="        FEATURES:"),entrylabel_W,entrylabel_L,entrylabel_NGRAMSIZE)
 	tkgrid(tklabel(f2,text="                 "),entry_W,entry_L,entry_NGRAMSIZE)
-	
+
 # Tooltips for the above
 	tk2tip(entrylabel_W, "Select this to work on words")
 	tk2tip(entrylabel_L, "Select this to work on characters \n(does not make much sense unless you use ngrams)")
 	tk2tip(entrylabel_NGRAMSIZE, "State your n for n-grams \nto work on word/char clusters of n")
 	tkgrid(tklabel(f2,text="    ")) # blank line for aesthetic purposes
-	
+
 # next row: MFW SETTINGS
 #
 	entry_START_AT <- tkentry(f2,textvariable=start.at,width="8")
@@ -651,7 +660,7 @@ if (interactive.mode.with.GUI == TRUE) {
 	tkgrid(tklabel(f2,text="MFW SETTINGS:"),entrylabel_START_AT,entrylabel_MFW_MAX)
 	tkgrid(tklabel(f2,text="             "),entry_START_AT,entry_MFW_MAX)
 	tkgrid(tklabel(f2,text="    ")) # blank line for aesthetic purposes
-	
+
 # Tooltips for the above
 	tk2tip(entrylabel_START_AT, "Set the number of words from the top of \nthe frequency list to skip in the analysis.")
 	tk2tip(entrylabel_MFW_MAX, "Set the maximum number of most frequent words. \nThe script will conduct its final analysis for \nthe number of words specified here")
@@ -671,14 +680,14 @@ if (interactive.mode.with.GUI == TRUE) {
 	tkgrid(tklabel(f2,text="         SELECTION:"),entrylabel_CUL, entrylabel_CUT_OFF,cblabel_DEL_PRON)
 	tkgrid(tklabel(f2,text="                 "),entry_CUL,entry_CUT_OFF,cb_DEL_PRON)
 	tkgrid(tklabel(f2,text="    ")) # blank line for aesthetic purposes
-	
-# Tooltips for the above  
+
+# Tooltips for the above
 	tk2tip(entrylabel_CUL, "State the culling setting. \n0 means no words are omitted from the analysis. \n50 means a word needs to appear in \nat least 50% of the texts to be included in the analysis. \n100 means that only words appearing in all the texts \nwill be included in the analysis")
 	tk2tip(entrylabel_CUT_OFF, "Set the maximum size of the word frequency table. \nAnything above 5000 requires patience and a fast computer")
 	tk2tip(cblabel_DEL_PRON, "Select if you want to omit pronouns in the analysis. \nThis improves attribution in some languages")
 
-	tkgrid(tklabel(f2,text="    ")) # blank line for aesthetic purposes 
-	
+	tkgrid(tklabel(f2,text="    ")) # blank line for aesthetic purposes
+
 # next row: DISTANCES
 #
 	entry_CD <- tkradiobutton(f3)
@@ -687,7 +696,7 @@ if (interactive.mode.with.GUI == TRUE) {
 	entry_ES <- tkradiobutton(f3)
 	entry_MH <- tkradiobutton(f3)
 	entry_CB <- tkradiobutton(f3)
-	
+
 	entry_EU <- tkradiobutton(f3)
 #
 	tkconfigure(entry_CD,variable=distance.measure,value="CD")
@@ -711,7 +720,7 @@ if (interactive.mode.with.GUI == TRUE) {
 	tkgrid(tklabel(f3,text="            "),entrylabel_MH,entrylabel_CB,entrylabel_EU)
 	tkgrid(tklabel(f3,text="            "),entry_MH,entry_CB,entry_EU)
 	tkgrid(tklabel(f3,text="    ")) # blank line for aesthetic purposes
-	
+
 # Tooltips for the above
 	tk2tip(entrylabel_CD, "Select the Classic Delta measure as developed by Burrows.")
 	tk2tip(entrylabel_AL, "Select Argamon's Linear Delta (based on Euclidean principles).")
@@ -721,24 +730,24 @@ if (interactive.mode.with.GUI == TRUE) {
 	tk2tip(entrylabel_CB, "Select Canberra Distance (risky, but sometimes amazingly good).")
 	tk2tip(entrylabel_EU, "Select Euclidean Distance (basic and the most *natural*).")
 	tkgrid(tklabel(f3,text="    ")) # blank line for aesthetic purposes
-	
+
 # next row: SAMPLING
 	entry_SLICELENGTH <- tkentry(f4,textvariable=text.slice.length,width="10")
 	entry_SLICESTEPSIZE <- tkentry(f4,textvariable=text.slice.stepsize,width="10")
-	
+
 	entrylabel_SLICELENGTH <- tklabel(f4,text="   Slice length    ")
 	entrylabel_SLICESTEPSIZE <- tklabel(f4,text="     Stepsize    ")
 
-	
+
 # Position and display sampling parameters on the grid:
 	tkgrid(tklabel(f4,text="    SAMPLING:"),entrylabel_SLICELENGTH, entrylabel_SLICESTEPSIZE)
 	tkgrid(tklabel(f4,text="    "),entry_SLICELENGTH, entry_SLICESTEPSIZE)
 	tkgrid(tklabel(f4,text="    ")) # blank line for aesthetic purposes
-	
+
 # Tooltips for the above
 	tk2tip(entrylabel_SLICELENGTH, "How many words per slice?")
 	tk2tip(entrylabel_SLICESTEPSIZE, "How many words of overlap between consecutive slices?")
-	
+
 # next row: OUTPUT
 #
 	cb_SCRN <- tkcheckbutton(f5)
@@ -746,7 +755,7 @@ if (interactive.mode.with.GUI == TRUE) {
 	cb_JPG <- tkcheckbutton(f5)
 	cb_SVG <- tkcheckbutton(f5)
 	cb_PNG <- tkcheckbutton(f5)
-	cb_PLOT.RESET <- tkcheckbutton(f5)	
+	cb_PLOT.RESET <- tkcheckbutton(f5)
 #
 	tkconfigure(cb_SCRN,variable=display.on.screen)
 	tkconfigure(cb_PDF,variable=write.pdf.file)
@@ -769,7 +778,7 @@ if (interactive.mode.with.GUI == TRUE) {
 	entrylabel_PLOT.WIDTH <- tklabel(f5,text="Plot width")
 	entrylabel_PLOT.FONT <- tklabel(f5,text="Font size")
 	entrylabel_PLOT.LINE <- tklabel(f5,text="Line width")
-	
+
 #
 	tkgrid(tklabel(f5,text="    GRAPHS:"), cblabel_SCRN,cblabel_PDF, cblabel_JPG,cblabel_SVG,cblabel_PNG,columnspan=5)
 	tkgrid(tklabel(f5,text="           "), cb_SCRN,cb_PDF,cb_JPG,cb_SVG,cb_PNG,columnspan=5)
@@ -777,7 +786,7 @@ if (interactive.mode.with.GUI == TRUE) {
 	tkgrid(tklabel(f5,text=" PLOT SIZE:"), cblabel_PLOT.RESET,entrylabel_PLOT.HEIGHT, entrylabel_PLOT.WIDTH,entrylabel_PLOT.FONT,entrylabel_PLOT.LINE,columnspan=5)
 	tkgrid(tklabel(f5,text="           "),cb_PLOT.RESET,entry_PLOT.HEIGHT,entry_PLOT.WIDTH,entry_PLOT.FONT,entry_PLOT.LINE,columnspan=5)
 	tkgrid(tklabel(f5,text="    ")) # blank line for aesthetic purposes
-	
+
 # Tooltips for the above
 	tk2tip(cblabel_SCRN, "Select to have your diagram(s) displayed on R's standard graphics device.")
 	tk2tip(cblabel_PDF, "Select to save your diagram(s) as (a) PDF file(s).")
@@ -788,7 +797,7 @@ if (interactive.mode.with.GUI == TRUE) {
 	tk2tip(entrylabel_PLOT.HEIGHT, "Set custom plot height (in inches).")
 	tk2tip(entrylabel_PLOT.WIDTH, "Set custom plot width (in inches).")
 	tk2tip(entrylabel_PLOT.FONT, "Set custom font size (in points).")
-	tk2tip(entrylabel_PLOT.LINE, "Set custom line width \n(in R units, 1 is default).")	
+	tk2tip(entrylabel_PLOT.LINE, "Set custom line width \n(in R units, 1 is default).")
 
 # next row: COLORS
 #
@@ -835,29 +844,29 @@ col11 <- tclVar("purple")
 col12 <- tclVar("orange")
 
 # 1st box
-combo.1 <- ttkcombobox(f6, values=color.selection, textvariable=col1, state="normal", width=12) 
+combo.1 <- ttkcombobox(f6, values=color.selection, textvariable=col1, state="normal", width=12)
 # 2nd box
-combo.2 <- ttkcombobox(f6, values=color.selection, textvariable=col2, state="normal", width=12) 
+combo.2 <- ttkcombobox(f6, values=color.selection, textvariable=col2, state="normal", width=12)
 # 3nd box
-combo.3 <- ttkcombobox(f6, values=color.selection, textvariable=col3, state="normal", width=12) 
+combo.3 <- ttkcombobox(f6, values=color.selection, textvariable=col3, state="normal", width=12)
 # 4th box
-combo.4 <- ttkcombobox(f6, values=color.selection, textvariable=col4, state="normal", width=12) 
+combo.4 <- ttkcombobox(f6, values=color.selection, textvariable=col4, state="normal", width=12)
 # 5th box
-combo.5 <- ttkcombobox(f6, values=color.selection, textvariable=col5, state="normal", width=12) 
+combo.5 <- ttkcombobox(f6, values=color.selection, textvariable=col5, state="normal", width=12)
 # 6th box
-combo.6 <- ttkcombobox(f6, values=color.selection, textvariable=col6, state="normal", width=12) 
+combo.6 <- ttkcombobox(f6, values=color.selection, textvariable=col6, state="normal", width=12)
 # 7th box
-combo.7 <- ttkcombobox(f6, values=color.selection, textvariable=col7, state="normal", width=12) 
+combo.7 <- ttkcombobox(f6, values=color.selection, textvariable=col7, state="normal", width=12)
 # 8th box
-combo.8 <- ttkcombobox(f6, values=color.selection, textvariable=col8, state="normal", width=12) 
+combo.8 <- ttkcombobox(f6, values=color.selection, textvariable=col8, state="normal", width=12)
 # 9th box
-combo.9 <- ttkcombobox(f6, values=color.selection, textvariable=col9, state="normal", width=12) 
+combo.9 <- ttkcombobox(f6, values=color.selection, textvariable=col9, state="normal", width=12)
 # 10th box
-combo.10 <- ttkcombobox(f6, values=color.selection, textvariable=col10, state="normal", width=12) 
+combo.10 <- ttkcombobox(f6, values=color.selection, textvariable=col10, state="normal", width=12)
 # 11th box
-combo.11 <- ttkcombobox(f6, values=color.selection, textvariable=col11, state="normal", width=12) 
+combo.11 <- ttkcombobox(f6, values=color.selection, textvariable=col11, state="normal", width=12)
 # 12th box
-combo.12 <- ttkcombobox(f6, values=color.selection, textvariable=col12, state="normal", width=12) 
+combo.12 <- ttkcombobox(f6, values=color.selection, textvariable=col12, state="normal", width=12)
 tkgrid(tklabel(f6,text="    ")) # blank line for aesthetic purposes
 tkgrid(label1,label2,label3,label4,label5,label6)
 tkgrid(combo.1,combo.2,combo.3,combo.4,combo.5,combo.6)
@@ -868,10 +877,10 @@ tkgrid(tklabel(f6,text="    ")) # blank line for aesthetic purposes
 
 # next row: the OK button
 	tkgrid(tklabel(tt,text="    ")) # blank line (i.e., bottom margin)
-	
-	
+
+
 ##########
-	
+
 	repeat{
 		if(cancel_pause){
 			analyzed.features <- as.character(tclvalue(analyzed.features))
@@ -912,7 +921,7 @@ tkgrid(tklabel(f6,text="    ")) # blank line for aesthetic purposes
 		}
 		.Tcl("font delete myDefaultFont")
 	}
-	
+
 } # <-- here the option "interactive.mode.with.GUI == TRUE" is completed
 
 # #################################################
@@ -926,13 +935,13 @@ tkgrid(tklabel(f6,text="    ")) # blank line for aesthetic purposes
 # #############################################################################
 
 
-# The chosen language option should be followed by an assignment of 
+# The chosen language option should be followed by an assignment of
 # the appropriate set of pronouns. The following code is responsible for it
 
 if(corpus.lang == "English")
 pronouns = eng.pronouns
 if(corpus.lang == "Polish")
-pronouns = pol.pronouns 
+pronouns = pol.pronouns
 if(corpus.lang == "Latin")
 pronouns = lat.pronouns
 if(corpus.lang == "Latin.corr")
@@ -951,15 +960,15 @@ pronouns = dut.pronouns
 
   # Windows users are a bit allergic to Unicode; let's make them happy
   # by converting the chosen set of pronouns to local encoding
-  if(Sys.info()[["sysname"]] == "Windows") { 
+  if(Sys.info()[["sysname"]] == "Windows") {
     pronouns = iconv(pronouns, from="UTF-8")
   }
 
 
 # Since it it not so easy to perform, say, 17.9 iterations, or analyze
-# 543.3 words, the code below rounds off all numerical variables to 
-# the nearest positive integers, to prevent you from making silly jokes 
-# with funny settings. (OK, it is still possible to crash the script in 
+# 543.3 words, the code below rounds off all numerical variables to
+# the nearest positive integers, to prevent you from making silly jokes
+# with funny settings. (OK, it is still possible to crash the script in
 # more ways than one, but you will have to find them on your own).
 
 mfw.max = round(mfw.max)
@@ -981,12 +990,12 @@ if(plot.options.reset == TRUE) {
 # Finally, we want to save some of the variable values for later use;
 # they are automatically loaded into the GUI at the next run of the script.
 cat("",file="config.txt",append=F)
-var.name<-function(x) { 
+var.name<-function(x) {
 	if(is.character(x)==TRUE) {
 		cat(paste(deparse(substitute(x)),"=\"",x,"\"", sep=""),file="config.txt",sep="\n",append=T)
 	} else {
 		cat(paste(deparse(substitute(x)),x, sep="="),file="config.txt",sep="\n",append=T) }
-} 
+}
 var.name(corpus.format)
 var.name(corpus.lang)
 var.name(analyzed.features)
@@ -1084,14 +1093,14 @@ delete.markup = function(input.text) {
 ###############################################################################
 # Function for splitting a given input text into
 # single words (chains of characters delimited with
-# spaces or punctuation marks). Alternatively, 
+# spaces or punctuation marks). Alternatively,
 # you can write here another rule for splitting.
 # Required argument: name of the text to be split
 ###############################################################################
 tokenize.text = function(input.text) {
 	# loading the file, splitting into pieces specified by regular expression;
 	# here, all sequences between non-letter characters are assumed to be words:
-	if(Sys.info()[["sysname"]] == "Windows") { 
+	if(Sys.info()[["sysname"]] == "Windows") {
 	### Windows
 		tokenized.text = c(unlist(strsplit(input.text, "\\W+|_+",perl=T)))
 	} else {
@@ -1127,7 +1136,7 @@ cleanup.text = function(input.text) {
 		tokenized.text = gsub(iconv("\u2019",from="UTF-8"),"'",input.text)
 		# getting rid of contractions ('t, 's, 've, 'd, 'll, 'em, 'im) by replacing
 		# their apostrophes with ^ (other apostrophes will not be replaced);
-		# Of course, if your corpus is Cockney, you should edit the 
+		# Of course, if your corpus is Cockney, you should edit the
 		# "([tsdm]|ll|ve|em|im)" statement accordingly.
 		tokenized.text = gsub("([[:alpha:]])'([tsdm]|ll|ve|em|im)\\b","\\1^\\2", tokenized.text) #'
 		# adding spaces around dashes (to distinguish dashes and hyphens)
@@ -1157,13 +1166,13 @@ cleanup.text = function(input.text) {
 	if (text.slice.stepsize > text.slice.length){
 		cat("\n\n",file, "\t", "This stepsize parameter is too large, given the slice length you have specified", "\n\n")
 		setwd("..")
-		stop("Corpus error...")	
+		stop("Corpus error...")
 	}
 	# at this point, each text in the corpus has been tokenized
 	# into an array of tokens which we can slice into consecutive 'rolling' windows
 	return(tokenized.text)
 }
-	
+
 ################################################################################
 
 # #############################################################################
@@ -1206,7 +1215,7 @@ for (file in filenames.primary.set) {
 	if(length(tokenized.text) < text.slice.length) {
 		error.message = TRUE
 		setwd("..")
-		cat("The above file is too short to be split into", 
+		cat("The above file is too short to be split into",
 		text.slice.length,"words\n")
 		stop("Change your settings please!")
 	}
@@ -1233,7 +1242,7 @@ for (file in filenames.secondary.set) {
 			events.indices.in.secondary.text = c(events.indices.in.secondary.text, c)
 		}
 	}
-	for (event.index in events.indices.in.secondary.text){	
+	for (event.index in events.indices.in.secondary.text){
 		tokenized.text[[event.index]] <- "xyzmarker" # mark indices
 	}
 	tokenized.text <- tokenized.text[tokenized.text!="xyzmarker"] # clean up after the indices
@@ -1246,7 +1255,7 @@ for (file in filenames.secondary.set) {
 		cat("The above file is too short to be split into", text.slice.length,"words\n")
 		stop("Change your settings please!")
 	}
-	max.lines = length(tokenized.text) 
+	max.lines = length(tokenized.text)
 }
 setwd("..")
 # send blank line on the screen
@@ -1301,7 +1310,7 @@ for (slice.name in names(primary.set.slices)){
 # preparing a sorted frequency list of the whole set
 mfw.list.of.all.primary.slices = sort(table(c(wordlist.of.primary.corpus)),decreasing=T)
 
-# if the whole list is long, then cut off the tail, as specified in the GUI 
+# if the whole list is long, then cut off the tail, as specified in the GUI
 # by the cutoff value
 if (length(mfw.list.of.all.primary.slices) > mfw.list.cutoff) {
     mfw.list.of.all.primary.slices = mfw.list.of.all.primary.slices[1:mfw.list.cutoff]
@@ -1312,7 +1321,7 @@ mfw.list.of.all.primary.slices = names(mfw.list.of.all.primary.slices)
 # some comments into the file containing the wordlist
 cat("# This file contains the words that were used for building the table",
 "# of frequencies. It can be also used for further tasks, and for this",
-"# purpose it can be manually revised, edited, deleted, culled, etc.", 
+"# purpose it can be manually revised, edited, deleted, culled, etc.",
 "# You can either delete unwanted words, or mark them with \"#\"",
 "# -----------------------------------------------------------------------",
 "",
@@ -1331,7 +1340,7 @@ make.slice.frequency.lists = function(slice.names,current.slice.set) {
 		raw.freq = table(current.slice) * 100 / length(current.slice)
 		# adjusting the frequency list to the main MFW list obtained above
 		freq.list.of.current.slice = raw.freq[mfw.list.of.all.primary.slices]
-		# taking the names (sc. words) from the main MFW list 
+		# taking the names (sc. words) from the main MFW list
 		names(freq.list.of.current.slice) = mfw.list.of.all.primary.slices
 		# and inserting the current slice into the general frequency table
 		freq.list.of.all.the.slices = rbind(freq.list.of.all.the.slices, freq.list.of.current.slice)
@@ -1389,17 +1398,17 @@ nonzero.values = primary.frequencies.0.culling > 0
 
 # counting of how many non-zero values there are
 for (y in 1: length(nonzero.values[1,])) {
-	raw.list.after.culling = c(raw.list.after.culling, 
-							   (length(grep("TRUE",nonzero.values[,y])) / 
-								length(nonzero.values[,y])) 
-							   >= culling/100 
+	raw.list.after.culling = c(raw.list.after.culling,
+							   (length(grep("TRUE",nonzero.values[,y])) /
+								length(nonzero.values[,y]))
+							   >= culling/100
 							   )
 }
 # a raw culling list has no word-identification; let's change it:
 names(raw.list.after.culling) = colnames(primary.frequencies.0.culling)
 
 # a simple sequence of words which were not culled
-list.of.words.after.culling = 
+list.of.words.after.culling =
 c(names(raw.list.after.culling[grep("TRUE",raw.list.after.culling)]))
 
 # procedure for deleting pronouns
@@ -1476,7 +1485,7 @@ colors = c("blue", "darkblue", "green", "aquamarine4", "lightblue", "cyan", "bro
 	}
 for (n in primary.set.clean.text.names){
 	if (not.plotted.yet == TRUE){
-		plot(plot.indices, plot.scores.all[[n]], xlim=c(0,max.lines), lwd=0.7, ylim=c(score.min, score.max), 
+		plot(plot.indices, plot.scores.all[[n]], xlim=c(0,max.lines), lwd=0.7, ylim=c(score.min, score.max),
 		col=colors[symbol.counter], type="o", xlab="Word indices of windows", ylab="Delta(centroid, window)", xaxt="n")
 		not.plotted.yet = FALSE
 	} else {
@@ -1489,7 +1498,7 @@ for (n in primary.set.clean.text.names){
 		for (k in 1:length(events.indices.in.secondary.text)){
 			abline(v=events.indices.in.secondary.text[[k]], lty=3)
 		}
-		axis(3, at=events.indices.in.secondary.text, las=2, labels=events.names.in.secondary.text, cex.axis=0.8)	
+		axis(3, at=events.indices.in.secondary.text, las=2, labels=events.names.in.secondary.text, cex.axis=0.8)
 	}
 
 	axis(1, at=seq(0,max.lines,by=5000))
@@ -1519,14 +1528,14 @@ graph.title = gsub("(\\.txt$)||(\\.xml$)||(\\.html$)||(\\.htm$)","",filenames.se
     dev.off()
     }
   if(write.svg.file == TRUE) {
-    svg(filename=paste(graph.title,"%03d",".svg",sep=""), 
+    svg(filename=paste(graph.title,"%03d",".svg",sep=""),
          width=plot.custom.width,height=plot.custom.height,
          pointsize=plot.font.size)
     plot.current.task()
     dev.off()
     }
   if(write.png.file == TRUE) {
-    png(filename = paste(graph.title,"%03d",".png",sep=""), 
+    png(filename = paste(graph.title,"%03d",".png",sep=""),
          width=plot.custom.width,height=plot.custom.height,
          units="in",res=300,pointsize=plot.font.size)
     plot.current.task()
@@ -1569,7 +1578,7 @@ if(exists("yet.another.variable")) {
 # This list will be turned into the class "stylo.results"
 results.rolling.delta = list()
 # elements that we want to add on this list
-variables.to.save = c("plot.indices", 
+variables.to.save = c("plot.indices",
                       "plot.scores.all",
                       "variable.to.be.done",
                       "yet.another.variable")
@@ -1594,6 +1603,6 @@ results.rolling.delta$name = call("rolling.delta")
 # these two functions are not visible for the users).
 class(results.rolling.delta) <- "stylo.results"
 
-# return the value of the function 
+# return the value of the function
 return(results.rolling.delta)
 }

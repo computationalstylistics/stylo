@@ -18,8 +18,21 @@
 # this option to FALSE.
 # #################################################
 
+<<<<<<< HEAD
 make.table.of.frequencies <- 
 function(corpus, features, absent.sensitive = TRUE, relative = TRUE) {
+=======
+make.table.of.frequencies = function(corpus, 
+                                     features, 
+                                     absent.sensitive = TRUE, 
+                                     relative = TRUE) {
+
+
+  # factorizing the features: this increases the speed radically:
+  current.levels = features
+  features = factor(features, levels = current.levels, ordered = TRUE)
+
+>>>>>>> master
   # variable initialization
   frequency.table = c()
   # checking the format of input data (vector? list?); converting to a list
@@ -34,7 +47,7 @@ function(corpus, features, absent.sensitive = TRUE, relative = TRUE) {
 
   for(i in 1:length(corpus)) {
     # loading the next sample (= next item) from the corpus
-    current.sample = corpus[[i]]
+    current.sample = factor(corpus[[i]], levels = current.levels)
     # preparing the frequency list of the current sample
     if(relative == TRUE) {
       # either relative frequencies...
@@ -45,6 +58,7 @@ function(corpus, features, absent.sensitive = TRUE, relative = TRUE) {
     }
     # adjusting the frequencies to the list of features passed as an argument
     current.vector.of.freqs = raw.freqs[features]
+<<<<<<< HEAD
     # taking the names (sc. words) from the reference list of words
     names(current.vector.of.freqs) = features
     # sticking the current sample into the frequency table
@@ -56,6 +70,26 @@ function(corpus, features, absent.sensitive = TRUE, relative = TRUE) {
     }
   }
   cat("\n")
+=======
+    # create a new vector (name assgned automatically) that will contain
+    # the frequencies of the current sample
+    assign(paste("vector_of_freqs_", sprintf("%09d", i), sep=""), current.vector.of.freqs)
+    # a short message on screen
+      if(i %% 10 == 0) {
+          message(".", appendLF = FALSE)
+      }
+
+  }
+  message("       ")
+  message("combining frequencies into a table...")
+  # combining frequencies into a table
+  frequency.table = sapply(mget(grep("vector_of_freqs_", ls(), value=T)), rbind)
+  frequency.table = t(frequency.table)  
+
+  # un-factoring features
+  features = as.character(features)
+  
+>>>>>>> master
   # adjusting names of the samples
   rownames(frequency.table) = names(corpus)
   # all NA values will be set to 0
@@ -79,6 +113,11 @@ function(corpus, features, absent.sensitive = TRUE, relative = TRUE) {
   if(length(frequency.table) == 0) {
     stop("something must be wrong with the words/features you want to analyze")
   }
+  # assign a class
+  class(frequency.table) = "stylo.data"
+  # adding some information about the current function call
+  # to the final list of results
+  attr(frequency.table, "call") = match.call()
 # the result of the function
 return(frequency.table)
 }

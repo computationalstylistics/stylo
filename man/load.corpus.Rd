@@ -5,10 +5,11 @@
 Function for loading text files from a specified directory.
 }
 \usage{
-load.corpus(files, corpus.dir = "", encoding = "native.enc")
+load.corpus(files = "all", corpus.dir = "", encoding = "native.enc")
 }
 \arguments{
-  \item{files}{a vector of file names.}
+  \item{files}{a vector of file names. The default value \code{all} is an 
+    equivalent to \code{list.files()}.}
   \item{corpus.dir}{a directory containing the text files to be loaded; if
     not specified, the current working directory will be used.}
   \item{encoding}{useful if you use Windows and non-ASCII alphabets: French,
@@ -25,7 +26,7 @@ containing as elements the texts loaded.
 \author{Maciej Eder}
 
 \seealso{
-\code{\link{stylo}}, \code{\link{classify}}, \code{\link{rolling.delta}}, 
+\code{\link{stylo}}, \code{\link{classify}}, \code{\link{rolling.classify}}, 
 \code{\link{oppose}}, \code{\link{txt.to.words}}
 }
 \examples{

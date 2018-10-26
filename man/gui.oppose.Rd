@@ -2,7 +2,8 @@
 \alias{gui.oppose}
 \title{GUI for the function oppose}
 \description{
-Graphical user interface for \code{oppose}. This function sets most of the variables needed for \code{oppose}.
+Graphical user interface for \code{oppose}. This function sets most 
+of the variables needed for \code{oppose}.
 }
 \usage{
 gui.oppose(...)

@@ -1,4 +1,4 @@
-# Delta in its various flavours
+# Delta in its various flavors
 
 perform.delta = function(training.set, 
                          test.set,
@@ -11,12 +11,26 @@ perform.delta = function(training.set,
 
 
 
-# getting the number of features (e.g. MFWs)
-no.of.cols = length(training.set[1,])
+
+# first, sanitizing the type of input data
+if(length(dim(training.set)) != 2) {
+    stop("train set error: a 2-dimensional table (matrix) is required")
+}
+# if a vector (rather than a matrix) was used as a test set, a fake row
+# will be added; actually, this will be a duplicate of the vector
+if(is.vector(test.set) == TRUE) {
+    test.set = rbind(test.set, test.set)
+    rownames(test.set) = c("unknown", "unknown-copy")
+    # additionally, duplicating ID of the test classes (if specified)
+    if(length(classes.test.set) == 1) {
+        classes.test.set = c(classes.test.set, "unknown-copy")
+    }
+}
+
 
 # checking if the two sets are of the same size
-if(length(test.set[1,]) != no.of.cols) {
-        stop("training set and test set should the same number of variables!")
+if(length(test.set[1,]) != length(training.set[1,]) ) {
+        stop("training set and test set must have the same number of variables!")
 }
 
 
@@ -65,7 +79,8 @@ input.freq.table = rbind(training.set, test.set)
 
 supported.measures = c("dist.euclidean", "dist.manhattan", "dist.canberra",
                        "dist.delta", "dist.eder", "dist.argamon",
-                       "dist.simple", "dist.cosine")
+                       "dist.simple", "dist.cosine", "dist.wurzburg",
+                       "dist.entropy", "dist.minmax")
 
 
 
@@ -99,12 +114,17 @@ if(length(grep(distance, supported.measures)) > 1 ) {
          distance = gsub("dist.", "", distance)
          # apply a standard distance, using the generic dist() function
          distance.table = as.matrix(dist(input.freq.table, method = distance))
-    # then, check for the non-standard methods but still supported by Stylo
-    } else if(distance %in% c("dist.simple", "dist.cosine")) {
+    # then, check for the non-standard methods but still supported by 'stylo':
+    } else if(distance %in% c("dist.simple", "dist.cosine", "dist.entropy", "dist.minmax")) {
 
          # invoke one of the distance measures functions from Stylo    
          distance.table = do.call(distance, list(x = input.freq.table))
     
+    } else if(distance == "dist.wurzburg") {
+
+         # invoke one of the distance measures functions from Stylo    
+         distance.table = do.call(distance, list(x = zscores.table.both.sets))
+        
     } else {
          # invoke one of the distances supported by 'stylo'; this is slightly
          # different from the custom functions invoked above, since it uses
@@ -112,7 +132,7 @@ if(length(grep(distance, supported.measures)) > 1 ) {
          distance.table = do.call(distance, list(x = zscores.table.both.sets, scale = FALSE))
     }
     
-} 
+}
 
 # convert the table to the format of matrix
 distance.table = as.matrix(distance.table)
@@ -153,6 +173,14 @@ for(h in 1:length(selected.dist[,1])) {
         classification.rankings = rbind(classification.rankings, current.ranking)
 }
 
+# preparing a confusion table
+predicted_classes = classification.results
+actual_classes = classes.test.set
+confusion.matrix = table(predicted_classes, actual_classes)
+# getting rid of the classes not represented in the training set (e.g. anonymous samples)
+# confusion.matrix = confusion.matrix[,rownames(confusion.matrix)]
+
+
 names(classification.results) = rownames(test.set)
 rownames(classification.rankings) = rownames(test.set)
 rownames(classification.scores) = rownames(test.set)
@@ -162,6 +190,8 @@ colnames(classification.scores) = 1:no.of.candidates
 attr(classification.results, "distance.table") = selected.dist
 attr(classification.results, "rankings") = classification.rankings
 attr(classification.results, "scores") = classification.scores
+attr(classification.results, "confusion_matrix") = confusion.matrix
+
 
 return(classification.results)
 }

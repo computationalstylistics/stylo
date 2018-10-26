@@ -133,7 +133,7 @@ the results, features assessed, generated tables of distances, etc.
 }
 \references{
 Eder, M. (2015). Rolling stylometry. "Digital Scholarship in the Humanities", 
-    30, Advance Access published April 6, 2015 (doi: 10.1093/llc/fqv010).
+    31(3): 457-69.
 
 Eder, M. (2014). Testing rolling stylometry. \url{https://goo.gl/f0YlOR}.
 }

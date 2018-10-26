@@ -43,7 +43,7 @@ Craig, H. and Kinney, A. F., eds. (2009). Shakespeare, Computers, and the
 Maciej Eder
 }
 \seealso{
-\code{\link{oppose}}, \code{\link{zeta.eder}},  
+\code{\link{oppose}}, \code{\link{zeta.craig}},  
 \code{\link{zeta.chisquare}}
 }
 \examples{

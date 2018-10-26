@@ -46,9 +46,8 @@ by Eder (2010) that harvesting random samples from original texts improves
 the performance of authorship attribution methods.
 }
 \references{
-Eder, M. (2014). Does size matter? Authorship attribution, short samples, 
-    big problem. "Literary and Linguistic Computing", 29, advanced access
-    (doi:10.1093/llc/fqt066).
+Eder, M. (2015). Does size matter? Authorship attribution, small samples, 
+    big problem. "Digital Scholarship in the Humanities", 30(2): 167-182.
 }
 \author{
 Mike Kestemont, Maciej Eder

@@ -2,7 +2,8 @@
 \alias{delete.markup}
 \title{Delete HTML or XML tags}
 \description{Function for removing markup tags (e.g. HTML, XML) from a string 
-  of characters. All XML markup is assumed to be compliant with the TEI guidelines (\url{http://www.tei-c.org/}).}
+  of characters. All XML markup is assumed to be compliant with 
+  the TEI guidelines (\url{http://www.tei-c.org/}).}
 
 \usage{
 delete.markup(input.text, markup.type = "plain")
