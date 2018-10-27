@@ -32,7 +32,7 @@ text files in the default subdirectory \code{corpus}.
 The function returns a summary message and writes detailed results into a csv file.
 }
 \references{
-Wickham , H., Hester, J., Francois, R., Jylanki, J., and Jørgensen, M. (2017). Package: 'readr'. https://cran.r-project.org/web/packages/readr/readr.pdf.
+Wickham , H., Hester, J., Francois, R., Jylanki, J., and Jørgensen, M. (2017). Package: 'readr'. <https://cran.r-project.org/web/packages/readr/readr.pdf>.
 }
 
 \author{Steffen Pielström}
@@ -42,7 +42,7 @@ Wickham , H., Hester, J., Francois, R., Jylanki, J., and Jørgensen, M. (2017). 
 }
 \examples{
 \dontrun{
-# standard usage from stylo working directory with a \code {corpus/} subfolder:
+# standard usage from stylo working directory with a 'corpus' subfolder:
 check.encoding()
 
 # specifying another folder:
