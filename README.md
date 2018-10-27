@@ -99,10 +99,10 @@ Download the package from **here**; save the file anywhere on your computer wher
 setwd("i/hope/i/can/remember/where/it/was/")
 ```
 
-Install the package:
+Install the package (remember to adjust the filename, if needed):
 
 ```
-install.packages("stylo_0.6.5.tar.gz", repos = NULL, type = "source")
+install.packages("stylo_0.6.9.tar.gz", repos = NULL, type = "source")
 ```
 
 **NOTE**: the `stylo` package requires a few standard R packages to be installed. When installing from CRAN or from GitHub, the dependencies are downloaded automatically; otherwise, you have to install them manually. Type (or copy-paste) the following lines:
