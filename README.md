@@ -87,7 +87,7 @@ library(devtools)
 install_github("computationalstylistics/stylo")
 ```
 
-
+The remarks about possible issues on MacOS apply (see above) are valid also in this case.
 
 
 
