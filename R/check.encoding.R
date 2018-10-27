@@ -15,7 +15,8 @@ check.encoding = function(corpus.dir = "corpus/",
   test.readr = tryCatch(readr::parse_factor(c("a", "b"), letters), error = function(e) NULL)
   if(is.null(test.readr) == TRUE) {
     stop("To use this function, you have to install the library 'readr',
-              e.g. by typing install.packages('readr') in the console")
+              e.g. by typing install.packages('readr') in the console.
+              Chances are, the package 'stringi' will also be needed.")
     }
 
   file.list = list.files(corpus.dir)
@@ -44,9 +45,9 @@ check.encoding = function(corpus.dir = "corpus/",
     message(paste("All your files are encoded in", dominant.encoding))
   } else {
     message(paste(round(100*dominant.encoding.number/sum),
-                "% of your files are encoded in", 
+                "% of your files are encoded in ", 
                 dominant.encoding,
-                ". Files using other encoding are"))
+                ". Files using other encoding are", sep=""))
   }
   
   # Output the first 10 inconsistent files
@@ -74,27 +75,27 @@ check.encoding = function(corpus.dir = "corpus/",
     output.path = paste(getwd(), output.file, sep = "/")
     message(paste("Detailed results have been saved to", output.path))
   } else {
-    message("To produce a full report, rerun check.encoding() and define an output cvs file
-    using the option \n
-                  output.file \n")
+    message("To produce a full report, rerun check.encoding() and define an output csv file \n", 
+    "using the option 'output.file', e.g.:\n",
+    "    check.encoding(output.file = \"encoding_report.csv\")")
   }
   
   # Suggest using change.encoding()
   if(dominant.encoding[1] != "UTF-8" | dominant.encoding.number[1] != sum){
-    message("Stylo works best with utf-8 encoded text files. If you want
-    to convert files to utf-8 encoding, try \n
-                  iconv()              for single files or
-                  change.encoding()    for entire folders")
+    message("Stylo works best with ASCII, but also with utf-8 encoded text files.")
+    message("If you want to convert files to utf-8 encoding, try \n",
+    "    iconv()              for single files or \n",
+    "    change.encoding()    for entire folders")
   }
   
   # Warn if corpus is very large.
   corpus.size = check.corpus.size(corpus.dir)/(10^6)
   corpus.size.output = format(corpus.size, scientific = FALSE, digits = 0)
   if(corpus.size > size.warning.threshold){
-    message(paste("WARNING: Your corpus is ", 
+    message(paste("WARNING: Your corpus is", 
                   corpus.size.output, 
-                  "MB large. Producing a version with a new encoding 
-                  will use another", corpus.size.output,
+                  "MB large. Producing a version with a new encoding \n", 
+                  "will use another", corpus.size.output,
                   "MB of memory on your hard drive!"
                   ))
   }

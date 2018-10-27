@@ -2,11 +2,11 @@
 \name{change.encoding}
 \alias{change.encoding}
 \title{
-Chance haracter encoding
+Change character encoding
 }
 \description{
-This function is a wrapper around \code{iconv()} that allow to convert 
-character encoing of multiple text files in a corpus folder, preferably 
+This function is a wrapper around \code{iconv()} that allows for converting 
+character encoding of multiple text files in a corpus folder, preferably 
 into UTF-8.
 }
 \usage{
@@ -22,19 +22,13 @@ change.encoding(corpus.dir = "corpus/", from, to = "utf-8", keep.original = TRUE
 
 }
 \details{
-Stylo works on UTF-8-enconded text by default. This function allows you to convert their corpus, if
-not yet encoded in UTF-8. To check the current encoding of text files in your corpus folder, you can
-use the function \code{check.encoding()}.
+Stylo works on UTF-8-enconded texts by default. This function allows you to convert your corpus, if not yet encoded in UTF-8. To check the current encoding of text files in your corpus folder, you can use the function \code{check.encoding()}.
 }
 \value{
 The function saves reencoded text files.
 }
-\references{
-R Core Team (2018). R: A language and environment for statistical computing. R Foundation for Statistical
-  Computing, Vienna, Austria. URL https://www.R-project.org/.
-}
 \author{
-Steffen Pielstrom
+Steffen Pielström
 }
 \seealso{
 \code{\link{check.encoding}}

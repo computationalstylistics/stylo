@@ -3,6 +3,9 @@
 \alias{check.encoding}
 \title{Check character encoding in corpus folder}
 \description{
+Using non-ASCII characters is never trivial, but sometimes unavoidable.
+Specifically, most of the world's languages use non-Latin alphabets or
+diacritics added to the standard Latin script. 
 The default character encoding in stylo is UTF-8, deviating from it can 
 cause problems. This function allows users to check the character 
 encoding in a corpus. A summary is returned to the termial and a detailed
