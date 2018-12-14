@@ -139,9 +139,9 @@ z.scores.of.all.samples = variables$z.scores.of.all.samples
 # a not very elegant way of switching from strings into logical values
 encoding.orig = variables$encoding
   if(variables$encoding == "UTF-8") {
-    encoding = FALSE #TRUE
+    encoding = FALSE
   } else {
-    encoding = TRUE #FALSE
+    encoding = TRUE
   }
 
 
@@ -404,7 +404,7 @@ encoding.orig = variables$encoding
   entrylabel_SPA <- tklabel(f1,text="    Spanish     ")
   entrylabel_CJK <- tklabel(f1,text="      CJK       ")
   entrylabel_OTH <- tklabel(f1,text="     Other      ")
-  entrylabel_UTF <- tklabel(f1,text="     native encoding      ")
+  entrylabel_UTF <- tklabel(f1,text="     Native encoding      ")
 
   #
   tkgrid(tklabel(f1,text="LANGUAGE: "),entrylabel_ENG,entrylabel_EN2,entrylabel_EN3,entrylabel_LAT,entrylabel_LA2)
@@ -874,7 +874,7 @@ encoding.orig = variables$encoding
 
 
   # switching back from logical values into strings
-  if(variables$encoding == FALSE) { #TRUE) {
+  if(variables$encoding == FALSE) {
     variables$encoding = "UTF-8"
   } else {
     variables$encoding = "native.enc"
