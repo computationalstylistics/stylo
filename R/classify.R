@@ -514,16 +514,16 @@ if(corpus.exists == FALSE) {
 
   # Checking whether required files and subdirectories exist
   # First check: allow user to choose a suitable folder via GUI
-  if(file.exists(primary.corpus.dir) == FALSE | file.exists(secondary.corpus.dir) == FALSE) {
+  if(file.exists(training.corpus.dir) == FALSE | file.exists(test.corpus.dir) == FALSE) {
     selected.path = tk_choose.dir(caption = "Select your working directory. It should two subdirectories called *primary_set* and *secondary_set*")
     setwd(selected.path)
   }
   
   # If the user failed to provide a suitable folder at this point, abort.
-  if(file.exists(primary.corpus.dir) == FALSE | file.exists(secondary.corpus.dir) == FALSE) {
+  if(file.exists(training.corpus.dir) == FALSE | file.exists(test.corpus.dir) == FALSE) {
     message("\n\n", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
             "Working directory should contain two subdirectories:
-        \"", primary.corpus.dir, "\" and \"", secondary.corpus.dir, "\"\n",
+        \"", training.corpus.dir, "\" and \"", test.corpus.dir, "\"\n",
             "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n", sep = "")
     # back to the original working directory
     setwd(original.path)
@@ -533,8 +533,8 @@ if(corpus.exists == FALSE) {
   
   # Retrieving the names of samples
   #
-  filenames.primary.set = list.files(primary.corpus.dir)
-  filenames.secondary.set = list.files(secondary.corpus.dir)
+  filenames.primary.set = list.files(training.corpus.dir)
+  filenames.secondary.set = list.files(test.corpus.dir)
   
   # Checking if the subdirectories contain any stuff
   if(length(filenames.primary.set) <2 | length(filenames.secondary.set) <2) {
