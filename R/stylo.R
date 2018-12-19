@@ -525,7 +525,7 @@ if(corpus.exists == FALSE) {
 
   # Checking whether the required subdirectory exists, calling the choose directory dialogue if not.
   if(file.exists(corpus.dir) == FALSE) {
-    selected.path = tk_choose.dir(caption = "Select your working directory. It should a subdirectory called *corpus* ")
+    selected.path = tk_choose.dir(caption = "Select your working directory. It should have a subdirectory called *corpus* ")
     setwd(selected.path)
   }
   if(file.exists(corpus.dir) == FALSE) {

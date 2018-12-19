@@ -53,20 +53,6 @@ if(is.character(path) == TRUE & length(path) > 0) {
   message("using current directory...")
 }
 
-
-# Choose directory via GUI:
-#
-# Just a few lines that allow users to choose the working directory if working
-# with the GUI.
-
-if(gui == TRUE & is.null(path)){
-  selected.path = tk_choose.dir(caption = "Select your working directory. It should a subdirectory called *corpus* ")
-  setwd(selected.path)
-}
-
-
-
-
 # loading the default settings as defined in the following function
 # (it absorbes the arguments passed from command-line)
 variables = stylo.default.settings(...)
@@ -300,15 +286,15 @@ if(corpus.exists == FALSE) {
 
 # if pre-processed corpora from R objects could not be loaded, then use files
 if(corpus.exists == FALSE) {
-
-
-
-  # Retrieving the names of samples
-  #
-  filenames.primary.set = list.files(primary.corpus.dir)
-  filenames.secondary.set = list.files(secondary.corpus.dir)
-
+ 
   # Checking whether required files and subdirectories exist
+  # First check: allow user to choose a suitable folder via GUI
+  if(file.exists(primary.corpus.dir) == FALSE | file.exists(secondary.corpus.dir) == FALSE) {
+    selected.path = tk_choose.dir(caption = "Select your working directory. It should two subdirectories called *primary_set* and *secondary_set*")
+    setwd(selected.path)
+  }
+
+  # If the user failed to provide a suitable folder at this point, abort.
   if(file.exists(primary.corpus.dir) == FALSE | file.exists(secondary.corpus.dir) == FALSE) {
     message("\n\n", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
         "Working directory should contain two subdirectories:
@@ -319,6 +305,12 @@ if(corpus.exists == FALSE) {
     # error message
     stop("corpus prepared incorrectly")
   }
+  
+  # Retrieving the names of samples
+  #
+  filenames.primary.set = list.files(primary.corpus.dir)
+  filenames.secondary.set = list.files(secondary.corpus.dir)
+  
   # Checking if the subdirectories contain any stuff
   if(length(filenames.primary.set) <2 | length(filenames.secondary.set) <2) {
     message("\n\n", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
