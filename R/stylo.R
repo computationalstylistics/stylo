@@ -15,6 +15,8 @@ stylo = function(gui = TRUE,
              parsed.corpus = NULL,
              features = NULL,
              path = NULL,
+             metadata = "filenames",
+             metadata.column = NULL,
              corpus.dir = "corpus", ...) {
 
 
@@ -1124,13 +1126,18 @@ distance.table = as.matrix(distance.table)
 
 # #################################################
 # a tiny module for graph auto-coloring:
-# uses the function "assign.plot.colors()"
+# uses the functions "metadata.processing()"
+# and assign.plot.colors()"
 # #################################################
 
 names.of.texts = gsub("(\\.txt)||(\\.xml)||(\\.html)||(\\.htm)","",rownames(table.with.all.freqs))
 
+groups = metadata.processing(metadata = metadata, 
+                             metadata.column = metadata.column,
+                             names.of.texts = names.of.texts)
+
 # using an appropriate function to assing colors to subsequent samples
-colors.of.pca.graph = assign.plot.colors(labels = names.of.texts,
+colors.of.pca.graph = assign.plot.colors(labels = groups,#names.of.texts,
                             col = colors.on.graphs, opacity = 1)
 
 
