@@ -15,8 +15,9 @@ stylo = function(gui = TRUE,
              parsed.corpus = NULL,
              features = NULL,
              path = NULL,
-             metadata = "filenames",
-             metadata.column = NULL,
+             metadata = NULL,
+             filename.column = "filename",
+             grouping.column = "author",
              corpus.dir = "corpus", ...) {
 
 
@@ -1130,14 +1131,13 @@ distance.table = as.matrix(distance.table)
 # and assign.plot.colors()"
 # #################################################
 
-names.of.texts = gsub("(\\.txt)||(\\.xml)||(\\.html)||(\\.htm)","",rownames(table.with.all.freqs))
-
-groups = metadata.processing(metadata = metadata, 
-                             metadata.column = metadata.column,
-                             names.of.texts = names.of.texts)
+groups = process.metadata(metadata = metadata, 
+                          filenames = rownames(table.with.all.freqs),
+                          filename.column = filename.column,
+                          grouping.column = grouping.column)
 
 # using an appropriate function to assing colors to subsequent samples
-colors.of.pca.graph = assign.plot.colors(labels = groups,#names.of.texts,
+colors.of.pca.graph = assign.plot.colors(labels = groups,
                             col = colors.on.graphs, opacity = 1)
 
 
