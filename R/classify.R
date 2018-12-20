@@ -54,16 +54,6 @@ if(is.character(test.corpus.dir) == FALSE | nchar(test.corpus.dir) == 0) {
   test.corpus.dir = "secondary_set"
 }
 
-# Choose directory:
-#
-# Just a few lines that allow users to choose the working directory if working
-# with the GUI.
-
-if(gui == TRUE & is.null(path)){
-  selected.path = tk_choose.dir(caption = "Select your working directory. It should a subdirectory called *corpus* ")
-  setwd(selected.path)
-}
-
 # loading the default settings as defined in the following function
 # (it absorbes the arguments passed from command-line)
 variables = stylo.default.settings(...)
@@ -522,22 +512,30 @@ if(corpus.exists == FALSE) {
 
 if(corpus.exists == FALSE) {
 
-  # Retrieving the names of samples
-  #
-  filenames.primary.set = list.files(training.corpus.dir)
-  filenames.secondary.set = list.files(test.corpus.dir)
-
   # Checking whether required files and subdirectories exist
+  # First check: allow user to choose a suitable folder via GUI
   if(file.exists(training.corpus.dir) == FALSE | file.exists(test.corpus.dir) == FALSE) {
-    message("\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
+    selected.path = tk_choose.dir(caption = "Select your working directory. It should two subdirectories called *primary_set* and *secondary_set*")
+    setwd(selected.path)
+  }
+  
+  # If the user failed to provide a suitable folder at this point, abort.
+  if(file.exists(training.corpus.dir) == FALSE | file.exists(test.corpus.dir) == FALSE) {
+    message("\n\n", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
             "Working directory should contain two subdirectories:
-            \"", training.corpus.dir, "\" and \"", test.corpus.dir, "\"\n",
-            "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
+        \"", training.corpus.dir, "\" and \"", test.corpus.dir, "\"\n",
+            "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n", sep = "")
     # back to the original working directory
     setwd(original.path)
     # error message
     stop("corpus prepared incorrectly")
   }
+  
+  # Retrieving the names of samples
+  #
+  filenames.primary.set = list.files(training.corpus.dir)
+  filenames.secondary.set = list.files(test.corpus.dir)
+  
   # Checking if the subdirectories contain any stuff
   if(length(filenames.primary.set) <2 | length(filenames.secondary.set) <2) {
     message("\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",

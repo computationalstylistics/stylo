@@ -54,17 +54,6 @@ if(is.character(corpus.dir) == FALSE | nchar(corpus.dir) == 0) {
 }
 
 
-# Choose directory:
-#
-# Just a few lines that allow users to choose the working directory if working
-# with the GUI.
-
-if(gui == TRUE & is.null(path)){
-  selected.path = tk_choose.dir(caption = "Select your working directory. It should a subdirectory called *corpus* ")
-  setwd(selected.path)
-}
-
-
 # loading the default settings as defined in the following function
 # (it absorbes the arguments passed from command-line)
 variables = stylo.default.settings(...)
@@ -537,6 +526,22 @@ if(corpus.exists == TRUE) {
 
 if(corpus.exists == FALSE) {
 
+  # Checking whether the required subdirectory exists, calling the choose directory dialogue if not.
+  if(file.exists(corpus.dir) == FALSE) {
+    selected.path = tk_choose.dir(caption = "Select your working directory. It should have a subdirectory called *corpus* ")
+    setwd(selected.path)
+  }
+  if(file.exists(corpus.dir) == FALSE) {
+          message("\n\n", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
+              "Hey! The working directory should contain the subdirectory \"",
+              corpus.dir,"\"\n",
+              "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n")
+          # back to the original working directory
+          setwd(original.path)
+          # error message
+          stop("Corpus prepared incorrectly")
+  }
+  
   # Retrieving the names of texts.
   # It's possible to choose the files manually (choose an appropriate option!)
   if (interactive.files == TRUE) {
@@ -577,18 +582,7 @@ if(corpus.exists == FALSE) {
       }
   }
 
-
-  # Checking whether the required files and subdirectory exist
-    if(file.exists(corpus.dir) == FALSE) {
-      message("\n\n", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
-          "Hey! The working directory should contain the subdirectory \"",
-          corpus.dir,"\"\n",
-          "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n")
-      # back to the original working directory
-      setwd(original.path)
-      # error message
-      stop("Corpus prepared incorrectly")
-    }
+  # Checking whether the required files exist
     if(length(corpus.filenames) <2 & sampling != "normal.sampling")  {
       message("\n\n !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
           "Ho! The subdirectory \"",corpus.dir,"\" should contain at least
