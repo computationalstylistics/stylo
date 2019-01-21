@@ -1,6 +1,6 @@
 # stylo: R package for stylometric analyses
 
-**Authors:** Maciej Eder<sup>*</sup>, Mike Kestemont, Jan Rybicki<br/>
+**Authors:** Maciej Eder<sup>*</sup>, Mike Kestemont, Jan Rybicki, Steffen Pielström<br/>
 **License:** [GPL-3](https://opensource.org/licenses/GPL-3.0)
 
 

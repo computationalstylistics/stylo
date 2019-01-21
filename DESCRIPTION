@@ -2,8 +2,8 @@ Package: stylo
 Type: Package
 Title: Stylometric Multivariate Analyses
 Version: 0.6.9
-Date: 2018-10-25
-Author: Maciej Eder, Jan Rybicki, Mike Kestemont
+Date: 2019-01-20
+Author: Maciej Eder, Jan Rybicki, Mike Kestemont, Steffen Pielstroem
 Maintainer: Maciej Eder <maciejeder@gmail.com>
 URL: https://github.com/computationalstylistics/stylo
 Depends: R (>= 2.14)

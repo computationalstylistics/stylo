@@ -1,10 +1,11 @@
 ## 'stylo' news ##
 
 
-### version 0.6.9, 2018/10/27
+### version 0.6.9, 2019/01/20
   * Unicode (UTF-8) made the default encoding, also for Windows
   * check.encoding() and change.encoding() introduced
-  * {Steffen Pielstroem joins!}
+  * GUI allows for changing the working directory with one click
+  * {Steffen Pielström joins!}
 
 
 ### version 0.6.8, 2018/06/14

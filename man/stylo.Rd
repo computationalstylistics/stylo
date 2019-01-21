@@ -1,3 +1,4 @@
+\encoding{utf8}
 \name{stylo}
 \alias{stylo}
 \alias{stylo.package}
@@ -10,7 +11,9 @@ stylistics. For a more detailed description, refer to HOWTO available at:
 }
 \usage{
 stylo(gui = TRUE, frequencies = NULL, parsed.corpus = NULL,
-      features = NULL, path = NULL, corpus.dir = "corpus", ...)
+      features = NULL, path = NULL, metadata = NULL, 
+      filename.column = "filename", grouping.column = "author",
+      corpus.dir = "corpus", ...)
 }
 \arguments{
   \item{gui}{an optional argument; if switched on, a simple yet effective
@@ -50,7 +53,12 @@ stylo(gui = TRUE, frequencies = NULL, parsed.corpus = NULL,
     an external corpus and/or external table with frequencies is loaded.}
 
   \item{metadata}{if not specified, colors for plotting will be assigned
-    accoding to file names after the usual author_ducument.txt pattern. But users can also specify a grouping variable, i.e. a vector of a length equal to the number of texts in the corpus, or a csv file, conventionally named "metadata.csv" containg matadata for the corpus. This metadata file should contain one row per document, a column with the file names in alphabetical order, and a calumn containing the grouping varible.}
+    accoding to file names after the usual author_ducument.txt pattern. 
+    But users can also specify a grouping variable, i.e. a vector of a length equal 
+    to the number of texts in the corpus, or a csv file, conventionally named 
+    "metadata.csv" containg matadata for the corpus. This metadata file should 
+    contain one row per document, a column with the file names in alphabetical order, 
+    and a calumn containing the grouping varible.}
 
   \item{filename.column}{the column in the metadata.csv containg the file names
     of the documents in alphabetical order.}
@@ -89,7 +97,7 @@ Eder, M. (2017). Visualization in stylometry: cluster analysis using networks.
 
 }
 
-\author{Maciej Eder, Jan Rybicki, Mike Kestemont}
+\author{Maciej Eder, Jan Rybicki, Mike Kestemont, Steffen Pielström}
 
 \seealso{
 \code{\link{classify}}, \code{\link{oppose}}, \code{\link{rolling.classify}}
