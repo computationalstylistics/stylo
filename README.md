@@ -27,26 +27,29 @@ If you find the package `stylo` useful and plan to publish your results, please 
 
 ## Installation
 
-There are three ways of installing `stylo`:
+There are four ways of installing `stylo`:
 
-* from CRAN repository
-* from the GitHub repository, via the package `devtools`
-* from a locally downloaded file
-
-
-
+1. from CRAN repository
+2. from the GitHub repository, via the package `devtools`
+3. from a locally downloaded file
+4. building the package directly from source files
 
 
 
-###  1. Installing from CRAN
 
-Launch R, make sure you are connected to the internet, type: 
+
+###  1. Installing from CRAN repository
+
+This is the simplest way to install `stylo` (as well as any other R package). Launch R, make sure you are connected to the internet, type: 
 
 ```
 install.packages("stylo")
 ```
 
-choose your favorite CRAN mirror (a window will pop up), click OK.
+choose your favorite CRAN mirror (a window will usually pop up), click OK.
+
+If you are a MacOS user, please have a look below, at the **Installation issues** section.
+
 
 
 
@@ -57,14 +60,14 @@ A convenient way to install R packages directly from the GitHub repository is to
 
 ```install.packages("devtools")```
 
-Then, install the package `stylo`
+Then, install the package `stylo`:
 
 ```
 library(devtools)
 install_github("computationalstylistics/stylo")
 ```
 
-The remarks about possible issues on MacOS apply (see above) are valid also in this case.
+The remarks about possible issues on MacOS apply are valid also in this case.
 
 
 
@@ -77,9 +80,12 @@ setwd("i/hope/i/can/remember/where/I/have/put/the/tarball/")
 install.packages("stylo_0.6.9.tar.gz", repos = NULL, type = "source")
 ```
 
+
+
+
 ### 4. Building a package from source files
 
-This is something for real geeks. Clone this repository, unpack it, and type the following lines at the command prompt:
+This is something for real geeks. Clone this very repository, unpack it, and type the following lines at the command prompt:
 
 ```
 R CMD build stylo
@@ -90,7 +96,7 @@ R CMD INSTALL stylo
 ## Installation issues
 
 
-**NOTE** (Mac OS users): the package “stylo” requires X11 support being installed. To quote "R for Mac OS X FAQ" (http://cran.r-project.org/bin/macosx/RMacOSX-FAQ.html): “Each binary distribution of R available through CRAN is build to use the X11 implementation of Tcl/Tk. Of course a X windows server has to be started first: this should happen automatically on OS X, provided it has been installed (it needs a separate install on Mountain Lion or later). The first time things are done in the X server there can be a long delay whilst a font cache is constructed; starting the server can take several seconds.”
+**NOTE** (Mac OS users): the package `stylo` requires X11 support being installed. To quote "R for Mac OS X FAQ" (http://cran.r-project.org/bin/macosx/RMacOSX-FAQ.html): “Each binary distribution of R available through CRAN is build to use the X11 implementation of Tcl/Tk. Of course a X windows server has to be started first: this should happen automatically on OS X, provided it has been installed (it needs a separate install on Mountain Lion or later). The first time things are done in the X server there can be a long delay whilst a font cache is constructed; starting the server can take several seconds.”
 
 You might also run into encoding errors when you start up R (e.g. “WARNING: You're using a non-UTF8 locale” etc.). In that case, you should close R, open a new window in Applications > Terminal and execute the following line:
 
