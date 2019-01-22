@@ -8,6 +8,7 @@
 ### version 0.6.9, 2019/01/20
   * check.encoding() and change.encoding() introduced
   * GUI allows for changing the working directory with one click
+  * metadata handling through a dedicated variable
   * {Steffen Pielström joins!}
 
 
