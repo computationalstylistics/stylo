@@ -77,9 +77,9 @@ setwd("i/hope/i/can/remember/where/I/have/put/the/tarball/")
 install.packages("stylo_0.6.9.tar.gz", repos = NULL, type = "source")
 ```
 
-### 3. Building a package from source files
+### 4. Building a package from source files
 
-This is something for real geeks. Clone this repository, unpack it, open a bash terminal, and type the following:
+This is something for real geeks. Clone this repository, unpack it, and type the following lines at the command prompt:
 
 ```
 R CMD build stylo
