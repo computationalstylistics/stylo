@@ -10,7 +10,7 @@
 This package provides a number of functions, supplemented by a GUI, to perform various
 analyses in the field of computational stylistics, authorship attribution, etc.
 
-
+Refer to the [Computational Stylistics Group webpage](https://computationalstylistics.github.io/), especially the subpage [Projects](https://computationalstylistics.github.io/projects/), to get some ideas about possible applications of the package `stylo`.
 
 
 
@@ -132,14 +132,14 @@ This section is meant to give the users a general outline of what the package ca
 
 
 
-## Docs on non-obvious functions
+## Docs on non-obvious functionalities
 
 
 * [Authorship verification with the package 'stylo'](https://computationalstylistics.github.io/blog/imposters)
 * [Cross-validation using the function `classify()`](https://computationalstylistics.github.io/blog/cross_validation)
 * [Custom distance measures](https://computationalstylistics.github.io/blog/custom_distances)
 * [Testing rolling stylometry](https://computationalstylistics.github.io/blog/rolling_stylometry)
-
+* [Using ‘Stylo’ with languages other than English](https://computationalstylistics.github.io/blog/stylo_and_languages/)
 
 
 
