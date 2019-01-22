@@ -160,9 +160,9 @@ plot.token = variables$plot.token
 # a not very elegant way of switching from strings into logical values
 encoding.orig = variables$encoding
   if(variables$encoding == "UTF-8") {
-    encoding = TRUE
-  } else {
     encoding = FALSE
+  } else {
+    encoding = TRUE
   }
 
 
@@ -331,7 +331,7 @@ tkgrid(tklabel(tt,text="    ")) # blank line
 variables$encoding = encoding  
 
   # switching back from logical values into strings
-  if(variables$encoding == TRUE) {
+  if(variables$encoding == FALSE) {
     variables$encoding = "UTF-8"
   } else {
     variables$encoding = "native.enc"
