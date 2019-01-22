@@ -1,13 +1,13 @@
 Package: stylo
 Type: Package
 Title: Stylometric Multivariate Analyses
-Version: 0.6.9
-Date: 2019-01-20
+Version: 0.7.0
+Date: 2019-01-22
 Author: Maciej Eder, Jan Rybicki, Mike Kestemont, Steffen Pielstroem
 Maintainer: Maciej Eder <maciejeder@gmail.com>
 URL: https://github.com/computationalstylistics/stylo
 Depends: R (>= 2.14)
-Imports: tcltk, tcltk2, ape, pamr, e1071, class, lattice, tsne
+Imports: tcltk2, ape, pamr, e1071, class, lattice, tsne
 Suggests: stringi, networkD3, readr
 Description: Supervised and unsupervised multivariate methods, supplemented by GUI and some visualizations, to perform various analyses in the field of computational stylistics, authorship attribution, etc. For further reference, see Eder et al. (2016), <https://journal.r-project.org/archive/2016/RJ-2016-007/index.html> You are also encouraged to visit the Computational Stylistics Group's website <https://computationalstylistics.github.io/>, where a reasonable amount of information about the package and related projects are provided.
 License: GPL (>= 3)

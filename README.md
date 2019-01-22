@@ -48,29 +48,6 @@ install.packages("stylo")
 
 choose your favorite CRAN mirror (a window will pop up), click OK.
 
-**NOTE** (Mac OS users): the package “stylo” requires X11 support being installed. To quote "R for Mac OS X FAQ" (http://cran.r-project.org/bin/macosx/RMacOSX-FAQ.html): “Each binary distribution of R available through CRAN is build to use the X11 implementation of Tcl/Tk. Of course a X windows server has to be started first: this should happen automatically on OS X, provided it has been installed (it needs a separate install on Mountain Lion or later). The first time things are done in the X server there can be a long delay whilst a font cache is constructed; starting the server can take several seconds.”
-
-You might also run into encoding errors when you start up R (e.g. “WARNING: You're using a non-UTF8 locale” etc.). In that case, you should close R, open a new window in Applications > Terminal and execute the following line:
-
-```
-defaults write org.R-project.R force.LANG en_US.UTF-8
-```
-
-Next, close the Terminal and start up R again.
-
-**ANOTHER NOTE** A slightly different workaround of the above problem (Mac users again):
-
-* Install XQuartz, restart Mac
-* Open Terminal, type: `sudo ln -s /opt/X11 /usr/X11`
-* Run XQuartz
-* Run R, type: `system ('defaults write org.R-project.R force.LANG en_US.UTF-8')`
-
-
-**YET ANOTHER NOTE** On MacOS Mojave one usually faces the problem of not properly recognized tcltk support. Open your terminal and type the following command:
-
-`xcode-select --install`
-
-This will download and install xcode developer tools and fix the problem. The problem is that one needs to explicitly agree to the license agreement.
 
 
 
@@ -93,28 +70,51 @@ The remarks about possible issues on MacOS apply (see above) are valid also in t
 
 ### 3. Installing from a local file
 
-Download the package from **here**; save the file anywhere on your computer where you will be able to find it; launch R; set working directory to the folder where the downloaded file is (please keep it mind that the slashes might look different in different operating systems):
+This is an option for more advanced users. You need to obtain a so-called tarball file, which is a compressed version of the package (you can grab it from CRAN). It might be named `stylo_0.6.9.tar.gz`, depending of the current version of course. Then type in R console:
 
 ```
-setwd("i/hope/i/can/remember/where/it/was/")
-```
-
-Install the package (remember to adjust the filename, if needed):
-
-```
+setwd("i/hope/i/can/remember/where/I/have/put/the/tarball/")
 install.packages("stylo_0.6.9.tar.gz", repos = NULL, type = "source")
 ```
 
-**NOTE**: the `stylo` package requires a few standard R packages to be installed. When installing from CRAN or from GitHub, the dependencies are downloaded automatically; otherwise, you have to install them manually. Type (or copy-paste) the following lines:
+### 3. Building a package from source files
+
+This is something for real geeks. Clone this repository, unpack it, open a bash terminal, and type the following:
 
 ```
-install.packages("tcltk2")
-install.packages("ape")
-install.packages("class")
-install.packages("e1071")
-install.packages("pamr")
-install.packages("tsne")
+R CMD build stylo
+R CMD INSTALL stylo
 ```
+
+
+## Installation issues
+
+
+**NOTE** (Mac OS users): the package “stylo” requires X11 support being installed. To quote "R for Mac OS X FAQ" (http://cran.r-project.org/bin/macosx/RMacOSX-FAQ.html): “Each binary distribution of R available through CRAN is build to use the X11 implementation of Tcl/Tk. Of course a X windows server has to be started first: this should happen automatically on OS X, provided it has been installed (it needs a separate install on Mountain Lion or later). The first time things are done in the X server there can be a long delay whilst a font cache is constructed; starting the server can take several seconds.”
+
+You might also run into encoding errors when you start up R (e.g. “WARNING: You're using a non-UTF8 locale” etc.). In that case, you should close R, open a new window in Applications > Terminal and execute the following line:
+
+```
+defaults write org.R-project.R force.LANG en_US.UTF-8
+```
+
+Next, close the Terminal and start up R again.
+
+**ANOTHER NOTE** A slightly different workaround of the above problem (Mac users again):
+
+* Install XQuartz, restart Mac
+* Open Terminal, type: `sudo ln -s /opt/X11 /usr/X11`
+* Run XQuartz
+* Run R, type: `system('defaults write org.R-project.R force.LANG en_US.UTF-8')`
+
+
+**YET ANOTHER NOTE** On MacOS Mojave one usually faces the problem of not properly recognized tcltk support. Open your terminal and type the following command:
+
+`xcode-select --install`
+
+This will download and install xcode developer tools and fix the problem. The problem is that one needs to explicitly agree to the license agreement.
+
+
 
 
 
