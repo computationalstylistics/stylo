@@ -142,7 +142,7 @@ This section is meant to give the users a general outline of what the package ca
 
 
 * [Authorship verification with the package 'stylo'](https://computationalstylistics.github.io/blog/imposters)
-* [Cross-validation using the function `classify()`](https://computationalstylistics.github.io/blog/cross_validation)
+* [Cross-validation using the function `classify()`](https://computationalstylistics.github.io/blog/cross-validation)
 * [Custom distance measures](https://computationalstylistics.github.io/blog/custom_distances)
 * [Testing rolling stylometry](https://computationalstylistics.github.io/blog/rolling_stylometry)
 * [Using ‘Stylo’ with languages other than English](https://computationalstylistics.github.io/blog/stylo_and_languages/)
