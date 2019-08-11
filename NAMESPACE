@@ -66,6 +66,7 @@ export(
   stylo.network,
   stylo.pronouns,
   stylo,
+  text.size.penalize,
   txt.to.features,
   txt.to.words.ext,
   txt.to.words,

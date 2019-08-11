@@ -125,10 +125,8 @@ crossv = function(training.set,
         
         # now, performing classification:
         if(tolower(classification.method) == "delta") {
-#            classification.results = perform.delta(cv.train, cv.test, 
-#                                     cv.classes.train, cv.classes.test, ...)
             classification.results = perform.delta(cv.train, cv.test, 
-                                     cv.classes.train, cv.classes.test)
+                                     cv.classes.train, cv.classes.test, ...)
         }
         if(tolower(classification.method) == "knn") {
             classification.results = perform.knn(cv.train, cv.test, 
