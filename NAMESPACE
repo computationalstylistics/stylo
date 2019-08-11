@@ -59,6 +59,7 @@ export(
   perform.nsc,
   perform.svm,
   perform.impostors,
+  performance.measures,
   rolling.classify,
   rolling.delta,
   stylo.default.settings,

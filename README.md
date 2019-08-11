@@ -238,6 +238,6 @@ This section is meant to give the users a general outline of what the package ca
 
  
 
->>>>>>> master
+
 
 

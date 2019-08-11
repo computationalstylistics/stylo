@@ -1,6 +1,11 @@
 ## 'stylo' news ##
 
 
+### version 0.7.1, 2019/08/11
+  * improvements in crossv(): confusion matrix
+  * new funcion performance.measures(), providing recall, precision etc.
+  
+
 ### version 0.7.0, 2019/01/22
   * Unicode (UTF-8) made the default encoding, also for Windows
 
