@@ -141,9 +141,9 @@ show.features = variables$show.features
 # a not very elegant way of switching from strings into logical values
 encoding.orig = variables$encoding
   if(variables$encoding == "UTF-8") {
-    encoding = TRUE
-  } else {
     encoding = FALSE
+  } else {
+    encoding = TRUE
   }
 
 
@@ -392,7 +392,7 @@ encoding.orig = variables$encoding
   entrylabel_SPA <- tklabel(f1,text="    Spanish     ")
   entrylabel_CJK <- tklabel(f1,text="      CJK       ")
   entrylabel_OTH <- tklabel(f1,text="     Other      ")
-  entrylabel_UTF <- tklabel(f1,text="     UTF-8      ")
+  entrylabel_UTF <- tklabel(f1,text="     Native encoding      ")
 
   #
   tkgrid(tklabel(f1,text="LANGUAGE: "),entrylabel_ENG,entrylabel_EN2,entrylabel_EN3,entrylabel_LAT,entrylabel_LA2)
@@ -418,7 +418,7 @@ encoding.orig = variables$encoding
   tk2tip(entrylabel_SPA, "Plain Castilian: contractions and \ncompound words are split")
   tk2tip(entrylabel_CJK, "Chinese, Japanese and Korean \n(experimental)")
   tk2tip(entrylabel_OTH, "Other language than the ones listed above.")
-  tk2tip(entrylabel_UTF, "Check this box if your texts are in Unicode \nand your system is Windows;\nno need to bother if you use Linux of Mac")
+  tk2tip(entrylabel_UTF, "Check this box if your texts are in a \nnative encoding other than UTF-8. \n(May apply on Windows machines.) \nUse the function check_encoding() \nif you are uncertain.")
 
   
   # next row: TEXT FEATURES
@@ -816,7 +816,7 @@ encoding.orig = variables$encoding
 
 
   # switching back from logical values into strings
-  if(variables$encoding == TRUE) {
+  if(variables$encoding == FALSE) {
     variables$encoding = "UTF-8"
   } else {
     variables$encoding = "native.enc"

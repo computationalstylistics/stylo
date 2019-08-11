@@ -24,10 +24,10 @@ change.encoding = function(corpus.dir = "corpus/",
   corpus.size = check.corpus.size(corpus.dir)/(10^6)
   corpus.size.output = format(corpus.size, scientific = FALSE, digits = 0)
   if(corpus.size > size.warning.threshold){
-    message(paste("WARNING: Your corpus is ", 
+    message(paste("WARNING: Your corpus is", 
                   corpus.size.output, 
-                  "MB large. Producing a version with a new encoding 
-                  will use about another", corpus.size.output,
+                  "MB large. Producing a version with a new encoding \n", 
+                  "will use another", corpus.size.output,
                   "MB of memory on your hard drive!"
     ))
     answer = readline(prompt = "Do you really want procede (y/n)?")

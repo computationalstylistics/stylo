@@ -3,6 +3,9 @@
 \alias{check.encoding}
 \title{Check character encoding in corpus folder}
 \description{
+Using non-ASCII characters is never trivial, but sometimes unavoidable.
+Specifically, most of the world's languages use non-Latin alphabets or
+diacritics added to the standard Latin script. 
 The default character encoding in stylo is UTF-8, deviating from it can 
 cause problems. This function allows users to check the character 
 encoding in a corpus. A summary is returned to the termial and a detailed
@@ -29,7 +32,7 @@ text files in the default subdirectory \code{corpus}.
 The function returns a summary message and writes detailed results into a csv file.
 }
 \references{
-Wickham , H., Hester, J., Francois, R., Jylanki, J., and Jørgensen, M. (2017). Package: 'readr'. https://cran.r-project.org/web/packages/readr/readr.pdf.
+Wickham , H., Hester, J., Francois, R., Jylanki, J., and Jørgensen, M. (2017). Package: 'readr'. <https://cran.r-project.org/web/packages/readr/readr.pdf>.
 }
 
 \author{Steffen Pielström}
@@ -39,7 +42,7 @@ Wickham , H., Hester, J., Francois, R., Jylanki, J., and Jørgensen, M. (2017). 
 }
 \examples{
 \dontrun{
-# standard usage from stylo working directory with a \code {corpus/} subfolder:
+# standard usage from stylo working directory with a 'corpus' subfolder:
 check.encoding()
 
 # specifying another folder:

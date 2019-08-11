@@ -1,29 +1,32 @@
+\encoding{utf8}
 \name{stylo}
 \alias{stylo}
 \alias{stylo.package}
 \title{Stylometric multidimensional analyses}
 \description{
-It is quite a long story what this function does. Basically, it is an 
+It is quite a long story what this function does. Basically, it is an
 all-in-one tool for a variety of experiments in computational
 stylistics. For a more detailed description, refer to HOWTO available at:
 \url{https://sites.google.com/site/computationalstylistics/}
 }
 \usage{
 stylo(gui = TRUE, frequencies = NULL, parsed.corpus = NULL,
-      features = NULL, path = NULL, corpus.dir = "corpus", ...)
+      features = NULL, path = NULL, metadata = NULL, 
+      filename.column = "filename", grouping.column = "author",
+      corpus.dir = "corpus", ...)
 }
 \arguments{
-  \item{gui}{an optional argument; if switched on, a simple yet effective 
+  \item{gui}{an optional argument; if switched on, a simple yet effective
     graphical interface (GUI) will appear. Default value is \code{TRUE}.}
 
   \item{frequencies}{using this optional argument, one can load a custom
-    table containing frequencies/counts for several variables, e.g. 
-    most frequent words, across a number of text samples. It can be either 
-    an R object (matrix or data frame), or a filename containing 
+    table containing frequencies/counts for several variables, e.g.
+    most frequent words, across a number of text samples. It can be either
+    an R object (matrix or data frame), or a filename containing
     tab-delimited data. If you use an R object, make sure that the rows
     contain samples, and the columns -- variables (words). If you use
     an external file, the variables should go vertically (i.e. in rows):
-    this is because files containing vertically-oriented tables are far 
+    this is because files containing vertically-oriented tables are far
     more flexible and easily editable using, say, Excel or any text editor.
     To flip your table horizontally/vertically use the generic function t().}
 
@@ -36,51 +39,65 @@ stylo(gui = TRUE, frequencies = NULL, parsed.corpus = NULL,
     word n-grams, character n-grams) are extracted automatically from the
     corpus, and they are used as variables for further analysis. However,
     in some cases it makes sense to use a set of tailored features, e.g.
-    the words that are associated with emotions or, say, a specific subset 
+    the words that are associated with emotions or, say, a specific subset
     of function words. This optional argument allows to pass either a
-    filename containing your custom list of features, or a vector 
+    filename containing your custom list of features, or a vector
     (R object) of features to be assessed.}
 
-  \item{path}{if not specified, the current directory will be used 
+  \item{path}{if not specified, the current directory will be used
     for input/output procedures (reading files, outputting the results).}
 
   \item{corpus.dir}{the subdirectory (within the current working directory) that
-    contains the corpus text files. If not specified, the default 
+    contains the corpus text files. If not specified, the default
     subdirectory \code{corpus} will be used. This option is immaterial when
     an external corpus and/or external table with frequencies is loaded.}
+
+  \item{metadata}{if not specified, colors for plotting will be assigned
+    accoding to file names after the usual author_ducument.txt pattern. 
+    But users can also specify a grouping variable, i.e. a vector of a length equal 
+    to the number of texts in the corpus, or a csv file, conventionally named 
+    "metadata.csv" containg matadata for the corpus. This metadata file should 
+    contain one row per document, a column with the file names in alphabetical order, 
+    and a calumn containing the grouping varible.}
+
+  \item{filename.column}{the column in the metadata.csv containg the file names
+    of the documents in alphabetical order.}
+
+  \item{grouping.column}{the column in the metadata.csv containg the grouping
+    variable.}
 
   \item{...}{any variable produced by \code{stylo.default.settings}
     can be set here, in order to overwrite the default values. An example
     of such a variable is \code{network = TRUE} (switched off as default)
-    for producing stylometric bootstrap consensus networks (Eder, forthcoming); 
-    the function saves a csv file, containing a list of nodes that can be 
+    for producing stylometric bootstrap consensus networks (Eder, forthcoming);
+    the function saves a csv file, containing a list of nodes that can be
     loaded into, say, Gephi.}
 }
 \details{
 If no additional argument is passed, then the function tries to load
-text files from the default subdirectory \code{corpus}. 
+text files from the default subdirectory \code{corpus}.
 There are a lot of additional options that should be passed to this
-function; they are all loaded when \code{stylo.default.settings} is 
-executed (which is typically called automatically from inside the \code{stylo} 
+function; they are all loaded when \code{stylo.default.settings} is
+executed (which is typically called automatically from inside the \code{stylo}
 function).
 }
 \value{
 The function returns an object of the class \code{stylo.results}:
-a list of variables, including a table of word frequencies, vector of features 
-used, a distance table and some more stuff. Additionally, depending on which 
-options have been chosen, the function produces a number of files containing 
+a list of variables, including a table of word frequencies, vector of features
+used, a distance table and some more stuff. Additionally, depending on which
+options have been chosen, the function produces a number of files containing
 results, plots, tables of distances, etc.
 }
 \references{
-Eder, M., Rybicki, J. and Kestemont, M. (2016). Stylometry with R: a package 
+Eder, M., Rybicki, J. and Kestemont, M. (2016). Stylometry with R: a package
     for computational text analysis. "R Journal", 8(1): 107-21.
-    
-Eder, M. (2017). Visualization in stylometry: cluster analysis using networks. 
+
+Eder, M. (2017). Visualization in stylometry: cluster analysis using networks.
     "Digital Scholarship in the Humanities", 32(1): 50-64.
 
 }
 
-\author{Maciej Eder, Jan Rybicki, Mike Kestemont}
+\author{Maciej Eder, Jan Rybicki, Mike Kestemont, Steffen Pielström}
 
 \seealso{
 \code{\link{classify}}, \code{\link{oppose}}, \code{\link{rolling.classify}}
@@ -102,7 +119,7 @@ custom.txt.collection = list(txt1, txt2, txt3)
 stylo(parsed.corpus = custom.txt.collection)
 
 # using a custom set of features (words, n-grams) to be analyzed:
-my.selection.of.function.words = c("the", "and", "of", "in", "if", "into", 
+my.selection.of.function.words = c("the", "and", "of", "in", "if", "into",
                                    "within", "on", "upon", "since")
 stylo(features = my.selection.of.function.words)
 

@@ -87,7 +87,7 @@ stop.words = NULL
 analyzed.features = "w"
 ngram.size = 1
 preserve.case = FALSE
-encoding = "native.enc"
+encoding = "UTF-8"
 
 
 # some classifiers, e.g. Nearest Shrunken Centroids, allows you to 
