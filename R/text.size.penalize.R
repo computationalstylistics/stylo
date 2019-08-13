@@ -42,8 +42,7 @@ text.size.penalize = function(training.frequencies = NULL,
 ##### temporary!! ######
 #source("/Users/m/Desktop/stylo_R_package/stylo/R/performance.measures.R")
 corpus.language = "English.all"
-training.corpus = c("ABronte_Agnes")#, 
-#training.corpus = c("ABronte_Tenant")
+training.corpus = c("ABronte_Agnes", "ABronte_Tenant")
 ##### temporary!! ######    
 
 # if(training.frequencies == NULL)
@@ -207,10 +206,8 @@ training.corpus = c("ABronte_Agnes")#,
                 }
             }
             
+            # retrieving the names of the classes used in the prediction stage
             predicted_classes = colnames(classify_results[[1]])
-            # scaling the accuracy values according to the number of iterations
-            # so that the final results fall into the range {0,1}.
-#            classify_results = lapply(classify_results, function(x) (x / iterations) )
             
             # retrieving accuracies from the results (stored as an attribute)
             accuracy = sapply(classify_results, function(x) attr(x, "accuracy"))
@@ -232,23 +229,34 @@ training.corpus = c("ABronte_Agnes")#,
             confusion_matrices_all[[counter.alt]] = classify_results
         
         }
-    
-
-    
-    # naming the accuracy results' rows and columns
-    rownames(accuracy_all) = paste(mfw, "mfw", sep = "_")
-    colnames(accuracy_all) = sample.size.coverage
-    
-    # naming the class diversity results
-    rownames(diversity_all) = paste(mfw, "mfw", sep = "_")
-    colnames(diversity_all) = sample.size.coverage
-    
-    # adding the current scores to the joint object
-    joint.accuracy.scores[[iteration.counter]] = accuracy_all
-    joint.diversity.scores[[iteration.counter]] = diversity_all
-    
-#    names(full.results) = paste("sample_", sample.size.coverage, sep = "")
-#    joint.confusion.matrices[[iteration.counter]] = full.results
+        
+        
+        
+        # reshaping the confusion matrices, so that they are stored as tables
+        counter_i = 0
+        confusion_matrices_current_text = list()
+        for(z in 1:length(confusion_matrices_all[[1]][,1]) ) {
+            counter_i = counter_i +1
+            r = sapply(confusion_matrices_all, function(x) x[z,])
+            colnames(r) = sample.size.coverage
+            confusion_matrices_current_text[[counter_i]] = r
+        }
+        names(confusion_matrices_current_text) = paste(mfw, "mfw", sep = "_")
+        
+        
+        
+        # naming the accuracy results' rows and columns
+        rownames(accuracy_all) = paste(mfw, "mfw", sep = "_")
+        colnames(accuracy_all) = sample.size.coverage
+        
+        # naming the class diversity results
+        rownames(diversity_all) = paste(mfw, "mfw", sep = "_")
+        colnames(diversity_all) = sample.size.coverage
+        
+        # adding the current scores to the joint object
+        joint.accuracy.scores[[iteration.counter]] = accuracy_all
+        joint.diversity.scores[[iteration.counter]] = diversity_all
+        joint.confusion.matrices[[iteration.counter]] = confusion_matrices_current_text
     
     }
     
@@ -257,7 +265,14 @@ training.corpus = c("ABronte_Agnes")#,
     # attaching some names to the variable containing the results
     names(joint.accuracy.scores) = test.texts
     names(joint.diversity.scores) = test.texts
-
-    return(joint.diversity.scores)
+    names(joint.confusion.matrices) = test.texts
+    
+    
+    
+    
+    
+    
+    
+    return(joint.confusion.matrices)
     
 }
