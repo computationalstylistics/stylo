@@ -1,7 +1,7 @@
 
-text.size.penalize = function(training.frequencies = NULL, 
-                              test.frequencies = NULL,
-                              training.corpus = NULL, 
+size.penalize = function(training.frequencies = NULL, 
+                         test.frequencies = NULL,
+                         training.corpus = NULL, 
                               test.corpus = NULL,
                               mfw = c(100,200,300),
                               features = NULL, 
@@ -26,10 +26,10 @@ text.size.penalize = function(training.frequencies = NULL,
     test_doMC = tryCatch(doMC::registerDoMC(cores = detectCores()), error = function(e) NULL)
     test_foreach = tryCatch(foreach::foreach(i = 1:2, .combine = "rbind") %do% sum(c(1,2,3)), error = function(e) NULL)
     
-    # switching to either parallel, or serial mode
+    # switching to either parallel, or serial mode, depending on the above test
     if(length(test_foreach[1]) > 0 & length(test_doMC) > 0) {
         parallel_mode = TRUE
-        doMC::registerDoMC(cores = detectCores())
+        doMC::registerDoMC(cores = doMC::detectCores())
     } else {
         parallel_mode = FALSE
     }
@@ -40,7 +40,6 @@ text.size.penalize = function(training.frequencies = NULL,
     
     
 ##### temporary!! ######
-#source("/Users/m/Desktop/stylo_R_package/stylo/R/performance.measures.R")
 corpus.language = "English.all"
 training.corpus = c("ABronte_Agnes", "ABronte_Tenant")
 ##### temporary!! ######    
@@ -111,9 +110,6 @@ training.corpus = c("ABronte_Agnes", "ABronte_Tenant")
     
     # function to compute Simpson's index of diversity
     get.dispersion = function(x) {
-        # l = sum( x ^ 2 )
-        #  - sum( x * log(x))
-        # y = sum(x * (x-1)) / sum(x) * (sum(x) -1) 
         l = sum(x * (x-1)) / (sum(x) * (sum(x) -1))
 #l = ( 4 * sum(x) * (sum(x)-1) * (sum(x)-2) * sum((x/sum(x))^3) + 2 * sum(x) * (sum(x)-1) * sum((x/sum(x))^2) - 2 * sum(x) * (sum(x-1)) * (2*sum(x)-3) * (sum((x/sum(x))^2)^2) ) / ( (sum(x) * (sum(x)-1))^2 )
 
@@ -241,16 +237,16 @@ training.corpus = c("ABronte_Agnes", "ABronte_Tenant")
             colnames(r) = sample.size.coverage
             confusion_matrices_current_text[[counter_i]] = r
         }
-        names(confusion_matrices_current_text) = paste(mfw, "mfw", sep = "_")
+        names(confusion_matrices_current_text) = paste("mfw", mfw, sep = "_")
         
         
         
         # naming the accuracy results' rows and columns
-        rownames(accuracy_all) = paste(mfw, "mfw", sep = "_")
+        rownames(accuracy_all) = paste("mfw", mfw, sep = "_")
         colnames(accuracy_all) = sample.size.coverage
         
         # naming the class diversity results
-        rownames(diversity_all) = paste(mfw, "mfw", sep = "_")
+        rownames(diversity_all) = paste("mfw", mfw, sep = "_")
         colnames(diversity_all) = sample.size.coverage
         
         # adding the current scores to the joint object
@@ -269,10 +265,49 @@ training.corpus = c("ABronte_Agnes", "ABronte_Tenant")
     
     
     
+    if(exists("joint.accuracy.scores")) {
+        attr(joint.accuracy.scores, "description") = "accuracy scores for the texts tested"
+    }
+    if(exists("joint.diversity.scores")) {
+        attr(joint.diversity.scores, "description") = "Simpson's index of diversity for the texts tested"
+    }
+    if(exists("joint.confusion.matrices")) {
+        attr(joint.confusion.matrices, "description") = "all classification scores (raw tables)"
+    }
+    if(exists("test.texts")) {
+        attr(test.texts, "description") = "names of the texts analyzed"
+    }
+
+    
+    # creating an object (list) that will contain the final results,
+    results = list()
+    # elements that we want to add on this list
+    variables.to.save = c("joint.accuracy.scores", 
+                          "joint.diversity.scores", 
+                          "joint.confusion.matrices",
+                          "test.texts")
+    # checking if they really exist; getting rid of non-existing ones:
+    filtered.variables = ls()[ls() %in% variables.to.save]
+    # adding them to the list
+    for(i in filtered.variables) {
+        results[[i]] = get(i)
+    }
+
+
+    
+    # adding some information about the current function call
+    # to the final list of results
+    results$call = match.call()
+    results$name = call("text.size.penalize")
+    class(results) = c("sample.size", "stylo.results")
     
     
-    
-    
-    return(joint.confusion.matrices)
+    return(results)
     
 }
+
+
+
+
+
+
