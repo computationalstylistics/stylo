@@ -53,7 +53,7 @@ corpus.language = "English.all"
 # else:     doc.term.matrix = training.frequencies
 
 # if(training.corpus == NULL) needs to be re-thought!
-    if(training.corpus == NULL) {
+    if(is.null(training.corpus) == TRUE) {
         test.texts = rownames(doc.term.matrix)
     } else {
         test.texts = training.corpus ## or names(training.corpus) !!!!!
