@@ -44,6 +44,11 @@ plot.sample.size = function(x,
     }
     
     
+    if(is.null(target) & length(x$test.texts) == 1 ) {
+        target = x$test.texts[1]
+        message(target, " -- plotting sample size properties")
+    }
+    
     
     if(is.null(target) & length(x$test.texts) > 1) {
         message("\nResults for more than one text available; these are as follows: \n", 
@@ -54,9 +59,6 @@ plot.sample.size = function(x,
             "(Both functions are equivalent: numeric value represents the n-th text).")
         message("")
         target = x$test.texts[1]
-#    } else {
-#        target = x$test.texts[1]
-#        message(target, " -- plotting sample size properties")
     }
     
     
@@ -111,8 +113,9 @@ plot.sample.size = function(x,
             lines(lowess(dataset[a,], f = 1/5)$y ~ as.numeric(colnames(dataset)), col = plot_color[a], lwd = 3)
         }
     }
+# maybe a dot rather than a line in the legend? (pch = 20 rather than lwd = 3)
     if(legend == TRUE) {
-        legend(x = legend_pos, legend = rownames(dataset), bty = "n", text.col = plot_color, col = plot_color, lwd = 3)
+        legend(x = legend_pos, legend = rownames(dataset), bty = "n", text.col = plot_color, col = plot_color, pch = 20)
     }
     
     
