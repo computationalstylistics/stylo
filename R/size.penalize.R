@@ -2,17 +2,17 @@
 size.penalize = function(training.frequencies = NULL, 
                          test.frequencies = NULL,
                          training.corpus = NULL, 
-                              test.corpus = NULL,
-                              mfw = c(100,200,300),
-                              features = NULL, 
-                              path = NULL, 
-                              corpus.dir = "corpus",
-                              sample.size.coverage = seq(100,10000,100),
-                              sample.with.replacement = FALSE,
-                              iterations = 100,
-                              classification.method = "delta",
-                              list.cutoff = 1000,
-                              ...) {
+                         test.corpus = NULL,
+                         mfw = c(100,200,500),
+                         features = NULL, 
+                         path = NULL, 
+                         corpus.dir = "corpus",
+                         sample.size.coverage = seq(100,10000,100),
+                         sample.with.replacement = FALSE,
+                         iterations = 100,
+                         classification.method = "delta",
+                         list.cutoff = 1000,
+                         ...) {
     #
     
     add.args = list(...)
@@ -41,7 +41,7 @@ size.penalize = function(training.frequencies = NULL,
     
 ##### temporary!! ######
 corpus.language = "English.all"
-training.corpus = c("ABronte_Agnes", "ABronte_Tenant")
+#training.corpus = c("ABronte_Agnes", "ABronte_Tenant")
 ##### temporary!! ######    
 
 # if(training.frequencies == NULL)
@@ -52,12 +52,14 @@ training.corpus = c("ABronte_Agnes", "ABronte_Tenant")
     
 # else:     doc.term.matrix = training.frequencies
 
-# if(training.corpus == NULL)
-    test.texts = rownames(doc.term.matrix)
+# if(training.corpus == NULL) needs to be re-thought!
+    if(training.corpus == NULL) {
+        test.texts = rownames(doc.term.matrix)
+    } else {
+        test.texts = training.corpus ## or names(training.corpus) !!!!!
+    }
+##### temporary!! ######    
     
-# else:     
-    test.texts = training.corpus ## or names(training.corpus) !!!!!
-    #
 
 
     message("")
