@@ -18,7 +18,7 @@
 # this option to FALSE.
 # #################################################
 
-make.table.of.frequencies = function(corpus, 
+make.table.of.frequencies.optimized = function(corpus, 
                                      features, 
                                      absent.sensitive = TRUE, 
                                      relative = TRUE) {
