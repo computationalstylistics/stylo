@@ -17,7 +17,7 @@ parse.corpus(input.data, markup.type = "plain",
                       sample.overlap = 0, number.of.samples = 1,
                       sampling.with.replacement = FALSE, features = "w", 
                       ngram.size = 1, preserve.case = FALSE,
-                      encoding = "native.enc")
+                      encoding = "UTF-8")
 }
 \arguments{
   \item{input.data}{a list (preferably of the class \code{stylo.corpus})

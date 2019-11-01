@@ -3,11 +3,11 @@ size.penalize = function(training.frequencies = NULL,
                          test.frequencies = NULL,
                          training.corpus = NULL, 
                          test.corpus = NULL,
-                         mfw = c(100,200,500),
+                         mfw = c(100, 200, 500),
                          features = NULL, 
                          path = NULL, 
                          corpus.dir = "corpus",
-                         sample.size.coverage = seq(100,10000,100),
+                         sample.size.coverage = seq(100, 10000, 100),
                          sample.with.replacement = FALSE,
                          iterations = 100,
                          classification.method = "delta",
@@ -15,6 +15,8 @@ size.penalize = function(training.frequencies = NULL,
                          ...) {
     #
     
+    
+    # fist, capturing any additional parameters passed by the user
     add.args = list(...)
     
     
@@ -22,14 +24,13 @@ size.penalize = function(training.frequencies = NULL,
     
     ###############################################################
     
-    # testing if multicore environment ('doMC', 'foreach') can be used
-    test_doMC = tryCatch(doMC::registerDoMC(cores = detectCores()), error = function(e) NULL)
-    test_foreach = tryCatch(foreach::foreach(i = 1:2, .combine = "rbind") %do% sum(c(1,2,3)), error = function(e) NULL)
-    
+    # testing if multicore environment ('doMC', 'parallel') can be used
+    test_doMC = tryCatch(doMC::registerDoMC(cores = parallel::detectCores()), 
+                         error = function(e) NULL)
     # switching to either parallel, or serial mode, depending on the above test
-    if(length(test_foreach[1]) > 0 & length(test_doMC) > 0) {
+    if(length(test_doMC) > 0) {
         parallel_mode = TRUE
-        doMC::registerDoMC(cores = doMC::detectCores())
+        doMC::registerDoMC(cores = parallel::detectCores())
     } else {
         parallel_mode = FALSE
     }
@@ -40,13 +41,24 @@ size.penalize = function(training.frequencies = NULL,
     
     
 ##### temporary!! ######
-corpus.language = "English.all"
+corpus.lang = "English.all"
+
+# this needs to be replaced with "..."
+# and, in several functions language needs to be replaced with corpus.lang:
+# txt.to.words.ext, parse.corpus, load.corpus.and.parse, stylo, classify (x2), oppose (x3), rolling.classify (x3)
+# the same applies to man pages!!!
+
+
+
 #training.corpus = c("ABronte_Agnes", "ABronte_Tenant")
 ##### temporary!! ######    
 
+
+
+
 # if(training.frequencies == NULL)
 
-    input.texts = load.corpus.and.parse(files = "all", corpus.dir = corpus.dir, language = corpus.language)
+    input.texts = load.corpus.and.parse(files = "all", corpus.dir = corpus.dir, language = corpus.lang)
     wordlist = make.frequency.list(input.texts, head = list.cutoff)
     doc.term.matrix = make.table.of.frequencies(corpus = input.texts, features = wordlist)
     
@@ -73,7 +85,8 @@ corpus.language = "English.all"
 
     # function (iterator) to get random samples from a given input text 
     get.vector.of.freqs = function(tokenized.text) {
-        current.sample = sample(tokenized.text, size = current.sample.size, replace = sample.with.replacement)
+        current.sample = sample(tokenized.text, size = current.sample.size, 
+                                replace = sample.with.replacement)
         relative.frequencies = table(current.sample) / length(current.sample) * 100
         vector.of.freqs = relative.frequencies[wordlist]
         names(vector.of.freqs) = wordlist
@@ -86,13 +99,16 @@ corpus.language = "English.all"
     # function (iterator) to perform the classification stage
     perform.classification = function(no.of.features) {
         if(classification.method == "delta") {
-            predicted_classes = perform.delta(train.table[,1:no.of.features], test.table[,1:no.of.features], z.scores.both.sets = FALSE, ...)
+            predicted_classes = perform.delta(train.table[,1:no.of.features], 
+                                    test.table[,1:no.of.features], z.scores.both.sets = FALSE, ...)
         }
         if(classification.method == "svm") {
-            predicted_classes = perform.svm(train.table[,1:no.of.features], test.table[,1:no.of.features], ...)
+            predicted_classes = perform.svm(train.table[,1:no.of.features], 
+                                    test.table[,1:no.of.features], ...)
         }
         if(classification.method == "nsc") {
-            predicted_classes = perform.nsc(train.table[,1:no.of.features], test.table[,1:no.of.features], ...)
+            predicted_classes = perform.nsc(train.table[,1:no.of.features], 
+                                    test.table[,1:no.of.features], ...)
         }
 #### this class matching seems a bit weird!
         actual_classes = gsub("_.*" ,"", names(predicted_classes))
@@ -113,15 +129,15 @@ corpus.language = "English.all"
     # function to compute Simpson's index of diversity
     get.dispersion = function(x) {
         l = sum(x * (x-1)) / (sum(x) * (sum(x) -1))
-#l = ( 4 * sum(x) * (sum(x)-1) * (sum(x)-2) * sum((x/sum(x))^3) + 2 * sum(x) * (sum(x)-1) * sum((x/sum(x))^2) - 2 * sum(x) * (sum(x-1)) * (2*sum(x)-3) * (sum((x/sum(x))^2)^2) ) / ( (sum(x) * (sum(x)-1))^2 )
-
+        #l = ( 4 * sum(x) * (sum(x)-1) * (sum(x)-2) * sum((x/sum(x))^3) + 
+             # 2 * sum(x) * (sum(x)-1) * sum((x/sum(x))^2) - 2 * sum(x) * (sum(x-1)) * 
+             # (2*sum(x)-3) * (sum((x/sum(x))^2)^2) ) / ( (sum(x) * (sum(x)-1))^2 )
         return(l)
     }
     
     
     # variance
     # Ds = ( sum( (x / sum(x) )^3 ) - (sum( (x / sum(x) )^2 )^2 ) ) / (sum(x)/4)
-    
     # a better version:
     # Ds = ( 4 * sum(x) * (sum(x)-1) * (sum(x)-2) * sum((x/sum(x))^3) + 2 * sum(x) * (sum(x)-1) * sum((x/sum(x))^2) - 2 * sum(x) * (sum(x-1)) * (2*sum(x)-3) * (sum((x/sum(x))^2)^2) ) / ( (sum(x) * (sum(x)-1))^2 )
     
@@ -155,7 +171,7 @@ corpus.language = "English.all"
         
         
         
-        # starting a new (empty) variables
+        # starting some new (empty) variables
         accuracy_all = c()
         diversity_all = c()
         confusion_matrices_all = list()

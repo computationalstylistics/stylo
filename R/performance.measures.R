@@ -1,7 +1,19 @@
 
 
-performance.measures = function(predicted_classes, actual_classes, beta = 1, positive = "1", drop_test_classes = TRUE) {
+performance.measures = function(predicted_classes, 
+                                actual_classes, 
+                                beta = 1, 
+                                positive = "1", 
+                                drop_test_classes = TRUE ) {
 
+    
+    
+    
+
+    
+    
+    
+    
     predicted = factor(as.character(predicted_classes), levels = unique(as.character(actual_classes)))
     expected  = as.factor(actual_classes)
     confusion_matrix = as.matrix(table(actual_classes, predicted_classes))

@@ -76,8 +76,8 @@ The remarks about possible issues on MacOS apply are valid also in this case.
 This is an option for more advanced users. You need to obtain a so-called tarball file, which is a compressed version of the package (you can grab it from CRAN). It might be named `stylo_0.6.9.tar.gz`, depending of the current version of course. Then type in R console:
 
 ```
-setwd("i/hope/i/can/remember/where/I/have/put/the/tarball/")
-install.packages("stylo_0.6.9.tar.gz", repos = NULL, type = "source")
+setwd("I/hope/I/can/remember/where/I/have/put/the/zipfile/")
+install.packages("stylo_0.7.1.tar.gz", repos = NULL, type = "source")
 ```
 
 
@@ -175,13 +175,13 @@ This section is meant to give the users a general outline of what the package ca
 Download the package from **here**; save the file anywhere on your computer where you will be able to find it; launch R; set working directory to the folder where the downloaded file is (please keep it mind that the slashes might look different in different operating systems):
 
 ```
-setwd("i/hope/i/can/remember/where/it/was/")
+setwd("I/hope/I/remember/where/it/was/")
 ```
 
 Install the package:
 
 ```
-install.packages("stylo_0.6.5.tar.gz", repos = NULL, type = "source")
+install.packages("stylo_0.7.1.tar.gz", repos = NULL, type = "source")
 ```
 
 **NOTE**: the `stylo` package requires a few standard R packages to be installed. When installing from CRAN or from GitHub, the dependencies are downloaded automatically; otherwise, you have to install them manually. Type (or copy-paste) the following lines:

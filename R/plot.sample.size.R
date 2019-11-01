@@ -15,6 +15,11 @@ plot.sample.size = function(x,
     }
     
     
+    # fist, capturing any additional parameters passed by the user
+    add.args = list(...)
+
+    
+    
     diversity = x$joint.diversity.scores
     accuracy = x$joint.accuracy.scores
     
@@ -56,7 +61,7 @@ plot.sample.size = function(x,
             "The first one will be used to generate the plot. If you want to use a different\n",
             "one, please specify it via the argument 'target', e.g. \n    plot(x, target = \"",
             x$test.texts[2], "\")", "\n    plot(x, target = 2)\n", 
-            "(Both functions are equivalent: numeric value represents the n-th text).")
+            "(Both ways are equivalent, where a numeric value represents the n-th text).")
         message("")
         target = x$test.texts[1]
     }
@@ -102,7 +107,7 @@ plot.sample.size = function(x,
          ylab = ylabel, 
          xlab = "sample size", 
          main = main_title, 
-         type = "n")
+         type = "n", ...)
     
     
     for(a in 1:no_of_variables) {
