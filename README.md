@@ -193,6 +193,7 @@ install.packages("class")
 install.packages("e1071")
 install.packages("pamr")
 install.packages("tsne")
+install.packages("foreach")
 ```
 
 

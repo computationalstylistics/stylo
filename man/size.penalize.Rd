@@ -97,9 +97,10 @@ size.penalize(training.frequencies = NULL, test.frequencies = NULL,
       it saves lots of time when the table of frequencies is trimmed. The default
       value is 1000 most frequent words.}
 
-  \item{...}{any other argument, usually hyperparameters of different 
-    classification methods, such as a distanse measure (for Delta), a cost 
-    function (for SVM), and so forth.}
+  \item{...}{any other argument, usually tokenization settings (via the 
+      parameters \code{corpus.lang}, \code{features}, \code{ngram.size} etc.),
+      or hyperparameters of different classification methods, such as 
+      a distanse measure (for Delta), a cost function (for SVM), and so forth.}
 }
 \details{
 If no additional argument is passed, then the function tries to load

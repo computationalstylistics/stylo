@@ -41,7 +41,6 @@ size.penalize = function(training.frequencies = NULL,
     
     
 ##### temporary!! ######
-corpus.lang = "English.all"
 
 # this needs to be replaced with "..."
 # and, in several functions language needs to be replaced with corpus.lang:
@@ -58,7 +57,7 @@ corpus.lang = "English.all"
 
 # if(training.frequencies == NULL)
 
-    input.texts = load.corpus.and.parse(files = "all", corpus.dir = corpus.dir, language = corpus.lang)
+    input.texts = load.corpus.and.parse(files = "all", corpus.dir = corpus.dir, ...)
     wordlist = make.frequency.list(input.texts, head = list.cutoff)
     doc.term.matrix = make.table.of.frequencies(corpus = input.texts, features = wordlist)
     
@@ -283,26 +282,34 @@ corpus.lang = "English.all"
     
     
     
-    if(exists("joint.accuracy.scores")) {
-        attr(joint.accuracy.scores, "description") = "accuracy scores for the texts tested"
+    # simplifying the names of the output variables
+    accuracy.scores = joint.accuracy.scores
+    diversity.scores = joint.diversity.scores
+    confusion.matrices = joint.confusion.matrices
+    
+    
+    
+    
+    if(exists("accuracy.scores")) {
+        attr(accuracy.scores, "description") = "accuracy scores for the tested texts"
     }
-    if(exists("joint.diversity.scores")) {
-        attr(joint.diversity.scores, "description") = "Simpson's index of diversity for the texts tested"
+    if(exists("diversity.scores")) {
+        attr(diversity.scores, "description") = "Simpson's index of diversity for the tested texts"
     }
-    if(exists("joint.confusion.matrices")) {
-        attr(joint.confusion.matrices, "description") = "all classification scores (raw tables)"
+    if(exists("confusion.matrices")) {
+        attr(confusion.matrices, "description") = "all classification scores (raw tables)"
     }
     if(exists("test.texts")) {
-        attr(test.texts, "description") = "names of the texts analyzed"
+        attr(test.texts, "description") = "names of the tested texts"
     }
 
     
     # creating an object (list) that will contain the final results,
     results = list()
     # elements that we want to add on this list
-    variables.to.save = c("joint.accuracy.scores", 
-                          "joint.diversity.scores", 
-                          "joint.confusion.matrices",
+    variables.to.save = c("accuracy.scores", 
+                          "diversity.scores", 
+                          "confusion.matrices",
                           "test.texts")
     # checking if they really exist; getting rid of non-existing ones:
     filtered.variables = ls()[ls() %in% variables.to.save]
@@ -316,7 +323,7 @@ corpus.lang = "English.all"
     # adding some information about the current function call
     # to the final list of results
     results$call = match.call()
-    results$name = call("text.size.penalize")
+    results$name = call("size.penalize")
     class(results) = c("sample.size", "stylo.results")
     
     

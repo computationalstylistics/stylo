@@ -13,7 +13,7 @@
 # #################################################
 
 txt.to.words.ext = function(input.text, 
-         language = "English", 
+         corpus.lang = "English", 
          splitting.rule = NULL,
          preserve.case = FALSE) {
 
@@ -21,7 +21,7 @@ txt.to.words.ext = function(input.text,
      # since the function can be applied to lists and vectors,
      # we need to define an internal function that will be applied afterwards
      wrapper = function(input.text = input.text, 
-                        language = language, 
+                        corpus.lang = corpus.lang, 
                         splitting.rule = splitting.rule,
                         preserve.case = preserve.case) {
                  
@@ -42,7 +42,7 @@ txt.to.words.ext = function(input.text,
   } else {
     # Loading the file; optionally, fiddling with apostrophes and contractions:    #
     # This is the standard procedure of splitting input texts
-    if(tolower(language) == "cjk") {
+    if(tolower(corpus.lang) == "cjk") {
       tokenized.text = txt.to.words(input.text,  
                                     splitting.rule = paste("[^A-Za-z",
                                         # Japanese (Hiragana)
@@ -60,19 +60,19 @@ txt.to.words.ext = function(input.text,
                                         "]+", sep=""),
                                     preserve.case=TRUE)
       }
-    if(tolower(language) != "english.contr" & 
-       tolower(language) != "english.all" & tolower(language) != "cjk" )  {
+    if(tolower(corpus.lang) != "english.contr" & 
+       tolower(corpus.lang) != "english.all" & tolower(corpus.lang) != "cjk" ) {
     tokenized.text = txt.to.words(input.text, preserve.case=preserve.case)
     }
     # if the Latin option with adjusting the v/u letters is on,
     # this smashes the distinction and converts both types to the letter u
-    if(tolower(language) == "latin.corr") {
+    if(tolower(corpus.lang) == "latin.corr") {
       tokenized.text = gsub("v", "u", tokenized.text)
       tokenized.text = gsub("&", "et", tokenized.text)
       tokenized.text = gsub("j", "i", tokenized.text)
     }
     # this code is used for English corpora only
-    if(tolower(language) == "english.contr" | tolower(language) == "english.all") {
+    if(tolower(corpus.lang) == "english.contr" | tolower(corpus.lang) == "english.all") {
       # turning into lowercase, if applicable
         if(preserve.case == FALSE) {
           input.text = tolower(input.text)
@@ -91,11 +91,11 @@ tokenized.text = input.text
       tokenized.text = gsub("[-]{2,5}"," -- ",tokenized.text)
       # depending on which option was swithed on, either the contractions are
       # kept, or all the peculiarities, i.e. both contractions and hyphens
-        if(tolower(language) == "english.contr") {
+        if(tolower(corpus.lang) == "english.contr") {
           tokenized.text=c(unlist(strsplit(tokenized.text,
                     "[^A-Za-z\U00C0-\U00FF\U0100-\U01BF\U01C4-\U02AF^]+")))
         }
-        if(tolower(language) == "english.all") {
+        if(tolower(corpus.lang) == "english.all") {
           tokenized.text=c(unlist(strsplit(tokenized.text,
                     "[^A-Za-z\U00C0-\U00FF\U0100-\U01BF\U01C4-\U02AF^-]+")))
           # trying to clean the remaining dashes:
@@ -117,14 +117,14 @@ tokenized.text = input.text
         if(is.list(input.text) == FALSE) {
                 # apply an appropriate replacement function
                 tokenized.text = wrapper(input.text = input.text, 
-                        language = language, 
+                        corpus.lang = corpus.lang, 
                         splitting.rule = splitting.rule,
                         preserve.case = preserve.case)
                 # if the dataset has already a form of list
         } else {
                 # applying an appropriate function to a corpus:
                 tokenized.text = lapply(input.text, wrapper, 
-                        language = language, 
+                        corpus.lang = corpus.lang, 
                         splitting.rule = splitting.rule,
                         preserve.case = preserve.case)
                 class(tokenized.text) = "stylo.corpus"

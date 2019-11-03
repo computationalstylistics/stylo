@@ -1,11 +1,13 @@
 ## 'stylo' news ##
 
 
-### version 0.7.1, 2019/10/31
-  * improvements in crossv(): confusion matrix
-  * new funcion performance.measures(), providing recall, precision etc.
-  * new function text.size.penalize() to assess minimal sample size
-  * extension to the generic plot() function, to plot text.sample.size() results
+
+
+### version 0.7.1, 2019/11/3
+  * improvements in crossv(): confusion matrix fully operational
+  * new funcion performance.measures(), providing recall, precision, f1, etc.
+  * new function size.penalize() to assess minimal sample size
+  * extension to the generic plot() function, to plot size.penalize() results
 
 
 ### version 0.7.0, 2019/01/22

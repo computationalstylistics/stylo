@@ -20,8 +20,8 @@ plot.sample.size = function(x,
 
     
     
-    diversity = x$joint.diversity.scores
-    accuracy = x$joint.accuracy.scores
+    diversity = x$diversity.scores
+    accuracy = x$accuracy.scores
     
     
     
