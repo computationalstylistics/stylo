@@ -6,7 +6,16 @@ performance.measures = function(predicted_classes,
                                 drop_test_classes = TRUE ) {
     
     
-    
+    # sanitizing predicted and actual classes:
+    # forbidden is the case in which there's more classes outputted by the classifier
+    # than available ground truth classes
+    if(sum(!(predicted_classes %in% actual_classes)) > 0) {
+        stop("Classes mismatch: the following classes could not be found among\n", 
+        "the actual classes:\n",
+        "\t", predicted_classes[!(predicted_classes %in% actual_classes)], "\n",
+        "The problem is usually caused by mixing up predicted classes and actual\n", 
+        "(or expected) classes.")
+    }
     
     predicted = factor(as.character(predicted_classes), levels = unique(as.character(actual_classes)))
     expected  = as.factor(actual_classes)
@@ -17,6 +26,8 @@ performance.measures = function(predicted_classes,
     # by dropping the respecive columns (usually, texts by anonymous authors)
     if(drop_test_classes == TRUE) {
         confusion_matrix = confusion_matrix[colnames(confusion_matrix),]
+        predicted = predicted[expected %in% predicted]
+        expected = expected[expected %in% predicted]
     }
     
     

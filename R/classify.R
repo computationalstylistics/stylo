@@ -5,16 +5,15 @@
 # and Nearest Shrunken Centroids (Jockers and Witten, 2010). Most of the options
 # are derived from the 'stylo' function.
 
-classify <-
-function(gui = TRUE,
-         training.frequencies = NULL,
-         test.frequencies = NULL,
-         training.corpus = NULL,
-         test.corpus = NULL,
-         features = NULL,
-         path = NULL,
-         training.corpus.dir = "primary_set",
-         test.corpus.dir = "secondary_set", ...) {
+classify = function(gui = TRUE,
+                    training.frequencies = NULL,
+                    test.frequencies = NULL,
+                    training.corpus = NULL,
+                    test.corpus = NULL,
+                    features = NULL,
+                    path = NULL,
+                    training.corpus.dir = "primary_set",
+                    test.corpus.dir = "secondary_set", ...) {
 
 
 
@@ -181,7 +180,7 @@ show.features = variables$show.features
 # If no language was chosen (or if a desired language is not supported, or if
 # there was a spelling mistake), then the variable will be set to "English".
 
-pronouns = stylo.pronouns(language=corpus.lang)
+pronouns = stylo.pronouns(corpus.lang = corpus.lang)
 
 
 # Since it it not so easy to perform, say, 17.9 iterations, or analyze
@@ -858,9 +857,9 @@ total.no.of.possible.attrib = c()
 
 # retrieving the total number of texts to be "guessed"
 # (anonymous texts and unique authorial samples will not be counted)
-authors.I.set = c(gsub("_.*", "", rownames(freq.I.set.0.culling)))
-authors.II.set = c(gsub("_.*", "", rownames(freq.II.set.0.culling)))
-perfect.guessing = length(authors.II.set[authors.II.set %in% authors.I.set])
+classes.train = c(gsub("_.*", "", rownames(freq.I.set.0.culling)))
+classes.test = c(gsub("_.*", "", rownames(freq.II.set.0.culling)))
+perfect.guessing = length(classes.test[classes.test %in% classes.train])
 
 
 
@@ -1057,6 +1056,8 @@ if(tolower(classification.method) == "delta") {
 
 
 for(i in seq(mfw.min, mfw.max, round(mfw.incr)) ) {
+
+    
 mfw = i
 
 
@@ -1143,13 +1144,20 @@ if(tolower(classification.method) == "nsc") {
 classes.test = gsub("_.*","",rownames(secondary.set))
 
 
+performance = performance.measures(classification.results, classes.test)
+
+
+
+
+
+
 
 # returns the ranking of the most likely candidates as a list
 if(final.ranking.of.candidates == TRUE) {
     cat("\n\n\n", file = outputfile, append = TRUE)
       misclassified.samples =
                    paste(rownames(secondary.set), "\t-->\t",
-                   classification.results)[classes.test!=classification.results]
+                   classification.results)[classes.test != classification.results]
       cat(misclassified.samples, file = outputfile, append = TRUE, sep = "\n")
       # temporarily (the results should be made available, eventually)
       rm(misclassified.samples)
@@ -1196,6 +1204,11 @@ if(cv.folds > 0) {
   # creating an empty matrix for the final success scores
   cross.validation.results = c()
   cross.validation.results.all = c()
+  
+  
+  # accumulating the predictions and the expected classes
+  predicted.cv = c()
+  expected.cv = c()
 
 
 
@@ -1287,6 +1300,11 @@ if(cv.folds > 0) {
   # retrieving classes of the new test set
   classes.test = gsub("_.*", "", rownames(test.set))
 
+  
+  
+  # accumulating the predictions and the expected classes
+  predicted.cv = c(predicted.cv, as.vector(classification.results))
+  expected.cv = c(expected.cv, classes.test)
 
 
     # returns the number of correct attributions
@@ -1311,6 +1329,10 @@ if(cv.folds > 0) {
 
   cross.validation.results.all = cbind(cross.validation.results.all, cross.validation.results)
   colnames(cross.validation.results.all) = paste(mfw, "@", current.culling, sep="")
+  
+  performance = performance.measures(predicted.cv, expected.cv)
+
+  
 }   # <-- if(cv.folds > 0)
 
 
@@ -1523,6 +1545,13 @@ if(exists("frequencies.test.set")) {
   attr(frequencies.test.set, "description") = "frequencies of words/features in the test set"
   class(frequencies.test.set) = "stylo.data"
 }
+if(exists("performance")) {
+  attr(performance, "description") = "precision, recall, accuracy, and the f1 measure"
+}
+
+
+
+
 
 
 # creating an object (list) that will contain the final results,
@@ -1532,6 +1561,7 @@ results.classify = list()
 variables.to.save = c("misclassified.samples",
                       "success.rate",
                       "overall.success.rate",
+                      "performance",
                       "distance.table",
                       "distinctive.features",
                       "features",

@@ -1,5 +1,5 @@
-stylo.pronouns <-
-function(language="English") {
+
+stylo.pronouns = function(corpus.lang = "English") {
 
   # pronouns (and other words) to be deleted
   # * what are the selection criteria used here? Personal, possessive, ...? *
@@ -104,27 +104,27 @@ function(language="English") {
   pronouns = eng.pronouns
 
   # if other language has been chosen, the pronouns will be overwritten
-  if(tolower(language) == "polish") 
+  if(tolower(corpus.lang) == "polish") 
       pronouns = pol.pronouns 
-  if(tolower(language) == "latin" || tolower(language) == "latin.corr")
+  if(tolower(corpus.lang) == "latin" || tolower(corpus.lang) == "latin.corr")
       pronouns = lat.pronouns
-  if(tolower(language) == "french")
+  if(tolower(corpus.lang) == "french")
       pronouns = fra.pronouns
-  if(tolower(language) == "german" )
+  if(tolower(corpus.lang) == "german" )
       pronouns = ger.pronouns
-  if(tolower(language) == "italian")
+  if(tolower(corpus.lang) == "italian")
       pronouns = ita.pronouns
-  if(tolower(language) == "hungarian")
+  if(tolower(corpus.lang) == "hungarian")
       pronouns = hun.pronouns
-  if(tolower(language) == "dutch")
+  if(tolower(corpus.lang) == "dutch")
       pronouns = dut.pronouns
-  if(tolower(language) == "spanish")
+  if(tolower(corpus.lang) == "spanish")
       pronouns = sp.pronouns
 
   # Windows users are a bit allergic to Unicode; let's make them happy
   # by converting the chosen set of pronouns to local encoding
   if(Sys.info()[["sysname"]] == "Windows") { 
-    pronouns = iconv(pronouns, from="UTF-8")
+    pronouns = iconv(pronouns, from = "UTF-8")
   }
 
 return(pronouns)

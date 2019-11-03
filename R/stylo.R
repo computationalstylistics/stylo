@@ -183,7 +183,7 @@ custom.graph.filename = variables$custom.graph.filename
 # If no language was chosen (or if a desired language is not supported, or if
 # there was a spelling mistake), then the variable will be set to "English".
 
-pronouns = stylo.pronouns(language = corpus.lang)
+pronouns = stylo.pronouns(corpus.lang = corpus.lang)
 
 
 # Since it it not so easy to perform, say, 17.9 iterations, or analyze

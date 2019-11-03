@@ -66,7 +66,7 @@ delete.stop.words(my.data.table, stop.words = c("the", "of", "if"))
 
 # also, some pre-defined lists of pronouns can be applied:
 delete.stop.words(my.data.table, 
-                      stop.words = stylo.pronouns(language = "English"))
+                      stop.words = stylo.pronouns(corpus.lang = "English"))
 
 
 }

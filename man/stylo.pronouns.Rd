@@ -8,13 +8,13 @@ It has been shown that pronoun deletion improves, to some extent,
 attribution accuracy of stylometric procedures (e.g. in English novels: Hoover 2004a; 2004b).
 }
 \usage{
-stylo.pronouns(language = "English")
+stylo.pronouns(corpus.lang = "English")
 }
 \arguments{
-  \item{language}{an optional argument specifying the language of the texts analyzed: available
-    languages are \code{English}, \code{Latin}, \code{Polish}, \code{Dutch},
-    \code{French}, \code{German}, \code{Spanish}, \code{Italian}, and
-    \code{Hungarian} (default is \code{English}).}
+  \item{corpus.lang}{an optional argument specifying the language of the texts 
+      analyzed: available languages are \code{English}, \code{Latin}, 
+      \code{Polish}, \code{Dutch}, \code{French}, \code{German}, \code{Spanish}, 
+      \code{Italian}, and \code{Hungarian} (default is \code{English}).}
 }
 \value{
 The function returns a vector of pronouns.
@@ -34,8 +34,8 @@ Hoover, D. (2004b). Delta prime?. "Literary and Linguistic Computing",
 }
 \examples{
 stylo.pronouns()
-stylo.pronouns(language="Latin")
-my.stop.words = stylo.pronouns(language="German")
+stylo.pronouns(corpus.lang = "Latin")
+my.stop.words = stylo.pronouns(corpus.lang = "German")
 }
 %\keyword{text processing}
 %\keyword{corpus linguistics}
