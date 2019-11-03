@@ -15,7 +15,7 @@
 
 parse.corpus = function(input.data,
          markup.type = "plain",
-         language = "English",
+         corpus.lang = "English",
          splitting.rule = NULL,
          sample.size = 10000,
          sampling = "no.sampling",
@@ -48,7 +48,7 @@ parse.corpus = function(input.data,
   # deleting punctuation, splitting into words
   cat("slicing input text into tokens...\n")
   loaded.corpus = lapply(loaded.corpus, txt.to.words.ext,
-                                        language = language,
+                                        corpus.lang = corpus.lang,
                                         splitting.rule = splitting.rule,
                                         preserve.case = preserve.case)
   # normal sampling (if applicable); random sampling will be run later

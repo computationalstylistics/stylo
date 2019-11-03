@@ -54,7 +54,7 @@ text = "Mr. Sherlock Holmes, who was usually very late in the mornings,
 words = txt.to.words(text)
 
 # an avanced tokenizer is available via the function 'txt.to.words.ext':
-words2 = txt.to.words.ext(text, language = "English.all")
+words2 = txt.to.words.ext(text, corpus.lang = "English.all")
 
 # a frequency list (just words):
 make.frequency.list(words)

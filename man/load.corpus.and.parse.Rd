@@ -9,13 +9,13 @@ and thus it requires a large number of arguments. The only obligatory
 argument, however, is a vector containing the names of the files to be loaded.
 }
 \usage{
-load.corpus.and.parse(files = "all", corpus.dir = "", markup.type = "plain",
-                      language = "English", splitting.rule = NULL,
+load.corpus.and.parse(files = "all", corpus.dir = "", markup.type= "plain",
+                      corpus.lang = "English", splitting.rule = NULL,
                       sample.size = 10000, sampling = "no.sampling",
                       sample.overlap = 0, number.of.samples = 1,
                       sampling.with.replacement = FALSE, features = "w", 
                       ngram.size = 1, preserve.case = FALSE,
-                      encoding = "native.enc")
+                      encoding = "UTF-8")
 }
 \arguments{
   \item{files}{a vector of file names. The default value \code{all} is an 
@@ -31,7 +31,7 @@ load.corpus.and.parse(files = "all", corpus.dir = "", markup.type = "plain",
     additionally, all the chapter/section (sub)titles will be deleted, 
     or strings within each the <head> </head> tags); 
     see \code{delete.markup} for further details.}
-  \item{language}{an optional argument indicating the language of the texts 
+  \item{corpus.lang}{an optional argument indicating the language of the texts 
     analyzed; the values that will affect the function's behavior are: 
     \code{English.contr}, \code{English.all}, \code{Latin.corr} (type 
     \code{help(txt.to.words.ext)} for explanation). The default value 
@@ -71,7 +71,9 @@ load.corpus.and.parse(files = "all", corpus.dir = "", markup.type = "plain",
     Polish, Hebrew, etc. In such a situation, it is quite convenient to 
     convert your text files into Unicode and to set this option to
     \code{encoding = "UTF-8"}. In Linux and Mac, you are always expected
-    to use Unicode, thus you don't need to set anything.}
+    to use Unicode, thus you don't need to set anything. In Windows, 
+    consider using UTF-8 but don't forget about the way of analyzing native 
+    ANSI encoded files: set this option to \code{encoding = "native.enc"}.}
 }
 \value{
 The function returns an object of the class \code{stylo.corpus}. It is a list

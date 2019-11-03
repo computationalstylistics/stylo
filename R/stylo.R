@@ -616,7 +616,7 @@ if(corpus.exists == FALSE) {
                          corpus.dir = corpus.dir,
                          encoding = encoding,
                          markup.type = corpus.format,
-                         language = corpus.lang,
+                         corpus.lang = corpus.lang,
                          splitting.rule = splitting.rule,
                          sample.size = sample.size,
                          sampling = sampling,

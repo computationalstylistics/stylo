@@ -12,7 +12,7 @@ their elements being particular texts.
 }
 \usage{
 parse.corpus(input.data, markup.type = "plain",
-                      language = "English", splitting.rule = NULL,
+                      corpus.lang = "English", splitting.rule = NULL,
                       sample.size = 10000, sampling = "no.sampling",
                       sample.overlap = 0, number.of.samples = 1,
                       sampling.with.replacement = FALSE, features = "w", 
@@ -31,7 +31,7 @@ parse.corpus(input.data, markup.type = "plain",
     additionally, all the chapter/section (sub)titles will be deleted, 
     or strings within each the <head> </head> tags); 
     see \code{delete.markup} for further details.}
-  \item{language}{an optional argument indicating the language of the texts 
+  \item{corpus.lang}{an optional argument indicating the language of the texts 
     analyzed; the values that will affect the function's behavior are: 
     \code{English.contr}, \code{English.all}, \code{Latin.corr} (type 
     \code{help(txt.to.words.ext)} for explanation). The default value 
@@ -87,9 +87,9 @@ words/characters and combined into n-grams (if applicable).
 }
 
 \examples{
-data(novels)
 \dontrun{
-# depending on the size of the corpus, it might take a while
+data(novels)
+# depending on the size of the corpus, it might take a while:
 parse.corpus(novels)
 }
 }

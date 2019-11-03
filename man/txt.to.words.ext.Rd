@@ -7,12 +7,12 @@ removing punctuation etc., and preserving some language-dependent
 idiosyncracies, such as common contractions in English.
 }
 \usage{
-txt.to.words.ext(input.text, language = "English", splitting.rule = NULL, 
+txt.to.words.ext(input.text, corpus.lang = "English", splitting.rule = NULL, 
                  preserve.case = FALSE)
 }
 \arguments{
   \item{input.text}{a string of characters, usually a text.}
-  \item{language}{an optional argument specifying the language of the texts 
+  \item{corpus.lang}{an optional argument specifying the language of the texts 
     analyzed. Values that will affect the function's output are: 
     \code{English.contr}, \code{English.all}, \code{Latin.corr} (their 
     meaning is explained below), \code{JCK} for Japanese, Chinese and Korean,
@@ -26,7 +26,7 @@ txt.to.words.ext(input.text, language = "English", splitting.rule = NULL,
     option will overwrite the above language settings. For further details,
     refer to \code{help(txt.to.words)}.}
   \item{preserve.case}{Whether or not to lowercase all character in the corpus 
-    (default = FALSE).}
+    (default = \code{FALSE}).}
 }
 \details{
 Function for splitting a given input text into single words (chains 
@@ -57,8 +57,8 @@ txt.to.words.ext("Nel mezzo del cammin di nostra vita / mi ritrovai per
 # to see the difference between particular options for English,
 # consider the following sentence from Joseph Conrad's "Nostromo":
 sample.text = "That's how your money-making is justified here."
-txt.to.words.ext(sample.text, language = "English")
-txt.to.words.ext(sample.text, language = "English.contr")
-txt.to.words.ext(sample.text, language = "English.all")
+txt.to.words.ext(sample.text, corpus.lang = "English")
+txt.to.words.ext(sample.text, corpus.lang = "English.contr")
+txt.to.words.ext(sample.text, corpus.lang = "English.all")
 }
 %\keyword{text processing}

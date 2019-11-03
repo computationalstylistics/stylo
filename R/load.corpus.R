@@ -7,8 +7,8 @@
 # #################################################
 
 
-load.corpus <-
-function(files = "all", corpus.dir = "", encoding = "native.enc") {
+load.corpus = function(files = "all", corpus.dir = "", encoding = "UTF-8") {
+
   # first of all, retrieve the current path name
   original.path = getwd()
   # checking if the specified directory exists

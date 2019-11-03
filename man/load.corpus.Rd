@@ -5,7 +5,7 @@
 Function for loading text files from a specified directory.
 }
 \usage{
-load.corpus(files = "all", corpus.dir = "", encoding = "native.enc")
+load.corpus(files = "all", corpus.dir = "", encoding = "UTF-8")
 }
 \arguments{
   \item{files}{a vector of file names. The default value \code{all} is an 

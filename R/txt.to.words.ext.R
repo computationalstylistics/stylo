@@ -7,7 +7,7 @@
 # to manage some language-dependent text features 
 # during the process of splitting.
 # Required argument: string of characters (words)
-# Optional argument: language
+# Optional argument: corpus.lang
 # Supported languages: "English", "English.contr",
 # "English.all", "Latin.corr", ...
 # #################################################

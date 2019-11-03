@@ -7,18 +7,17 @@
 #
 # load.corpus(corpus.dir="",files)
 # delete.markup(input.text,markup.type="plain")
-# txt.to.words.ext(input.text,language="English")
+# txt.to.words.ext(input.text,corpus.lang="English")
 # make.samples(tokenized.input.data,sample.size=10000,sampling="no.sampling",
 #   sampling.with.replacement=FALSE)
 # txt.to.features(tokenized.text,features="w",ngram.size=1)
 #
 #################################################################
 
-load.corpus.and.parse <-
-function(files = "all",
+load.corpus.and.parse = function(files = "all",
          corpus.dir = "",
          markup.type = "plain",
-         language = "English",
+         corpus.lang = "English",
          splitting.rule = NULL,
          sample.size = 10000,
          sampling = "no.sampling",
@@ -28,7 +27,7 @@ function(files = "all",
          features = "w",
          ngram.size = 1,
          preserve.case = FALSE,
-         encoding = "native.enc") {
+         encoding = "UTF-8") {
 
 
   # first, checking which files were requested; usually, the user is 
@@ -49,7 +48,7 @@ loaded.corpus = load.corpus(files = files,
   # deleting punctuation, splitting into words
   message("slicing input text into tokens...\n")
   loaded.corpus = lapply(loaded.corpus, txt.to.words.ext,
-                                        language = language,
+                                        corpus.lang = corpus.lang,
                                         splitting.rule = splitting.rule,
                                         preserve.case = preserve.case)
   # normal sampling (if applicable); random sampling will be run later
