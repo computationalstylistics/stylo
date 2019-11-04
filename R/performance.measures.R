@@ -1,7 +1,7 @@
 
 
-performance.measures = function(predicted_classes, 
-                                actual_classes, 
+performance.measures = function(actual_classes,
+                                predicted_classes, 
                                 f_beta = 1, 
                                 drop_test_classes = TRUE ) {
     

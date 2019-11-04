@@ -5,13 +5,13 @@
 This function returns a few standard measurments used to test how efficient
 a given classifier is, in a supervised machine-learnig classification setup.}
 \usage{
-performance.measures(predicted_classes, actual_classes, 
+performance.measures(actual_classes, predicted_classes, 
                      f_beta = 1, drop_test_classes = TRUE)
 }
 \arguments{
-  \item{predicted_classes}{a vector of predictions outputted from a classifier.}
-  
   \item{actual_classes}{a vector of expected classes.}
+
+  \item{predicted_classes}{a vector of predictions outputted from a classifier.}
   
   \item{f_beta}{the F score is usually used in its F1 version, but one can
       use any other scaling factor, e.g. F(1/2) or F(2); the default value
@@ -42,7 +42,7 @@ predicted = c("prose", "prose", "prose", "poetry", "prose", "prose")
 # known classes (or, the ground truth)
 actual = c("prose", "prose", "prose", "poetry", "poetry", "poetry")
 
-performance.measures(predicted, actual)
+performance.measures(actual, predicted)
 
 
 # classifying the standard 'iris' dataset:
@@ -54,7 +54,7 @@ train.classes = c(rep("s",25), rep("c",25), rep("v",25))
 test.classes = c(rep("s",25), rep("c",25), rep("v",25))
 results = perform.delta(train, test, train.classes, test.classes)
 
-performance.measures(results, test.classes)
+performance.measures(test.classes, results)
 
 
 }

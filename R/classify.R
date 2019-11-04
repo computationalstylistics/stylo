@@ -1141,10 +1141,10 @@ if(tolower(classification.method) == "nsc") {
 
 
 
-classes.test = gsub("_.*","",rownames(secondary.set))
+expected_classes = gsub("_.*","",rownames(secondary.set))
+predicted_classes = as.vector(classification.results)
 
-
-performance = performance.measures(classification.results, classes.test)
+performance = performance.measures(expected_classes, predicted_classes)
 
 
 
@@ -1207,8 +1207,8 @@ if(cv.folds > 0) {
   
   
   # accumulating the predictions and the expected classes
-  predicted.cv = c()
-  expected.cv = c()
+  predicted_classes = c()
+  expected_classes = c()
 
 
 
@@ -1303,8 +1303,8 @@ if(cv.folds > 0) {
   
   
   # accumulating the predictions and the expected classes
-  predicted.cv = c(predicted.cv, as.vector(classification.results))
-  expected.cv = c(expected.cv, classes.test)
+  predicted_classes = c(predicted_classes, as.vector(classification.results))
+  expected_classes = c(expected_classes, classes.test)
 
 
     # returns the number of correct attributions
@@ -1330,7 +1330,7 @@ if(cv.folds > 0) {
   cross.validation.results.all = cbind(cross.validation.results.all, cross.validation.results)
   colnames(cross.validation.results.all) = paste(mfw, "@", current.culling, sep="")
   
-  performance = performance.measures(predicted.cv, expected.cv)
+  performance = performance.measures(expected_classes, predicted_classes)
 
   
 }   # <-- if(cv.folds > 0)
@@ -1548,6 +1548,14 @@ if(exists("frequencies.test.set")) {
 if(exists("performance")) {
   attr(performance, "description") = "precision, recall, accuracy, and the f1 measure"
 }
+if(exists("predicted_classes")) {
+  predicted = predicted_classes
+  attr(predicted, "description") = "outcomes of the classifier, or a vector of predicted classes"
+}
+if(exists("expected_classes")) {
+  expected = expected_classes
+  attr(expected, "description") = "ground truth, or a vector of expected classes"
+}
 
 
 
@@ -1562,6 +1570,8 @@ variables.to.save = c("misclassified.samples",
                       "success.rate",
                       "overall.success.rate",
                       "performance",
+                      "predicted",
+                      "expected",
                       "distance.table",
                       "distinctive.features",
                       "features",
