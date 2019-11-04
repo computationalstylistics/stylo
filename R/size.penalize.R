@@ -22,20 +22,20 @@ size.penalize = function(training.frequencies = NULL,
     
     
     
-    ###############################################################
-    
-    # testing if multicore environment ('doMC', 'parallel') can be used
-    test_doMC = tryCatch(doMC::registerDoMC(cores = parallel::detectCores()), 
-                         error = function(e) NULL)
-    # switching to either parallel, or serial mode, depending on the above test
-    if(length(test_doMC) > 0) {
-        parallel_mode = TRUE
-        doMC::registerDoMC(cores = parallel::detectCores())
-    } else {
-        parallel_mode = FALSE
-    }
-    
-    ###############################################################
+#    ###############################################################
+#    
+#    # testing if multicore environment ('doMC', 'parallel') can be used
+#    test_doMC = tryCatch(doMC::registerDoMC(cores = parallel::detectCores()), 
+#                         error = function(e) NULL)
+#    # switching to either parallel, or serial mode, depending on the above test
+#    if(length(test_doMC) > 0) {
+#        parallel_mode = TRUE
+#        doMC::registerDoMC(cores = parallel::detectCores())
+#    } else {
+#        parallel_mode = FALSE
+#    }
+#   
+#    ###############################################################
     
     
     
@@ -188,27 +188,27 @@ size.penalize = function(training.frequencies = NULL,
                 message("\n", appendLF = FALSE)
             }
             
-            # sampling N times from the original text
-            if(parallel_mode == TRUE) {
-                # a loop involving many cores, to extract text samples in N iterations 
-                test.table = foreach::foreach(i = 1:iterations, .combine = "rbind") %dopar% get.vector.of.freqs(get.test.text)
-            } else {
+#            # sampling N times from the original text
+#            if(parallel_mode == TRUE) {
+#                # a loop involving many cores, to extract text samples in N iterations 
+#                test.table = foreach::foreach(i = 1:iterations, .combine = "rbind") %dopar% get.vector.of.freqs(get.test.text)
+#            } else {
                 # a loop using one CPU core: a classic solution
                 test.table = c()
                 for(i in 1:iterations) {
                     g = get.vector.of.freqs(get.test.text)
                     test.table = rbind(test.table, g)
                 }
-            }
+#            }
             
             rownames(test.table) = paste(test.text, 1:iterations, sep="_")    
             
             # another loop (the main one!), aka classification
             # which involves different vectors of features
-            if(parallel_mode == TRUE) {
-                # this version involves many CPU cores
-                classify_results = foreach::foreach(f = mfw) %dopar% perform.classification(f)
-            } else {
+ #           if(parallel_mode == TRUE) {
+ #               # this version involves many CPU cores
+ #               classify_results = foreach::foreach(f = mfw) %dopar% perform.classification(f)
+ #           } else {
                 # ...and this is a one-core equivalent of the above
                 classify_results = list()
                 no_of_f = 0
@@ -217,7 +217,7 @@ size.penalize = function(training.frequencies = NULL,
                     b = perform.classification(f)
                     classify_results[[no_of_f]] = b
                 }
-            }
+#            }
             
             # retrieving the names of the classes used in the prediction stage
             predicted_classes = colnames(classify_results[[1]])
