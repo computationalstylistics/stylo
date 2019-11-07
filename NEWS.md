@@ -3,9 +3,10 @@
 
 
 
-### version 0.7.1, 2019/11/3
+### version 0.7.1, 2019/11/4
   * improvements in crossv(): confusion matrix fully operational
   * new funcion performance.measures(), providing recall, precision, f1, etc.
+  * performance measures made available via classify()
   * new function size.penalize() to assess minimal sample size
   * extension to the generic plot() function, to plot size.penalize() results
 

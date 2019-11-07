@@ -1144,7 +1144,7 @@ if(tolower(classification.method) == "nsc") {
 expected_classes = gsub("_.*","",rownames(secondary.set))
 predicted_classes = as.vector(classification.results)
 
-performance = performance.measures(expected_classes, predicted_classes)
+#performance = performance.measures(expected_classes, predicted_classes)
 
 
 
@@ -1330,7 +1330,7 @@ if(cv.folds > 0) {
   cross.validation.results.all = cbind(cross.validation.results.all, cross.validation.results)
   colnames(cross.validation.results.all) = paste(mfw, "@", current.culling, sep="")
   
-  performance = performance.measures(expected_classes, predicted_classes)
+#  performance = performance.measures(expected_classes, predicted_classes)
 
   
 }   # <-- if(cv.folds > 0)
@@ -1550,7 +1550,7 @@ if(exists("performance")) {
 }
 if(exists("predicted_classes")) {
   predicted = predicted_classes
-  attr(predicted, "description") = "outcomes of the classifier, or a vector of predicted classes"
+  attr(predicted, "description") = "a vector of classes predicted by the classifier"
 }
 if(exists("expected_classes")) {
   expected = expected_classes

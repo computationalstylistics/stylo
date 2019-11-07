@@ -36,9 +36,10 @@ can be freely distributed.
 }
 \examples{
 data(lee)
-
 rownames(lee)
 
+\dontrun{
 stylo(frequencies = lee, gui = FALSE)
+}
 }
 \keyword{datasets}
