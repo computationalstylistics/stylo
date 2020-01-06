@@ -21,8 +21,6 @@ function(labels, col = "colors", opacity = 1) {
     
     distinct_labels_cleaned$colors <- c(1:length(distinct_labels_cleaned$labels_cleaned))
     
-    
-    #todo: get rid of dplyr code
     labels_cleaned <- merge(as.data.frame(labels_cleaned), distinct_labels_cleaned, by = 'labels_cleaned')
     
     color.numeric.values <- labels_cleaned$colors
