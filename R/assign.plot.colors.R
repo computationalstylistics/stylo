@@ -15,16 +15,17 @@ function(labels, col = "colors", opacity = 1) {
     vector.of.colors = rep("black", length(labels))
   } else {
     
+    # generate unique list of cleaned labels
     labels_cleaned <- gsub("_.*","",labels)
-    
     distinct_labels_cleaned <- unique(as.data.frame(labels_cleaned))
     
+    # assign a color identifier to each label
     distinct_labels_cleaned$colors <- c(1:length(distinct_labels_cleaned$labels_cleaned))
     
+    # join the list of of distinct label-color pairs to the full list of labels
     labels_cleaned <- merge(as.data.frame(labels_cleaned), distinct_labels_cleaned, by = 'labels_cleaned')
     
     color.numeric.values <- labels_cleaned$colors
-    
     
   # define a vector of available colors, if an appropriate option was chosen
   if(col == "colors" && opacity >= 1) {
