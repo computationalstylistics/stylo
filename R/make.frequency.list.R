@@ -19,7 +19,7 @@ make.frequency.list = function(data,
      # test if the dataset belongs to 'stylo.corpus' class
      if(class(data) == "stylo.corpus" | is.list(data) == TRUE) {
              # unlist, or make one long text out of the corpus samples
-             data = unlist(data)    
+             data = unlist(data, recursive = FALSE, use.names = FALSE)    
      # otherwise, test if the dataset is a vector
      } else if(is.vector(data) == FALSE) {        
              # whet it is not, produce an error message and stop
@@ -50,7 +50,7 @@ make.frequency.list = function(data,
      if(is.numeric(head) == TRUE) {
              # sanitizing the indicated number
              head = abs(round(head))
-             if(head == 0) head = 1
+             if(head == 0) {head = 1}
              # cutting off the list
              frequent.features = frequent.features[1:head]
      }
