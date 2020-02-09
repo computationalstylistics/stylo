@@ -661,17 +661,7 @@ if(exists("frequencies.0.culling") == FALSE) {
     mfw.list.of.all = features
   } else {
     # Extracting all the words used in the corpus
-    wordlist.of.loaded.corpus = c()
-#wordlist.of.loaded.corpus = unlist(loaded.corpus)
-    for (file in 1 : length(loaded.corpus)) {
-      # loading the next sample from the list "corpus.filenames"
-      current.text = loaded.corpus[[file]]
-      # putting the files together:
-      wordlist.of.loaded.corpus = c(wordlist.of.loaded.corpus, current.text)
-      # short message on screen
-      message(".", appendLF = FALSE)
-      if(file/25 == floor(file/25)) { message("")} # a newline every 25th sample
-    }
+    wordlist.of.loaded.corpus = unlist(loaded.corpus, use.names = FALSE)
 
     # Preparing a sorted frequency list of the whole primary set (or both sets).
     # short message
