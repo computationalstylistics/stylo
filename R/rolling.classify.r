@@ -555,7 +555,9 @@ corpus.of.secondary.set = load.corpus.and.parse(files=filenames.secondary.set,
                            sampling = "no.sampling"
                            )
 
-milestone.points = grep("xmilestone", corpus.of.secondary.set[[1]])
+if (is.null(milestone.points)) {
+	milestone.points = grep("xmilestone", corpus.of.secondary.set[[1]])
+}
 text.length = length(corpus.of.secondary.set[[1]])
 
 
