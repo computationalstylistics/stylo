@@ -14,32 +14,28 @@ function(labels, col = "colors", opacity = 1) {
   if(col == "black") {
     vector.of.colors = rep("black", length(labels))
   } else {
-    color.numeric.values = c(1)
-    current.color = 1
-    # a loop for matching the subsequent strings of chars
-    for(w in 2:length(labels)) {
-      # if two samples have the same id, don't change the color
-      if(gsub("_.*","",labels)[w] %in%  
-                       gsub("_.*","",labels[1:(w-1)]) == TRUE) {
-        find.color = which(gsub("_.*","",labels) == 
-                               gsub("_.*","",labels)[w])[1]
-        current.color = color.numeric.values[find.color]
-      # if the samples differ, assign the next color (actually, the color's id)
-      } else {
-        current.color = max(color.numeric.values) + 1
-      }
-    # append the recent color to the final vector of color values
-    color.numeric.values = c(color.numeric.values, current.color)
-    }
+    
+    # generate unique list of cleaned labels
+    labels_cleaned <- gsub("_.*","",labels)
+    distinct_labels_cleaned <- unique(as.data.frame(labels_cleaned))
+    
+    # assign a color identifier to each label
+    distinct_labels_cleaned$colors <- c(1:length(distinct_labels_cleaned$labels_cleaned))
+    
+    # join the list of of distinct label-color pairs to the full list of labels
+    labels_cleaned <- merge(as.data.frame(labels_cleaned), distinct_labels_cleaned, by = 'labels_cleaned')
+    
+    color.numeric.values <- labels_cleaned$colors
+    
   # define a vector of available colors, if an appropriate option was chosen
   if(col == "colors" && opacity >= 1) {
-    available.colors = rep(c("red","green","blue","black","orange","purple",
+    available.colors = rep_len(c("red","green","blue","black","orange","purple",
       "darkgrey","brown","maroon4","mediumturquoise","gold4", "deepskyblue",
       "greenyellow","grey","chartreuse4", "khaki", "navy", "palevioletred",
-      "darkolivegreen4", "chocolate4", "yellowgreen"),10)
+      "darkolivegreen4", "chocolate4", "yellowgreen"), max(color.numeric.values))
     }
   if(col == "colors" && opacity < 1) {
-    available.colors = rep(c(
+    available.colors = rep_len(c(
       rgb(1,0,0, (opacity*0.8)), # red, opacity slightly tuned
       rgb(0.2,0.8,0, opacity), # green
       rgb(0,0,1, opacity), # blue
@@ -47,7 +43,7 @@ function(labels, col = "colors", opacity = 1) {
       rgb(1,0.7,0, opacity), # yellow/organge
       rgb(1,0,0.8, opacity), # purple but slightly different
       rgb(0.5,0.5,0.5, (opacity*0.8)) # dark grey
-      ),40)
+      ), max(color.numeric.values))
   }
   # define a vector of gray tones, instead of colors
   if(col == "greyscale") {
