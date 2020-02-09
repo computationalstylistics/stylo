@@ -52,7 +52,7 @@ if(is.character(path) == TRUE & length(path) > 0) {
   }
 } else {
   # if the argument was empty, then relax
-  cat("using current directory...\n")
+  message("using current directory...\n")
 }
 
 # Choose directory via GUI:
@@ -92,12 +92,12 @@ if (gui == TRUE) {
             "AQUA" || (capabilities("tcltk") && capabilities("X11") &&
             suppressWarnings(tcltk::.TkUp))) {
         #variables = gui.classify(...)
-        cat("\n")
-        cat("GUI could not be launched -- it is not supported yet :-( \n\n")
+        message("\n")
+        message("GUI could not be launched -- it is not supported yet :-( \n\n")
       } else {
-        cat("\n")
-        cat("GUI could not be launched -- default settings will be used;\n")
-        cat("otherwise please pass your variables as command-line agruments\n\n")
+        message("\n")
+        message("GUI could not be launched -- default settings will be used;\n")
+        message("otherwise please pass your variables as command-line agruments\n\n")
       }
 }
 
@@ -268,11 +268,11 @@ features.exist = FALSE
         # if yes, then convert the above object into characters, just in case
         features = as.character(features)
       } else {
-        cat("\n")
-        cat("You seem to have chosen an existing set of features\n")
-        cat("Unfortunately, something is wrong: check if your variable\n")
-        cat("has a form of vector\n")
-        cat("\n")
+        message("\n")
+        message("You seem to have chosen an existing set of features\n")
+        message("Unfortunately, something is wrong: check if your variable\n")
+        message("has a form of vector\n")
+        message("\n")
         stop("Wrong format: a vector of features (e.g. words) was expected")
       }
     # selecting the above vector as a valid set of features
@@ -286,14 +286,14 @@ features.exist = FALSE
       # does the file exist?
       if(file.exists(features) == TRUE) {
         # file with a vector of features will be loaded
-        cat("\n", "reading a custom set of features from a file...", "\n",sep="")
+        message("\n", "reading a custom set of features from a file...", "\n",sep="")
         # reading a file: newlines are supposed to be delimiters
         features = scan(features,what="char",sep="\n",encoding=encoding)
         # getting rid of the lines beginning with the "#" char
         features = c(grep("^[^#]",features,value=TRUE))
       } else {
         # if there's no such a file, then don't try to use it
-        cat("\n", "file \"",features, "\" could not be found\n",sep="")
+        message("\n", "file \"",features, "\" could not be found\n",sep="")
         stop("Wrong file name")
       }
     # selecting the above vector as a valid set of features
@@ -332,11 +332,11 @@ for(iteration in 1:2) {
         # if yes, then convert the above object into a matrix (just in case)
         frequencies = as.matrix(frequencies)
       } else {
-        cat("\n")
-        cat("You seem to have chosen an existing table with frequencies\n")
-        cat("Unfortunately, something is wrong: check if your variable\n")
-        cat("has a form of matrix/data frame\n")
-        cat("\n")
+        message("\n")
+        message("You seem to have chosen an existing table with frequencies\n")
+        message("Unfortunately, something is wrong: check if your variable\n")
+        message("has a form of matrix/data frame\n")
+        message("\n")
         stop("Wrong format of the table of frequencies")
       }
       # this code makes sure that the table has variables' names
@@ -358,11 +358,11 @@ for(iteration in 1:2) {
       # does the file exist?
       if(file.exists(frequencies) == TRUE) {
         # file with frequencies will be loaded
-        cat("\n", "reading a file containing frequencies...", "\n",sep="")
+        message("\n", "reading a file containing frequencies...", "\n",sep="")
         frequencies = t(read.table(frequencies, encoding=encoding))
       } else {
         # if there's no such a file, then don't try to use it
-        cat("\n", "file \"",frequencies, "\" could not be found\n",sep="")
+        message("\n", "file \"",frequencies, "\" could not be found\n",sep="")
         stop("Wrong file name")
       }
     # selecting the above matrix as a valid corpus
@@ -375,12 +375,12 @@ for(iteration in 1:2) {
   if(features.exist == TRUE & corpus.exists == TRUE) {
       # checking if the chosen features do match the columns of the table
       if(length(grep("TRUE",colnames(frequencies) %in% features)) < 2) {
-        cat("The features you want to analyze do not match the variables' names:\n")
-        cat("\n")
-        cat("Available features:",head(colnames(frequencies)), "...\n")
-        cat("Chosen features:", head(features), "...\n")
-        cat("\n")
-        cat("Check the rotation of your table and the names of its rows and columns.\n")
+        message("The features you want to analyze do not match the variables' names:\n")
+        message("\n")
+        message("Available features:",head(colnames(frequencies)), "...\n")
+        message("Chosen features:", head(features), "...\n")
+        message("\n")
+        message("Check the rotation of your table and the names of its rows and columns.\n")
         stop("Input data mismatch")
       } else {
         # if everything is right, select the subset of columns from the table:
@@ -399,10 +399,10 @@ for(iteration in 1:2) {
   # Additionally, check if the table with frequencies is long enough
   if(corpus.exists == TRUE) {
     if(length(frequencies[,1]) < 2 | length(frequencies[1,]) < 2 ) {
-      cat("\n")
-      cat("There is not enough samples and/or features to be analyzed.\n")
-      cat("Try to use tables of at least two rows by two columns.\n")
-      cat("\n")
+      message("\n")
+      message("There is not enough samples and/or features to be analyzed.\n")
+      message("Try to use tables of at least two rows by two columns.\n")
+      message("\n")
       stop("Wrong size of the table of frequencies")
     }
   }
@@ -410,12 +410,12 @@ for(iteration in 1:2) {
   # 1st iteration: setting the matrix containing the training set (if applicable)
   if(corpus.exists == TRUE & iteration == 1) {
     freq.I.set.0.culling = frequencies
-    cat("Training set successfully loaded.\n")
+    message("Training set successfully loaded.\n")
   }
   # 2nd iteration: setting the matrix containing the test set (if applicable)
   if(corpus.exists == TRUE & iteration == 2) {
     freq.II.set.0.culling = frequencies
-    cat("Test set successfully loaded.\n")
+    message("Test set successfully loaded.\n")
   }
 
 # attempts at loading the training set and the test set: the loop returns here
@@ -424,14 +424,14 @@ for(iteration in 1:2) {
 # Two iterations completed, another sanity check should be applied
   # First, let's check if the I set was loaded
   if(!exists("freq.I.set.0.culling") & exists("freq.II.set.0.culling")) {
-    cat("Training set is missing, though.\n")
-    cat("Trying to build both tables from scratch.\n")
+    message("Training set is missing, though.\n")
+    message("Trying to build both tables from scratch.\n")
     corpus.exists = FALSE
   }
   # Secondly, let's check the II set
   if(exists("freq.I.set.0.culling") & !exists("freq.II.set.0.culling")) {
-    cat("Test set is missing, though.\n")
-    cat("Trying to build both tables from scratch.\n")
+    message("Test set is missing, though.\n")
+    message("Trying to build both tables from scratch.\n")
     corpus.exists = FALSE
   }
 ###############################################################################
@@ -467,13 +467,13 @@ for(iteration in 1:2) {
         # if everything is fine, use this variable as a valid corpus
 #        loaded.corpus = parsed.corpus
       } else {
-        cat("\n")
-        cat("The object you've specified as your corpus cannot be used.\n")
-        cat("It should be a list containing particular text samples\n")
-        cat("(vectors containing sequencies of words/n-grams or other features).\n")
-        cat("The samples (elements of the list) should have their names.\n")
-        cat("Alternatively, try to build your corpus from text files (default).\n")
-        cat("\n")
+        message("\n")
+        message("The object you've specified as your corpus cannot be used.\n")
+        message("It should be a list containing particular text samples\n")
+        message("(vectors containing sequencies of words/n-grams or other features).\n")
+        message("The samples (elements of the list) should have their names.\n")
+        message("Alternatively, try to build your corpus from text files (default).\n")
+        message("\n")
         stop("Wrong corpus format")
       }
   }
@@ -492,10 +492,10 @@ for(iteration in 1:2) {
 # Two iterations completed, another sanity check should be applied
 if(corpus.exists == FALSE) {
     if(length(corpus.of.primary.set) >1 & length(corpus.of.secondary.set) >1 ) {
-      cat("Two subcorpora loaded successfully.\n")
+      message("Two subcorpora loaded successfully.\n")
       corpus.exists = TRUE
     } else {
-      cat("The subcorpora will be loaded from text files...\n")
+      message("The subcorpora will be loaded from text files...\n")
       corpus.exists = FALSE
     }
 }
@@ -520,7 +520,7 @@ if(corpus.exists == FALSE) {
 
   # Checking whether required files and subdirectories exist
   if(file.exists(training.corpus.dir) == FALSE | file.exists(test.corpus.dir) == FALSE) {
-    cat("\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
+    message("\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
         "Working directory should contain two subdirectories:
         \"",training.corpus.dir,"\" and \"",test.corpus.dir,"\"\n",
         "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n",sep="")
@@ -531,7 +531,7 @@ if(corpus.exists == FALSE) {
   }
   # Checking if the subdirectories contain any stuff
   if(length(filenames.primary.set) <2 | length(filenames.secondary.set) >1) {
-    cat("\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
+    message("\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
         "The subdirectory \"",training.corpus.dir,"\" should contain at least",
         " two text samples; \n\"",
         test.corpus.dir,"\" should contain exactly one sample!\n",
@@ -610,13 +610,13 @@ corpus.of.primary.set = load.corpus.and.parse(files = filenames.primary.set,
 if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
 
   # blank line on the screen
-  cat("\n")
+  message("\n")
 
   # both corpora (training set and test set) shoud contain some texts;
   # if the number of text samples is lower than 2, the script will stop
   # (in the case of the test set, it MUST contain exacly one sample!)
   if(length(corpus.of.primary.set) < 2 || length(corpus.of.secondary.set) < 1) {
-    cat("\n\n","either the training set or the test set is empty!", "\n\n")
+    message("\n\n","either the training set or the test set is empty!", "\n\n")
     stop("corpus error")
   }
 
@@ -625,15 +625,15 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
   # frequent words (or n-grams, or anything else) used in the current corpus,
   # in descending order, without frequencies (just a list of words/features).
   if (features.exist == TRUE) {
-    cat("\n")
-    cat("using an existing wordlist (vector of features)...\n")
+    message("\n")
+    message("using an existing wordlist (vector of features)...\n")
     # just to say something
     features = features
   } else {
     # Extracting all the words (features) used in the texts of primary set
     # (or both if "Z-scores all" is set to TRUE)
     wordlist.of.primary.set = c()
-    cat("\n")
+    message("\n")
     # iterating over the samples stored in corpus.of.primary.set
     for (file in 1 : length(corpus.of.primary.set)) {
       # loading the next sample from the list filenames.primary.set,
@@ -641,21 +641,21 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
       # putting the samples together:
       wordlist.of.primary.set = c(wordlist.of.primary.set, current.text)
       # short message on screen
-      cat(".")
-      if(file/25 == floor(file/25)) { cat("\n")} # a newline every 25th sample
+      message(".")
+      if(file/25 == floor(file/25)) { message("\n")} # a newline every 25th sample
     }
     # including words of the secondary set in the reference wordlist (if specified)
       if (reference.wordlist.of.all.samples == TRUE) {
         wordlist.of.secondary.set = c()
-        cat("\n")
+        message("\n")
         for (file in 1 : length(corpus.of.secondary.set)) {
           # loading the next sample from the list filenames.secondary.set,
           current.text = corpus.of.secondary.set[[file]]
           # putting samples together:
           wordlist.of.secondary.set = c(wordlist.of.secondary.set, current.text)
           # short message on screen
-          cat(".")
-          if(file/25 == floor(file/25)) { cat("\n")} # a newline every 25th sample
+          message(".")
+          if(file/25 == floor(file/25)) { message("\n")} # a newline every 25th sample
         }
       } else {
         # otherwise, create an empty vector
@@ -664,8 +664,8 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
 
     # Preparing a sorted frequency list of the whole primary set (or both sets).
     # short message
-    cat("\n")
-    cat(length(c(wordlist.of.primary.set,wordlist.of.secondary.set)),"tokens",
+    message("\n")
+    message(length(c(wordlist.of.primary.set,wordlist.of.secondary.set)),"tokens",
          "will be used to create a list of features\n")
     # the core procedure: frequency list
     features = sort(table(c(wordlist.of.primary.set,wordlist.of.secondary.set)),
@@ -679,7 +679,7 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
 
     # Saving the list of features.
     # some comments into the file containing wordlist
-    cat("# This file contains the words that were used for building the table",
+    message("# This file contains the words that were used for building the table",
       "# of frequencies. It can be also used for the next tasks, and for this",
       "# purpose it can be manually revised, edited, deleted, culled, etc.",
       "# You can either delete unwanted words, or mark them with \"#\"",
@@ -693,7 +693,7 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
         data.to.be.saved = iconv(features, to=encoding)
       }
   # writing the stuff
-  cat(data.to.be.saved,file="wordlist.txt", sep="\n",append=T)
+  message(data.to.be.saved,file="wordlist.txt", sep="\n",append=T)
 
 
   }   # <----- conditional expr. if(features.exist == TRUE) terminates here
@@ -717,7 +717,7 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
     # writing the stuff into files
     setwd("sample_dump_primary_set")
       for(i in names(corpus.of.primary.set)) {
-        cat(corpus.of.primary.set[[i]],file=paste(names(corpus.of.primary.set[i]),".txt",sep=""))
+        message(corpus.of.primary.set[[i]],file=paste(names(corpus.of.primary.set[i]),".txt",sep=""))
       }
     setwd("..")
   }
@@ -733,7 +733,7 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
     # writing the stuff into files
     setwd("sample_dump_secondary_set")
       for(i in names(corpus.of.secondary.set)) {
-        cat(corpus.of.secondary.set[[i]],file=paste(names(corpus.of.secondary.set[i]),".txt",sep=""))
+        message(corpus.of.secondary.set[[i]],file=paste(names(corpus.of.secondary.set[i]),".txt",sep=""))
       }
     setwd("..")
   }
@@ -745,7 +745,7 @@ if(!exists("freq.I.set.0.culling") | !exists("freq.II.set.0.culling")) {
 
 
   # blank line on the screen
-  cat("\n")
+  message("\n")
 
 
   # preparing a huge table of all the frequencies for the training set
