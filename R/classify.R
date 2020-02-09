@@ -269,7 +269,7 @@ features.exist = FALSE
         message("")
         message("You seem to have chosen an existing set of features")
         message("Unfortunately, something is wrong: check if your variable")
-        message("has a form of vector\n")
+        message("has a form of vector")
         stop("Wrong format: a vector of features (e.g. words) was expected")
       }
     # selecting the above vector as a valid set of features

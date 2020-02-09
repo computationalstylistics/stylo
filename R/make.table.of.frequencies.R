@@ -64,7 +64,7 @@ make.table.of.frequencies = function(corpus,
       }
 
   }
-  message("       ")
+  message("")
   message("combining frequencies into a table...")
   # combining frequencies into a table
   frequency.table = sapply(mget(grep("vector_of_freqs_", ls(), value=T)), rbind)
