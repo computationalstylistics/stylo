@@ -39,11 +39,10 @@ load.corpus = function(files = "all", corpus.dir = "", encoding = "UTF-8") {
       message("!\n")
       message("\"", file, "\"? no such a file -- check your directory!\n")
     } else {
-      message("loading ", file, "\t", "...")
+      #message("loading ", file, "\t", "...")
       # loading the next file from the list "corpus.filenames";
       # if an error occurred, ignore it and send a message on the screen
-      current.file = tryCatch(scan(file, what = "char", encoding = encoding,
-                                   sep = "\n", quiet = TRUE),
+      current.file = tryCatch(readChar(file, file.info(file)$size),
                               error = function(e) NULL)
       # if successful, append the scanned file into the corpus,
       # otherwise send a message
