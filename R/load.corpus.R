@@ -31,7 +31,8 @@ load.corpus = function(files = "all", corpus.dir = "", encoding = "UTF-8") {
   	  files = list.files()
   }
   # variable initialization
-  loaded.corpus = list()
+  loaded.corpus = vector("list", length = length(files))
+  names(loaded.corpus) = files
   # uploading all files listed in the vector "files"
   for (file in files) {
     if(file.exists(file) == FALSE) {
