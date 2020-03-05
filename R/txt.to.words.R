@@ -12,9 +12,7 @@
 txt.to.words = function(input.text, 
                         splitting.rule = NULL, 
                         preserve.case = FALSE) {
-#
-
-
+  #
   # since the function can be applied to lists and vectors,
   # we need to define an internal function that will be applied afterwards
   wrapper = function(input.text = input.text, splitting.rule = splitting.rule, 
@@ -70,7 +68,7 @@ txt.to.words = function(input.text,
           "\UAC00-\UD7AF",
           "]+",
           sep="")
-      tokenized.text = c(unlist(strsplit(input.text, splitting.rule)))
+      tokenized.text = c(unlist(stringr::str_split(input.text, splitting.rule)))
     # if custom splitting rule was indicated:
     } else {
       # sanity check
@@ -78,7 +76,7 @@ txt.to.words = function(input.text,
         # just in case, convert to characters
         splitting.rule = as.character(splitting.rule)
         # splitting into units specified by custom regular expression
-        tokenized.text = c(unlist(strsplit(input.text, splitting.rule)))
+        tokenized.text = c(unlist(stringr::str_split(input.text, splitting.rule)))
       } else {
         stop("Wrong splitting regexp")
       }
