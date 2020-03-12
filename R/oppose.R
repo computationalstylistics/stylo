@@ -312,10 +312,10 @@ if(corpus.exists == FALSE) {
   filenames.secondary.set = list.files(secondary.corpus.dir)
   
   # Checking if the subdirectories contain any stuff
-  if(length(filenames.primary.set) <2 | length(filenames.secondary.set) <2) {
+  if(length(filenames.primary.set) < 1 | length(filenames.secondary.set) < 1) {
     message("\n\n", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
         "Both subdirectories \"", primary.corpus.dir, "\" and \"",
-        secondary.corpus.dir, "\"\nshould contain at least two text samples!\n",
+        secondary.corpus.dir, "\"\nshould contain at least one text sample!\n",
         "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n", sep = "")
     # back to the original working directory
     setwd(original.path)
