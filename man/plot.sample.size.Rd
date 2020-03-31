@@ -11,7 +11,7 @@ of short samples in text classification. See the help page of
 \method{plot}{sample.size}(x, target = NULL, variable = "diversity",
       trendline = TRUE, observations = FALSE,
       grayscale = FALSE, legend = TRUE, 
-      legend_pos = "bottomright", ...)
+      legend_pos = "bottomright", main = "default", ...)
 }    
 \arguments{
   \item{x}{an object of class \code{"stylo.results"} as produced by
@@ -37,6 +37,10 @@ of short samples in text classification. See the help page of
   \item{legend_pos}{position of the legend: choose between 
       \code{"bottomright"}, \code{"bottomleft"}, \code{"topright"}
       and \code{"topleft"}.}
+  \item{main}{title of the plot; use it as if it was a regular option
+      of the function \code{plot}, or leave it as \code{"default"}
+      to get the name of the sample as automatically extracted from 
+      the class \code{"stylo.results"}.}
   \item{\dots}{further arguments to be passed to \code{plot}.}
 }
 \details{

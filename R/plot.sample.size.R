@@ -7,6 +7,7 @@ plot.sample.size = function(x,
                             grayscale = FALSE,
                             legend = TRUE, 
                             legend_pos = "bottomright",
+                            main = "default",
                             ...) {
     #
     
@@ -83,6 +84,18 @@ plot.sample.size = function(x,
         warning("Unknown value of the argument 'variable'. Performing 'variable = \"diversity\"'.")    
     }
     
+
+
+
+    if(is.null(main) == TRUE) {
+        plot_title = NULL
+    } else if(main == "default") {
+        plot_title = main_title
+    } else {
+        plot_title = main
+    }
+
+
     
     
     no_of_variables = length(dataset[,1])
@@ -106,7 +119,7 @@ plot.sample.size = function(x,
          ylim = c(0,1), 
          ylab = ylabel, 
          xlab = "sample size", 
-         main = main_title, 
+         main = plot_title, 
          type = "n", ...)
     
     
@@ -128,12 +141,4 @@ plot.sample.size = function(x,
 
 
 
-
-#texts = xxx$test.texts
-#for(i in texts) {
-#    file_png = paste(i, ".png", sep = "")
-#    png(filename = file_png)
-#    plot(xxx, variable = "diversity", target = i)
-#    dev.off()
-#}
 
