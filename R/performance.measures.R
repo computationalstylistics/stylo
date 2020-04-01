@@ -43,9 +43,10 @@ performance.measures = function(actual_classes,
     # a generalized version:
     f = ifelse(precision + recall == 0, 0, (1 + f_beta^2) * precision * recall / ((f_beta^2 * precision) + recall) )
     
-    # assigning explicit 0s to NAs
+    # assigning explicit 0s to NAs and NaNs
     f[is.na(f)] = 0
-    
+    precision[is.nan(precision)] = 0
+    recall[is.nan(recall)] = 0
     
     
     
