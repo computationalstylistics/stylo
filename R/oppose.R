@@ -838,7 +838,7 @@ message("")
 #
 }
 } else {
-message("No test set samples found\n",
+message("No test set samples found (but this is totally OK in most cases!).\n",
     "Performing a simple comparison of the training samples...")
 }
 #
