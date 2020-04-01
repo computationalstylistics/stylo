@@ -113,10 +113,10 @@ size.penalize = function(training.frequencies = NULL,
         actual_classes = gsub("_.*" ,"", names(predicted_classes))
         predicted_classes = as.character(predicted_classes)
         training_classes = gsub("_.*" ,"", rownames(train.table))
-        
-        predicted = factor(predicted_classes, levels = unique(as.character(training_classes)))
-        expected  = as.factor(actual_classes)
-        confusion_matrix = as.matrix(table(expected, predicted))
+                
+        predicted_classes = factor(as.character(predicted_classes), levels = unique(as.character(actual_classes)))
+        actual_classes = factor(actual_classes)
+        confusion_matrix = table(actual_classes, predicted_classes)
         
         results = confusion_matrix
         accuracy = sum(actual_classes == predicted_classes)

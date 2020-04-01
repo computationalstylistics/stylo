@@ -57,15 +57,19 @@ perform.knn = function(training.set, test.set,
   names(classification.results) = rownames(test.set)
 
 
-# preparing a confusion table
-predicted_classes = classification.results
-actual_classes = classes.test.set
-confusion.matrix = table(predicted_classes, actual_classes)
+    # preparing a confusion table
+    predicted_classes = classification.results
+    actual_classes = classes.test.set
+
+    predicted_classes = factor(as.character(predicted_classes), levels = unique(as.character(actual_classes)))
+    actual_classes = factor(actual_classes)
+    confusion_matrix = table(actual_classes, predicted_classes)
+
 # getting rid of the classes not represented in the training set (e.g. anonymous samples)
-#confusion.matrix = confusion.matrix[,rownames(confusion.matrix)]
+#confusion_matrix = confusion_matrix[,rownames(confusion_matrix)]
 
 
-attr(classification.results, "confusion_matrix") = confusion.matrix
+attr(classification.results, "confusion_matrix") = confusion_matrix
 
 
 
