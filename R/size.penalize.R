@@ -109,17 +109,20 @@ size.penalize = function(training.frequencies = NULL,
             predicted_classes = perform.nsc(train.table[,1:no.of.features], 
                                     test.table[,1:no.of.features], ...)
         }
+
+
 #### this class matching seems a bit weird!
-        actual_classes = gsub("_.*" ,"", names(predicted_classes))
+        expected_classes = gsub("_.*" ,"", names(predicted_classes))
         predicted_classes = as.character(predicted_classes)
         training_classes = gsub("_.*" ,"", rownames(train.table))
                 
-        predicted_classes = factor(as.character(predicted_classes), levels = unique(as.character(actual_classes)))
-        actual_classes = factor(actual_classes)
-        confusion_matrix = table(actual_classes, predicted_classes)
+        classes_all = sort(unique(as.character(c(expected_classes, predicted_classes))))
+        predicted = factor(as.character(predicted_classes), levels = classes_all)
+        expected  = factor(as.character(expected_classes), levels = classes_all)
+        confusion_matrix = table(expected, predicted)
         
         results = confusion_matrix
-        accuracy = sum(actual_classes == predicted_classes)
+        accuracy = sum(expected_classes == predicted_classes)
         attr(results, "accuracy") = accuracy
         return(results)
     }

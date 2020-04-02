@@ -5,23 +5,17 @@
 This function returns a few standard measurments used to test how efficient
 a given classifier is, in a supervised machine-learnig classification setup.}
 \usage{
-performance.measures(actual_classes, predicted_classes, 
-                     f_beta = 1, drop_test_classes = TRUE)
+performance.measures(expected_classes, predicted_classes, f_beta = 1)
 }
 \arguments{
-  \item{actual_classes}{a vector of expected classes.}
+  \item{expected_classes}{a vector of expected classes, or the classification
+  results that we knew in advance.}
 
   \item{predicted_classes}{a vector of predictions outputted from a classifier.}
   
   \item{f_beta}{the F score is usually used in its F1 version, but one can
       use any other scaling factor, e.g. F(1/2) or F(2); the default value
       is 1.}
-    
-  \item{drop_test_classes}{when the vector of expected classes (see above)
-      contains items that were not used to train the model (a good example
-      being a text by anonymous author, to be attributed), then one might
-      drop these classes so that the overall performance measures are not
-      biased.}
 }
 \value{
 The function returns a vector of four values: accuracy, precision, recall
@@ -36,13 +30,12 @@ and the F measure.
 }
 \examples{
 
-# observed classes (or, the classes "guessed" by a classifier)
-predicted = c("prose", "prose", "prose", "poetry", "prose", "prose")
+# classification results aka predictions (or, the classes "guessed" by a classifier)
+what_we_got = c("prose", "prose", "prose", "poetry", "prose", "prose")
+# expected classes (or, the ground truth)
+what_we_expected = c("prose", "prose", "prose", "poetry", "poetry", "poetry")
 
-# known classes (or, the ground truth)
-actual = c("prose", "prose", "prose", "poetry", "poetry", "poetry")
-
-performance.measures(actual, predicted)
+performance.measures(what_we_expected, what_we_got)
 
 
 # classifying the standard 'iris' dataset:
