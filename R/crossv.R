@@ -187,8 +187,8 @@ crossv = function(training.set,
     
     attr(cross.validation.results, "confusion_matrix") = confusion_matrix
     attr(cross.validation.results, "misclassifications") = cv.misclassifications
-    attr(cross.validation.results, "predicted_classes") = predicted_classes
-    attr(cross.validation.results, "expected_classes") = expected_classes
+    attr(cross.validation.results, "predicted") = predicted_classes
+    attr(cross.validation.results, "expected") = expected_classes
 
     
     class(cross.validation.results) = "stylo.data"
