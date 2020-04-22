@@ -80,7 +80,7 @@ Maciej Eder
 \examples{
 \dontrun{
 perform.svm(training.set, test.set)
-}
+
 
 # classifying the standard 'iris' dataset:
 data(iris)
@@ -91,5 +91,6 @@ train.classes = c(rep("s",25), rep("c",25), rep("v",25))
 test.classes = c(rep("s",25), rep("c",25), rep("v",25))
 
 perform.svm(train, test, train.classes, test.classes)
+}
 }
 %\keyword{classification}

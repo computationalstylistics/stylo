@@ -75,6 +75,7 @@ perform.svm = function(training.set,
   # a. default/custom parameters (faster but less accurate)
   if(tune.parameters == FALSE) {
           model = svm(classes ~ ., data = input.data, subset = training.classes, 
+#                 type = "C",
                  kernel = svm.kernel, degree = svm.degree, coef0 = svm.coef0, 
                  cost = svm.cost)
   # b. the parameters tuned empirically
@@ -86,6 +87,7 @@ perform.svm = function(training.set,
                             tunecontrol = tune.control(sampling = "boot"))
           #
           model = svm(classes ~ ., data = input.data, subset = training.classes, 
+#          type = "C",
                  kernel = svm.kernel, degree = svm.degree, coef0 = svm.coef0, 
                  cost=params$best.parameter[[2]], 
                  gamma=params$best.parameter[[1]])

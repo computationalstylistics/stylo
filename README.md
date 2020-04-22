@@ -228,6 +228,7 @@ This section is meant to give the users a general outline of what the package ca
 
 ## Other relevant resources
 
+* If you work with the Gutenberg Project collection and plan to analyze it using `stylo`, then [this notebook](https://github.com/djwrisley/RLAC/blob/master/Project%20Gutenberg%20with%20Stylo/Stylo_with_texts_from_PG.Rmd) by David L. Wrisley is a must: you’ll find a seamless pipeline here.
 
 * Despite a black legend, R and Python are not necessarily in a deadly clash: here is [a great post](https://cligs.hypotheses.org/577) by José Calvo Tello on invoking the package `stylo` directly from Python!
 
