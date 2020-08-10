@@ -17,9 +17,17 @@ rolling.classify = function(gui = FALSE,
          milestone.points = NULL,
          milestone.labels = NULL,
          plot.legend = TRUE,
-         add.ticks = FALSE, ...) {
+         add.ticks = FALSE, 
+         shading = NULL, ...) {
 
-
+  # add a logical toggle defining shading when it isn't specified
+  if (is.null(shading)) {
+    if (colors.on.graphs == "black") {
+      shading <- TRUE
+    } else {
+      shading <- FALSE
+    }
+  }
 
 # if any command-line arguments have been passed by a user, they will
 # be stored on the following list and used to overwrite the defaults
@@ -930,6 +938,22 @@ if(length(attr(classification.results, "rankings")[1,]) > 2) {
       names(third.choice) = names(classification.results)
 }
 
+# define some angles and shading parameters (these might need tweaked)
+if (shading) {
+  plot_labs <- unique(gsub("_.+","", rownames(training.set)))
+  plot_angles <- rep(c(45,70,115,90,20,170,0), 2)[1:length(plot_labs)]
+  plot_angles2 <- rep(c(135,70,115,0,20,170,0), 2)[1:length(plot_labs)]
+  plot_density <- rep(c(27,40),length(plot_labs))[1:length(plot_labs)]
+  
+  names(plot_angles) <- names(colors.first.choice)
+  names(plot_angles2) <- names(colors.first.choice)
+  names(plot_density) <- names(colors.first.choice)
+} else {
+  plot_angles <- NULL
+  plot_angles2 <- NULL
+  plot_density <- NULL
+}
+
 
 
 
@@ -1024,7 +1048,15 @@ plot.current.task = function(){
         # adding lines at each style break point
         segments(style.change.points,0.14,style.change.points,0)
         # drawing the strip: a sequence of colored rectangles
-        rect(start.segment,0.15,end.segment,0.3,border=NA, col=colors.first.choice[rle(first.choice)$values])
+        rect(start.segment,0.15,end.segment,0.3,border=NA, col=colors.first.choice[rle(first.choice)$values],
+             angle = plot_angles[rle(first.choice)$values], 
+             density = plot_density[rle(first.choice)$values])
+	if (shading) {# a second plot with new angles allows for cross-hatching
+		rect(start.segment, 0.15, end.segment, 0.3, border = NA, 
+		     col = colors.first.choice[rle(first.choice)$values],
+		     angle = plot_angles2[rle(first.choice)$values], 
+		     density = plot_density[rle(first.choice)$values])
+	}
 
 
 
@@ -1035,7 +1067,15 @@ plot.current.task = function(){
         zero.point = 0
         start.segment = c(zero.point, end.segment[1:(length(end.segment)-1)])
         # drawing the strip: a sequence of colored rectangles
-        rect(start.segment,0.31,end.segment,0.45,border=NA, col=colors.second.choice[rle(second.choice)$values])
+        rect(start.segment,0.31,end.segment,0.45,border=NA, col=colors.second.choice[rle(second.choice)$values],
+	     angle = plot_angles[rle(second.choice)$values], 
+	     density = plot_density[rle(second.choice)$values])
+	if (shading) {# a second plot with new angles allows for cross-hatching
+		rect(start.segment, 0.31, end.segment, 0.45, border = NA, 
+		     col = colors.second.choice[rle(second.choice)$values],
+		     angle = plot_angles2[rle(second.choice)$values], 
+		     density = plot_density[rle(second.choice)$values])
+	}
 
 
 
@@ -1046,7 +1086,16 @@ plot.current.task = function(){
                 zero.point = 0
                 start.segment = c(zero.point, end.segment[1:(length(end.segment)-1)])
                 # drawing the strip: a sequence of colored rectangles
-                rect(start.segment,0.46,end.segment,0.6,border=NA, col=colors.third.choice[rle(third.choice)$values])
+                rect(start.segment,0.46,end.segment,0.6,border=NA, col=colors.third.choice[rle(third.choice)$values],
+		     angle = plot_angles[rle(third.choice)$values], 
+		     density = plot_density[rle(third.choice)$values])
+		if (shading) {# a second plot with new angles allows for cross-hatching
+			rect(start.segment, 0.31, end.segment, 0.45, border = NA, 
+			     col = colorcolors.third.choices.second.choice[rle(third.choice)$values],
+			     angle = plot_angles2[rle(third.choice)$values], 
+			     density = plot_density[rle(third.choice)$values])
+      }
+    }
         }
 
 
@@ -1093,13 +1142,23 @@ plot.current.task = function(){
 
         # adding an optional legend on the right side of the plot
         if(plot.legend == TRUE) {
-                legend(x = entire.sample.length, y = 0.95,
-                       legend = names(colors.first.choice),
-                       col = colors.first.choice,
-                       bty = "n",
-                       cex=0.75,
-                       lwd = 5)
-        }
+                if (shading) {# overlay a second legend for cross-hatches, and replace the legend style with fill
+			legend(x = entire.sample.length, y = 0.95, legend = names(colors.first.choice), 
+			       fill = colors.first.choice, bty = "n", cex = 1,
+			       angle = plot_angles[names(colors.first.choice)], 
+			       density = plot_density[names(colors.first.choice)])
+			legend(x = entire.sample.length, y = 0.95, legend = names(colors.first.choice), 
+			       fill = colors.first.choice, bty = "n", cex = 1, 
+			       angle = plot_angles2[names(colors.first.choice)], 
+			       density = plot_density[names(colors.first.choice)])
+		} else {
+			legend(x = entire.sample.length, y = 0.95,
+			       legend = names(colors.first.choice),
+			       col = colors.first.choice,
+			       bty = "n",
+			       cex=0.75,
+			       lwd = 5)
+		}
 
 
         # adding optional ranking hints
