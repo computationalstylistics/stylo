@@ -1091,7 +1091,7 @@ plot.current.task = function(){
 		     density = plot_density[rle(third.choice)$values])
 		if (shading) {# a second plot with new angles allows for cross-hatching
 			rect(start.segment, 0.31, end.segment, 0.45, border = NA, 
-			     col = colorcolors.third.choices.second.choice[rle(third.choice)$values],
+			     col = colors.third.choice[rle(third.choice)$values],
 			     angle = plot_angles2[rle(third.choice)$values], 
 			     density = plot_density[rle(third.choice)$values])
       }

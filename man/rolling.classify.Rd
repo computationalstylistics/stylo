@@ -16,7 +16,7 @@ rolling.classify(gui = FALSE, training.corpus.dir = "reference_set",
          slice.size = 5000, slice.overlap = 4500, 
          training.set.sampling = "no.sampling", mfw = 100, culling = 0, 
          milestone.points = NULL, milestone.labels = NULL, 
-         plot.legend = TRUE, add.ticks = FALSE, 
+         plot.legend = TRUE, add.ticks = FALSE, shading = NULL,
          ...)
 }
 \arguments{
@@ -114,6 +114,12 @@ rolling.classify(gui = FALSE, training.corpus.dir = "reference_set",
   \item{add.ticks}{a graphical parameter: consider adding tiny ticks 
     (short horizontal lines) to see the density of sampling. Default:
   \code{FALSE}.}
+  
+  \item{shading}{instead of using colors on the final plot, one might 
+    choose to use shading hatches, which might be an option to toggle 
+    with greyscale, but also with non-black settings thereby allowing 
+    for photocopier-friendly charts (even if they may be subjectively 
+    unattractive). To use this option, switch it to \code{TRUE}.}
   
   \item{...}{any variable as produced by \code{stylo.default.settings()}
     can be set here to overwrite the default values.}
