@@ -92,7 +92,7 @@ stylo.pronouns = function(corpus.lang = "English") {
     "jouzelf", "elkaar", "hen", "henzelf", "hun", "hunzelf", "zich", 
     "elkaar", "wie", "wat", "welke")
   # Spanish
-  sp.pronouns = c("yo", "me", "m\303\255", "t\303\272", "te", "t\303\255", "usted", 
+  sp.pronouns = c("yo", "me", "m\303\255", "t\303\272", "te", "ti", "usted", 
     "ud", "le", "lo", "la", "se", "s\303\255", "\303\251l", "lo", "ella", 
     "nos", "nosotros", "nosotras", "vosotros", "vosotras", "ustedes", "ud", 
     "les", "los", "las", "se", "ellos", "los", "ellas", "os", "uds", "vos")
