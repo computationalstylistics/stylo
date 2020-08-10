@@ -1,12 +1,19 @@
 ## 'stylo' news ##
 
 
+
+### version 0.7.3, 2020/08/10
+  * perfom.svm() improved to work with R >4.0.0
+  * oppose() not restricted anymore to have at least 2 texts per set
+  
+
 ### version 0.7.2, 2020/04/20
   * fixes required by CRAN to meet R >3.6.3 requirements
   * CPU performance improvements
   * improvements in performance.measures()
-  * confusion matrixes fixed
+  * confusion matrices fixed
   * oppose() update, to allow having just one text per set
+  
 
 ### version 0.7.1, 2019/11/4
   * improvements in crossv(): confusion matrix fully operational

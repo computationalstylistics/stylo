@@ -1,8 +1,8 @@
 Package: stylo
 Type: Package
 Title: Stylometric Multivariate Analyses
-Version: 0.7.2
-Date: 2020-04-20
+Version: 0.7.3
+Date: 2020-08-10
 Author: Maciej Eder, Jan Rybicki, Mike Kestemont, Steffen Pielstroem
 Maintainer: Maciej Eder <maciejeder@gmail.com>
 URL: https://github.com/computationalstylistics/stylo
