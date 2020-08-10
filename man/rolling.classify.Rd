@@ -16,7 +16,7 @@ rolling.classify(gui = FALSE, training.corpus.dir = "reference_set",
          slice.size = 5000, slice.overlap = 4500, 
          training.set.sampling = "no.sampling", mfw = 100, culling = 0, 
          milestone.points = NULL, milestone.labels = NULL, 
-         plot.legend = TRUE, add.ticks = FALSE, shading = NULL,
+         plot.legend = TRUE, add.ticks = FALSE, shading = FALSE,
          ...)
 }
 \arguments{
