@@ -18,16 +18,9 @@ rolling.classify = function(gui = FALSE,
          milestone.labels = NULL,
          plot.legend = TRUE,
          add.ticks = FALSE, 
-         shading = NULL, ...) {
+         shading = FALSE, ...) {
 
-  # add a logical toggle defining shading when it isn't specified
-  if (is.null(shading)) {
-    if (colors.on.graphs == "black") {
-      shading <- TRUE
-    } else {
-      shading <- FALSE
-    }
-  }
+
 
 # if any command-line arguments have been passed by a user, they will
 # be stored on the following list and used to overwrite the defaults
@@ -210,6 +203,19 @@ if(length(save.plot.custom.height) > 0) {
       # if the saved value exists, apply it to the main variable
       plot.custom.height = save.plot.custom.height
 }
+
+
+
+
+
+  # add a logical toggle defining shading when it isn't specified
+  if (is.null(shading)) {
+    if (colors.on.graphs == "black") {
+      shading <- TRUE
+    } else {
+      shading <- FALSE
+    }
+  }
 
 
 
@@ -939,7 +945,7 @@ if(length(attr(classification.results, "rankings")[1,]) > 2) {
 }
 
 # define some angles and shading parameters (these might need tweaked)
-if (shading) {
+if (shading == TRUE) {
   plot_labs <- unique(gsub("_.+","", rownames(training.set)))
   plot_angles <- rep(c(45,70,115,90,20,170,0), 2)[1:length(plot_labs)]
   plot_angles2 <- rep(c(135,70,115,0,20,170,0), 2)[1:length(plot_labs)]
@@ -1094,9 +1100,9 @@ plot.current.task = function(){
 			     col = colors.third.choice[rle(third.choice)$values],
 			     angle = plot_angles2[rle(third.choice)$values], 
 			     density = plot_density[rle(third.choice)$values])
-      }
-    }
+            }
         }
+
 
 
 
@@ -1167,8 +1173,9 @@ plot.current.task = function(){
                 text(0, 0.38, expression(2^ nd), adj = c(1.5,0.5))
                 text(0, 0.53, expression(3^ rd), adj = c(1.5,0.5))
         }
-}
+    }
 
+}
 
 
 
