@@ -172,7 +172,7 @@ This section is meant to give the users a general outline of what the package ca
 
 ### 3. Installing from a local file
 
-Download the package from **here**; save the file anywhere on your computer where you will be able to find it; launch R; set working directory to the folder where the downloaded file is (please keep it mind that the slashes might look different in different operating systems):
+Download the package in its source version from [**here**](https://cran.r-project.org/package=stylo) (look for the `stylo_0.7.3.tar.gz` file or a newer one); save the file anywhere on your computer where you will be able to find it; launch R; set working directory to the folder where the downloaded file is (please keep it mind that the slashes might look different in different operating systems):
 
 ```
 setwd("I/hope/I/remember/where/it/was/")
@@ -181,7 +181,7 @@ setwd("I/hope/I/remember/where/it/was/")
 Install the package:
 
 ```
-install.packages("stylo_0.7.1.tar.gz", repos = NULL, type = "source")
+install.packages("stylo_0.7.3.tar.gz", repos = NULL, type = "source")
 ```
 
 **NOTE**: the `stylo` package requires a few standard R packages to be installed. When installing from CRAN or from GitHub, the dependencies are downloaded automatically; otherwise, you have to install them manually. Type (or copy-paste) the following lines:
