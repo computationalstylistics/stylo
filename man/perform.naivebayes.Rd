@@ -60,6 +60,6 @@ test = rbind(x[26:50,], x[76:100,], x[126:150,])
 train.classes = c(rep("s",25), rep("c",25), rep("v",25))
 test.classes = c(rep("s",25), rep("c",25), rep("v",25))
 
-perform.knn(train, test, train.classes, test.classes)
+perform.naivebayes(train, test, train.classes, test.classes)
 }
 %\keyword{classification}

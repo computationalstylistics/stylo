@@ -39,10 +39,18 @@ perform.naivebayes = function(training.set, test.set,
   }
   #
   classes = c(classes.training.set, classes.test.set)
+  # converting strings to factors
+  classes = factor(classes)
+  #
   input.data = as.data.frame(rbind(training.set,test.set))
   input.data = cbind(classes, input.data)
   training.classes = c(1:length(training.set[,1]))
   #
+  # an error is produced when variable names contain three dots: "..."
+  # just in case, then:
+  colnames(input.data) = gsub("\\.\\.\\.","^^^",colnames(input.data))
+  colnames(training.set) = gsub("\\.\\.\\.","^^^",colnames(training.set))
+
   # training a model
   model = naiveBayes(classes ~ ., data = input.data, subset = training.classes)
   #
