@@ -185,38 +185,34 @@ crossv = function(training.set,
 #    confusion_matrix = confusion_matrix[,unique(predicted_classes)]
 
     # shorten the names of the variables
-    guessed = cross.validation.results
+    y = cross.validation.results
 #    predicted = predicted_classes
 #    expected = expected_classes
     misclassified = cv.misclassifications
     
-    attr(guessed, "description") = "a vector of correct and incorrect attributions"
+    attr(y, "description") = "classification results in a compact form"
     attr(confusion_matrix, "description") = "confusion matrix for all cv folds"
     attr(misclassified, "description") = "misclassified samples [still not working properly]"
     attr(predicted, "description") = "a vector of classes predicted by the classifier"
     attr(expected, "description") = "ground truth, or a vector of expected classes"
     
-#    attr(cross.validation.results, "confusion_matrix") = confusion_matrix
-#    attr(cross.validation.results, "misclassifications") = cv.misclassifications
-#    attr(cross.validation.results, "predicted") = predicted_classes
-#    attr(cross.validation.results, "expected") = expected_classes
 
-    results_crossv = list()
-    results_crossv$guessed = guessed
-    results_crossv$confusion_matrix = confusion_matrix
-    results_crossv$misclassified = misclassified
-    results_crossv$predicted = predicted
-    results_crossv$expected = expected
+    results = list()
+    results$y = y
+    results$confusion_matrix = confusion_matrix
+    results$misclassified = misclassified
+    results$predicted = predicted
+    results$expected = expected
 
 
     # adding some information about the current function call
     # to the final list of results
-    results_crossv$call = match.call()
-    results_crossv$name = call("crossv")
+    results$call = match.call()
+    results$name = call("crossv")
     
-    class(results_crossv) = "stylo.results"
+    class(results) = "stylo.results"
     
-    return(results_crossv)
+    return(results)
     
 }
 

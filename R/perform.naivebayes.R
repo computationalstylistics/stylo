@@ -72,12 +72,12 @@ perform.naivebayes = function(training.set, test.set,
     confusion_matrix = table(expected, predicted)
 
     # shorten the names of the variables
-    guessed = classification.results
+    y = classification.results
     # predicted = predicted_classes
     # expected = expected_classes
     # misclassified = cv.misclassifications
     
-    attr(guessed, "description") = "a vector of correct and incorrect attributions"
+    attr(y, "description") = "classification results in a compact form"
     attr(confusion_matrix, "description") = "confusion matrix for all cv folds"
     # attr(misclassified, "description") = "misclassified samples [still not working properly]"
     attr(predicted, "description") = "a vector of classes predicted by the classifier"
@@ -85,7 +85,7 @@ perform.naivebayes = function(training.set, test.set,
     
 
     results = list()
-    results$guessed = guessed
+    results$y = y
     results$confusion_matrix = confusion_matrix
     # results$misclassified = misclassified
     results$predicted = predicted
