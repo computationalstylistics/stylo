@@ -2,9 +2,11 @@
 
 
 
-### version 0.7.3, 2020/08/10
+### version 0.7.3, 2020/08/11
   * perfom.svm() improved to work with R >4.0.0
   * oppose() not restricted anymore to have at least 2 texts per set
+  * better color management in rolling.classify()
+  * CPU performance improvements
   
 
 ### version 0.7.2, 2020/04/20

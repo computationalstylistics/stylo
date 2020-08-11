@@ -40,7 +40,7 @@ Burrows, J. F. (2002). "Delta": a measure of stylistic difference and
 
 Eder, M. (2015). Taking stylometry to the limits: benchmark study on 5,281 
     texts from Patrologia Latina. In: "Digital Humanities 2015: Conference 
-    Abstracts".
+    Abstracts". \url{https://zenodo.org/record/1321296#.XzK5APgzagQ}
 
 Evert, S., Proisl, T., Jannidis, F., Reger, I., Pielstrom, S., Schoch, C. 
     and Vitt, T. (2017). Understanding and explaining Delta measures for authorship 
