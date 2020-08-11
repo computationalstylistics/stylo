@@ -181,7 +181,9 @@ imposters = function(reference.set,
             
             # THE MAIN STEP: LAUNCHING THE CLASSIFIER
             # run the classifier
-            get.the.answer = perform.delta(training.set, test.set, ...)[1]
+            get.the.answer = perform.delta(training.set, test.set, ...)
+            # getting only the first hit, from the variable y (compact results)
+            get.the.answer = get.the.answer$y[1]
             
             # increasing the score when the nearest author is in the target group
             if(get.the.answer == candidate) {

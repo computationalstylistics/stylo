@@ -194,7 +194,7 @@ crossv = function(training.set,
     
     attr(y, "description") = "classification results in a compact form"
     attr(confusion_matrix, "description") = "confusion matrix for all cv folds"
-    attr(misclassified, "description") = "misclassified samples [still not working properly]"
+    attr(misclassified, "description") = "misclassified samples [still to be elaborated]"
     attr(predicted, "description") = "a vector of classes predicted by the classifier"
     attr(expected, "description") = "ground truth, or a vector of expected classes"
     
