@@ -47,7 +47,7 @@ train.classes = c(rep("s",25), rep("c",25), rep("v",25))
 test.classes = c(rep("s",25), rep("c",25), rep("v",25))
 results = perform.delta(train, test, train.classes, test.classes)
 
-performance.measures(test.classes, results)
+performance.measures(results$expected, results$predicted)
 
 
 }
