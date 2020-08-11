@@ -206,6 +206,9 @@ if(length(save.plot.custom.height) > 0) {
 
 
 
+classification.method = tolower(classification.method)
+
+
 
 
   # add a logical toggle defining shading when it isn't specified
@@ -907,9 +910,9 @@ if(tolower(classification.method) == "naivebayes") {
 # 2nd: (slice.size / 2) + (slice.size - slice.overlap)
 # 3rd: (slice.size / 2) + (slice.size - slice.overlap) + (slice.size - slice.overlap)
 # Nth: (slice.size / 2) + ((slice.size - slice.overlap) * (N - 1))
-names(classification.results) =  c(round(slice.size/2) +
+names(classification.results$y) =  c(round(slice.size/2) +
                                     ((slice.size - slice.overlap) *
-                                    (1:length(names(classification.results)) -1)) )
+                                    (1:length(names(classification.results$y)) -1)) )
 #
 
 
@@ -935,13 +938,13 @@ colors.third.choice = assign.plot.colors((unique(gsub("_.+","",rownames(training
 
 
 
-first.choice = attr(classification.results, "rankings")[,1]
-names(first.choice) = names(classification.results)
-second.choice = attr(classification.results, "rankings")[,2]
-names(second.choice) = names(classification.results)
-if(length(attr(classification.results, "rankings")[1,]) > 2) {
-      third.choice = attr(classification.results, "rankings")[,3]
-      names(third.choice) = names(classification.results)
+first.choice = classification.results$ranking[,1]
+names(first.choice) = names(classification.results$y)
+second.choice = classification.results$ranking[,2]
+names(second.choice) = names(classification.results$y)
+if(length(classification.results$ranking[1,]) > 2) {
+      third.choice = classification.results$ranking[,3]
+      names(third.choice) = names(classification.results$y)
 }
 
 # define some angles and shading parameters (these might need tweaked)
@@ -965,7 +968,7 @@ if (shading == TRUE) {
 
 
 # how many words/features the main sample has
-entire.sample.length = (slice.size - slice.overlap) * length(classification.results)
+entire.sample.length = (slice.size - slice.overlap) * length(classification.results$y)
   # if slice overlap was used, an additional tweak is needed
   if(slice.overlap >0) {
        entire.sample.length = entire.sample.length + slice.overlap
@@ -998,7 +1001,7 @@ plot.current.task = function(){
                 } else {
                     identifiers = milestone.labels
                 }
-                if(classification.method == "delta" & length(attr(classification.results, "rankings")[1,]) > 2) {
+                if(classification.method == "delta" & length(classification.results$ranking[1,]) > 2) {
                     segments(milestone.points,0.62,milestone.points,0.8, lty=3)
                 } else {
                     segments(milestone.points,0.47,milestone.points,0.8, lty=3)
@@ -1011,7 +1014,7 @@ plot.current.task = function(){
         x = entire.sample.length-10*slice.size
 
         # drawing a rectangle; its length depending on the number of stripes
-        if(classification.method == "delta" & length(attr(classification.results, "rankings")[1,]) > 2) {
+        if(classification.method == "delta" & length(classification.results$ranking[1,]) > 2) {
             rect(x, c(-0.1,0.62), x+slice.size, c(0.13,1), border=NA, col=rgb(0.4,0.4,0.4,0.3))
         } else {
             rect(x, c(-0.1,0.47), x+slice.size, c(0.13,1), border=NA, col=rgb(0.4,0.4,0.4,0.3))
@@ -1041,8 +1044,8 @@ plot.current.task = function(){
 
         # additional identifier for every single sample
         if(add.ticks == TRUE) {
-          segments(as.numeric(names(classification.results)),0.14,as.numeric(names(classification.results)),0.12,
-          col=colors.first.choice[classification.results] )
+          segments(as.numeric(names(classification.results$y)),0.14,as.numeric(names(classification.results$y)),0.12,
+          col=colors.first.choice[classification.results$y] )
         }
 
 
@@ -1086,7 +1089,7 @@ plot.current.task = function(){
 
 
         # strip III (for delta)
-        if(classification.method == "delta" && length(attr(classification.results, "rankings")[1,]) > 2) {
+        if(classification.method == "delta" && length(classification.results$ranking[1,]) > 2) {
                 end.segment = as.numeric(names(rle(third.choice)$values)) + (slice.size / 2) - (slice.overlap / 2)
                 end.segment[length(end.segment)] = entire.sample.length
                 zero.point = 0
@@ -1108,8 +1111,8 @@ plot.current.task = function(){
 
         if(classification.method == "svm" || classification.method == "nsc") {
 
-                scores.raw = attr(classification.results, "scores")
-                rownames(scores.raw) = names(classification.results)
+                scores.raw = classification.results$scores
+                rownames(scores.raw) = names(classification.results$y)
                 y = round(scores.raw, 1)
 
                 # adjusting the svm decision values to the current scale {0,1}
@@ -1250,11 +1253,12 @@ features.actually.used = colnames(training.set)
 frequencies.training.set = freq.I.set.0.culling
 frequencies.test.set = freq.II.set.0.culling
 
-classification.rankings = attr(classification.results, "rankings")
-classification.scores = attr(classification.results, "scores")
+classification.rankings = classification.results$ranking
+classification.scores = classification.results$scores
 
 
-
+# overwriting the 'classification.results' value with its core part
+classification.results = classification.results$y
 
 
 
