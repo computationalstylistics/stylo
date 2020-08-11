@@ -18,8 +18,8 @@ performance.measures(expected_classes, predicted_classes, f_beta = 1)
       is 1.}
 }
 \value{
-The function returns a vector of four values: accuracy, precision, recall
-and the F measure.
+The function returns a list containing four performance indexes -- accuracy, precision, 
+recall and the F measure -- for each class, as well as an average score for all classes.
 }
 
 \author{Maciej Eder}

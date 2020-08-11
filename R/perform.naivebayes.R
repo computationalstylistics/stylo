@@ -71,12 +71,35 @@ perform.naivebayes = function(training.set, test.set,
     expected  = factor(as.character(expected_classes), levels = classes_all)
     confusion_matrix = table(expected, predicted)
 
-  # getting rid of the classes not represented in the training set (e.g. anonymous samples)
-  # confusion_matrix = confusion_matrix[,rownames(confusion_matrix)]
+    # shorten the names of the variables
+    guessed = classification.results
+    # predicted = predicted_classes
+    # expected = expected_classes
+    # misclassified = cv.misclassifications
+    
+    attr(guessed, "description") = "a vector of correct and incorrect attributions"
+    attr(confusion_matrix, "description") = "confusion matrix for all cv folds"
+    # attr(misclassified, "description") = "misclassified samples [still not working properly]"
+    attr(predicted, "description") = "a vector of classes predicted by the classifier"
+    attr(expected, "description") = "ground truth, or a vector of expected classes"
+    
 
-  attr(classification.results, "confusion_matrix") = confusion_matrix
+    results = list()
+    results$guessed = guessed
+    results$confusion_matrix = confusion_matrix
+    # results$misclassified = misclassified
+    results$predicted = predicted
+    results$expected = expected
 
 
-return(classification.results)
+    # adding some information about the current function call
+    # to the final list of results
+    results$call = match.call()
+    results$name = call("perform.naivebayes")
+    
+    class(results) = "stylo.results"
+    
+    return(results)
+    
 }
 
