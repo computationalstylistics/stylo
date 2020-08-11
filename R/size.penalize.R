@@ -94,39 +94,51 @@ size.penalize = function(training.frequencies = NULL,
     }
     
     
+
+
+
+
+
     
     # function (iterator) to perform the classification stage
     perform.classification = function(no.of.features) {
         if(classification.method == "delta") {
-            predicted_classes = perform.delta(train.table[,1:no.of.features], 
+            classification_results = perform.delta(train.table[,1:no.of.features], 
                                     test.table[,1:no.of.features], z.scores.both.sets = FALSE, ...)
         }
         if(classification.method == "svm") {
-            predicted_classes = perform.svm(train.table[,1:no.of.features], 
+            classification_results = perform.svm(train.table[,1:no.of.features], 
                                     test.table[,1:no.of.features], ...)
         }
         if(classification.method == "nsc") {
-            predicted_classes = perform.nsc(train.table[,1:no.of.features], 
+            classification_results = perform.nsc(train.table[,1:no.of.features], 
                                     test.table[,1:no.of.features], ...)
         }
 
 
 #### this class matching seems a bit weird!
-        expected_classes = gsub("_.*" ,"", names(predicted_classes))
-        predicted_classes = as.character(predicted_classes)
-        training_classes = gsub("_.*" ,"", rownames(train.table))
-                
-        classes_all = sort(unique(as.character(c(expected_classes, predicted_classes))))
-        predicted = factor(as.character(predicted_classes), levels = classes_all)
-        expected  = factor(as.character(expected_classes), levels = classes_all)
-        confusion_matrix = table(expected, predicted)
+#        expected_classes = gsub("_.*" ,"", names(predicted_classes))
+#        predicted_classes = as.character(predicted_classes)
+#        training_classes = gsub("_.*" ,"", rownames(train.table))
+#                
+#        classes_all = sort(unique(as.character(c(expected_classes, predicted_classes))))
+#        predicted = factor(as.character(predicted_classes), levels = classes_all)
+#        expected  = factor(as.character(expected_classes), levels = classes_all)
+#        confusion_matrix = table(expected, predicted)
+#### this class matching seems a bit weird!
         
-        results = confusion_matrix
-        accuracy = sum(expected_classes == predicted_classes)
+
+
+        results = classification_results$confusion_matrix
+        accuracy = sum(classification_results$expected == classification_results$predicted)
         attr(results, "accuracy") = accuracy
         return(results)
     }
     
+
+
+
+
     
     # function to compute Simpson's index of diversity
     get.dispersion = function(x) {
