@@ -126,23 +126,23 @@ crossv = function(training.set,
         # now, performing classification:
         if(tolower(classification.method) == "delta") {
             classification.results = perform.delta(cv.train, cv.test, 
-                                     cv.classes.train, cv.classes.test, ...)
+                                     cv.classes.train, cv.classes.test, ...)$y
         }
         if(tolower(classification.method) == "knn") {
             classification.results = perform.knn(cv.train, cv.test, 
-                                     cv.classes.train, cv.classes.test, ...)
+                                     cv.classes.train, cv.classes.test, ...)$y
         }
         if(tolower(classification.method) == "svm") {
             classification.results = perform.svm(cv.train, cv.test, 
-                                     cv.classes.train, cv.classes.test, ...)
+                                     cv.classes.train, cv.classes.test, ...)$y
         }
         if(tolower(classification.method) == "nsc") {
             classification.results = perform.nsc(cv.train, cv.test, 
-                                     cv.classes.train, cv.classes.test, ...)
+                                     cv.classes.train, cv.classes.test, ...)$y
         }
         if(tolower(classification.method) == "naivebayes") {
             classification.results = perform.naivebayes(cv.train, cv.test, 
-                                     cv.classes.train, cv.classes.test, ...)
+                                     cv.classes.train, cv.classes.test, ...)$y
         }
         
 
@@ -174,20 +174,22 @@ crossv = function(training.set,
     
     }
     
+    
+   #### cross.validation.results
+    
+    
+    
     classes_all = sort(unique(as.character(c(expected_classes, predicted_classes))))
     predicted = factor(as.character(predicted_classes), levels = classes_all)
     expected  = factor(as.character(expected_classes), levels = classes_all)
     confusion_matrix = table(expected, predicted)
 
     
-#    # getting rid of classes that are not represented in the training set
-#    # by dropping the respective columns (usually by anonymous authors)
-#    confusion_matrix = confusion_matrix[,unique(predicted_classes)]
 
     # shorten the names of the variables
     y = cross.validation.results
-#    predicted = predicted_classes
-#    expected = expected_classes
+    # predicted = predicted_classes
+    # expected = expected_classes
     misclassified = cv.misclassifications
     
     attr(y, "description") = "classification results in a compact form"
