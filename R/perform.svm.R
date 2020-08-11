@@ -171,14 +171,6 @@ perform.svm = function(training.set,
     expected  = factor(as.character(expected_classes), levels = classes_all)
     confusion_matrix = table(expected, predicted)
 
-   
-  
-#  attr(classification.results, "distance.table") = selected.dist
-#  attr(classification.results, "rankings") = classification.rankings
-#  attr(classification.results, "scores") = classification.scores
-#  attr(classification.results, "confusion_matrix") = confusion_matrix
-
-
 
     # shorten the names of the variables
     y = classification.results
@@ -198,7 +190,6 @@ perform.svm = function(training.set,
     attr(raw_scores, "description") = "SVM decision scores in their original order"
     attr(confusion_matrix, "description") = "confusion matrix for all cv folds"
 
-    
 
     results = list()
     results$y = y
@@ -219,9 +210,6 @@ perform.svm = function(training.set,
     class(results) = "stylo.results"
     
     return(results)
-
-
-
 
 }
 
