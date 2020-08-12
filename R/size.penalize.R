@@ -22,34 +22,31 @@ size.penalize = function(training.frequencies = NULL,
     
     
     
-#    ###############################################################
-#    
-#    # testing if multicore environment ('doMC', 'parallel') can be used
-#    test_doMC = tryCatch(doMC::registerDoMC(cores = parallel::detectCores()), 
-#                         error = function(e) NULL)
-#    # switching to either parallel, or serial mode, depending on the above test
-#    if(length(test_doMC) > 0) {
-#        parallel_mode = TRUE
-#        doMC::registerDoMC(cores = parallel::detectCores())
-#    } else {
-#        parallel_mode = FALSE
-#    }
-#   
-#    ###############################################################
+    # # testing if multicore environment ('doMC', 'parallel') can be used
+    # test_doMC = tryCatch(doMC::registerDoMC(cores = parallel::detectCores()), 
+    #                      error = function(e) NULL)
+    # # switching to either parallel, or serial mode, depending on the above test
+    # if(length(test_doMC) > 0) {
+    #     parallel_mode = TRUE
+    #     doMC::registerDoMC(cores = parallel::detectCores())
+    # } else {
+    #     parallel_mode = FALSE
+    # }
     
     
     
     
-##### temporary!! ######
-
-# this needs to be replaced with "..."
-# and, in several functions language needs to be replaced with corpus.lang:
+# in several functions 'language' needs to be replaced with 'corpus.lang':
 # txt.to.words.ext, parse.corpus, load.corpus.and.parse, stylo, classify (x2), oppose (x3), rolling.classify (x3)
 # the same applies to man pages!!!
 
 
 
+##### temporary!! ######
+
+
 #training.corpus = c("ABronte_Agnes", "ABronte_Tenant")
+
 ##### temporary!! ######    
 
 
