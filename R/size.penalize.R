@@ -115,10 +115,15 @@ size.penalize = function(training.frequencies = NULL,
         }
 
 
-        results = classification$confusion_matrix[1,]
+        # getting only one row (the relevant one!) from the confusion matrix
+        expected_class = classification$expected[1]
+        results = classification$confusion_matrix[expected_class,]
+        
+        # getting accuracy
         accuracy = sum(classification$expected == classification$predicted)
         attr(results, "accuracy") = accuracy
         return(results)
+
     }
     
 
@@ -129,12 +134,16 @@ size.penalize = function(training.frequencies = NULL,
     # function to compute Simpson's index of diversity
     get.dispersion = function(x) {
         l = sum(x * (x-1)) / (sum(x) * (sum(x) -1))
-        #l = ( 4 * sum(x) * (sum(x)-1) * (sum(x)-2) * sum((x/sum(x))^3) + 
-             # 2 * sum(x) * (sum(x)-1) * sum((x/sum(x))^2) - 2 * sum(x) * (sum(x-1)) * 
-             # (2*sum(x)-3) * (sum((x/sum(x))^2)^2) ) / ( (sum(x) * (sum(x)-1))^2 )
         return(l)
     }
     
+    
+    
+    
+    # alternative estimate of Simpson's dispersion (introduced in the same paper):
+             # l = ( 4 * sum(x) * (sum(x)-1) * (sum(x)-2) * sum((x/sum(x))^3) + 
+             # 2 * sum(x) * (sum(x)-1) * sum((x/sum(x))^2) - 2 * sum(x) * (sum(x-1)) * 
+             # (2*sum(x)-3) * (sum((x/sum(x))^2)^2) ) / ( (sum(x) * (sum(x)-1))^2 )
     
     # variance
     # Ds = ( sum( (x / sum(x) )^3 ) - (sum( (x / sum(x) )^2 )^2 ) ) / (sum(x)/4)
@@ -184,23 +193,23 @@ size.penalize = function(training.frequencies = NULL,
             counter.alt = counter.alt + 1
             
             # a short message on screen
-            message(".", appendLF = FALSE)
-            if(counter.alt %% 64 == 0) {
-                message("\n", appendLF = FALSE)
+            if(counter.alt %% 5 == 0) {
+                message(".", appendLF = FALSE)
             }
             
-             # sampling N times from the original text
-             # if(parallel_mode == TRUE) {
-             #     # a loop involving many cores, to extract text samples in N iterations 
-             #     test.table = foreach::foreach(i = 1:iterations, .combine = "rbind") %dopar% get.vector.of.freqs(get.test.text)
-             # } else {
-             #  # a loop using one CPU core: a classic solution
-                test.table = c()
-                for(i in 1:iterations) {
-                    g = get.vector.of.freqs(get.test.text)
-                    test.table = rbind(test.table, g)
-                }
-             # }
+            
+            # sampling N times from the original text
+            # if(parallel_mode == TRUE) {
+            #     # a loop involving many cores, to extract text samples in N iterations 
+            #     test.table = foreach::foreach(i = 1:iterations, .combine = "rbind") %dopar% get.vector.of.freqs(get.test.text)
+            # } else {
+            #  # a loop using one CPU core: a classic solution
+               test.table = c()
+               for(i in 1:iterations) {
+                   g = get.vector.of.freqs(get.test.text)
+                   test.table = rbind(test.table, g)
+               }
+            # }
             
             rownames(test.table) = paste(test.text, sprintf("%04.0f", (1:iterations)), sep="_")    
             

@@ -103,7 +103,7 @@ perform.nsc = function(training.set,
     predicted_classes = classification.results
     expected_classes = classes.test.set
 
-    classes_all = sort(unique(as.character(c(expected_classes, predicted_classes))))
+    classes_all = sort(unique(as.character(c(expected_classes, classes.training.set))))
     predicted = factor(as.character(predicted_classes), levels = classes_all)
     expected  = factor(as.character(expected_classes), levels = classes_all)
     confusion_matrix = table(expected, predicted)
