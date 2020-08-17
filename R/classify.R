@@ -1516,7 +1516,7 @@ if(exists("distance.table")) {
   attr(distance.table, "description") = "final distances between each pair of samples"
   class(distance.table) = "stylo.data"
 }
-if(exists("distinctive.features") & length(distinctive.features) > 0) {
+if(exists("distinctive.features")) {
   attr(distinctive.features, "description") = "most distinctive features"
 }
 if(exists("frequencies.both.sets")) {

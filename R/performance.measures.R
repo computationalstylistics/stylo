@@ -1,8 +1,20 @@
 
 
-performance.measures = function(expected_classes,
-                                predicted_classes, 
+performance.measures = function(predicted_classes,
+                                expected_classes = NULL, 
                                 f_beta = 1) {
+    
+
+    
+    if(class(predicted_classes) == "stylo.results") {
+        input_data = unclass(predicted_classes)
+        predicted_classes = input_data$predicted
+        expected_classes = input_data$expected
+    } else {
+        if(is.null(expected_classes)) {
+            stop("a vector of expected classes is required! see help(performance.measures)")
+        }
+    }
     
     
     # sanitizing predicted and actual classes (they will be factorized later anyway)
