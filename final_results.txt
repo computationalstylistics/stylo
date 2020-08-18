@@ -1,0 +1,14 @@
+
+
+
+HarperLee_Mockingbird_1960 	-->	 Welty
+HarperLee_Watchman_2015 	-->	 Welty
+
+100 MFW , culled @ 0%,  12 of 12	(100%)
+
+General attributive success:  12 of 12 (100%)
+
+MFWs from 100 to 100 @ increment 100
+Culling from 0 to 0 @ increment 20
+Pronouns deleted: FALSE
+

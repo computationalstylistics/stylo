@@ -3,7 +3,7 @@
 
 crossv = function(training.set, 
                   test.set = NULL,
-                  cv.mode = "stratified",
+                  cv.mode = "leaveoneout",
                   cv.folds = 10,
                   classes.training.set = NULL,
                   classes.test.set = NULL,

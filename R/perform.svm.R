@@ -88,10 +88,10 @@ perform.svm = function(training.set,
   
   #
   # testing the model on "new" data (i.e. the test.set)
-  classification.results = predict(model, test.set, decision.values = TRUE)
+  predicted.classes = predict(model, test.set, decision.values = TRUE)
 
   # retrieving decision values: a composite matrix
-  d.values = attr(classification.results, "decision.values")
+  d.values = attr(predicted.classes, "decision.values")
   
   # get reverse values in each cell
   d.values.rev = d.values * -1
@@ -125,12 +125,14 @@ perform.svm = function(training.set,
 
 
   # starting final variables
+  classification.results = c()
   classification.scores = c()
   classification.rankings = c()
   
   for(h in 1:length(selected.dist[,1])) {
           ranked.c = order(selected.dist[h,],decreasing=TRUE)[1:no.of.candidates]
           current.sample = colnames(selected.dist)[ranked.c[1]]
+          classification.results = c(classification.results, current.sample)
           #
           current.ranking = colnames(selected.dist)[ranked.c]
           current.scores = selected.dist[h,ranked.c]
