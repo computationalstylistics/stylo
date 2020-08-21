@@ -129,7 +129,7 @@ This will download and install xcode developer tools and fix the problem. The pr
 This section is meant to give the users a general outline of what the package can do, rather than providing a comprehensive description of designing a stylometric test using the R package `stylo`. Refer to the following documents:
 
 * for (real) beginners: a crush introduction in the form of a [slideshow](https://computationalstylistics.github.io/stylo_nutshell/)
-* for (sort of) beginners: a concise [HOWTO](https://sites.google.com/site/computationalstylistics/stylo/stylo_howto.pdf)
+* for (sort of) beginners: a concise [HOWTO](https://github.com/computationalstylistics/stylo_howto/blob/master/stylo_howto.pdf)
 * for advanced users: a paper in [R Journal](https://journal.r-project.org/archive/2016/RJ-2016-007/RJ-2016-007.pdf)
 * full documentation at [CRAN](https://cran.r-project.org/web/packages/stylo/stylo.pdf)
 
@@ -164,6 +164,3 @@ This section is meant to give the users a general outline of what the package ca
 * The package `stylo` has been created as a by-product of a few projects conducted by the Computational Stylistics Group. See [this website](https://computationalstylistics.github.io/) for further details. An [older version](https://sites.google.com/site/computationalstylistics/) of the webpage is also there, even if it has not been be updated for a while.
 
  
-
-
-
