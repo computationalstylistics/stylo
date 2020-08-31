@@ -1358,7 +1358,7 @@ if(analysis.type == "PCV" || analysis.type == "PCR") {
       for (c in rownames(pca.results$x)){
         labels = c(labels, gsub("_.*", "", c))
       }
-      COOR = data.frame(pca.results$x[,1:2], LABEL = labels)
+      COOR = data.frame(pca.results$x[,1:2], LABEL = labels, stringsAsFactors = TRUE)
       labels = c(levels(COOR$LABEL))
       # visualize
       sps = trellis.par.get("superpose.symbol")
