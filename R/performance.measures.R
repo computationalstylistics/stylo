@@ -1,20 +1,31 @@
 
 
-performance.measures = function(expected_classes,
-                                predicted_classes, 
+performance.measures = function(predicted_classes,
+                                expected_classes = NULL, 
                                 f_beta = 1) {
     
+
     
-    # sanitizing predicted and actual classes:
-    # forbidden is the case in which there's more classes outputted by the classifier
-    # than available ground truth classes
-#    if(sum(!(predicted_classes %in% expected_classes)) > 0) {
-#        stop("Classes mismatch: the following classes could not be found among\n", 
-#        "the actual classes:\n",
-#        "\t", predicted_classes[!(predicted_classes %in% expected_classes)], "\n",
-#        "The problem is usually caused by mixing up predicted classes and actual\n", 
-#        "(or expected) classes.")
-#    }
+    if(class(predicted_classes) == "stylo.results") {
+        input_data = unclass(predicted_classes)
+        predicted_classes = input_data$predicted
+        expected_classes = input_data$expected
+    } else {
+        if(is.null(expected_classes)) {
+            stop("a vector of expected classes is required! see help(performance.measures)")
+        }
+    }
+    
+    
+    # sanitizing predicted and actual classes (they will be factorized later anyway)
+    if(is.factor(expected_classes) == TRUE) {
+        expected_classes = as.character(expected_classes)
+    }
+    if(is.factor(predicted_classes) == TRUE) {
+        predicted_classes = as.character(predicted_classes)
+    }
+
+    
 
     classes_all = sort(unique(as.character(c(expected_classes, predicted_classes))))
     predicted = factor(as.character(predicted_classes), levels = classes_all)
@@ -28,7 +39,7 @@ performance.measures = function(expected_classes,
 
 
     # f1 measure, or the f score with beta = 1:
-    #f = ifelse(precision + recall == 0, 0, 2 * precision * recall / (precision + recall) )
+    # f = ifelse(precision + recall == 0, 0, 2 * precision * recall / (precision + recall) )
 
     # a generalized version:
     f = ifelse(precision + recall == 0, 0, (1 + f_beta^2) * precision * recall / ((f_beta^2 * precision) + recall) )
@@ -40,10 +51,9 @@ performance.measures = function(expected_classes,
     
     
     # binary F score or multi-class macro-averaged F score
-#    f = ifelse(length(confusion_matrix[1,]) == 2, f[positive], mean(f))
+    # f = ifelse(length(confusion_matrix[1,]) == 2, f[positive], mean(f))
     #
-    
-#    names(results) = c("accuracy", "precision", "recall", paste("F(", f_beta, ")-score", sep = ""))
+    # names(results) = c("accuracy", "precision", "recall", paste("F(", f_beta, ")-score", sep = ""))
 
 
 
@@ -55,7 +65,7 @@ performance.measures = function(expected_classes,
     results$avg.precision = mean(precision)
     results$avg.recall = mean(recall)
     results$avg.f = mean(f)
-
+    
     
     return(results)
 }

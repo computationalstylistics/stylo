@@ -22,34 +22,31 @@ size.penalize = function(training.frequencies = NULL,
     
     
     
-#    ###############################################################
-#    
-#    # testing if multicore environment ('doMC', 'parallel') can be used
-#    test_doMC = tryCatch(doMC::registerDoMC(cores = parallel::detectCores()), 
-#                         error = function(e) NULL)
-#    # switching to either parallel, or serial mode, depending on the above test
-#    if(length(test_doMC) > 0) {
-#        parallel_mode = TRUE
-#        doMC::registerDoMC(cores = parallel::detectCores())
-#    } else {
-#        parallel_mode = FALSE
-#    }
-#   
-#    ###############################################################
+    # # testing if multicore environment ('doMC', 'parallel') can be used
+    # test_doMC = tryCatch(doMC::registerDoMC(cores = parallel::detectCores()), 
+    #                      error = function(e) NULL)
+    # # switching to either parallel, or serial mode, depending on the above test
+    # if(length(test_doMC) > 0) {
+    #     parallel_mode = TRUE
+    #     doMC::registerDoMC(cores = parallel::detectCores())
+    # } else {
+    #     parallel_mode = FALSE
+    # }
     
     
     
     
-##### temporary!! ######
-
-# this needs to be replaced with "..."
-# and, in several functions language needs to be replaced with corpus.lang:
+# in several functions 'language' needs to be replaced with 'corpus.lang':
 # txt.to.words.ext, parse.corpus, load.corpus.and.parse, stylo, classify (x2), oppose (x3), rolling.classify (x3)
 # the same applies to man pages!!!
 
 
 
+##### temporary!! ######
+
+
 #training.corpus = c("ABronte_Agnes", "ABronte_Tenant")
+
 ##### temporary!! ######    
 
 
@@ -94,49 +91,59 @@ size.penalize = function(training.frequencies = NULL,
     }
     
     
+
+
+
+
+
     
     # function (iterator) to perform the classification stage
     perform.classification = function(no.of.features) {
+    
         if(classification.method == "delta") {
-            predicted_classes = perform.delta(train.table[,1:no.of.features], 
-                                    test.table[,1:no.of.features], z.scores.both.sets = FALSE, ...)
+            classification = perform.delta(train.table[,1:no.of.features], 
+                                       test.table[,1:no.of.features], 
+                                       z.scores.both.sets = FALSE, ...)
         }
         if(classification.method == "svm") {
-            predicted_classes = perform.svm(train.table[,1:no.of.features], 
-                                    test.table[,1:no.of.features], ...)
+            classification = perform.svm(train.table[,1:no.of.features], 
+                                       test.table[,1:no.of.features], ...)
         }
         if(classification.method == "nsc") {
-            predicted_classes = perform.nsc(train.table[,1:no.of.features], 
-                                    test.table[,1:no.of.features], ...)
+            classification = perform.nsc(train.table[,1:no.of.features], 
+                                       test.table[,1:no.of.features], ...)
         }
 
 
-#### this class matching seems a bit weird!
-        expected_classes = gsub("_.*" ,"", names(predicted_classes))
-        predicted_classes = as.character(predicted_classes)
-        training_classes = gsub("_.*" ,"", rownames(train.table))
-                
-        classes_all = sort(unique(as.character(c(expected_classes, predicted_classes))))
-        predicted = factor(as.character(predicted_classes), levels = classes_all)
-        expected  = factor(as.character(expected_classes), levels = classes_all)
-        confusion_matrix = table(expected, predicted)
+        # getting only one row (the relevant one!) from the confusion matrix
+        expected_class = classification$expected[1]
+        results = classification$confusion_matrix[expected_class,]
         
-        results = confusion_matrix
-        accuracy = sum(expected_classes == predicted_classes)
+        # getting accuracy
+        accuracy = sum(classification$expected == classification$predicted)
         attr(results, "accuracy") = accuracy
         return(results)
+
     }
     
+
+
+
+
     
     # function to compute Simpson's index of diversity
     get.dispersion = function(x) {
         l = sum(x * (x-1)) / (sum(x) * (sum(x) -1))
-        #l = ( 4 * sum(x) * (sum(x)-1) * (sum(x)-2) * sum((x/sum(x))^3) + 
-             # 2 * sum(x) * (sum(x)-1) * sum((x/sum(x))^2) - 2 * sum(x) * (sum(x-1)) * 
-             # (2*sum(x)-3) * (sum((x/sum(x))^2)^2) ) / ( (sum(x) * (sum(x)-1))^2 )
         return(l)
     }
     
+    
+    
+    
+    # alternative estimate of Simpson's dispersion (introduced in the same paper):
+             # l = ( 4 * sum(x) * (sum(x)-1) * (sum(x)-2) * sum((x/sum(x))^3) + 
+             # 2 * sum(x) * (sum(x)-1) * sum((x/sum(x))^2) - 2 * sum(x) * (sum(x-1)) * 
+             # (2*sum(x)-3) * (sum((x/sum(x))^2)^2) ) / ( (sum(x) * (sum(x)-1))^2 )
     
     # variance
     # Ds = ( sum( (x / sum(x) )^3 ) - (sum( (x / sum(x) )^2 )^2 ) ) / (sum(x)/4)
@@ -186,32 +193,34 @@ size.penalize = function(training.frequencies = NULL,
             counter.alt = counter.alt + 1
             
             # a short message on screen
-            message(".", appendLF = FALSE)
-            if(counter.alt %% 64 == 0) {
-                message("\n", appendLF = FALSE)
+            if(counter.alt %% 5 == 0) {
+                message(".", appendLF = FALSE)
             }
             
-#            # sampling N times from the original text
-#            if(parallel_mode == TRUE) {
-#                # a loop involving many cores, to extract text samples in N iterations 
-#                test.table = foreach::foreach(i = 1:iterations, .combine = "rbind") %dopar% get.vector.of.freqs(get.test.text)
-#            } else {
-                # a loop using one CPU core: a classic solution
-                test.table = c()
-                for(i in 1:iterations) {
-                    g = get.vector.of.freqs(get.test.text)
-                    test.table = rbind(test.table, g)
-                }
-#            }
             
-            rownames(test.table) = paste(test.text, 1:iterations, sep="_")    
+            # sampling N times from the original text
+            # if(parallel_mode == TRUE) {
+            #     # a loop involving many cores, to extract text samples in N iterations 
+            #     test.table = foreach::foreach(i = 1:iterations, .combine = "rbind") %dopar% get.vector.of.freqs(get.test.text)
+            # } else {
+            #  # a loop using one CPU core: a classic solution
+               test.table = c()
+               for(i in 1:iterations) {
+                   g = get.vector.of.freqs(get.test.text)
+                   test.table = rbind(test.table, g)
+               }
+            # }
+            
+            rownames(test.table) = paste(test.text, sprintf("%04.0f", (1:iterations)), sep="_")    
             
             # another loop (the main one!), aka classification
             # which involves different vectors of features
- #           if(parallel_mode == TRUE) {
- #               # this version involves many CPU cores
- #               classify_results = foreach::foreach(f = mfw) %dopar% perform.classification(f)
- #           } else {
+            #
+            #
+            # if(parallel_mode == TRUE) {
+            #    # this version involves many CPU cores
+            #     classify_results = foreach::foreach(f = mfw) %dopar% perform.classification(f)
+            # } else {
                 # ...and this is a one-core equivalent of the above
                 classify_results = list()
                 no_of_f = 0
@@ -220,10 +229,10 @@ size.penalize = function(training.frequencies = NULL,
                     b = perform.classification(f)
                     classify_results[[no_of_f]] = b
                 }
-#            }
+            # }
             
             # retrieving the names of the classes used in the prediction stage
-            predicted_classes = colnames(classify_results[[1]])
+            predicted_classes = names(classify_results[[1]])
             
             # retrieving accuracies from the results (stored as an attribute)
             accuracy = sapply(classify_results, function(x) attr(x, "accuracy"))

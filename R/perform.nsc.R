@@ -90,32 +90,71 @@ perform.nsc = function(training.set,
   }
   
   
+  
+    names(classification.results) = rownames(test.set)
+    rownames(classification.rankings) = rownames(test.set)
+    rownames(classification.scores) = rownames(test.set)
+    colnames(classification.rankings) = 1:no.of.candidates
+    colnames(classification.scores) = 1:no.of.candidates
+
+  
+  
     # preparing a confusion table
     predicted_classes = classification.results
     expected_classes = classes.test.set
 
-    classes_all = sort(unique(as.character(c(expected_classes, predicted_classes))))
+    classes_all = sort(unique(as.character(c(expected_classes, classes.training.set))))
     predicted = factor(as.character(predicted_classes), levels = classes_all)
     expected  = factor(as.character(expected_classes), levels = classes_all)
     confusion_matrix = table(expected, predicted)
 
-  # getting rid of the classes not represented in the training set (e.g. anonymous samples)
-  # confusion_matrix = confusion_matrix[,rownames(confusion_matrix)]
 
-  
-  names(classification.results) = rownames(test.set)
-  rownames(classification.rankings) = rownames(test.set)
-  rownames(classification.scores) = rownames(test.set)
-  colnames(classification.rankings) = 1:no.of.candidates
-  colnames(classification.scores) = 1:no.of.candidates
-  
-  attr(classification.results, "distance.table") = selected.dist
-  attr(classification.results, "rankings") = classification.rankings
-  attr(classification.results, "scores") = classification.scores
-  attr(classification.results, "features") = the.features
-  attr(classification.results, "confusion_matrix") = confusion_matrix
+    # shorten the names of the variables
+    y = classification.results
+    ranking = classification.rankings
+    scores = classification.scores
+    raw_scores = selected.dist
+    features = the.features
+    # predicted = predicted_classes
+    # expected = expected_classes
+    # misclassified = cv.misclassifications
+    
+    attr(y, "description") = "classification results in a compact form"
+    # attr(misclassified, "description") = "misclassified samples [still not working properly]"
+    attr(predicted, "description") = "a vector of classes predicted by the classifier"
+    attr(expected, "description") = "ground truth, or a vector of expected classes"
+    attr(ranking, "description") = "predicted classes with their runner-ups"
+    attr(scores, "description") = "NSC decision scores, ordered according to candidates"
+    attr(raw_scores, "description") = "NSC decision scores in their original order"
+    attr(confusion_matrix, "description") = "confusion matrix for all cv folds"
 
 
-return(classification.results)
+    results = list()
+    results$y = y
+    # results$misclassified = misclassified
+    results$predicted = predicted
+    results$expected = expected
+    results$ranking = ranking
+    results$scores = scores
+    results$raw_scores = raw_scores
+    results$confusion_matrix = confusion_matrix
+    
+    
+    # if 'features' is non-empty, add it as well:
+    if(is.null(features) == FALSE) {
+        attr(features, "description") = "the most distinctive features"
+        results$features = features
+    }
+
+
+    # adding some information about the current function call
+    # to the final list of results
+    results$call = match.call()
+    results$name = call("perform.nsc")
+    
+    class(results) = "stylo.results"
+    
+    return(results)
+
 }
 

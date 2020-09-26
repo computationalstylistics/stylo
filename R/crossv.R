@@ -3,7 +3,7 @@
 
 crossv = function(training.set, 
                   test.set = NULL,
-                  cv.mode = "stratified",
+                  cv.mode = "leaveoneout",
                   cv.folds = 10,
                   classes.training.set = NULL,
                   classes.test.set = NULL,
@@ -126,23 +126,23 @@ crossv = function(training.set,
         # now, performing classification:
         if(tolower(classification.method) == "delta") {
             classification.results = perform.delta(cv.train, cv.test, 
-                                     cv.classes.train, cv.classes.test, ...)
+                                     cv.classes.train, cv.classes.test, ...)$y
         }
         if(tolower(classification.method) == "knn") {
             classification.results = perform.knn(cv.train, cv.test, 
-                                     cv.classes.train, cv.classes.test, ...)
+                                     cv.classes.train, cv.classes.test, ...)$y
         }
         if(tolower(classification.method) == "svm") {
             classification.results = perform.svm(cv.train, cv.test, 
-                                     cv.classes.train, cv.classes.test, ...)
+                                     cv.classes.train, cv.classes.test, ...)$y
         }
         if(tolower(classification.method) == "nsc") {
             classification.results = perform.nsc(cv.train, cv.test, 
-                                     cv.classes.train, cv.classes.test, ...)
+                                     cv.classes.train, cv.classes.test, ...)$y
         }
         if(tolower(classification.method) == "naivebayes") {
             classification.results = perform.naivebayes(cv.train, cv.test, 
-                                     cv.classes.train, cv.classes.test, ...)
+                                     cv.classes.train, cv.classes.test, ...)$y
         }
         
 
@@ -174,25 +174,47 @@ crossv = function(training.set,
     
     }
     
+    
+   #### cross.validation.results
+    
+    
+    
     classes_all = sort(unique(as.character(c(expected_classes, predicted_classes))))
     predicted = factor(as.character(predicted_classes), levels = classes_all)
     expected  = factor(as.character(expected_classes), levels = classes_all)
     confusion_matrix = table(expected, predicted)
 
     
-#    # getting rid of classes that are not represented in the training set
-#    # by dropping the respective columns (usually by anonymous authors)
-#    confusion_matrix = confusion_matrix[,unique(predicted_classes)]
-    
-    
-    attr(cross.validation.results, "confusion_matrix") = confusion_matrix
-    attr(cross.validation.results, "misclassifications") = cv.misclassifications
-    attr(cross.validation.results, "predicted") = predicted_classes
-    attr(cross.validation.results, "expected") = expected_classes
 
+    # shorten the names of the variables
+    y = cross.validation.results
+    # predicted = predicted_classes
+    # expected = expected_classes
+    misclassified = cv.misclassifications
     
-    class(cross.validation.results) = "stylo.data"
-    return(cross.validation.results)
+    attr(y, "description") = "classification results in a compact form"
+    attr(confusion_matrix, "description") = "confusion matrix for all cv folds"
+    attr(misclassified, "description") = "misclassified samples [still to be elaborated]"
+    attr(predicted, "description") = "a vector of classes predicted by the classifier"
+    attr(expected, "description") = "ground truth, or a vector of expected classes"
+    
+
+    results = list()
+    results$y = y
+    results$confusion_matrix = confusion_matrix
+    results$misclassified = misclassified
+    results$predicted = predicted
+    results$expected = expected
+
+
+    # adding some information about the current function call
+    # to the final list of results
+    results$call = match.call()
+    results$name = call("crossv")
+    
+    class(results) = "stylo.results"
+    
+    return(results)
     
 }
 

@@ -59,49 +59,39 @@ perform.svm = function(training.set,
   training.set = training.set[,(check.columns != 0)]
   test.set = test.set[,(check.columns != 0)]
 
-  
-  
-  classes = c(classes.training.set, classes.test.set)
-  # converting strings to factors
-  classes = factor(classes)
-  input.data = as.data.frame(rbind(training.set,test.set))
-  input.data = cbind(classes, input.data)
-  training.classes = c(1:length(training.set[,1]))
-  
   # an error is produced when variable names contain three dots: "..."
   # just in case, then:
-  colnames(input.data) = gsub("\\.\\.\\.","^^^",colnames(input.data))
+  colnames(test.set) = gsub("\\.\\.\\.","^^^",colnames(test.set))
   colnames(training.set) = gsub("\\.\\.\\.","^^^",colnames(training.set))
-  #
+
+
+
   # training a model
-  # a. default/custom parameters (faster but less accurate)
-  if(tune.parameters == FALSE) {
-          model = svm(classes ~ ., data = input.data, subset = training.classes, 
-#                 type = "C",
-                 kernel = svm.kernel, degree = svm.degree, coef0 = svm.coef0, 
-                 cost = svm.cost)
-  # b. the parameters tuned empirically
-  } else {
-          tuning.data = cbind(classes.training.set, as.data.frame(training.set))
-          colnames(tuning.data)[1] = "classes"
-          params = tune.svm(classes ~ ., data = tuning.data,
-                            gamma = 2^(-1:1), cost = 2^(2:4),
+  
+  if(tune.parameters == FALSE) { # a. default parameters (faster but less accurate)
+  
+          model = svm(training.set, factor(classes.training.set), kernel = svm.kernel, 
+                      degree = svm.degree, coef0 = svm.coef0, cost = svm.cost)
+   
+  } else {    # b. the parameters tuned empirically
+
+          params = tune.svm(training.set, factor(classes.training.set),
+                            gamma = 2^(-1:1), cost = 2^(1:5),
                             tunecontrol = tune.control(sampling = "boot"))
-          #
-          model = svm(classes ~ ., data = input.data, subset = training.classes, 
-#          type = "C",
-                 kernel = svm.kernel, degree = svm.degree, coef0 = svm.coef0, 
-                 cost=params$best.parameter[[2]], 
-                 gamma=params$best.parameter[[1]])
+          model = svm(training.set, factor(classes.training.set), kernel = svm.kernel, 
+                      degree = svm.degree, coef0 = svm.coef0, 
+                      cost = params$best.parameters$cost, 
+                      gamma = params$best.parameters$gamma )
+                      
   }
 
   
   #
   # testing the model on "new" data (i.e. the test.set)
-  classification.results = predict(model, input.data[,-1], decision.values=T)
-  
+  predicted.classes = predict(model, test.set, decision.values = TRUE)
+
   # retrieving decision values: a composite matrix
-  d.values = attr(classification.results, "decision.values")
+  d.values = attr(predicted.classes, "decision.values")
   
   # get reverse values in each cell
   d.values.rev = d.values * -1
@@ -112,9 +102,6 @@ perform.svm = function(training.set,
   
   # combining both matrices
   xx = cbind(d.values,d.values.rev)
-
-  # getting rid of the trainig samples
-  xx = xx[-c(1:length(training.set[,1])),]
   
   # producing a table of "distances" (actually: decision values)
   selected.dist = c()
@@ -154,31 +141,62 @@ perform.svm = function(training.set,
   }
   
   
+    names(classification.results) = rownames(test.set)
+    rownames(classification.rankings) = rownames(test.set)
+    rownames(classification.scores) = rownames(test.set)
+    colnames(classification.rankings) = 1:no.of.candidates
+    colnames(classification.scores) = 1:no.of.candidates
+  
+
+
     # preparing a confusion table
     predicted_classes = classification.results
     expected_classes = classes.test.set
 
-    classes_all = sort(unique(as.character(c(expected_classes, predicted_classes))))
+    classes_all = sort(unique(as.character(c(expected_classes, classes.training.set))))
     predicted = factor(as.character(predicted_classes), levels = classes_all)
     expected  = factor(as.character(expected_classes), levels = classes_all)
     confusion_matrix = table(expected, predicted)
 
-  # getting rid of the classes not represented in the training set (e.g. anonymous samples)
-  #  confusion_matrix = confusion_matrix[,rownames(confusion_matrix)]
 
-  
-  names(classification.results) = rownames(test.set)
-  rownames(classification.rankings) = rownames(test.set)
-  rownames(classification.scores) = rownames(test.set)
-  colnames(classification.rankings) = 1:no.of.candidates
-  colnames(classification.scores) = 1:no.of.candidates
-  
-  attr(classification.results, "distance.table") = selected.dist
-  attr(classification.results, "rankings") = classification.rankings
-  attr(classification.results, "scores") = classification.scores
-  attr(classification.results, "confusion_matrix") = confusion_matrix
+    # shorten the names of the variables
+    y = classification.results
+    ranking = classification.rankings
+    scores = classification.scores
+    raw_scores = selected.dist
+    # predicted = predicted_classes
+    # expected = expected_classes
+    # misclassified = cv.misclassifications
+    
+    attr(y, "description") = "classification results in a compact form"
+    # attr(misclassified, "description") = "misclassified samples [still not working properly]"
+    attr(predicted, "description") = "a vector of classes predicted by the classifier"
+    attr(expected, "description") = "ground truth, or a vector of expected classes"
+    attr(ranking, "description") = "predicted classes with their runner-ups"
+    attr(scores, "description") = "SVM decision scores, ordered according to candidates"
+    attr(raw_scores, "description") = "SVM decision scores in their original order"
+    attr(confusion_matrix, "description") = "confusion matrix for all cv folds"
 
-  
-return(classification.results)
+
+    results = list()
+    results$y = y
+    # results$misclassified = misclassified
+    results$predicted = predicted
+    results$expected = expected
+    results$ranking = ranking
+    results$scores = scores
+    results$raw_scores = raw_scores
+    results$confusion_matrix = confusion_matrix
+
+
+    # adding some information about the current function call
+    # to the final list of results
+    results$call = match.call()
+    results$name = call("perform.svm")
+    
+    class(results) = "stylo.results"
+    
+    return(results)
+
 }
 

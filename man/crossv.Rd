@@ -14,7 +14,7 @@ available samples are exhausted.
 }
 \usage{
 crossv(training.set, test.set = NULL, 
-       cv.mode = "stratified", cv.folds = 10, 
+       cv.mode = "leaveoneout", cv.folds = 10, 
        classes.training.set = NULL, classes.test.set = NULL, 
        classification.method = "delta", ...)
 }
@@ -90,8 +90,40 @@ matrices for particular cv folds (attr "confusion_matrix").
 }
 \examples{
 \dontrun{
+## standard usage:
 crossv(training.set, test.set)
 }
+
+## text categorization
+
+# specify a table with frequencies
+data(lee)
+# perform a leave-one-out classification using kNN
+results = crossv(lee, classification.method = "knn")
+# inspect final results
+performance.measures(results)
+
+
+
+## stratified cross-validation
+
+# specity a table with frequencies
+data(galbraith)
+freqs = galbraith
+# specify class labels:
+training.texts = c("coben_breaker", "coben_dropshot", "lewis_battle", 
+                   "lewis_caspian", "rowling_casual", "rowling_chamber", 
+                   "tolkien_lord1", "tolkien_lord2")
+train.classes = match(training.texts,rownames(freqs))
+
+# select the training samples:
+training.set = freqs[train.classes,]
+# select remaining rows as test samples:
+test.set = freqs[-train.classes,]
+
+crossv(training.set, test.set, cv.mode = "stratified")
+
+
 
 # classifying the standard 'iris' dataset:
 data(iris)
@@ -105,24 +137,6 @@ crossv(train, test, cv.mode = "stratified", cv.folds = 10,
        train.classes, test.classes)
 
 
-# text categorization
 
-# specity a table with frequencies:
-data(galbraith)
-freqs = galbraith
-
-# specify class labels:
-training.texts = c("coben_breaker", "coben_dropshot", "lewis_battle", 
-                   "lewis_caspian", "rowling_casual", "rowling_chamber", 
-                   "tolkien_lord1", "tolkien_lord2")
-train.classes = match(training.texts,rownames(freqs))
-
-# select the training samples:
-training.set = freqs[train.classes,]
-
-# select remaining rows as test samples:
-test.set = freqs[-train.classes,]
-
-crossv(training.set, test.set)
 }
 %\keyword{distance measure}

@@ -1003,14 +1003,6 @@ freq.table.both.sets = rbind(primary.set, secondary.set)
 
 
 
-# Entropy distance: experimental, but entirely available
-# (the results do not really differ than for typical word frequencies)
-#
-# A = t(t(freq.table.both.sets + 1) / colSums(freq.table.both.sets + 1))
-# B = t(t(log(freq.table.both.sets + 2)) / -(colSums(A * log(A))))
-# freq.table.both.sets = B
-#
-
 
 if(tolower(classification.method) == "delta") {
         # a short message on the screen:
@@ -1103,38 +1095,41 @@ message(mfw, " ", appendLF = FALSE)
 
 
 if(tolower(classification.method) == "delta") {
-  classification.results = perform.delta(training.set = primary.set[,1:mfw],
+    classification.results = perform.delta(training.set = primary.set[,1:mfw],
                                 test.set = secondary.set[,1:mfw],
                                 distance = distance.measure,
                                 z.scores.both.sets = z.scores.of.all.samples)
-  distance.table = attr(classification.results, "distance.table")
+    distance.table = classification.results$distance_table
+    classification.results = classification.results$y
 
 }
 
 
 if(tolower(classification.method) == "knn") {
-  classification.results = perform.knn(training.set = primary.set[,1:mfw],
+    classification.results = perform.knn(training.set = primary.set[,1:mfw],
                                        test.set = secondary.set[,1:mfw],
-                                       k.value = k.value)
+                                       k.value = k.value)$y
 }
 
 
 if(tolower(classification.method) == "svm") {
-  classification.results = perform.svm(training.set = primary.set[,1:mfw],
-                                       test.set = secondary.set[,1:mfw])
+    classification.results = perform.svm(training.set = primary.set[,1:mfw],
+                                       test.set = secondary.set[,1:mfw])$y
 }
 
 
 if(tolower(classification.method) == "naivebayes") {
-  classification.results = perform.naivebayes(training.set= primary.set[,1:mfw],
-                                              test.set = secondary.set[,1:mfw])
+    classification.results = perform.naivebayes(training.set= primary.set[,1:mfw],
+                                              test.set = secondary.set[,1:mfw])$y
 }
 
 
 if(tolower(classification.method) == "nsc") {
-  classification.results = perform.nsc(training.set = primary.set[,1:mfw],
+    classification.results = perform.nsc(training.set = primary.set[,1:mfw],
                                        test.set = secondary.set[,1:mfw],
                                        show.features = show.features)
+    classification.results.features = classification.results$features
+    classification.results = classification.results$y
 }
 
 
@@ -1272,24 +1267,25 @@ if(cv.folds > 0) {
 
 
   if(tolower(classification.method) == "delta") {
-    classification.results = perform.delta(training.set,
+      classification.results = perform.delta(training.set,
                                    test.set,
                                    distance = distance.measure,
                                    z.scores.both.sets = z.scores.of.all.samples)
-    distance.table = attr(classification.results, "distance.table")
+      distance.table = classification.results$distance_table
+      classification.results = classification.results$y
   }
   if(tolower(classification.method) == "knn") {
-    classification.results = perform.knn(training.set, test.set, k.value)
+      classification.results = perform.knn(training.set, test.set, k.value)$y
   }
   if(tolower(classification.method) == "svm") {
-    classification.results = perform.svm(training.set, test.set)
+      classification.results = perform.svm(training.set, test.set)$y
   }
   if(tolower(classification.method) == "nsc") {
-    classification.results = perform.nsc(training.set, test.set,
-                                         show.features = show.features)
+      classification.results = perform.nsc(training.set, test.set,
+                                         show.features = show.features)$y
   }
   if(tolower(classification.method) == "naivebayes") {
-    classification.results = perform.naivebayes(training.set, test.set)
+      classification.results = perform.naivebayes(training.set, test.set)$y
   }
 
 
@@ -1479,7 +1475,9 @@ features.actually.used = colnames(freq.table.both.sets[,1:mfw])
 features = mfw.list.of.all
 
 
-distinctive.features = attr(classification.results, "features")
+if(exists("classification.results.features")) {
+    distinctive.features = classification.results.features
+}
 
 
 # what about removing some of the variables? (suppose there are thousands
@@ -1518,7 +1516,7 @@ if(exists("distance.table")) {
   attr(distance.table, "description") = "final distances between each pair of samples"
   class(distance.table) = "stylo.data"
 }
-if(exists("distinctive.features") & length(distinctive.features) > 0) {
+if(exists("distinctive.features")) {
   attr(distinctive.features, "description") = "most distinctive features"
 }
 if(exists("frequencies.both.sets")) {

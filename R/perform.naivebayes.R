@@ -39,10 +39,18 @@ perform.naivebayes = function(training.set, test.set,
   }
   #
   classes = c(classes.training.set, classes.test.set)
+  # converting strings to factors
+  classes = factor(classes)
+  #
   input.data = as.data.frame(rbind(training.set,test.set))
   input.data = cbind(classes, input.data)
   training.classes = c(1:length(training.set[,1]))
   #
+  # an error is produced when variable names contain three dots: "..."
+  # just in case, then:
+  colnames(input.data) = gsub("\\.\\.\\.","^^^",colnames(input.data))
+  colnames(training.set) = gsub("\\.\\.\\.","^^^",colnames(training.set))
+
   # training a model
   model = naiveBayes(classes ~ ., data = input.data, subset = training.classes)
   #
@@ -58,17 +66,40 @@ perform.naivebayes = function(training.set, test.set,
     predicted_classes = classification.results
     expected_classes = classes.test.set
 
-    classes_all = sort(unique(as.character(c(expected_classes, predicted_classes))))
+    classes_all = sort(unique(as.character(c(expected_classes, classes.training.set))))
     predicted = factor(as.character(predicted_classes), levels = classes_all)
     expected  = factor(as.character(expected_classes), levels = classes_all)
     confusion_matrix = table(expected, predicted)
 
-  # getting rid of the classes not represented in the training set (e.g. anonymous samples)
-  # confusion_matrix = confusion_matrix[,rownames(confusion_matrix)]
+    # shorten the names of the variables
+    y = classification.results
+    # predicted = predicted_classes
+    # expected = expected_classes
+    # misclassified = cv.misclassifications
+    
+    attr(y, "description") = "classification results in a compact form"
+    attr(confusion_matrix, "description") = "confusion matrix for all cv folds"
+    # attr(misclassified, "description") = "misclassified samples [still not working properly]"
+    attr(predicted, "description") = "a vector of classes predicted by the classifier"
+    attr(expected, "description") = "ground truth, or a vector of expected classes"
+    
 
-  attr(classification.results, "confusion_matrix") = confusion_matrix
+    results = list()
+    results$y = y
+    results$confusion_matrix = confusion_matrix
+    # results$misclassified = misclassified
+    results$predicted = predicted
+    results$expected = expected
 
 
-return(classification.results)
+    # adding some information about the current function call
+    # to the final list of results
+    results$call = match.call()
+    results$name = call("perform.naivebayes")
+    
+    class(results) = "stylo.results"
+    
+    return(results)
+    
 }
 
