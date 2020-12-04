@@ -44,7 +44,7 @@ load.corpus = function(files = "all", corpus.dir = "", encoding = "UTF-8") {
       # if an error occurred, ignore it and send a message on the screen
 #      current.file = tryCatch(readChar(file, file.info(file)$size),
 #                              error = function(e) NULL)
-      current.file = tryCatch(readLines(file, warn = TRUE, encoding = encoding),
+      current.file = tryCatch(readLines(file, warn = FALSE, encoding = encoding),
                               error = function(e) NULL)
       # if successful, append the scanned file into the corpus,
       # otherwise send a message
