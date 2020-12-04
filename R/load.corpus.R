@@ -42,7 +42,9 @@ load.corpus = function(files = "all", corpus.dir = "", encoding = "UTF-8") {
       #message("loading ", file, "\t", "...")
       # loading the next file from the list "corpus.filenames";
       # if an error occurred, ignore it and send a message on the screen
-      current.file = tryCatch(readChar(file, file.info(file)$size),
+#      current.file = tryCatch(readChar(file, file.info(file)$size),
+#                              error = function(e) NULL)
+      current.file = tryCatch(readLines(file, warn = TRUE, encoding = encoding),
                               error = function(e) NULL)
       # if successful, append the scanned file into the corpus,
       # otherwise send a message
