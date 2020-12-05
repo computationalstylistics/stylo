@@ -2,6 +2,16 @@
 
 
 
+### version 0.7.4, 2020/12/5
+  * option for shading in rolling.classify() 
+  * performance.measures() greatly improved
+  * supervised classifiers updated, to be compliant with cross-validation
+  * SVM output fixed
+  * bugs in rolling.classify() fixed
+  * bugs in load.corpus() causing codepages mismatches fixed 
+  * general code cleanup
+
+
 ### version 0.7.3, 2020/08/11
   * perfom.svm() improved to work with R >4.0.0
   * oppose() not restricted anymore to have at least 2 texts per set

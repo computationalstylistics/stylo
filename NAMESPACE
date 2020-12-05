@@ -19,7 +19,7 @@ importFrom(stats, as.dendrogram, as.dist, biplot, chisq.test, cmdscale,
              dendrapply, dist, hclust, is.leaf, prcomp, predict, sd, 
              wilcox.test)
 importFrom(utils, head, read.table, read.csv, write.csv, write.table)
-# importFrom(foreach, foreach, '%dopar%')
+
 
 
 export(
@@ -61,7 +61,6 @@ export(
   perform.svm,
   perform.impostors,
   performance.measures,
-#  plot.sample.size,
   rolling.classify,
   rolling.delta,
   size.penalize,
