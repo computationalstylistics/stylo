@@ -3,7 +3,7 @@
 \title{Delete HTML or XML tags}
 \description{Function for removing markup tags (e.g. HTML, XML) from a string 
   of characters. All XML markup is assumed to be compliant with 
-  the TEI guidelines (\url{https://www.tei-c.org/}).}
+  the TEI guidelines (\url{https://tei-c.org/}).}
 
 \usage{
 delete.markup(input.text, markup.type = "plain")
@@ -22,8 +22,8 @@ delete.markup(input.text, markup.type = "plain")
     or strings within each the <head> </head> tags).}
 }
 \details{
-  This function needs to be used carefully: while a document formatted
-  in compliance with the TEI guidelines will be parsed flawlessly, the cleaning up of an HTML
+  This function needs to be used carefully: while a document formatted in compliance 
+  with the TEI guidelines will be parsed flawlessly, the cleaning up of an HTML
   page harvested randomly on the web might cause some side effects, e.g. the footers, 
   disclaimers, etc. will not be removed.
 }
