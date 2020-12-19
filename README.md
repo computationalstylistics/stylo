@@ -137,6 +137,15 @@ This section is meant to give the users a general outline of what the package ca
 
 
 
+## Materials on Youtube
+
+* [Introduction to the package ‘stylo’: first steps](https://www.youtube.com/watch?v=pWOCfZnitdc&t=6s)
+* [Introduction to the package ‘stylo’: installation](https://www.youtube.com/watch?v=Rv7u4UNZJrA&t=86s)
+* [Introduction to the package ‘stylo’: basic parameters](https://www.youtube.com/watch?v=uPHPhIo2Drc)
+
+
+
+
 
 ## Docs on non-obvious functionalities
 
