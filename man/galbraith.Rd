@@ -2,7 +2,7 @@
 \alias{galbraith}
 \docType{data}
 \title{
-Table of word frequencies (Galbraith, Rowling, Cobenm, Tolkien, Lewis)
+Table of word frequencies (Galbraith, Rowling, Coben, Tolkien, Lewis)
 }
 \description{
 This dataset contains a table (matrix) of relative frequencies of 3000 most 
