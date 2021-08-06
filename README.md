@@ -150,6 +150,7 @@ This section is meant to give the users a general outline of what the package ca
 ## Docs on non-obvious functionalities
 
 
+* [Performance measures in supervised classification](https://computationalstylistics.github.io/blog/performance_measures/)
 * [Authorship verification with the package 'stylo'](https://computationalstylistics.github.io/blog/imposters)
 * [Cross-validation using the function `classify()`](https://computationalstylistics.github.io/blog/cross-validation)
 * [Custom distance measures](https://computationalstylistics.github.io/blog/custom_distances)
@@ -163,6 +164,8 @@ This section is meant to give the users a general outline of what the package ca
 
 ## Other relevant resources
 
+
+* Kudos to David L. Wrisley for [a super-useful post](https://github.com/djwrisley/RLAC/blob/master/Project%20Gutenberg%20with%20Stylo/Stylo_with_texts_from_PG.Rmd) (a notebook with code snippets, to be precise) on analyzing the Gutenberg Project texts with `stylo`.
 
 * Despite a black legend, R and Python are not necessarily in a deadly clash: here is [a great post](https://cligs.hypotheses.org/577) by José Calvo Tello on invoking the package `stylo` directly from Python!
 
