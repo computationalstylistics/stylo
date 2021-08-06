@@ -73,11 +73,11 @@ The remarks about possible issues on MacOS apply are valid also in this case.
 
 ### 3. Installing from a local file
 
-This is an option for more advanced users. You need to obtain a so-called tarball file, which is a compressed version of the package (you can grab it from CRAN). It might be named `stylo_0.6.9.tar.gz`, depending of the current version of course. Then type in R console:
+This is an option for more advanced users. You need to obtain a so-called tarball file, which is a compressed version of the package (you can grab it from CRAN). It might be named `stylo_0.7.4.tar.gz`, depending of the current version of course. Then type in R console:
 
 ```
 setwd("I/hope/I/can/remember/where/I/have/put/the/zipfile/")
-install.packages("stylo_0.7.1.tar.gz", repos = NULL, type = "source")
+install.packages("stylo_0.7.4.tar.gz", repos = NULL, type = "source")
 ```
 
 
