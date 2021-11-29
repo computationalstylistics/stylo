@@ -234,7 +234,7 @@ for(iteration in 1:2) {
   # checking if the variable "parsed.corpus" is empty
   if(corpus.exists == FALSE & length(parsed.corpus) > 0) {
       # if the variable was used, check its format
-      if(is.list(parsed.corpus) == TRUE & length(parsed.corpus) > 1) {
+      if(is.list(parsed.corpus) == TRUE & length(parsed.corpus) >= 1) {
           # checking if the samples have their names; otherwise, assign generic ones:
           if( length(names(parsed.corpus)) != length(parsed.corpus) ) {
             names(parsed.corpus) = paste("sample",1:length(parsed.corpus),sep="_")
@@ -265,7 +265,7 @@ for(iteration in 1:2) {
 
 # Two iterations completed, another sanity check should be applied
 if(corpus.exists == FALSE) {
-    if(length(corpus.of.primary.set) >1 & length(corpus.of.secondary.set) >1 ) {
+    if(length(corpus.of.primary.set) >=1 & length(corpus.of.secondary.set) >=1 ) {
       message("Two subcorpora loaded successfully.")
       corpus.exists = TRUE
     } else {
