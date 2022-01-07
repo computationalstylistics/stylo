@@ -26,7 +26,7 @@ dist.minmax = function(x){
     # iterating over rows and columns
     for(i in 1:rows) {
         for(j in i:rows ) {
-            y[j,i] = 1 - sum(apply(x[c(i,j),], 2, min)) / sum(apply(x[c(i,j),], 2, max))
+            y[j,i] = 1 - sum(pmin(x[i,], x[j,])) / sum(pmax(x[i,], x[j,]))
         }
     }
 
