@@ -1015,7 +1015,7 @@ if(tolower(classification.method) == "delta") {
         if(distance.measure == "eder") {
                 message("Calculating Eder's Delta distances...")
         }
-        if(distance.measure == "eder") {
+        if(distance.measure == "simple") {
                 message("Calculating Eder's Simple distances...")
         }
         if(distance.measure == "manhattan") {
