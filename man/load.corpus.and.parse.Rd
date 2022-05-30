@@ -15,7 +15,7 @@ load.corpus.and.parse(files = "all", corpus.dir = "", markup.type= "plain",
                       sample.overlap = 0, number.of.samples = 1,
                       sampling.with.replacement = FALSE, features = "w", 
                       ngram.size = 1, preserve.case = FALSE,
-                      encoding = "UTF-8")
+                      encoding = "UTF-8", ...)
 }
 \arguments{
   \item{files}{a vector of file names. The default value \code{all} is an 
@@ -74,6 +74,7 @@ load.corpus.and.parse(files = "all", corpus.dir = "", markup.type= "plain",
     to use Unicode, thus you don't need to set anything. In Windows, 
     consider using UTF-8 but don't forget about the way of analyzing native 
     ANSI encoded files: set this option to \code{encoding = "native.enc"}.}
+  \item{...}{option not used; introduced here for compatibility reasons.}
 }
 \value{
 The function returns an object of the class \code{stylo.corpus}. It is a list

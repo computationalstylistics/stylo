@@ -6,7 +6,7 @@ performance.measures = function(predicted_classes,
     
 
     
-    if(class(predicted_classes) == "stylo.results") {
+    if(inherits(predicted_classes, "stylo.results") == TRUE) {
         input_data = unclass(predicted_classes)
         predicted_classes = input_data$predicted
         expected_classes = input_data$expected

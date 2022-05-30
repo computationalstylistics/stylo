@@ -1,6 +1,12 @@
 ## 'stylo' news ##
 
 
+### version 0.7.5, 2022/05/30
+  * bug in size.penalize() fixed
+  * improved performance of dist.minmax() 
+  * oppose() update, to allow having just one text per set
+  * several minor improvements here and there
+
 
 ### version 0.7.4, 2020/12/5
   * option for shading in rolling.classify() 

@@ -27,7 +27,7 @@ load.corpus.and.parse = function(files = "all",
          features = "w",
          ngram.size = 1,
          preserve.case = FALSE,
-         encoding = "UTF-8") {
+         encoding = "UTF-8", ...) {
 
 
   # first, checking which files were requested; usually, the user is 

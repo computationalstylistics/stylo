@@ -50,7 +50,7 @@ delete.stop.words =  function(input.data, stop.words = NULL) {
                 culled.data = input.data[!(input.data %in% stop.words)]
                 
         # is input.data a list?
-        } else if(class(input.data) == "stylo.corpus") {
+        } else if( inherits(input.data, "stylo.corpus") == TRUE ) {
 
                 # checking if the stop words match (any) variables' names
               #  if(length(stop.words) > 0 && 
