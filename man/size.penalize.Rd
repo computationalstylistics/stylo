@@ -14,7 +14,8 @@ reaches a point of saturation. The function \code{size.penalize} is aimed
 at indentifying such a saturation point.
 }
 \usage{
-size.penalize(training.frequencies = NULL, test.frequencies = NULL,
+size.penalize(training.frequencies = NULL, 
+              test.frequencies = NULL,
               training.corpus = NULL, test.corpus = NULL,
               mfw = c(100, 200, 500), features = NULL, 
               path = NULL, corpus.dir = "corpus",

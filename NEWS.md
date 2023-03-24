@@ -1,10 +1,11 @@
 ## 'stylo' news ##
 
 
-### version 0.7.5, 2022/05/30
+### version 0.7.5, 2022/08/10
   * bug in size.penalize() fixed
   * improved performance of dist.minmax() 
   * oppose() update, to allow having just one text per set
+  * a solid clean-up in a few functions
   * several minor improvements here and there
 
 
@@ -14,7 +15,7 @@
   * supervised classifiers updated, to be compliant with cross-validation
   * SVM output fixed
   * bugs in rolling.classify() fixed
-  * bugs in load.corpus() causing codepages mismatches fixed 
+  * bugs in load.corpus() causing codepage mismatches fixed 
   * general code cleanup
 
 

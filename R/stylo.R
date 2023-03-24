@@ -1115,10 +1115,10 @@ distance.table = as.matrix(distance.table)
 # and assign.plot.colors()"
 # #################################################
 
-groups = process.metadata(metadata = metadata, 
+groups = suppressMessages(process.metadata(metadata = metadata, 
                           filenames = rownames(table.with.all.freqs),
                           filename.column = filename.column,
-                          grouping.column = grouping.column)
+                          grouping.column = grouping.column))
 
 # using an appropriate function to assing colors to subsequent samples
 colors.of.pca.graph = assign.plot.colors(labels = groups,
