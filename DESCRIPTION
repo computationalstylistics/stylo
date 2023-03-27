@@ -2,7 +2,7 @@ Package: stylo
 Type: Package
 Title: Stylometric Multivariate Analyses
 Version: 0.7.5
-Date: 2022-05-30
+Date: 2023-03-27
 Authors@R: c(person("Maciej", "Eder", role = c("aut", "cre"), 
            email = "maciejeder@gmail.com"),
              person("Jan", "Rybicki", role = "aut"),
