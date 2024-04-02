@@ -1,7 +1,8 @@
 ## 'stylo' news ##
 
 
-### version 0.7.5, 2022/08/10
+### version 0.7.5, 2024/04/02
+  * size.penalize() renamed to samplesize.penalize(), for CRAN
   * bug in size.penalize() fixed
   * improved performance of dist.minmax() 
   * oppose() update, to allow having just one text per set

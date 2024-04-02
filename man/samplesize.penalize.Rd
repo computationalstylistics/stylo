@@ -1,7 +1,7 @@
 \encoding{utf8}
-\name{size.penalize}
-\alias{size.penalize}
-\title{Testing Minimal Sample Size for Text Classification}
+\name{samplesize.penalize}
+\alias{samplesize.penalize}
+\title{Determining Minimal Sample Size for Text Classification}
 \description{
 This function tests the ability of a given input text (or texts) to be 
 correctly classified in a supervised machine-learning setup (e.g. Delta,
@@ -10,11 +10,11 @@ SVM or NSC) when its length is limited. The procedure, introduced by Eder
 are drawn from the text in question, and then they are tested against 
 a training set. For very short samples, the obtained classification accuracy 
 is quite low (obviously), but then it usually increases until it finally 
-reaches a point of saturation. The function \code{size.penalize} is aimed 
+reaches a point of saturation. The function \code{samplesize.penalize} is aimed 
 at indentifying such a saturation point.
 }
 \usage{
-size.penalize(training.frequencies = NULL, 
+samplesize.penalize(training.frequencies = NULL, 
               test.frequencies = NULL,
               training.corpus = NULL, test.corpus = NULL,
               mfw = c(100, 200, 500), features = NULL, 
@@ -132,7 +132,7 @@ Eder, M. (2017). Short samples in authorship attribution: A new approach.
 \dontrun{
 
 # standard usage (it builds a corpus from a set of text files):
-results = size.penalize()
+results = samplesize.penalize()
 plot(results)
 
 }

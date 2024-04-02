@@ -63,7 +63,7 @@ export(
   performance.measures,
   rolling.classify,
   rolling.delta,
-  size.penalize,
+  samplesize.penalize,
   stylo.default.settings,
   stylo.network,
   stylo.pronouns,

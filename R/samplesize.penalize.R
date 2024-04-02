@@ -1,5 +1,5 @@
 
-size.penalize = function(training.frequencies = NULL, 
+samplesize.penalize = function(training.frequencies = NULL, 
                          test.frequencies = NULL,
                          training.corpus = NULL, 
                          test.corpus = NULL,
@@ -335,7 +335,7 @@ size.penalize = function(training.frequencies = NULL,
     # adding some information about the current function call
     # to the final list of results
     results$call = match.call()
-    results$name = call("size.penalize")
+    results$name = call("samplesize.penalize")
     class(results) = c("sample.size", "stylo.results")
     
     
