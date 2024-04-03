@@ -17,9 +17,9 @@ make.frequency.list.optimized = function(data,
      # first, sanitize the input dataset
      
      # test if the dataset belongs to 'stylo.corpus' class
-     if(class(data) == "stylo.corpus" | is.list(data) == TRUE) {
+     if(inherits(data, "stylo.corpus") | is.list(data) == TRUE) {
              # unlist, or make one long text out of the corpus samples
-#             data = unlist(data)    
+#             data = unlist(data)
      # otherwise, test if the dataset is a vector
      } else if(is.vector(data) == FALSE) {        
              # whet it is not, produce an error message and stop

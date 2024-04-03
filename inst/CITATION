@@ -1,28 +1,18 @@
-citHeader("To cite the package 'stylo' in publications use:")
 
-citEntry(entry="Article",
+
+bibentry(header = "To cite the package 'stylo' in publications use:",
+         bibtype = "Article",
          title = "Stylometry with R: a package for computational text analysis",
-         author = personList(as.person("Maciej Eder"),
-                             as.person("Jan Rybicki"),
-                             as.person("Mike Kestemont")),
+         author       = c(person(given = "Maciej", family = "Eder", 
+                         role = c("aut", "cre"), email = "maciejeder@gmail.com"),
+                  person(given = "Jan", family = "Rybicki", role = "aut"),
+                  person(given = "Mike", family = "Kestemont", role = "aut")),
          journal      = "R Journal",
          year         = "2016",
          volume       = "8",
          number       = "1",
          pages        = "107--121",
          url          = "https://journal.r-project.org/archive/2016/RJ-2016-007/index.html",
-
-         textVersion =
-         paste("Eder, M., Rybicki, J. and Kestemont, M. (2016). ",
-               "Stylometry with R: a package for computational text analysis. ",
-               "\"R Journal\", ",
-               "8(1): 107-121.",
-               sep = "")
+         footer       = paste("We have invested a lot of time and effort in creating 'stylo',", "please cite it when using it together with R.", "See also", sQuote("citation()"), "for citing R.")
          )
 
-
-
-citFooter("We have invested a lot of time and effort in creating 'stylo',",
-  "please cite it when using it together with R.",
-	"See also", sQuote("citation()"),
-	"for citing R.")

@@ -123,7 +123,7 @@ if(length(grep(distance, supported.measures)) > 1 ) {
         # the function of the same name, with x as its argument
         distance.table = do.call(distance, list(x = input.freq.table))
         # check if the invoked function did produce a distance
-        if(class(distance.table) != "dist") {
+        if(!inherits(distance.table, "dist")) {
             # say something nasty here, if it didn't:
             stop("it wasn't a real distance measure function applied, was it?")
         }
