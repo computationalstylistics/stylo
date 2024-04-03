@@ -32,15 +32,19 @@ use the generic function \code{as.dist}.
 \references{
 Argamon, S. (2008). Interpreting Burrows's Delta: geometric and 
     probabilistic foundations. "Literary and Linguistic Computing", 
-    23(2): 131-47.
+    23(2): 131-147.
 
 Burrows, J. F. (2002). "Delta": a measure of stylistic difference and 
     a guide to likely authorship. "Literary and Linguistic Computing", 
-    17(3): 267-87.
+    17(3): 267-287.
 
 Eder, M. (2015). Taking stylometry to the limits: benchmark study on 5,281 
     texts from Patrologia Latina. In: "Digital Humanities 2015: Conference 
-    Abstracts". \url{https://zenodo.org/record/1321296#.XzK5APgzagQ}
+    Abstracts". 
+
+Eder, M. (2022). Boosting word frequencies in authorship attribution. In:
+    "CHR 2022 Computational Humanities Research 2022", pp. 387-397. 
+    \url{https://ceur-ws.org/Vol-3290/long_paper5362.pdf}
 
 Evert, S., Proisl, T., Jannidis, F., Reger, I., Pielstrom, S., Schoch, C. 
     and Vitt, T. (2017). Understanding and explaining Delta measures for authorship 
