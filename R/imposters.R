@@ -15,6 +15,7 @@ imposters = function(reference.set,
                      iterations = 100,
                      features = 0.5,
                      imposters = 0.5,
+method = "GI", # "GI" | "BDI"
                      classes.reference.set = NULL,
                      classes.candidate.set = NULL,
                      ...) {
@@ -37,6 +38,10 @@ imposters = function(reference.set,
         imposters = 0.5
     }
     
+
+if(method == "BDI") {
+    imposters = 0
+}
     
     # sanitize the reference set: if it is a matrix etc.etc.etc
     #
@@ -140,6 +145,7 @@ imposters = function(reference.set,
         # get the centroids?
         
         score = 0
+overall.diff = c()
         
         for(k in 1 : iterations) {
             # randomly picking the features: the percentage passed as an argument
@@ -155,12 +161,13 @@ imposters = function(reference.set,
             # extracting the selection of features from the colnames of one of the sets
             feature.subset = sample(colnames(imposters.set))[feature.IDs]
             
-            # randomly picking the imposters: the percentage passed as an argument
-            # is first converted into an integer
-            no.of.imposters = round(length(imposters.set[,1]) * imposters)
-        
-            # extracting the selection of imposters from the rownames 
-            imposters.subset = sample(rownames(imposters.set))[1:no.of.imposters]
+            # randomly picking the imposters: 
+# the percentage passed as an argument is first converted into an integer
+if(imposters > 0) {
+    no.of.imposters = round(length(imposters.set[,1]) * imposters)
+    # extracting the selection of imposters from the rownames 
+    imposters.subset = sample(rownames(imposters.set))[1:no.of.imposters]
+}
             
             # building new subsets given the above constrains (no. of features etc.)
             # first, shrinking the candidate set, depending on its dimensionality
