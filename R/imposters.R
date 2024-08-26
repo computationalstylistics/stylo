@@ -15,7 +15,7 @@ imposters = function(reference.set,
                      iterations = 100,
                      features = 0.5,
                      imposters = 0.5,
-method = "GI", # "GI" | "BDI"
+                     method = "GI",
                      classes.reference.set = NULL,
                      classes.candidate.set = NULL,
                      ...) {
@@ -38,10 +38,13 @@ method = "GI", # "GI" | "BDI"
         imposters = 0.5
     }
     
+    # sanitize the method variable
+    method = toupper(method)
 
-if(method == "BDI") {
-    imposters = 0
-}
+    # if BDI is used, a single imposter against a sigle candidate is performed
+    if(method == "BDI") {
+        imposters = 0
+    }
     
     # sanitize the reference set: if it is a matrix etc.etc.etc
     #
@@ -127,8 +130,12 @@ if(method == "BDI") {
     
     message("Testing a given candidate against imposters...\n")
     
+
     final.scores = c()
-    
+
+
+
+
     for(candidate in candidates) {
         
         # if only one text has been indicated to be the candidate set, don't bother
@@ -145,7 +152,7 @@ if(method == "BDI") {
         # get the centroids?
         
         score = 0
-overall.diff = c()
+        overall.diff = c()
         
         for(k in 1 : iterations) {
             # randomly picking the features: the percentage passed as an argument
@@ -162,12 +169,15 @@ overall.diff = c()
             feature.subset = sample(colnames(imposters.set))[feature.IDs]
             
             # randomly picking the imposters: 
-# the percentage passed as an argument is first converted into an integer
-if(imposters > 0) {
-    no.of.imposters = round(length(imposters.set[,1]) * imposters)
-    # extracting the selection of imposters from the rownames 
-    imposters.subset = sample(rownames(imposters.set))[1:no.of.imposters]
-}
+            # the percentage passed as an argument is first converted into an integer
+            if(imposters > 0) {
+                no.of.imposters = round(length(imposters.set[,1]) * imposters)
+                # extracting the selection of imposters from the rownames 
+                imposters.subset = sample(rownames(imposters.set))[1:no.of.imposters]
+            } else {
+                imposters.subset = sample(rownames(imposters.set))[1]
+                pick.one.from.candidate = sample(rownames(current.candidate))[1]
+            }
             
             # building new subsets given the above constrains (no. of features etc.)
             # first, shrinking the candidate set, depending on its dimensionality
@@ -176,6 +186,14 @@ if(imposters > 0) {
             } else {
                 shrunken.candidate.set = current.candidate[, feature.subset]
             }
+            # if the chosen method is "BDI", overwrite the above candidate set anyway;
+            # similarly, a sigle candidate text will be picked when `imposters = 0`
+            if(imposters == 0) {
+                shrunken.candidate.set = 
+                            current.candidate[pick.one.from.candidate, feature.subset]
+            }
+
+
             shrunken.imposters.set = imposters.set[imposters.subset,feature.subset]
             shrunken.test = test[feature.subset]
             
@@ -189,31 +207,52 @@ if(imposters > 0) {
             # THE MAIN STEP: LAUNCHING THE CLASSIFIER
             # run the classifier
             get.the.answer = perform.delta(training.set, test.set, ...)
-            # getting only the first hit, from the variable y (compact results)
-            get.the.answer = get.the.answer$y[1]
+
+
+            if(method == "GI") {
+                # getting only the first hit, from the variable y (compact results)
+                get.the.answer = get.the.answer$y[1]
             
-            # increasing the score when the nearest author is in the target group
-            if(get.the.answer == candidate) {
-                score = score + 1 / iterations
+                # increasing the score when the nearest author is in the target group
+                if(get.the.answer == candidate) {
+                    score = score + 1 / iterations
+                }
+            } else {
+                get.the.answer = get.the.answer$distance_table[1,]
+                get.the.diff = get.the.answer[2] - get.the.answer[1]
+                overall.diff = c(overall.diff, get.the.diff)
             }
             
         }
         
         # for the sake of compatibility with the original paper, reversing the scores
         #score = 1 - score
-        
-        # for some reason, it returns values such as -6.6613e-16; getting rid of this:
-        score = round(score, 10)
-        
-        # message on screen
-        message(paste(candidate, "\t", score))
-        
-        # recording the final scores 
-        final.scores = c(final.scores, score)
-    }
-    
-    names(final.scores) = candidates
 
+        if(method == "GI") {        
+            # it sometimes returns values such as -6.6613e-16; getting rid of this:
+            score = round(score, 10)
+        
+            # message on screen
+            message(paste(candidate, "\t", score))
+    
+            # recording the final scores 
+            final.scores = c(final.scores, score)
+        } else {
+            message(paste(candidate, "\tmu =", round(mean(overall.diff), 2), "\tsd =", 
+                           round(sd(overall.diff), 2)))
+            final.scores = cbind(final.scores, overall.diff)
+        }
+    
+    }
+
+
+    if(method == "GI") {
+        names(final.scores) = candidates
+    } else {
+        colnames(final.scores) = candidates
+        rownames(final.scores) = c(1 : iterations)
+        class(final.scores) = "stylo.data"
+    }
 
 return(final.scores)
 }

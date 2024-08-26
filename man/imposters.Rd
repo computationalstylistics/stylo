@@ -7,7 +7,9 @@ verification tasks. This function is an implementation of the 2nd order
 verification system known as the General Imposters framework (GI), 
 and introduced by Koppel and Winter (2014). The current implementation 
 tries to stick -- with some improvements -- to the description provided 
-by Kestemont et al. (2016: 88).
+by Kestemont et al. (2016: 88). The function provides both the General
+Imposters imposters implementation, and its extended version known as
+the Bootstrap Distance Imposters as introduced by Nagy (2024).
 }
 \usage{
 imposters(reference.set, 
@@ -16,6 +18,7 @@ imposters(reference.set,
           iterations = 100,
           features = 0.5,
           imposters = 0.5,
+          method = "GI",
           classes.reference.set = NULL,
           classes.candidate.set = NULL,
           ...) 
@@ -63,6 +66,16 @@ imposters(reference.set,
           (randomly). See above, for the features' choice. The default value
           of this parameter is 0.5.}
 
+\item{method}{the default value "GI" makes the function perform the original
+          General Imposters procedure, discussed by Kestemont et al. (2016).
+          The option "BDI" switches to Bootstrap Distance Imposters method
+          as introduced by Nagy (2024); rather than comparing a set of texts 
+          by a candidate against a set of texts by imposters, it randomly 
+          picks only one text by an impostor and one text by a candidate, 
+          and estimates the difference between their distances. Choosing 
+          the option "BDI" forces the above `imposters` setting to take 
+          the value of 0.}
+
 \item{classes.reference.set}{a vector containing class identifiers for the
           reference set. When missing, the row names of the set
           table will be used; the assumed classes are the strings of 
@@ -106,6 +119,8 @@ Koppel, M. , and Winter, Y. (2014). Determining if two documents are
 Kestemont, M., Stover, J., Koppel, M., Karsdorp, F. and Daelemans, W. (2016).
     Authenticating the writings of Julius Caesar. "Expert Systems With
     Applications", 63: 86-96.
+
+Nagy, B. (2024). Bootstrap Distance Imposters. forthcoming.
 }
 \author{
 Maciej Eder
@@ -125,14 +140,16 @@ imposters(galbraith)
 
 # general usage:
 
-# Let's assume there is a table with frequencies, the 8th row of which contains
-# the data for a text one wants to verify.
+# Let's assume there is a table with frequencies, the 12th row of which contains
+# the data for a text one wants to verify. For the sake of simplicity, let's use
+# the same `galbraith` dataset as above:
+dataset = galbraith
 
 # getting the 8th row from the dataset
-text_to_be_tested = dataset[8,]
+text_to_be_tested = dataset[12,]
 
-# building the reference set so that it does not contain the 8th row
-remaining_frequencies = dataset[-c(8),]
+# building the reference set so that it does not contain the 12th row
+remaining_frequencies = dataset[-c(12),]
 
 # launching the imposters method:
 imposters(reference.set = remaining_frequencies, test = text_to_be_tested)
