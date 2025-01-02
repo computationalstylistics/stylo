@@ -6,7 +6,7 @@
 
 [![CRAN Version](https://www.r-pkg.org/badges/version-last-release/stylo)](https://CRAN.R-project.org/package=stylo)
 [![CRAN Downloads](https://cranlogs.r-pkg.org/badges/grand-total/stylo)](https://CRAN.R-project.org/package=stylo) 
-![Downloads](http://cranlogs.r-pkg.org/badges/stylo)
+[![Downloads](http://cranlogs.r-pkg.org/badges/stylo)](https://CRAN.R-project.org/package=stylo)
 [![GitHub R package version](https://img.shields.io/github/r-package/v/computationalstylistics/stylo)](https://github.com/computationalstylistics/stylo)
 [![license](https://img.shields.io/cran/l/stylo)](https://opensource.org/licenses/GPL-3.0)
 [![paper](https://img.shields.io/badge/DOI-10.32614%2FRJ--2016--007-blue)](https://journal.r-project.org/archive/2016/RJ-2016-007/index.html)
