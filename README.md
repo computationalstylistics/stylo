@@ -4,8 +4,8 @@
 **License:** [GPL-3](https://opensource.org/licenses/GPL-3.0)
 
 
-[![CRAN Version](http://www.r-pkg.org/badges/version/stylo)](https://CRAN.R-project.org/package=stylo)
-[![CRAN Downloads](http://cranlogs.r-pkg.org/badges/grand-total/stylo)](https://www.rpackages.io/package/stylo) 
+[![CRAN Version](https://www.r-pkg.org/badges/version-last-release/stylo)](https://CRAN.R-project.org/package=stylo)
+[![CRAN Downloads](https://cranlogs.r-pkg.org/badges/grand-total/stylo)](https://CRAN.R-project.org/package=stylo) 
 ![Downloads](http://cranlogs.r-pkg.org/badges/stylo)
 [![GitHub R package version](https://img.shields.io/github/r-package/v/computationalstylistics/stylo)](https://github.com/computationalstylistics/stylo)
 [![license](https://img.shields.io/cran/l/stylo)](https://opensource.org/licenses/GPL-3.0)
