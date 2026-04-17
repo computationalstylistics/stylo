@@ -9,6 +9,7 @@
 # #################################################    
 
 gui.stylo = function(...) {
+  .stylo_require_gui("gui.stylo()")
   
   # loading required libraries
   # (this will be obsolete when we solve the varibles import/export issues)

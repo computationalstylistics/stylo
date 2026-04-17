@@ -61,8 +61,11 @@ if(is.character(path) == TRUE & length(path) > 0) {
 # Just a few lines that allow users to choose the working directory if working
 # with the GUI.
 
-if(gui == TRUE & is.null(path)){
-  selected.path = tk_choose.dir(caption = "Select your working directory. It should a subdirectory called *corpus* ")
+if(gui == TRUE & is.null(path) & .stylo_dialogs_available()){
+  selected.path = .stylo_choose_dir(
+    caption = "Select your working directory. It should a subdirectory called *corpus* ",
+    error_message = "Working directory selection requires Tcl/Tk."
+  )
   setwd(selected.path)
 }
 
@@ -89,9 +92,7 @@ variables = stylo.default.settings(...)
 if (gui == TRUE) {
       # first, checking if the GUI can be displayed
       # (the conditional expression is stolen form the generic function "menu")
-      if (.Platform$OS.type == "windows" || .Platform$GUI ==
-            "AQUA" || (capabilities("tcltk") && capabilities("X11") &&
-            suppressWarnings(tcltk::.TkUp))) {
+      if (.stylo_gui_available()) {
         #variables = gui.classify(...)
         message("")
         message("GUI could not be launched -- it is not supported yet :-( ")

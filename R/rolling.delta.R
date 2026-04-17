@@ -35,8 +35,11 @@ cat("using current directory...\n")
 # Just a few lines that allow users to choose the working directory if working
 # with the GUI.
 
-if(gui == TRUE & is.null(path)){
-  selected.path = tk_choose.dir(caption = "Select your working directory. It should a subdirectory called *corpus* ")
+if(gui == TRUE & is.null(path) & .stylo_dialogs_available()){
+  selected.path = .stylo_choose_dir(
+    caption = "Select your working directory. It should a subdirectory called *corpus* ",
+    error_message = "Working directory selection requires Tcl/Tk."
+  )
   setwd(selected.path)
 }
 
@@ -85,7 +88,13 @@ col12="orange"
 # will serve as default for the GUI for the first run of the script on a corpus.
 # In the subsequent runs, last values will appear as default in the GUI.
 
-interactive.mode.with.GUI = TRUE
+interactive.mode.with.GUI = gui && .stylo_gui_available()
+
+if (gui == TRUE && interactive.mode.with.GUI == FALSE) {
+  message("")
+  message("GUI could not be launched -- default settings will be used;")
+  message("otherwise please pass your variables as command-line agruments.")
+}
 
 ##############################################################################
 
