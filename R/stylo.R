@@ -65,9 +65,7 @@ variables = stylo.default.settings(...)
 if (gui == TRUE) {
       # first, checking if the GUI can be displayed
       # (the conditional expression is stolen form the generic function "menu")
-      if (.Platform$OS.type == "windows" || .Platform$GUI ==
-            "AQUA" || (capabilities("tcltk") && capabilities("X11") &&
-            suppressWarnings(tcltk::.TkUp))) {
+      if (.stylo_gui_available()) {
         variables = gui.stylo(...)
       } else {
         message(" ")
@@ -528,7 +526,14 @@ if(corpus.exists == FALSE) {
 
   # Checking whether the required subdirectory exists, calling the choose directory dialogue if not.
   if(file.exists(corpus.dir) == FALSE) {
-    selected.path = tk_choose.dir(caption = "Select your working directory. It should have a subdirectory called *corpus* ")
+    selected.path = .stylo_choose_dir(
+      caption = "Select your working directory. It should have a subdirectory called *corpus* ",
+      error_message = paste0(
+        "Working directory should contain the subdirectory \"",
+        corpus.dir,
+        "\". Pass `path` to a directory containing it."
+      )
+    )
     setwd(selected.path)
   }
   if(file.exists(corpus.dir) == FALSE) {
@@ -547,8 +552,16 @@ if(corpus.exists == FALSE) {
   if (interactive.files == TRUE) {
     # go to corpus directory
     setwd(corpus.dir)
-    corpus.filenames = basename(tk_choose.files(default = "",
-                                caption = "Select at least 2 files", multi = TRUE))
+    corpus.filenames = basename(.stylo_choose_files(
+      default = "",
+      caption = "Select at least 2 files",
+      multi = TRUE,
+      error_message = paste0(
+        "Interactive file selection requires Tcl/Tk. Set `interactive.files = FALSE` or provide files in `",
+        corpus.dir,
+        "`."
+      )
+    ))
     # back to the working directory
     setwd("..")
   } else {

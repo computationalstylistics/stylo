@@ -11,6 +11,7 @@
 
 gui.oppose <-
 function(...) {
+  .stylo_require_gui("gui.oppose()")
   
   # loading required library  #### it will not be needed
   #  library(tcltk2)

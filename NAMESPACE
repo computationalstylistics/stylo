@@ -1,8 +1,6 @@
 
 
 import(
-  tcltk,
-  tcltk2, 
   ape, 
   pamr, 
   e1071, 
@@ -82,5 +80,4 @@ S3method(print, stylo.data)
 S3method(summary, stylo.results)
 S3method(summary, stylo.corpus)
 S3method(plot, sample.size)
-
 

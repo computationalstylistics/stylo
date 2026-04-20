@@ -72,9 +72,7 @@ stage.II.similarity.test = TRUE
 if (gui == TRUE) {
       # first, checking if the GUI can be displayed
       # (the conditional expression is stolen form the generic function "menu")
-      if (.Platform$OS.type == "windows" || .Platform$GUI ==
-            "AQUA" || (capabilities("tcltk") && capabilities("X11") &&
-            suppressWarnings(tcltk::.TkUp))) {
+      if (.stylo_gui_available()) {
         variables = gui.oppose(...)
       } else {
         message("")
@@ -290,7 +288,16 @@ if(corpus.exists == FALSE) {
   # Checking whether required files and subdirectories exist
   # First check: allow user to choose a suitable folder via GUI
   if(file.exists(primary.corpus.dir) == FALSE | file.exists(secondary.corpus.dir) == FALSE) {
-    selected.path = tk_choose.dir(caption = "Select your working directory. It should two subdirectories called *primary_set* and *secondary_set*")
+    selected.path = .stylo_choose_dir(
+      caption = "Select your working directory. It should two subdirectories called *primary_set* and *secondary_set*",
+      error_message = paste0(
+        "Working directory should contain two subdirectories: \"",
+        primary.corpus.dir,
+        "\" and \"",
+        secondary.corpus.dir,
+        "\". Pass `path` to a directory containing them."
+      )
+    )
     setwd(selected.path)
   }
 

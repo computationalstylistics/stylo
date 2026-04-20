@@ -12,6 +12,7 @@
 
 
 gui.classify = function(...) {
+  .stylo_require_gui("gui.classify()")
   
 
 
