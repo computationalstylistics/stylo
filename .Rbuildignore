@@ -2,4 +2,3 @@ README.md
 .DS_Store
 .git
 .gitignore
-.travis.yml

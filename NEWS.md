@@ -1,5 +1,14 @@
 ## 'stylo' news ##
 
+### version 0.7.7, 2026/04/20
+  * GUI behavior improved
+
+
+### version 0.7.6, 2024/08/26
+  * Bootstrap Distance Imposters implemented
+  * other improvements in imposters()
+  * documentation refreshed
+
 
 ### version 0.7.5, 2024/04/02
   * size.penalize() renamed to samplesize.penalize(), for CRAN
