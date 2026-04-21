@@ -1,7 +1,7 @@
 
 
 
-# the whole function needs to be thoroughly rewritten
+# the whole function needs to be thoroughly rewritten;
 # so far, this is the original oppose() function plugged into a wrapper;
 # see the new oppose() function in the oppose.R file
 
@@ -351,7 +351,7 @@ if(corpus.exists == FALSE) {
     stop("corpus prepared incorrectly")
   }
 
-  # loading text files, splitting, parsing, n-gramming, samping, and so forth
+  # loading text files, splitting, parsing, n-gramming, sampling, and so forth
   corpus.of.primary.set = load.corpus.and.parse(files = filenames.primary.set,
                          corpus.dir = primary.corpus.dir,
                          encoding = encoding,
@@ -366,7 +366,7 @@ if(corpus.exists == FALSE) {
                          ngram.size = ngram.size)
 
   # loading text files: test set
-  corpus.of.secondary.set = load.corpus.and.parse(files=filenames.secondary.set,
+  corpus.of.secondary.set = load.corpus.and.parse(files = filenames.secondary.set,
                          corpus.dir = secondary.corpus.dir,
                          encoding = encoding,
                          markup.type = corpus.format,
@@ -388,7 +388,7 @@ if(corpus.exists == FALSE) {
   # We need a list of the most frequent words used in the current corpus,
   # in descendent order, without frequencies (just a list of words).
   wordlist.raw = sort(table( c(unlist(corpus.of.primary.set),
-                          unlist(corpus.of.secondary.set))), decreasing=TRUE)
+                          unlist(corpus.of.secondary.set))), decreasing = TRUE)
 
 
   # we want to filter out rare words (e.g. hapax legomena and/or dislegomena)
@@ -705,7 +705,7 @@ cat(data.to.be.saved, file = "words_preferred.txt", sep = "\n", append = TRUE)
 #
 
 
-# some comments into the file containing worlist
+# some comments into the file containing wordlist
 cat("# The file contains words that were extracted in Burrows' Zeta test:",
   "# this subset lists words significantly AVOIDED by primary author(s).",
   "# The list can be used as an input wordlist for other methods, and for this",
@@ -759,7 +759,7 @@ if (visualization == "words" | visualization == "markers"){
 
 if (visualization == "words" && oppose.method != "box.plot"){
 
-        # only a portion of discinctive words (e.g. 70) will be plotted
+        # only a portion of distinctive words (e.g. 70) will be plotted
         if(length(names(words.preferred)) > 70) {
                 preferred.words.for.plotting = names(words.preferred)[1:70]
                 preferred.indices.for.plotting = 1:70
@@ -883,7 +883,7 @@ summary.zeta.scores = c()
 
 
 # checking if the test set exists and if it contains file(s)
-# depending on the ansewer, initializing 2 or 3 turns of the loop
+# depending on the answer, initializing 2 or 3 turns of the loop
 if(file.exists(test.corpus.dir) == TRUE) {
     if(length(dir(test.corpus.dir)) > 0) {
     loop.size = 3 }
@@ -922,10 +922,6 @@ for(i in 1 : loop.size) {
 # making the matrix appropriately shaped, namely:
 # converting the matrix into a table, making the numbers numeric again
 colnames(summary.zeta.scores) = c("preferred","avoided","class")
-#summary.zeta.scores = as.data.frame(summary.zeta.scores, stringsAsFactors=FALSE)
-#summary.zeta.scores[,1] = as.numeric(summary.zeta.scores[,1])
-#summary.zeta.scores[,2] = as.numeric(summary.zeta.scores[,2])
-#summary.zeta.scores[,3] = as.factor(summary.zeta.scores[,3])
 
 
 } # <---- the second stage of the analysis is completed
@@ -946,7 +942,7 @@ if ((visualization == "markers") && (oppose.method != "box.plot")){
                            "gold4", "deepskyblue","yellowgreen","grey",
                            "chartreuse4", "khaki", "navy", "palevioletred",
                            "greenyellow", "darkolivegreen4", "chocolate4"
-                           ),10)
+                           ), 10)
   #
   for(w in 2:length(names.of.the.texts)) {
       if(gsub("_.*","",names.of.the.texts)[w]
@@ -1027,7 +1023,6 @@ if (classification == TRUE && oppose.method != "box.plot") {
   #################################################################
   # naive Bayes classification
   if(naive.bayes == TRUE) {
-#  library(e1071)
     model = naiveBayes(class ~ preferred + avoided, my.data[1:training.subset,])
     classification.results = predict(model, my.data[(training.subset+1):test.subset,-3], type="raw")
     final.probabilities = round(classification.results,2)
@@ -1036,15 +1031,11 @@ if (classification == TRUE && oppose.method != "box.plot") {
   #################################################################
   # support vector machines
   if(svm.classification == TRUE) {
-#    library(e1071)
     model = svm(as.factor(class) ~ preferred + avoided, my.data[1:training.subset,],probability=T)
     ### plot(model, my.data[1:training.subset,])
-    #classification.results = predict(model, my.data[(training.subset+1):test.subset,-3], probability=T)
     classification.results = predict(model, my.data[,-3], probability=T)
     classification.results = attr(classification.results,"probabilities")
     final.probabilities = round(classification.results,2)
-    # plotting the test set
-    #plot(final.probabilities[,2],type="h")
     # plotting all the samples, distinguished by color:
     if (visualization == "markers"){
       plot(final.probabilities[,2],type="h",
@@ -1067,7 +1058,7 @@ if (classification == TRUE && oppose.method != "box.plot") {
 
 
 # #################################################
-# praparing final resutls: building a class
+# preparing final results: building a class
 
 
 # renaming some of the variables (for the sake of attractiveness)
@@ -1083,12 +1074,6 @@ if(exists("words.preferred.by.primary.author")) {
 if(exists("words.avoided.by.primary.author")) {
   words.avoided = words.avoided.by.primary.author
 }
-
-# some fake output
-variable.to.be.done = c(0,0,0,0)
-yet.another.variable = "nothing to be shown"
-
-
 
 
 if(exists("words.preferred")) {
@@ -1147,7 +1132,7 @@ results.oppose$call = match.call()
 results.oppose$name = call("oppose")
 
 
-# This assings the list of final results to the class "stylo.resutls";
+# This assigns the list of final results to the class "stylo.results";
 # the same class will be used to handle the output of classify(),
 # rolling.delta() and oppose(). See the files "print.stylo.results.R"
 # and "summary.stylo.results.R" (no help files are provided, since
