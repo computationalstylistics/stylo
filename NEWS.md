@@ -2,6 +2,8 @@
 
 ### version 0.7.7, 2026/04/20
   * GUI behavior improved
+  * oppose() decoupled from direct GUI call
+  * same with stylo() and classify()
 
 
 ### version 0.7.6, 2024/08/26
