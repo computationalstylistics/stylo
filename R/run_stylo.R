@@ -16,7 +16,7 @@ run_stylo = function(gui = FALSE,
              metadata = NULL,
              filename.column = "filename",
              grouping.column = "author",
-             corpus.dir = "corpus", ...) {
+             corpus.dir = "corpus", ..., reporter = NULL) {
 
 
 # this is a much cleaner solution, but perhaps it's too early at this stage
@@ -39,6 +39,17 @@ run_stylo = function(gui = FALSE,
 	gui = FALSE
 
 
+report = function(msg, type = "message") {
+    if (!is.null(reporter)) {
+      reporter(msg, type)
+    } else {
+      # fallback: CLI behavior
+      if (type == "message") message(msg)
+      else cat(msg, "\n")
+    }
+  }
+
+#report("!!!!!!!!! testing !!!!!!!!!!!!!!!!")
 
 
 # changing working directory (if applicable)

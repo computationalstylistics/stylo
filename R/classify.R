@@ -28,6 +28,16 @@ classify = function(gui = TRUE,
 	config = utils::modifyList(default_params, custom_params)
 
 
+	# adding the args passed directly by the user
+	config$training.frequencies = training.frequencies
+	config$test.frequencies = test.frequencies
+	config$training.corpus = training.corpus
+	config$test.corpus = test.corpus
+	config$features = features
+	config$path = path
+	config$training.corpus.dir = training.corpus.dir
+	config$test.corpus.dir = test.corpus.dir
+
 
 	# optionally, launch GUI and overwrite any existing variable
 	if (gui == TRUE) {
@@ -44,8 +54,9 @@ classify = function(gui = TRUE,
 	}
 
 
-	# here, saving the config file should be performed:
-	#   -> so far, this is still performed by the engine function run_oppose() 
+	# NOTE: here, saving the config file should be performed:
+	#  -> so far, this is still performed by the engine function 
+	#
 	#
 
 

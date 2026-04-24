@@ -27,6 +27,15 @@ oppose = function(gui = TRUE,
 	config = utils::modifyList(default_params, custom_params)
 
 
+	# adding the args passed directly by the user
+	config$path = path
+	config$primary.corpus = primary.corpus
+	config$secondary.corpus = secondary.corpus
+	config$test.corpus = test.corpus
+	config$primary.corpus.dir = primary.corpus.dir
+	config$secondary.corpus.dir = secondary.corpus.dir
+	config$test.corpus.dir = test.corpus.dir
+
 
 	# optionally, launch GUI and overwrite any existing variable
 	if (gui == TRUE) {
@@ -43,8 +52,9 @@ oppose = function(gui = TRUE,
 	}
 
 
-	# here, saving the config file should be performed:
-	#   -> so far, this is still performed by the engine function run_oppose() 
+	# NOTE: here, saving the config file should be performed:
+	#  -> so far, this is still performed by the engine function 
+	#
 	#
 
 

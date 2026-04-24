@@ -28,6 +28,15 @@ stylo = function(gui = TRUE,
 	custom_params = list(...)
 	config = utils::modifyList(default_params, custom_params)
 
+	# adding the args passed directly by the user
+	config$frequencies = frequencies
+	config$parsed.corpus = parsed.corpus
+	config$features = features
+	config$path = path
+	config$metadata = metadata
+	config$filename.column = filename.column
+	config$grouping.column = grouping.column
+	config$corpus.dir = corpus.dir
 
 
 	# optionally, launch GUI and overwrite any existing variable
@@ -45,8 +54,9 @@ stylo = function(gui = TRUE,
 	}
 
 
-	# here, saving the config file should be performed:
-	#   -> so far, this is still performed by the engine function run_oppose() 
+	# NOTE: here, saving the config file should be performed:
+	#  -> so far, this is still performed by the engine function 
+	#
 	#
 
 
