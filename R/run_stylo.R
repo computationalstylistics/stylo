@@ -49,7 +49,6 @@ report = function(msg, type = "message") {
     }
   }
 
-#report("!!!!!!!!! testing !!!!!!!!!!!!!!!!")
 
 
 # changing working directory (if applicable)
@@ -654,7 +653,7 @@ if(corpus.exists == FALSE) {
 
 
 
-  # loading text files, splitting, parsing, n-gramming, samping, and so forth
+  # loading text files, splitting, parsing, n-gramming, sampling, and so forth
   loaded.corpus = load.corpus.and.parse(files = corpus.filenames,
                          corpus.dir = corpus.dir,
                          encoding = encoding,
@@ -874,7 +873,6 @@ number.of.current.iteration = 0
 # load the ape library; make an empty bootstrap.results list
 # this will be executed only if the bootstrap option is checked
 if (analysis.type == "BCT") {
-#    library(ape)
     bootstrap.list = list()
 }
 
@@ -1170,7 +1168,6 @@ colors.of.pca.graph = assign.plot.colors(labels = groups,
 
 
 
-
 # #################################################
 # preparing the graphs
 # #################################################
@@ -1199,6 +1196,8 @@ plot.current.task = function() {NULL}
     } else {
     culling.info = paste(culling.min, "-", culling.max, sep = "") }
 
+
+
 # prepares a dendrogram for the current MFW value for CA plotting
 if(analysis.type == "CA") {
   name.of.the.method = "Cluster Analysis"
@@ -1207,47 +1206,79 @@ if(analysis.type == "CA") {
     dendrogram.margins =  c(5,4,4,8)+0.1
     } else {
     dendrogram.margins = c(8,5,4,4)+0.1 }
-  # the following task will be plotted
-  plot.current.task = function(){
-    par(mar=dendrogram.margins)
-        # neighbor joining clustering algorithm needs a different call:
-        if(linkage == "nj") {
-          plot(nj(distance.table), font=1, tip.color = colors.of.pca.graph)
-        # any other linkage algorithm is produced by hclust()
-        } else {
-          # clustering the distances stored in the distance.table
-          clustered.data = hclust(as.dist(distance.table), method = linkage)
-          # reordering the vector of colors to fit the order of clusters
-          colors.on.dendrogram = colors.of.pca.graph[clustered.data$order]
-          # converting the clusters into common dendrogram format
-          tree.with.clusters = as.dendrogram(clustered.data, hang=0)
-          # now, preparing the procedure for changing leaves' color attributes
-          # (this snippet is taken from "help(dendrapply)" and slightly adjusted)
-                  colLab = function(n) {
-                          if(is.leaf(n)) {
-                                  a <- attributes(n)
-                                  i <<- i+1
-                                  attr(n, "nodePar") <-
-                                  c(a$nodePar, lab.col = mycols[i], pch = NA)
-                          }
-                          n
-                  }
-                  mycols = colors.on.dendrogram
-                  attributes(mycols) = NULL
-                  i = 0
-          # adding the attributes to subsequent leaves of the dendrogram,
-          # using the above colLab(n) function
-          dendrogram.with.colors = dendrapply(tree.with.clusters, colLab)
-          # finally, ploting the whole stuff
-          plot(dendrogram.with.colors, main = graph.main.title,
-                  horiz = dendrogram.layout.horizontal)
-          if(dendrogram.layout.horizontal == TRUE) {
-                  title(sub = graph.subtitle)
-          } else {
-                  title(sub = graph.subtitle, outer = TRUE, line = -1)
-          }
-        }
-    }
+
+	# preparing a dendro object
+	#
+	# clustering the distances stored in the distance.table
+	clustered_data = hclust(as.dist(distance.table), method = linkage)
+	# reordering the vector of colors to fit the order of clusters
+	colors_on_dendrogram = colors.of.pca.graph[clustered_data$order]
+	# converting the clusters into common dendrogram format
+	tree_with_clusters = as.dendrogram(clustered_data, hang = 0)
+	# now, preparing the procedure for changing leaves' color attributes
+	# (this snippet is taken from "help(dendrapply)" and slightly adjusted)
+		colLab = function(n) {
+			if(is.leaf(n)) {
+				a <- attributes(n)
+				i <<- i+1
+				attr(n, "nodePar") <- c(a$nodePar, 
+					lab.col = colors_on_dendrogram[i], 
+					pch = NA)
+			}
+			return(n)
+        	}
+		attributes(colors_on_dendrogram) = NULL
+		i = 0
+	# adding the attributes to subsequent leaves of the dendrogram,
+	# using the above colLab(n) function
+	dendrogram_with_colors = dendrapply(tree_with_clusters, colLab)
+
+
+	# wrapping into an object of the class "stylo_plot"
+	plot_obj = list(
+		plot_type = "dendrogram",
+		plot_data = dendrogram_with_colors,
+		#plot_type = "BCT",
+		#plot_data = tree,
+		#plot_colors = c("red", "green", "blue"),
+		title = graph.main.title,
+		subtitle = "subtitle testing",
+		dendro_horizontal = dendrogram.layout.horizontal
+		#plot_type = "MDS",
+		#plot_data = cmdscale(dist(USArrests), eig = TRUE),
+		#add_to_margins = add.to.margins,
+		#label_offset = label.offset,
+		#pointer_type = "both" # "points" | "labels" | "both"
+	)
+	class(plot_obj) = "stylo_plot"
+
+
+	# plotting as a wrapper, to be used on-screen and to save
+	plot.current.task = function(...) {
+		par(mar = dendrogram.margins)    # do we really need that tweak?
+		plot(plot_obj, ...)
+	}
+
+
+#  # the following task will be plotted
+#  plot.current.task = function(){
+#    par(mar=dendrogram.margins)
+#        # neighbor joining clustering algorithm needs a different call:
+#        if(linkage == "nj") {
+#          plot(nj(distance.table), font=1, tip.color = colors.of.pca.graph)
+#        # any other linkage algorithm is produced by hclust()
+#        } else {
+#         # finally, ploting the whole stuff
+#          plot(dendrogram_with_colors, main = graph.main.title,
+#                 horiz = dendrogram.layout.horizontal)
+#          if(dendrogram.layout.horizontal == TRUE) {
+#                 title(sub = graph.subtitle)
+#          } else {
+#                  title(sub = graph.subtitle, outer = TRUE, line = -1)
+#          }
+#        }
+#    }
+
 }
 
 
@@ -1269,54 +1300,87 @@ if(analysis.type == "MDS") {
   plot.area = define.plot.area(mds.results$points[,1], mds.results$points[,2],
                                xymargins = add.to.margins,
                                v.offset = label.offset)
-  # define the plotting function needed:
-  plot.current.task = function(){
-    if(text.id.on.graphs == "points" || text.id.on.graphs == "both") {
-      plot(xy.coord, type = "p",
-           ylab = "", xlab = "",
-           xlim = plot.area[[1]], ylim = plot.area[[2]],
-           main = graph.main.title,
-           sub = graph.subtitle,
-           col = colors.of.pca.graph,
-           lwd = plot.line.thickness)
-      }
-    if(text.id.on.graphs == "labels") {
-      plot(xy.coord, type = "n",
-           ylab = "", xlab = "",
-           xlim = plot.area[[1]], ylim = plot.area[[2]],
-           main = graph.main.title,
-           sub = graph.subtitle,
-           col = colors.of.pca.graph,
-           lwd = plot.line.thickness)
-      }
-    if(text.id.on.graphs == "labels" || text.id.on.graphs == "both") {
-      text(label.coord, rownames(label.coord), col=colors.of.pca.graph)
-      }
-    axis(1, lwd = plot.line.thickness)
-    axis(2, lwd = plot.line.thickness)
-    box(lwd = plot.line.thickness)
-  }
+
+
+
+	# wrapping into an object of the class "stylo_plot"
+	plot_obj = list(
+		plot_type = "MDS",
+		plot_data = mds.results,
+		plot_colors =  colors.of.pca.graph,
+		title = graph.main.title,
+		subtitle = "subtitle testing",
+		add_to_margins = add.to.margins,
+		label_offset = label.offset,
+		pointer_type = text.id.on.graphs
+	)
+	class(plot_obj) = "stylo_plot"
+
+
+	# plotting as a wrapper, to be used on-screen and to save
+	plot.current.task = function(...) {
+		plot(plot_obj, ...)
+	}
+
+
+## define the plotting function needed:
+#  plot.current.task = function(){
+#    if(text.id.on.graphs == "points" || text.id.on.graphs == "both") {
+#      plot(xy.coord, type = "p",
+#           ylab = "", xlab = "",
+#           xlim = plot.area[[1]], ylim = plot.area[[2]],
+#           main = graph.main.title,
+#           sub = graph.subtitle,
+#           col = colors.of.pca.graph,
+#           lwd = plot.line.thickness)
+#      }
+#    if(text.id.on.graphs == "labels") {
+#      plot(xy.coord, type = "n",
+#           ylab = "", xlab = "",
+#           xlim = plot.area[[1]], ylim = plot.area[[2]],
+#           main = graph.main.title,
+#           sub = graph.subtitle,
+#           col = colors.of.pca.graph,
+#           lwd = plot.line.thickness)
+#      }
+#    if(text.id.on.graphs == "labels" || text.id.on.graphs == "both") {
+#      text(label.coord, rownames(label.coord), col=colors.of.pca.graph)
+#      }
+#    axis(1, lwd = plot.line.thickness)
+#    axis(2, lwd = plot.line.thickness)
+#    box(lwd = plot.line.thickness)
+#  }
+
+
 }
 
+
+
+
 if(analysis.type == "tSNE") {
-    # set some string information variables
-    name.of.the.method = "t-Distributed Stochastic Neighbor Embedding"
-    short.name.of.the.method = "t-SNE"
-    distance.name.on.file = "tSNE"
-    distance.name.on.graph = "t-SNE"
-    plot.current.task = function(){
-        ecb = function(x,y){
-            if(titles.on.graphs == TRUE) {
-                graph.main.title = paste(graph.title,"\nt-SNE visualisation")
-            } else {
-                graph.main.title = ""
-            }
-            plot(x, t='n', main = graph.main.title, xlab = "", ylab = "", yaxt = "n", xaxt = "n")
-            text(x, rownames(table.with.all.freqs[,1:mfw]), cex = 0.3)
-        }
-    tsne(X = table.with.all.freqs[,1:mfw], initial_dims = 50, epoch_callback = ecb, perplexity = 50, max_iter = 2000)
-    }
+    message("tSNE no longer supported -- too few people were interested")
+    message("If you're looking at this, perhaps tSNE is worth restoring?")
 }
+
+#if(analysis.type == "tSNE") {
+#    # set some string information variables
+#    name.of.the.method = "t-Distributed Stochastic Neighbor Embedding"
+#    short.name.of.the.method = "t-SNE"
+#    distance.name.on.file = "tSNE"
+#    distance.name.on.graph = "t-SNE"
+#    plot.current.task = function(){
+#        ecb = function(x,y){
+#            if(titles.on.graphs == TRUE) {
+#                graph.main.title = paste(graph.title,"\nt-SNE visualisation")
+#            } else {
+#                graph.main.title = ""
+#            }
+#            plot(x, t='n', main = graph.main.title, xlab = "", ylab = "", yaxt = "n", xaxt = "n")
+#            text(x, rownames(table.with.all.freqs[,1:mfw]), cex = 0.3)
+#        }
+#    tsne(X = table.with.all.freqs[,1:mfw], initial_dims = 50, epoch_callback = ecb, perplexity = 50, max_iter = 2000)
+#    }
+#}
 
 # prepares Principal Components Analysis (PCA) for plotting
 if(analysis.type == "PCV" || analysis.type == "PCR") {
@@ -1419,6 +1483,10 @@ if(analysis.type == "PCV" || analysis.type == "PCR") {
     }
   }
 }
+
+
+
+
 
 
 # prepares a list of dendrogram-like structures for a bootstrap consensus tree
@@ -1796,7 +1864,7 @@ if(length(bootstrap.list) <= 2) {
 
 
 # #################################################
-# praparing final resutls: building a class
+# preparing final results: building a class
 
 
 
@@ -1913,6 +1981,10 @@ filtered.variables = ls()[ls() %in% variables.to.save]
 for(i in filtered.variables) {
   results.stylo[[i]] = get(i)
 }
+
+
+# adding the plot data to the final object
+results.stylo$plot_obj = plot_obj
 
 
 
