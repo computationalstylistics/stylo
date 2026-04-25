@@ -21,6 +21,7 @@ importFrom(utils, head, read.table, read.csv, write.csv, write.table)
 
 
 export(
+run_stylo,
   assign.plot.colors,
   change.encoding,
   check.encoding,

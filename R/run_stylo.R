@@ -1568,7 +1568,7 @@ if(save.analyzed.freqs == TRUE) {
       rownames(data.to.be.saved) = iconv(rownames(data.to.be.saved), to = encoding)
       colnames(data.to.be.saved) = iconv(colnames(data.to.be.saved), to = encoding)
     }
-  # writting the stuff -- the file name will be changed accordingly
+  # writing the stuff -- the file name will be changed accordingly
   write.table(data.to.be.saved,
      file = paste("frequencies_analyzed_", mfw, "mfw_", current.culling, "c.txt", sep = ""))
 }
