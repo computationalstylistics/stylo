@@ -1,15 +1,13 @@
 
-
-
 stylo = function(gui = TRUE,
-             frequencies = NULL,
-             parsed.corpus = NULL,
-             features = NULL,
-             path = NULL,
-             metadata = NULL,
-             filename.column = "filename",
-             grouping.column = "author",
-             corpus.dir = "corpus", ...) {
+		frequencies = NULL,
+		parsed.corpus = NULL,
+		features = NULL,
+		path = NULL,
+		metadata = NULL,
+		filename.column = "filename",
+		grouping.column = "author",
+		corpus.dir = "corpus", ...) {
 
 
 
@@ -17,12 +15,14 @@ stylo = function(gui = TRUE,
 	# keep as a list
 	default_params = stylo.default.settings()
 
+	# test whether GUI can be launched on this machine
+	gui_exists = detect_gui_capability()
+
 	# load custom settings from a file (if exists), overwrite the defaults
 	if(file.exists("stylo_config.txt") == TRUE) {
 		saved_params = config_read("stylo_config.txt")
 		default_params = utils::modifyList(default_params, saved_params)
 	}
-
 
 	# arguments directly passed by the user will be prioritized
 	custom_params = list(...)
@@ -39,30 +39,43 @@ stylo = function(gui = TRUE,
 	config$corpus.dir = corpus.dir
 
 
-	# optionally, launch GUI and overwrite any existing variable
-	if (gui == TRUE) {
-		# first, checking if the GUI can be displayed
-		# (the conditional expression inspired by the generic function "menu")
-		if (.stylo_gui_available()) {
-			gui_params = gui.stylo()  # replace with a new GUI call
-			config = utils::modifyList(config, gui_params)
-		} else {
-			message("")
-			message("GUI could not be launched -- default settings will be used;")
-			message("otherwise please pass your variables as command-line agruments\n")
-		}
+	# optionally, launch GUI and overwrite current config settings
+	if (gui && gui_exists) {
+		
+		message(">>> Launching GUI...")
+
+		# old good tcltk GUI starts here
+		# switch to shiny GUI in due time
+		#gui_params = gui.stylo()  
+		#config = utils::modifyList(config, gui_params)
+
+		# turn off direct plotting, let 'shiny' take over
+		config$display.on.screen = FALSE
+
+		shinyApp(
+			ui = make_ui(config),
+			server = make_server(config)
+		)
+
+	} else {
+
+		message(">>> Running in CLI mode...")
+
+		# switching to regular messages on screen
+		reporter = make_reporter(NULL)
+
+		# NOTE: here, saving the config file should be performed:
+		#  -> so far, this is still performed by the engine function 
+		# (or, maybe let's keep it where it was)
+		#
+		# calling the main function, with the final set of arguments
+		results = do.call(run_stylo, config)
+		return(results)
+
 	}
 
-
-	# NOTE: here, saving the config file should be performed:
-	#  -> so far, this is still performed by the engine function 
-	#
-	#
-
-
-	# calling the main function, with the final set of arguments
-	results = do.call(run_stylo, config)
-
-	return(results)
 }
+
+
+
 

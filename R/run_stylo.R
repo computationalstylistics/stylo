@@ -1197,6 +1197,12 @@ plot.current.task = function() {NULL}
     culling.info = paste(culling.min, "-", culling.max, sep = "") }
 
 
+# BUG: (well, no a real bug, but I wanted it to be highlighted)
+# the variable needs to be set for different methods
+# originally, it was implemented in the lines 1570 sq.
+graph.subtitle = "temporary subtitle"
+
+
 
 # prepares a dendrogram for the current MFW value for CA plotting
 if(analysis.type == "CA") {
@@ -1226,7 +1232,7 @@ if(analysis.type == "CA") {
 					pch = NA)
 			}
 			return(n)
-        	}
+		}
 		attributes(colors_on_dendrogram) = NULL
 		i = 0
 	# adding the attributes to subsequent leaves of the dendrogram,
@@ -1238,26 +1244,24 @@ if(analysis.type == "CA") {
 	plot_obj = list(
 		plot_type = "dendrogram",
 		plot_data = dendrogram_with_colors,
-		#plot_type = "BCT",
-		#plot_data = tree,
-		#plot_colors = c("red", "green", "blue"),
 		title = graph.main.title,
-		subtitle = "subtitle testing",
-		dendro_horizontal = dendrogram.layout.horizontal
-		#plot_type = "MDS",
-		#plot_data = cmdscale(dist(USArrests), eig = TRUE),
-		#add_to_margins = add.to.margins,
-		#label_offset = label.offset,
-		#pointer_type = "both" # "points" | "labels" | "both"
-	)
+		#subtitle = graph.subtitle,
+		dendro_horizontal = dendrogram.layout.horizontal)
 	class(plot_obj) = "stylo_plot"
+
 
 
 	# plotting as a wrapper, to be used on-screen and to save
 	plot.current.task = function(...) {
-		par(mar = dendrogram.margins)    # do we really need that tweak?
+
+		# tweak the margins of the plot
+		par(mar = dendrogram.margins)
 		plot(plot_obj, ...)
+		# when finished, reset the margins to original value
+		par(mar = c(5, 4, 4, 2) + 0.1)
+
 	}
+
 
 
 #  # the following task will be plotted
@@ -1309,11 +1313,10 @@ if(analysis.type == "MDS") {
 		plot_data = mds.results,
 		plot_colors =  colors.of.pca.graph,
 		title = graph.main.title,
-		subtitle = "subtitle testing",
+		subtitle = graph.subtitle,
 		add_to_margins = add.to.margins,
 		label_offset = label.offset,
-		pointer_type = text.id.on.graphs
-	)
+		mds_flavor = text.id.on.graphs)
 	class(plot_obj) = "stylo_plot"
 
 
@@ -1382,107 +1385,160 @@ if(analysis.type == "tSNE") {
 #    }
 #}
 
-# prepares Principal Components Analysis (PCA) for plotting
-if(analysis.type == "PCV" || analysis.type == "PCR") {
-  # set some string information variables
+
+# NOTE: change PCR and PCV -> PCA, and independently allow 'scaling'
+# if (method = "PCA") {........}
+# for the time being, it has to stay as is
+
+if(analysis.type == "PCA" || analysis.type == "PCV" || analysis.type == "PCR") {
   name.of.the.method = "Principal Components Analysis"
   short.name.of.the.method = "PCA"
   distance.name.on.file = "PCA"
   if(analysis.type == "PCV") {
     pca.results = prcomp(table.with.all.freqs[,1:mfw])
     distance.name.on.graph = "Covariance matrix"
-  } else if(analysis.type == "PCR") {
+  } else {
     pca.results = prcomp(table.with.all.freqs[,1:mfw], scale=TRUE)
     distance.name.on.graph = "Correlation matrix"
   }
-  # get the variation explained by the PCs:
-  expl.var = round(((pca.results$sdev^2) / sum(pca.results$sdev^2) * 100), 1)
-  PC1_lab = paste("PC1 (", expl.var[1], "%)", sep="")
-  PC2_lab = paste("PC2 (", expl.var[2], "%)", sep="")
 
-  # prepare the xy coordinates, add the margins, add the label offset
-  xy.coord = pca.results$x[,1:2]
-  if(text.id.on.graphs == "both") {
-    label.coord = cbind(pca.results$x[,1],(pca.results$x[,2] + (0.01*label.offset*
-                      abs(max(pca.results$x[,2]) - min(pca.results$x[,2])))))
-    } else {
-    label.coord = xy.coord
-    }
-  plot.area = define.plot.area(pca.results$x[,1], pca.results$x[,2],
-                               xymargins = add.to.margins,
-                               v.offset = label.offset)
-  # define the plotting function needed:
-  plot.current.task = function(){
-    if (pca.visual.flavour == "classic"){
-      if(text.id.on.graphs == "points" || text.id.on.graphs == "both") {
-        plot(xy.coord,
-             type = "p",
-             xlim = plot.area[[1]], ylim = plot.area[[2]],
-             xlab = "", ylab = PC2_lab,
-             main = graph.main.title, sub = paste(PC1_lab, "\n", graph.subtitle),
-             col = colors.of.pca.graph,
-             lwd = plot.line.thickness)
-      }
-      if(text.id.on.graphs == "labels") {
-        plot(xy.coord,
-             type = "n",
-             xlim = plot.area[[1]], ylim = plot.area[[2]],
-             xlab = "", ylab = PC2_lab,
-             main = graph.main.title, sub = paste(PC1_lab, "\n", graph.subtitle),
-             col = colors.of.pca.graph,
-             lwd = plot.line.thickness)
-      }
-      abline(h=0, v=0, col = "gray60",lty=2)
-      if(text.id.on.graphs == "labels" || text.id.on.graphs == "both") {
-        text(label.coord, rownames(pca.results$x), col = colors.of.pca.graph)
-      }
-      axis(1, lwd = plot.line.thickness)
-      axis(2, lwd = plot.line.thickness)
-      box(lwd = plot.line.thickness)
-    } else if(pca.visual.flavour == "loadings"){
-      biplot(pca.results,
-             col=c("grey70", "black"),
-             cex=c(0.7, 1), xlab = "",
-             ylab = PC2_lab,
-             main = paste(graph.main.title, "\n\n", sep=""),
-             sub = paste(PC1_lab, "\n", graph.subtitle, sep=""), var.axes = FALSE)
-    } else if(pca.visual.flavour == "technical"){
-      layout(matrix(c(1,2), 2, 2, byrow = TRUE), widths=c(3,1))
-      biplot(pca.results, col=c("black", "grey40"), cex=c(1, 0.9), xlab="", ylab=PC2_lab, main=paste(graph.main.title, "\n\n", sep=""), sub=paste(PC1_lab,"\n",graph.subtitle, sep=""),var.axes=FALSE)
-      abline(h=0, v=0, col = "gray60",lty=3)
-      # add the subpanel to the right
-      row = mat.or.vec(nc = ncol(pca.results$x), nr = 1)
-      for (i in 1:ncol(row)){row[,i] = "grey45"}
-      # paint the first two PCS black -- i.e. the ones actually plotted
-      row[,1] = "black"
-      row[,2] = "black"
-      barplot(expl.var, col = row, xlab = "Principal components", ylab = "Proportion of variance explained (in %)")
-      # set a horizontal dashed line, indicating the psychological 5% barrier
-      abline(h = 5, lty = 3)
-    } else if(pca.visual.flavour == "symbols"){
-      # determine labels involved
-      labels = c()
-      for (c in rownames(pca.results$x)){
-        labels = c(labels, gsub("_.*", "", c))
-      }
-      COOR = data.frame(pca.results$x[,1:2], LABEL = labels, stringsAsFactors = TRUE)
-      labels = c(levels(COOR$LABEL))
-      # visualize
-      sps = trellis.par.get("superpose.symbol")
-      sps$pch = 1:length(labels)
-      trellis.par.set("superpose.symbol", sps)
-      ltheme = canonical.theme(color = FALSE)
-      lattice.options(default.theme = ltheme)
-      pl = xyplot(data = COOR, x = PC2~PC1, xlab = paste(PC1_lab, "\n", graph.subtitle, sep = ""), ylab = PC2_lab, groups = COOR$LABEL, sub = "", key = list(columns = 2, text = list(labels), points = Rows(sps, 1:length(labels))),
-             panel = function(x, ...){
-                 panel.xyplot(x, ...)
-                 panel.abline(v = 0, lty = 3)
-                 panel.abline(h = 0, lty = 3)
-             })
-      plot(pl)
-    }
-  }
+# NOTE: a bridge to switch from PCV|PCR to regular PCA
+# replace with a better variable handling
+analysis.type = "PCA"
+if(pca.visual.flavour == "classic") {
+	pca.visual.flavour = text.id.on.graphs 
 }
+
+
+
+	# class "stylo_plot"
+	plot_obj = list(
+		plot_type = "PCA",
+		plot_data = pca.results,
+		pca_flavor = pca.visual.flavour,
+		plot_colors =  colors.of.pca.graph,
+		title = graph.main.title,
+		subtitle = graph.subtitle, #paste(PC1_lab, "\n", graph.subtitle, sep=""),
+		add_to_margins = add.to.margins,
+		label_offset = label.offset)
+	class(plot_obj) = "stylo_plot"
+
+
+	# NOTE: no need to repeat this function each time
+	# it's identical 
+
+	# plotting as a wrapper, to be used on-screen and to save
+	plot.current.task = function(...) {
+		plot(plot_obj, ...)
+	}
+
+}
+
+
+
+# # prepares Principal Components Analysis (PCA) for plotting
+# if(analysis.type == "PCV" || analysis.type == "PCR") {
+#   # set some string information variables
+#   name.of.the.method = "Principal Components Analysis"
+#   short.name.of.the.method = "PCA"
+#   distance.name.on.file = "PCA"
+#   if(analysis.type == "PCV") {
+#     pca.results = prcomp(table.with.all.freqs[,1:mfw])
+#     distance.name.on.graph = "Covariance matrix"
+#   } else if(analysis.type == "PCR") {
+#     pca.results = prcomp(table.with.all.freqs[,1:mfw], scale=TRUE)
+#     distance.name.on.graph = "Correlation matrix"
+#   }
+#   # get the variation explained by the PCs:
+#   expl.var = round(((pca.results$sdev^2) / sum(pca.results$sdev^2) * 100), 1)
+#   PC1_lab = paste("PC1 (", expl.var[1], "%)", sep="")
+#   PC2_lab = paste("PC2 (", expl.var[2], "%)", sep="")
+
+#   # prepare the xy coordinates, add the margins, add the label offset
+#   xy.coord = pca.results$x[,1:2]
+#   if(text.id.on.graphs == "both") {
+#     label.coord = cbind(pca.results$x[,1],(pca.results$x[,2] + (0.01*label.offset*
+#                       abs(max(pca.results$x[,2]) - min(pca.results$x[,2])))))
+#     } else {
+#     label.coord = xy.coord
+#     }
+#   plot.area = define.plot.area(pca.results$x[,1], pca.results$x[,2],
+#                                xymargins = add.to.margins,
+#                                v.offset = label.offset)
+#   # define the plotting function needed:
+#   plot.current.task = function(){
+#     if (pca.visual.flavour == "classic"){
+#       if(text.id.on.graphs == "points" || text.id.on.graphs == "both") {
+#         plot(xy.coord,
+#              type = "p",
+#              xlim = plot.area[[1]], ylim = plot.area[[2]],
+#              xlab = "", ylab = PC2_lab,
+#              main = graph.main.title, sub = paste(PC1_lab, "\n", graph.subtitle),
+#              col = colors.of.pca.graph,
+#              lwd = plot.line.thickness)
+#       }
+#       if(text.id.on.graphs == "labels") {
+#         plot(xy.coord,
+#              type = "n",
+#              xlim = plot.area[[1]], ylim = plot.area[[2]],
+#              xlab = "", ylab = PC2_lab,
+#              main = graph.main.title, sub = paste(PC1_lab, "\n", graph.subtitle),
+#              col = colors.of.pca.graph,
+#              lwd = plot.line.thickness)
+#       }
+#       abline(h=0, v=0, col = "gray60",lty=2)
+#       if(text.id.on.graphs == "labels" || text.id.on.graphs == "both") {
+#         text(label.coord, rownames(pca.results$x), col = colors.of.pca.graph)
+#       }
+#       axis(1, lwd = plot.line.thickness)
+#       axis(2, lwd = plot.line.thickness)
+#       box(lwd = plot.line.thickness)
+#     } else if(pca.visual.flavour == "loadings"){
+#       biplot(pca.results,
+#              col=c("grey70", "black"),
+#              cex=c(0.7, 1), xlab = "",
+#              ylab = PC2_lab,
+#              main = paste(graph.main.title, "\n\n", sep=""),
+#              sub = paste(PC1_lab, "\n", graph.subtitle, sep=""), var.axes = FALSE)
+#     } else if(pca.visual.flavour == "technical"){
+#       layout(matrix(c(1,2), 2, 2, byrow = TRUE), widths=c(3,1))
+#       biplot(pca.results, col=c("black", "grey40"), cex=c(1, 0.9), xlab="", ylab=PC2_lab, main=paste(graph.main.title, "\n\n", sep=""), sub=paste(PC1_lab,"\n",graph.subtitle, sep=""),var.axes=FALSE)
+#       abline(h=0, v=0, col = "gray60",lty=3)
+#       # add the subpanel to the right
+#       row = mat.or.vec(nc = ncol(pca.results$x), nr = 1)
+#       for (i in 1:ncol(row)){row[,i] = "grey45"}
+#       # paint the first two PCS black -- i.e. the ones actually plotted
+#       row[,1] = "black"
+#       row[,2] = "black"
+#       barplot(expl.var, col = row, xlab = "Principal components", ylab = "Proportion of variance explained (in %)")
+#       # set a horizontal dashed line, indicating the psychological 5% barrier
+#       abline(h = 5, lty = 3)
+#     } else if(pca.visual.flavour == "symbols"){
+#       # determine labels involved
+#       labels = c()
+#       for (c in rownames(pca.results$x)){
+#         labels = c(labels, gsub("_.*", "", c))
+#       }
+#       COOR = data.frame(pca.results$x[,1:2], LABEL = labels, stringsAsFactors = TRUE)
+#       labels = c(levels(COOR$LABEL))
+#       # visualize
+#       sps = trellis.par.get("superpose.symbol")
+#       sps$pch = 1:length(labels)
+#       trellis.par.set("superpose.symbol", sps)
+#       ltheme = canonical.theme(color = FALSE)
+#       lattice.options(default.theme = ltheme)
+#       pl = xyplot(data = COOR, x = PC2~PC1, xlab = paste(PC1_lab, "\n", graph.subtitle, sep = ""), ylab = PC2_lab, groups = COOR$LABEL, sub = "", key = list(columns = 2, text = list(labels), points = Rows(sps, 1:length(labels))),
+#              panel = function(x, ...){
+#                  panel.xyplot(x, ...)
+#                  panel.abline(v = 0, lty = 3)
+#                  panel.abline(h = 0, lty = 3)
+#              })
+#       plot(pl)
+#     }
+#   }
+# }
+
+
 
 
 
@@ -1510,6 +1566,10 @@ if (analysis.type == "BCT") {
   # adds the current dendrogram to the list of all dendrograms
   bootstrap.list[[number.of.current.iteration]] = current.bootstrap.results }
 
+
+
+# NOTE: the following block is (not yet, but almost) obsolete
+# (taken over by a simpler block earlier in the code)
 
 # establishing the text to appear on the graph (unless "notitle" was chosen)
 if(ngram.size > 1) {
@@ -1808,19 +1868,43 @@ if(length(all.connections) == 1) {
 # bootstrap visualization
 if(analysis.type == "BCT") {
 
+	consensus_tree = consensus(bootstrap.list, p = consensus.strength)
+
+	# wrapping into an object of the class "stylo_plot"
+	plot_obj = list(
+		plot_type = "BCT",
+		plot_data = consensus_tree,
+		plot_colors = colors.of.pca.graph,
+		title = graph.main.title,
+		subtitle = graph.subtitle)
+	class(plot_obj) = "stylo_plot"
+
+
+
+
 # as above, the task to be plotted is saved as a function
 if(length(bootstrap.list) <= 2) {
   message("\n\nSORRY, BUT YOU ARE EXPECTING TOO MUCH...!\n",
   "There should be at least 3 iterations to make a consensus tree\n")
   } else {
-  plot.current.task = function(){
-        plot(consensus(bootstrap.list, p=consensus.strength),
-           type="u",
-           font=1,
-           lab4ut="axial",
-           tip.color = colors.of.pca.graph)
-        title (main = graph.main.title)
-        title (sub = graph.subtitle) }
+#  plot.current.task = function(){
+#        plot(consensus(bootstrap.list, p=consensus.strength),
+#           type="u",
+#           font=1,
+#           lab4ut="axial",
+#           tip.color = colors.of.pca.graph)
+#        title (main = graph.main.title)
+#        title (sub = graph.subtitle) }
+
+
+
+	# plotting as a wrapper, to be used on-screen and to save
+	plot.current.task = function(...) {
+		plot(plot_obj, ...)
+	}
+
+
+
 
 # The core code for the graphic output... Yes, you are right: you've seen
 # the same lines above. Instead of blaming us, write better code yourself
