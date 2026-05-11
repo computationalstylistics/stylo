@@ -250,23 +250,29 @@ statistics_ui = function(id, config) {
 		# --- Distance ---
 		tags$h5("Distance measure"),
 
-		selectInput(
-			ns("distance_measure"),
-			label = "Distance",
-			choices = c(
-				"Classic Delta" = "delta",
-				"Cosine Delta (Würzburg)" = "wurzburg",
-				"Eder's Delta" = "eder",
-				"Eder's Simple" = "simple",
-				"Entropy" = "entropy",
-				"Manhattan" = "manhattan",
-				"Canberra" = "canberra",
-				"Euclidean" = "euclidean",
-				"Cosine" = "cosine",
-				"Min-Max" = "minmax"
-				),
-			selected = config$distance.measure
-		)
+
+
+		conditionalPanel(
+			condition = sprintf("input['%s'] != 'PCA'",ns("analysis_type")),
+
+			selectInput(
+				ns("distance_measure"),
+				label = "Distance",
+				choices = c(
+					"Classic Delta" = "delta",
+					"Cosine Delta (Würzburg)" = "wurzburg",
+					"Eder's Delta" = "eder",
+					"Eder's Simple" = "simple",
+					"Entropy" = "entropy",
+					"Manhattan" = "manhattan",
+					"Canberra" = "canberra",
+					"Euclidean" = "euclidean",
+					"Cosine" = "cosine",
+					"Min-Max" = "minmax"
+					),
+				selected = config$distance.measure
+			)
+		),
 	)
 }
 
@@ -305,7 +311,7 @@ sampling_ui = function(id, config) {
 			ns("sampling_mode"), NULL,
 			choices = c(
 				"No sampling" = "no.sampling",
-				"Normal samplng" = "normal.sampling",
+				"Normal sampling" = "normal.sampling",
 				"Random sampling" = "random.sampling"),
 			selected = config$sampling,
 			inline = TRUE
@@ -507,11 +513,11 @@ output_ui = function(id, config) {
 }
 
 
-output_server <- function(id, config) {
+output_server = function(id, config) {
 	moduleServer(id, function(input, output, session) {
 
 		observeEvent(input$reset_output, {
-			updateRadioButtons(session, "colors",
+			updateRadioButtons(session, session$ns("colors"),
 				selected = config$colors.on.graphs)
 			updateCheckboxInput(session, "titles",
 				value = config$titles.on.graphs)
