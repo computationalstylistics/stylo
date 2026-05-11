@@ -42,8 +42,16 @@ language_ui = function(id, config) {
 }
 
 
-language_server = function(id) {
+language_server = function(id, config, reset_trigger) {
 	moduleServer(id, function(input, output, session) {
+
+		observeEvent(reset_trigger(), {
+			updateSelectInput(session, "corpus_lang",
+				selected = config$corpus.lang)
+			updateCheckboxInput(session, "encoding_native",
+				value = config$encoding != "UTF-8")
+		})
+
 
 		reactive({
 			list(
@@ -79,17 +87,33 @@ features_ui = function(id, config) {
 		tags$h4("Features"),
 		helpText("Different text units can be used as countable features. Here, please choose between words or characters. Word 1-grams splits the text into single words, and turns them into frequencies: this is the most intuivive, entry-level solution. This said, why not explorig other features, say character 3-grams?"),
 
-		# --- Feature type ---
-		radioButtons(
-			ns("feat_type"), "Units",
-			choices = c("Words" = "w", "Characters" = "c"),
-			selected = config$analyzed.features,
-			inline = TRUE
-			),
-		numericInput(
-			ns("ngram_size"), "n-gram size:",
-			value = config$ngram.size, min = 1
-			),
+
+		fluidRow(
+			 column(
+				width = 7,
+				radioButtons(
+					ns("feat_type"), "Units",
+					choices = c(
+						"Words" = "w",
+						"Characters" = "c"
+						),
+					selected = config$analyzed.features,
+					inline = TRUE
+					)
+				),
+
+			 column(
+				width = 4,
+				numericInput(
+					ns("ngram_size"),
+					"n-gram size:",
+					value = config$ngram.size,
+					min = 1
+					)
+				)
+			 ),
+
+
 		checkboxInput(
 			ns("preserve_case"), "Preserve case",
 			value = config$preserve.case
@@ -157,8 +181,36 @@ features_ui = function(id, config) {
 	)
 }
 
-features_server = function(id) {
+features_server = function(id, config, reset_trigger) {
 	moduleServer(id, function(input, output, session) {
+
+
+		observeEvent(reset_trigger(), {
+			updateRadioButtons(session, "feat_type",
+				selected = config$analyzed.features)
+			updateNumericInput(session, "ngram_size",
+				value = config$ngram.size)
+			updateCheckboxInput(session, "preserve_case",
+				value = config$preserve.case)
+			updateNumericInput(session, "mfw_min",
+				value = config$mfw.min)
+			updateNumericInput(session, "mfw_max",
+				value = config$mfw.max)
+			updateNumericInput(session, "mfw_incr",
+				value = config$mfw.incr)
+			updateNumericInput(session, "start_at",
+				value = config$start.at)
+			updateNumericInput(session, "cull_min",
+				value = config$culling.min)
+			updateNumericInput(session, "cull_max",
+				value = config$culling.max)
+			updateNumericInput(session, "cull_incr",
+				value = config$culling.incr)
+			updateNumericInput(session, "mfw_cutoff",
+				value = config$mfw.list.cutoff)
+			updateCheckboxInput(session, "delete_pronouns",
+				value = config$delete.pronouns)
+		})
 
 		reactive({
 			list(
@@ -277,8 +329,21 @@ statistics_ui = function(id, config) {
 }
 
 
-statistics_server = function(id) {
+statistics_server = function(id, config, reset_trigger) {
 	moduleServer(id, function(input, output, session) {
+
+
+		observeEvent(reset_trigger(), {
+			updateRadioButtons(session, "analysis_type",
+				selected = config$analysis.type)
+			updateNumericInput(session, "consensus_strength",
+				value = config$consensus.strength)
+			updateSelectInput(session, "distance_measure",
+				selected = config$distance.measure)
+			updateRadioButtons(session, "pca_scaling",
+				selected = config$analysis.type)
+		})
+
 
 		reactive({
 			list(
@@ -348,8 +413,17 @@ sampling_ui = function(id, config) {
 }
 
 
-sampling_server = function(id) {
+sampling_server = function(id, config, reset_trigger) {
 	moduleServer(id, function(input, output, session) {
+
+		observeEvent(reset_trigger(), {
+			updateRadioButtons(session, "sampling_mode",
+				selected = config$sampling)
+			updateNumericInput(session, "sample_size",
+				value = config$sample.size)
+			updateNumericInput(session, "num_samples",
+				value = config$number.of.samples)
+		})
 
 		reactive({
 			list(
@@ -500,27 +574,23 @@ output_ui = function(id, config) {
 			"Save frequency tables",
 			value = config$save.analyzed.freqs
 			),
-
-		hr(),
-
-		# --- RESET ---
-		actionButton(
-			ns("reset_output"),
-			"Reset to defaults",
-			class = "btn-warning"
-		)
 	)
 }
 
 
-output_server = function(id, config) {
+output_server = function(id, config, reset_trigger) {
 	moduleServer(id, function(input, output, session) {
 
-		observeEvent(input$reset_output, {
-			updateRadioButtons(session, session$ns("colors"),
+
+		observeEvent(reset_trigger(), {
+			updateRadioButtons(session, "colors",
 				selected = config$colors.on.graphs)
 			updateCheckboxInput(session, "titles",
 				value = config$titles.on.graphs)
+			updateCheckboxInput(session, "save_plot",
+				value = FALSE)
+			updateSelectInput(session, "file_format",
+				selected = "png")
 			updateNumericInput(session, "plot_height",
 				value = config$plot.custom.height)
 			updateNumericInput(session, "plot_width",
@@ -545,12 +615,13 @@ output_server = function(id, config) {
 				value = config$save.analyzed.features)
 			updateCheckboxInput(session, "save_freqs",
 				value = config$save.analyzed.freqs)
-		})
+			})
+
 
 		reactive({
 
 			# map format -> original flags
-			write_flags <- list(
+			write_flags = list(
 				write.pdf.file = FALSE,
 				write.jpg.file = FALSE,
 				write.png.file = FALSE,
@@ -605,7 +676,21 @@ make_ui = function(config) {
 				width = 4,
 				helpText("You're welcome to push the 'Run' button at any time, but we encourage you to explore the options below. In some cases – perhaps in most cases – it is advisable to tweak the default options so that your settings are tailored to the corpus you are going to analyze."),
 
-				actionButton("run_btn", "Run", class = "btn-success", width = "100%"),
+				actionButton(
+					"run_btn", 
+					"Run", 
+					class = "btn-success", 
+					width = "100%"
+					),
+
+				br(), br(),
+
+				actionButton(
+					"reset_all",
+					"Reset all settings",
+					class = "btn-warning",
+					width = "33%"
+					),
 
 				hr(),
 				language_ui("lang_module", config),
@@ -634,7 +719,7 @@ make_ui = function(config) {
 						 textOutput("raw_data_features_comment")
 						 ),
 					tabPanel("Frequencies",
-						 renderTable("raw_data_frequencies"),
+						 tableOutput("raw_data_frequencies"),
 						 verbatimTextOutput("raw_data_frequencies"),
 						 textOutput("raw_data_frequencies_comment")
 						 ),
@@ -671,11 +756,37 @@ make_server = function(config_default_values) {
 	function(input, output, session) {
 
 		# modules
-		lang_params = language_server("lang_module")
-		feat_params = features_server("feat_module")
-		stats_params = statistics_server("stats_module")
-		sampling_params = sampling_server("sampling_module")
-		output_params = output_server("output_module")
+reset_trigger = reactive(input$reset_all)
+
+lang_params = language_server(
+  "lang_module",
+  config_default_values,
+  reset_trigger
+)
+
+feat_params = features_server(
+  "feat_module",
+  config_default_values,
+  reset_trigger
+)
+
+stats_params = statistics_server(
+  "stats_module",
+  config_default_values,
+  reset_trigger
+)
+
+sampling_params = sampling_server(
+  "sampling_module",
+  config_default_values,
+  reset_trigger
+)
+
+output_params = output_server(
+  "output_module",
+  config_default_values,
+  reset_trigger
+)
 
 		# reporter
 		reporter = make_reporter(session)
