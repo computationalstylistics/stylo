@@ -756,37 +756,34 @@ make_server = function(config_default_values) {
 	function(input, output, session) {
 
 		# modules
-reset_trigger = reactive(input$reset_all)
+		reset_trigger = reactive(input$reset_all)
 
-lang_params = language_server(
-  "lang_module",
-  config_default_values,
-  reset_trigger
-)
+		lang_params = language_server(
+			"lang_module",
+			config_default_values,
+			reset_trigger
+		)
+		feat_params = features_server(
+			"feat_module",
+			config_default_values,
+			reset_trigger
+		)
+		stats_params = statistics_server(
+			"stats_module",
+			config_default_values,
+			reset_trigger
+		)
+		sampling_params = sampling_server(
+			"sampling_module",
+			config_default_values,
+			reset_trigger
+		)
+		output_params = output_server(
+			"output_module",
+			config_default_values,
+			reset_trigger
+		)
 
-feat_params = features_server(
-  "feat_module",
-  config_default_values,
-  reset_trigger
-)
-
-stats_params = statistics_server(
-  "stats_module",
-  config_default_values,
-  reset_trigger
-)
-
-sampling_params = sampling_server(
-  "sampling_module",
-  config_default_values,
-  reset_trigger
-)
-
-output_params = output_server(
-  "output_module",
-  config_default_values,
-  reset_trigger
-)
 
 		# reporter
 		reporter = make_reporter(session)
@@ -882,15 +879,6 @@ output_params = output_server(
 		plot(computed_data()$plot_obj)
 	}, height = function() session$clientData$output_result_plot_width)
 
-	#output$stats_text <- renderPrint({
-	#	req(computed_data())
-	#	summary(computed_data()$values)
-	#})
-
-	#output$raw_data_table <- renderTable({
-	#	req(computed_data())
-	#	computed_data()$values
-	#})
 
 	# --- testing: click interaction (future-ready) ---
 	observeEvent(input$plot_click, {
