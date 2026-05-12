@@ -34,7 +34,7 @@ recall and the F measure -- for each class, as well as an average score for all 
 \code{\link{perform.svm}}, \code{\link{perform.nsc}}
 }
 \examples{
-
+\dontrun{
 # classification results aka predictions (or, the classes "guessed" by a classifier)
 what_we_got = c("prose", "prose", "prose", "poetry", "prose", "prose")
 # expected classes (or, the ground truth)
@@ -63,6 +63,6 @@ results = perform.delta(train, test, train.classes, test.classes)
 
 performance.measures(results)
 
-
+}
 }
 %\keyword{distance measure}

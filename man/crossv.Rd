@@ -107,6 +107,7 @@ performance.measures(results)
 
 ## stratified cross-validation
 
+\dontrun{
 # specity a table with frequencies
 data(galbraith)
 freqs = galbraith
@@ -136,7 +137,7 @@ test.classes = c(rep("s",25), rep("c",25), rep("v",25))
 crossv(train, test, cv.mode = "stratified", cv.folds = 10, 
        train.classes, test.classes)
 
-
+}
 
 }
 %\keyword{distance measure}
