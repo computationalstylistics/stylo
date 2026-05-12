@@ -1,6 +1,22 @@
 ## 'stylo' news ##
 
 
+### version 0.7.7, 2026/05/12
+  * plotting engine thoroughly redesigned
+  * GUI behavior improved
+  * oppose() decoupled from direct GUI call
+  * same with stylo() and classify()
+  * lots of typos fixed
+  * main functions made headless
+  * testing routines added
+
+
+### version 0.7.6, 2024/08/26
+  * Bootstrap Distance Imposters implemented
+  * other improvements in imposters()
+  * documentation refreshed
+
+
 ### version 0.7.5, 2024/04/02
   * size.penalize() renamed to samplesize.penalize(), for CRAN
   * bug in size.penalize() fixed

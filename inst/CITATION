@@ -12,7 +12,7 @@ bibentry(header = "To cite the package 'stylo' in publications use:",
          volume       = "8",
          number       = "1",
          pages        = "107--121",
-         url          = "https://journal.r-project.org/archive/2016/RJ-2016-007/index.html",
+         url          = "https://journal.r-project.org/articles/RJ-2016-007/index.html",
          footer       = paste("We have invested a lot of time and effort in creating 'stylo',", "please cite it when using it together with R.", "See also", sQuote("citation()"), "for citing R.")
          )
 
