@@ -90,9 +90,9 @@ matrices for particular cv folds (attr "confusion_matrix").
 }
 \examples{
 \dontrun{
+
 ## standard usage:
 crossv(training.set, test.set)
-}
 
 ## text categorization
 
@@ -107,7 +107,6 @@ performance.measures(results)
 
 ## stratified cross-validation
 
-\dontrun{
 # specity a table with frequencies
 data(galbraith)
 freqs = galbraith
