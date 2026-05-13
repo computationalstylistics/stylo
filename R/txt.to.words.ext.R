@@ -91,15 +91,35 @@ tokenized.text = input.text
       tokenized.text = gsub("[-]{2,5}"," -- ",tokenized.text)
       # depending on which option was swithed on, either the contractions are
       # kept, or all the peculiarities, i.e. both contractions and hyphens
+        # character class covering all scripts supported by txt.to.words.R
+        unicode.letters = paste("[^A-Za-z",
+            "\U00C0-\U00FF",
+            "\U0100-\U01BF",
+            "\U01C4-\U02AF",
+            "\U0386\U0388-\U03FF",
+            "\U0400-\U0481\U048A-\U0527",
+            "\U05D0-\U05EA\U05F0-\U05F4",
+            "\U0620-\U065F\U066E-\U06D3\U06D5\U06DC",
+            "\U1E00-\U1EFF",
+            "\U1F00-\U1FBC\U1FC2-\U1FCC\U1FD0-\U1FDB\U1FE0-\U1FEC\U1FF2-\U1FFC",
+            "\U03E2-\U03EF\U2C80-\U2CF3",
+            "\U10A0-\U10FF",
+            "\U3040-\U309F",
+            "\U30A0-\U30FF",
+            "\U3005\U3031-\U3035",
+            "\U4E00-\U9FFF",
+            "\U3400-\U4DBF",
+            "\UAC00-\UD7AF",
+            sep="")
         if(tolower(corpus.lang) == "english.contr") {
-          tokenized.text=c(unlist(strsplit(tokenized.text,
-                    "[^A-Za-z\U00C0-\U00FF\U0100-\U01BF\U01C4-\U02AF^]+")))
+          tokenized.text = c(unlist(strsplit(tokenized.text,
+                    paste0(unicode.letters, "^]+"))))
         }
         if(tolower(corpus.lang) == "english.all") {
-          tokenized.text=c(unlist(strsplit(tokenized.text,
-                    "[^A-Za-z\U00C0-\U00FF\U0100-\U01BF\U01C4-\U02AF^-]+")))
+          tokenized.text = c(unlist(strsplit(tokenized.text,
+                    paste0(unicode.letters, "^-]+"))))
           # trying to clean the remaining dashes:
-          tokenized.text = gsub("^[-]+$","",tokenized.text)
+          tokenized.text = gsub("^[-]+$", "", tokenized.text)
         }
     }
     # trying to avoid empty strings:
