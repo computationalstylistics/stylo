@@ -694,7 +694,7 @@ make_ui = function(config) {
 				actionButton(
 					"run_btn", 
 					"Run", 
-					class = "btn-primary", 
+					class = "btn-success", 
 					width = "100%"
 					),
 

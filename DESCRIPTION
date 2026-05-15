@@ -12,7 +12,7 @@ Author: Maciej Eder [aut, cre], Jan Rybicki [aut], Mike Kestemont [aut], Steffen
 Maintainer: Maciej Eder <maciejeder@gmail.com>
 URL: https://github.com/computationalstylistics/stylo
 Depends: R (>= 3.0)
-Imports: ape, pamr, e1071, class, lattice, tsne, shiny
+Imports: ape, pamr, e1071, class, lattice, tsne, shiny, bslib
 Suggests: tcltk2, stringi, networkD3, readr, testthat
 Config/testthat/edition: 3
 Description: Supervised and unsupervised multivariate methods, supplemented by GUI and some visualizations, to perform various analyses in the field of computational stylistics, authorship attribution, etc. For further reference, see Eder et al. (2016), <https://journal.r-project.org/articles/RJ-2016-007/index.html>. You are also encouraged to visit the Computational Stylistics Group's website <https://computationalstylistics.github.io/>, where a reasonable amount of information about the package and related projects are provided.
