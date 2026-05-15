@@ -1173,10 +1173,12 @@ plot.current.task = function() {NULL}
 if(analysis.type == "CA") {
   name.of.the.method = "Cluster Analysis"
   short.name.of.the.method = "CA"
+  max.label.chars = max(nchar(rownames(distance.table)))
+  label.margin = max(8, ceiling(max.label.chars * 0.6))
   if(dendrogram.layout.horizontal == TRUE) {
-    dendrogram.margins =  c(5,4,4,8)+0.1
+    dendrogram.margins = c(5, 4, 4, label.margin) + 0.1
     } else {
-    dendrogram.margins = c(8,5,4,4)+0.1 }
+    dendrogram.margins = c(label.margin, 5, 4, 4) + 0.1 }
   # the following task will be plotted
   plot.current.task = function(){
     par(mar=dendrogram.margins)
