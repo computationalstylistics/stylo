@@ -1,4 +1,12 @@
 
+
+config_write = function(x, file) {
+  #dput(x, file = file)
+	cat("configi will go here:\n", file = file)
+}
+
+
+
 #############################################################
 #
 # the GUI module for LANGUAGE
@@ -669,44 +677,94 @@ output_server = function(id, config, reset_trigger) {
 
 make_ui = function(config) {
 	fluidPage(
+		
+		theme = bs_theme(version = 5),
+		br(), br(),
 		titlePanel("Stylo: conduct text analysis in style"),
+		br(), br(),
 
 		sidebarLayout(
+
 			sidebarPanel(
 				width = 4,
 				helpText("You're welcome to push the 'Run' button at any time, but we encourage you to explore the options below. In some cases – perhaps in most cases – it is advisable to tweak the default options so that your settings are tailored to the corpus you are going to analyze."),
 
+				br(), br(),
+
 				actionButton(
 					"run_btn", 
 					"Run", 
-					class = "btn-success", 
+					class = "btn-primary", 
 					width = "100%"
 					),
 
 				br(), br(),
 
-				actionButton(
-					"reset_all",
-					"Reset all settings",
-					class = "btn-warning",
-					width = "33%"
-					),
+				helpText("Set your parameters by unfolding the tabs below. Do you want to wipe out your choices? There is a reset button at the bottom. Do you want to save your settings? There's a dedicated button as well."),
 
-				hr(),
-				language_ui("lang_module", config),
+				br(), br(),
 
-				hr(),
-				features_ui("feat_module", config),
+				accordion(
+					  multiple = TRUE,
+					  accordion_panel(
+						"Input",
+						language_ui("lang_module", config)
+						),
+					  accordion_panel(
+						"Features",
+						features_ui("feat_module", config)
+						),
+					  accordion_panel(
+						"Statistics",
+						statistics_ui("stats_module", config)
+						),
+					  accordion_panel(
+						"Sampling",
+						sampling_ui("sampling_module", config)
+						),
+					  accordion_panel(
+						"Output",
+						output_ui("output_module", config)
+						)
+					  ),
 
-				hr(),
-				statistics_ui("stats_module", config),
+				br(), br(),
 
-				hr(),
-				sampling_ui("sampling_module", config),
+				helpText("Whenever lost, try to revert to default settings. Or just the opposite: you might discover your optimal settings, and then save them to a file, for the sake of reproducibility."),
 
-				hr(),
-				output_ui("output_module", config)
-				),
+				br(), br(),
+				
+				fluidRow(
+					 column(
+						width = 4,
+						actionButton(
+							"reset_all",
+							"Reset settings",
+							class = "btn-primary",
+							width = "100%")
+						),
+					 column(
+						width = 4,
+						actionButton(
+							"save_config",
+							"Save settings",
+							class = "btn-primary",
+							width = "100%")
+						),
+					 column(
+						width = 4,
+						textInput(
+							"config_filename",
+							NULL,
+							value = "",
+							placeholder = "config.txt",
+							width = "100%")
+						)
+					)
+
+			),
+
+
 
 			mainPanel(
 				width = 8,
@@ -820,6 +878,34 @@ make_server = function(config_default_values) {
 
 			reporter("Computation finished.")
 	})
+
+
+observeEvent(input$save_config, {
+
+  #filename = input$config_filename
+
+  filename = trimws(input$config_filename)
+
+  if (filename == "") {
+    filename = "config.txt"
+  }
+
+  active_params = Reduce(
+    modifyList,
+    list(
+      config_default_values,
+      lang_params(),
+      feat_params(),
+      stats_params(),
+      sampling_params(),
+      output_params()
+    )
+  )
+
+  config_write(active_params, filename)
+
+  reporter(paste("Settings saved to", filename))
+})
 
 
 	# populate the FEATURES tab on main screen
