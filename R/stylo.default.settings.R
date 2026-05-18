@@ -12,6 +12,13 @@ passed.arguments = list(...)
 
 
 
+## NOTE: these three variables are set temporarily here, to be removed
+frequencies = NULL
+stop.words = NULL
+custom.graph.title = ""
+
+
+
 
 #######  TEXT- AND LANGUAGE-DEPENDENT SETTINGS  ####################
 

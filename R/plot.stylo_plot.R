@@ -12,11 +12,13 @@ plot.stylo_plot = function(x, ...) {
 
     if (x$plot_type == "dendrogram") {
 
+        max_label_chars = max(nchar(labels(x$plot_data)))
+        label_margin = max(8, ceiling(max_label_chars * 0.4))
         # define margins
         if(x$dendro_horizontal) {
-            dendr_margins =  c(5,4,4,8)+0.1
+            dendr_margins = c(5, 4, 4, label_margin) + 0.1
         } else {
-            dendr_margins = c(8,5,4,4)+0.1 
+            dendr_margins = c(label_margin, 5, 4, 4) + 0.1 
         }
         # set the margins
         par(mar = dendr_margins)

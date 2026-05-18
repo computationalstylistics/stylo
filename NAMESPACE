@@ -27,6 +27,7 @@ export(
   change.encoding,
   check.encoding,
   classify,
+  config_read, config_write, config_template,
   crossv,
   define.plot.area,
   delete.markup,
@@ -76,10 +77,13 @@ export(
   zeta.eder
 )
 
+S3method(plot, stylo_plot)
+S3method(plot, stylo.results)
+S3method(plot, sample.size)
 S3method(print, stylo.results)
 S3method(print, stylo.corpus)
 S3method(print, stylo.data)
 S3method(summary, stylo.results)
 S3method(summary, stylo.corpus)
-S3method(plot, sample.size)
+
 

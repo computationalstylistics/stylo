@@ -1,9 +1,9 @@
 
 
-config_write = function(x, file) {
-  #dput(x, file = file)
-	cat("configi will go here:\n", file = file)
-}
+#config_write = function(x, file) {
+#  #dput(x, file = file)
+#	cat("configi will go here:\n", file = file)
+#}
 
 
 
@@ -902,7 +902,7 @@ observeEvent(input$save_config, {
     )
   )
 
-  config_write(active_params, filename)
+  config_write(active_params, config_template(), filename)
 
   reporter(paste("Settings saved to", filename))
 })
