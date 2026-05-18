@@ -35,8 +35,10 @@ function(tokenized.text,
     if (length(current.text) < 10 || 
         (sampling == "normal.sampling" && length(current.text) < sample.size) || 
         (sampling == "random.sampling" && length(current.text) < sample.size)) {
-      warning("\n\n", head(current.text, 100), "...\t", "This text is too short!", 
-          "\n")
+      warning("\n\nThis text is too short to be sliced into samples of the requested size: ",
+          names(tokenized.text)[i],
+          "\nIf you are using a non-Latin script (Greek, Cyrillic, Arabic, Hebrew, etc.), ",
+          "try setting corpus.lang = \"Other\" to ensure correct tokenization.\n")
       stop("Corpus error...")
     }
     #
