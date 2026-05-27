@@ -877,100 +877,102 @@ make_server = function(config_default_values) {
 			computed_data(results)
 
 			reporter("Computation finished.")
-	})
 
-
-observeEvent(input$save_config, {
-
-  #filename = input$config_filename
-
-  filename = trimws(input$config_filename)
-
-  if (filename == "") {
-    filename = "config.txt"
-  }
-
-  active_params = Reduce(
-    modifyList,
-    list(
-      config_default_values,
-      lang_params(),
-      feat_params(),
-      stats_params(),
-      sampling_params(),
-      output_params()
-    )
-  )
-
-  config_write(active_params, config_template(), filename)
-
-  reporter(paste("Settings saved to", filename))
-})
-
-
-	# populate the FEATURES tab on main screen
-	output$raw_data_features = renderPrint({
-		req(computed_data()$features)
-
-		if(length(computed_data()$features) < 100) {
-			print(computed_data()$features)	
-		} else {
-			print(computed_data()$features[1:100])
-			output$raw_data_features_comment = renderText({
-				"Showing the first 100 features."
-			})	
-		}	
-	})
-
-
-	# populate the FREQUENCIES tab on main screen
-	output$raw_data_frequencies = renderPrint({
-		req(computed_data())
-		raw_data = computed_data()$table.with.all.freqs
-
-		if(length(raw_data[1, ]) > 10) {
-			raw_data = raw_data[, 1:10]
-		}
-		if(length(raw_data[, 1]) > 30) {
-			raw_data = raw_data[1:30, ]
-		}
-		print(round(raw_data, 3))
-		output$raw_data_frequencies_comment <- renderText({
-			"Showing a fragment of the frequency table."
 		})
-	})
 
 
-	# populate the DIAGNOSTICS tab on main screen
-	output$debug_params = renderPrint({
-		req(lang_params(), feat_params(), stats_params(),
-		    sampling_params(), output_params()
-		)
-		
-		diagnostic_params = c(
-			lang_params(),
-			feat_params(),
+
+		observeEvent(input$save_config, {
+
+			filename = trimws(input$config_filename)
+
+			if (filename == "") {
+				filename = "config.txt"
+			}
+
+			active_params = Reduce(
+				modifyList, list(
+					config_default_values,
+					lang_params(),
+					feat_params(),
+					stats_params(),
+					sampling_params(),
+					output_params()
+				)
+			)
+
+			# generate a self-documenting config file, save on disk
+			config_write(active_params, config_template(), filename)
+			# say what has been done
+			reporter(paste("Settings saved to", filename))
+		})
+
+
+	
+		# populate the FEATURES tab on main screen
+		output$raw_data_features = renderPrint({
+			req(computed_data()$features)
+
+			if(length(computed_data()$features) < 100) {
+				print(computed_data()$features)
+			} else {
+				print(computed_data()$features[1:100])
+				output$raw_data_features_comment = renderText({
+					"Showing the first 100 features."
+				})
+			}
+		})
+
+
+		# populate the FREQUENCIES tab on main screen
+		output$raw_data_frequencies = renderPrint({
+			req(computed_data())
+			raw_data = computed_data()$table.with.all.freqs
+
+			if(length(raw_data[1, ]) > 10) {
+				raw_data = raw_data[, 1:10]
+			}
+			if(length(raw_data[, 1]) > 30) {
+				raw_data = raw_data[1:30, ]
+			}
+			print(round(raw_data, 3))
+			output$raw_data_frequencies_comment = renderText({
+				"Showing a fragment of the frequency table."
+			})
+		})
+
+
+		# populate the DIAGNOSTICS tab on main screen
+		output$debug_params = renderPrint({
+			req(lang_params(),
+			feat_params(), 
 			stats_params(),
-			sampling_params(),
+			sampling_params(), 
 			output_params()
-		)
-		str(diagnostic_params)
-	})
-
-
-	# populate the VISUALIZATION tab on main screen
-	output$result_plot = renderPlot({
-		req(computed_data())
-		par(pty = "s")  # <- this one probably not needed
-		plot(computed_data()$plot_obj)
-	}, height = function() session$clientData$output_result_plot_width)
-
-
-	# --- testing: click interaction (future-ready) ---
-	observeEvent(input$plot_click, {
-		click = input$plot_click
-		reporter(sprintf("Clicked at x=%.2f, y=%.2f", click$x, click$y))
+			)
+		
+			diagnostic_params = c(
+				lang_params(),
+				feat_params(),
+				stats_params(),
+				sampling_params(),
+				output_params()
+			)
+			str(diagnostic_params)
 		})
+
+		# populate the VISUALIZATION tab on main screen
+		output$result_plot = renderPlot({
+			req(computed_data())
+			par(pty = "s")  # <- this is probably not needed
+			plot(computed_data()$plot_obj)
+		}, height = function() session$clientData$output_result_plot_width)
+
+		# --- testing: click interaction (future-ready) ---
+		#observeEvent(input$plot_click, {
+		#	click = input$plot_click
+		#	reporter(sprintf("Clicked at x=%.2f, y=%.2f", click$x, click$y))
+		#})
 	}
 }
 
