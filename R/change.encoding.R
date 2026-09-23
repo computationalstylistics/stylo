@@ -22,7 +22,7 @@ change.encoding = function(corpus.dir = "corpus/",
   
   # Warn if corpus is very large.
   corpus.size = check.corpus.size(corpus.dir)/(10^6)
-  corpus.size.output = format(corpus.size, scientific = FALSE, digits = 0)
+  corpus.size.output = format(corpus.size, scientific = FALSE, digits = 1)
   if(corpus.size > size.warning.threshold){
     message(paste("WARNING: Your corpus is", 
                   corpus.size.output, 
