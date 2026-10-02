@@ -69,6 +69,17 @@ imposters = function(reference.set,
         if(length(test) != no.of.cols) {
             stop("The anonymous sample and the reference set \nmust have the same number of variables!")
         }
+        # a one-row table (e.g. a matrix) is turned into a named vector
+        if(is.null(names(test)) == TRUE & is.null(colnames(test)) == FALSE) {
+            test = drop(test)
+        }
+        # features are selected by name, so the names must match the reference set
+        if(is.null(names(test)) == TRUE) {
+            names(test) = colnames(reference.set)
+            message("The anonymous sample has no names; names assigned from the reference set.")
+        } else if(all(colnames(reference.set) %in% names(test)) == FALSE) {
+            stop("The names of the anonymous sample must match \nthe column names of the reference set!")
+        }
         anon = "Anonymous"
     } else {
         # an extremely complicated way of getting the class that has 1 sample
@@ -115,6 +126,13 @@ imposters = function(reference.set,
         # checking if the reference sets and the sample are of the same size
         if(length(candidate.set) != no.of.cols) {
             stop("The candidate text and the reference set \nmust have the same number of variables!")
+        }
+        # features are selected by name, so the names must match the reference set
+        if(is.null(names(candidate.set)) == TRUE) {
+            names(candidate.set) = colnames(reference.set)
+            message("The candidate text has no names; names assigned from the reference set.")
+        } else if(all(colnames(reference.set) %in% names(candidate.set)) == FALSE) {
+            stop("The names of the candidate text must match \nthe column names of the reference set!")
         }
         # assigning a class
         candidates = "Candidate"
